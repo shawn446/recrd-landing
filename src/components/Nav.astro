@@ -1,0 +1,21 @@
+<nav id="nav">
+  <a href="/" class="logo">
+    <div class="logo-icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/></svg>
+    </div>
+    recrd
+  </a>
+  <div class="nav-links">
+    <a href="/features">Product</a>
+    <a href="/pricing">Pricing</a>
+    <a href="/blog">Resources</a>
+  </div>
+  <div class="nav-ctas">
+    <a href="#" class="nav-btn secondary">Login</a>
+    <a href="#" class="nav-btn primary">Get Started</a>
+  </div>
+</nav>
+<script>
+  const nav = document.getElementById('nav');
+  window.addEventListener('scroll', () => nav?.classList.toggle('scrolled', window.scrollY > 20));
+</script>

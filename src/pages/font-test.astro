@@ -1,12 +1,14 @@
 ---
 // src/pages/font-test.astro
+// Hero + Nav - Render-inspired design
 ---
 <html lang="en" data-theme="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>recrd — Font Test</title>
+  <title>recrd — AI Agents for Revenue Teams</title>
   <style>
+    /* FONTS */
     @font-face {
       font-family: 'Roobert';
       src: url('/fonts/RoobertCollectionVF-TRIAL.woff2') format('woff2');
@@ -26,21 +28,9 @@
       font-display: swap;
     }
     @font-face {
-      font-family: 'Matter';
-      src: url('/fonts/Matter-TRIAL-Medium.ttf') format('truetype');
-      font-weight: 500;
-      font-display: swap;
-    }
-    @font-face {
       font-family: 'Object Sans';
       src: url('/fonts/PPObjectSans-Heavy.otf') format('opentype');
       font-weight: 900;
-      font-display: swap;
-    }
-    @font-face {
-      font-family: 'Object Sans';
-      src: url('/fonts/PPObjectSans-Regular.otf') format('opentype');
-      font-weight: 400;
       font-display: swap;
     }
     @font-face {
@@ -50,300 +40,487 @@
       font-display: swap;
     }
 
-    * { margin: 0; padding: 0; box-sizing: border-box; }
+    /* VARIABLES */
+    :root {
+      --mint: #46FCAF;
+      --purple: #A678F4;
+      --cyan: #02C0FF;
+      --coral: #FF4F5E;
+      --yellow: #FFE869;
+      --heading-font: 'Roobert', system-ui, sans-serif;
+      --body-font: 'Roobert', system-ui, sans-serif;
+      --mono: 'Fraktion Mono', monospace;
+    }
 
     [data-theme="dark"] {
       --bg: #0A0A0A;
+      --bg-elevated: #111111;
+      --bg-card: #151515;
+      --border: #222222;
       --text: #ffffff;
-      --text-dim: #888;
-      --border: #222;
-      --accent: #46FCAF;
+      --text-secondary: #888888;
+      --text-muted: #555555;
+      --btn-primary-bg: #ffffff;
+      --btn-primary-text: #0a0a0a;
+      --grid-color: rgba(255,255,255,0.04);
     }
+
     [data-theme="light"] {
-      --bg: #fafafa;
+      --bg: #ffffff;
+      --bg-elevated: #fafafa;
+      --bg-card: #f5f5f5;
+      --border: #e0e0e0;
       --text: #0a0a0a;
-      --text-dim: #666;
-      --border: #ddd;
-      --accent: #46FCAF;
+      --text-secondary: #666666;
+      --text-muted: #999999;
+      --btn-primary-bg: #0a0a0a;
+      --btn-primary-text: #ffffff;
+      --grid-color: rgba(0,0,0,0.04);
     }
+
+    /* RESET */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
 
     body {
       background: var(--bg);
       color: var(--text);
-      font-family: system-ui, sans-serif;
-      padding: 40px;
+      font-family: var(--body-font);
+      font-weight: 400;
+      line-height: 1.5;
       transition: background 0.2s, color 0.2s;
     }
 
+    /* CONTROLS */
     .controls {
       position: fixed;
-      top: 20px;
-      right: 20px;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
       display: flex;
-      gap: 8px;
-      background: var(--bg);
+      gap: 6px;
+      background: var(--bg-elevated);
       border: 1px solid var(--border);
-      padding: 12px;
-      border-radius: 8px;
-      z-index: 100;
+      padding: 8px 12px;
+      z-index: 1000;
     }
 
-    .controls button {
+    .control-btn {
       background: transparent;
       border: 1px solid var(--border);
-      color: var(--text-dim);
+      color: var(--text-muted);
       padding: 6px 12px;
-      font-size: 11px;
-      font-family: 'Fraktion Mono', monospace;
-      cursor: pointer;
-      border-radius: 4px;
-    }
-    .controls button:hover { color: var(--text); }
-    .controls button.active {
-      background: var(--accent);
-      color: #0a0a0a;
-      border-color: var(--accent);
-    }
-
-    h1 {
-      font-family: 'Fraktion Mono', monospace;
-      font-size: 11px;
-      color: var(--text-dim);
-      text-transform: uppercase;
-      letter-spacing: 2px;
-      margin-bottom: 60px;
-    }
-
-    .font-section {
-      margin-bottom: 80px;
-      padding-bottom: 80px;
-      border-bottom: 1px solid var(--border);
-    }
-    .font-section:last-child { border-bottom: none; }
-
-    .font-name {
-      font-family: 'Fraktion Mono', monospace;
       font-size: 10px;
-      color: var(--accent);
-      text-transform: uppercase;
-      letter-spacing: 2px;
+      font-family: var(--mono);
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .control-btn:hover {
+      color: var(--text-secondary);
+      border-color: var(--text-muted);
+    }
+
+    .control-btn.active {
+      background: var(--mint);
+      color: #0a0a0a;
+      border-color: var(--mint);
+    }
+
+    .control-sep {
+      width: 1px;
+      background: var(--border);
+      margin: 0 6px;
+    }
+
+    /* NAV */
+    .nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 48px;
+      border-bottom: 1px solid var(--border);
+      position: relative;
+      z-index: 10;
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+    }
+
+    .nav-logo svg {
+      width: 32px;
+      height: 32px;
+    }
+
+    .nav-wordmark {
+      font-family: var(--heading-font);
+      font-weight: 700;
+      font-size: 22px;
+      color: var(--text);
+      letter-spacing: -0.02em;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 36px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 400;
+      transition: color 0.15s;
+    }
+
+    .nav-links a:hover {
+      color: var(--text);
+    }
+
+    .nav-cta {
+      background: var(--btn-primary-bg);
+      color: var(--btn-primary-text);
+      padding: 12px 24px;
+      font-family: var(--body-font);
+      font-weight: 500;
+      font-size: 14px;
+      text-decoration: none;
+      transition: opacity 0.15s;
+    }
+
+    .nav-cta:hover {
+      opacity: 0.85;
+    }
+
+    /* HERO */
+    .hero {
+      position: relative;
+      min-height: calc(100vh - 73px);
+      display: flex;
+      overflow: hidden;
+    }
+
+    .hero-grid {
+      position: absolute;
+      inset: 0;
+      background-image: 
+        linear-gradient(var(--grid-color) 1px, transparent 1px),
+        linear-gradient(90deg, var(--grid-color) 1px, transparent 1px);
+      background-size: 60px 60px;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 10;
+      padding: 100px 48px;
+      max-width: 620px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .hero-headline {
+      font-family: var(--heading-font);
+      font-weight: 700;
+      font-size: 56px;
+      line-height: 1.05;
+      letter-spacing: -0.03em;
       margin-bottom: 24px;
     }
 
-    .specimen { margin-bottom: 40px; }
-
-    .specimen-label {
-      font-family: 'Fraktion Mono', monospace;
-      font-size: 9px;
-      color: var(--text-dim);
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      margin-bottom: 8px;
+    .hero-headline em {
+      font-style: normal;
+      color: var(--mint);
     }
 
-    .headline-specimen {
-      font-size: 64px;
-      line-height: 1;
-      letter-spacing: -0.03em;
-      margin-bottom: 16px;
-    }
-
-    .subhead-specimen {
-      font-size: 32px;
-      line-height: 1.2;
-      letter-spacing: -0.02em;
-      margin-bottom: 16px;
-    }
-
-    .body-specimen {
-      font-size: 16px;
+    .hero-sub {
+      font-size: 18px;
+      font-weight: 300;
+      color: var(--text-secondary);
       line-height: 1.6;
-      max-width: 600px;
-      margin-bottom: 16px;
+      margin-bottom: 40px;
+      max-width: 500px;
     }
 
-    .weights {
+    .hero-buttons {
       display: flex;
-      gap: 40px;
-      flex-wrap: wrap;
-      margin-top: 32px;
+      gap: 12px;
     }
 
-    .weight-sample {
-      min-width: 150px;
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      padding: 16px 28px;
+      font-family: var(--body-font);
+      font-weight: 500;
+      font-size: 15px;
+      text-decoration: none;
+      cursor: pointer;
+      border: none;
+      transition: all 0.15s;
     }
 
-    .weight-label {
-      font-family: 'Fraktion Mono', monospace;
-      font-size: 9px;
-      color: var(--text-dim);
-      margin-bottom: 4px;
+    .btn-primary {
+      background: var(--btn-primary-bg);
+      color: var(--btn-primary-text);
     }
 
-    .weight-text {
-      font-size: 24px;
+    .btn-primary:hover {
+      opacity: 0.85;
     }
 
-    /* Font families */
-    .roobert { font-family: 'Roobert', system-ui, sans-serif; }
-    .matter { font-family: 'Matter', system-ui, sans-serif; }
-    .object { font-family: 'Object Sans', system-ui, sans-serif; }
-    .fraktion { font-family: 'Fraktion Mono', monospace; }
+    .btn-secondary {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--text);
+    }
 
-    @media (max-width: 600px) {
-      body { padding: 20px; }
-      .controls { top: 10px; right: 10px; padding: 8px; }
-      .headline-specimen { font-size: 40px; }
-      .subhead-specimen { font-size: 24px; }
+    .btn-secondary:hover {
+      border-color: var(--text-secondary);
+    }
+
+    .btn-arrow {
+      display: flex;
+      gap: 2px;
+    }
+
+    .btn-arrow span {
+      width: 4px;
+      height: 4px;
+      background: currentColor;
+    }
+
+    /* HERO VISUAL - Floating blocks */
+    .hero-visual {
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 55%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .blocks {
+      position: relative;
+      width: 500px;
+      height: 500px;
+    }
+
+    .block {
+      position: absolute;
+      animation: float 6s ease-in-out infinite;
+    }
+
+    .block:nth-child(1) { width: 180px; height: 120px; top: 60px; left: 80px; animation-delay: 0s; }
+    .block:nth-child(2) { width: 120px; height: 80px; top: 40px; left: 280px; animation-delay: 0.5s; }
+    .block:nth-child(3) { width: 200px; height: 140px; top: 160px; left: 160px; animation-delay: 1s; }
+    .block:nth-child(4) { width: 100px; height: 60px; top: 200px; left: 30px; animation-delay: 1.5s; }
+    .block:nth-child(5) { width: 160px; height: 100px; top: 280px; left: 260px; animation-delay: 2s; }
+    .block:nth-child(6) { width: 80px; height: 80px; top: 340px; left: 100px; animation-delay: 2.5s; }
+    .block:nth-child(7) { width: 140px; height: 90px; top: 380px; left: 200px; animation-delay: 3s; }
+    .block:nth-child(8) { width: 60px; height: 40px; top: 120px; left: 380px; animation-delay: 3.5s; }
+
+    [data-theme="dark"] .block.purple { background: var(--purple); }
+    [data-theme="dark"] .block.mint { background: var(--mint); }
+    [data-theme="dark"] .block.dark { background: #18181b; border: 1px solid #27272a; }
+    [data-theme="dark"] .block.white { background: rgba(255,255,255,0.9); }
+
+    [data-theme="light"] .block.mint { background: var(--mint); }
+    [data-theme="light"] .block.dark { background: #18181b; }
+    [data-theme="light"] .block.light { background: #ffffff; border: 1px solid #e0e0e0; }
+    [data-theme="light"] .block.teal { background: #14b8a6; }
+
+    .block .bar {
+      position: absolute;
+      height: 8px;
+      left: 12px;
+      right: 12px;
+    }
+
+    .block .bar:nth-child(1) { top: 16px; width: 60%; }
+    .block .bar:nth-child(2) { top: 32px; width: 80%; }
+    .block .bar:nth-child(3) { top: 48px; width: 40%; }
+    .block .bar:nth-child(4) { top: 64px; width: 70%; }
+
+    [data-theme="dark"] .bar.white { background: rgba(255,255,255,0.9); }
+    [data-theme="dark"] .bar.mint { background: var(--mint); }
+    [data-theme="dark"] .bar.purple { background: var(--purple); }
+
+    [data-theme="light"] .bar.dark { background: #18181b; }
+    [data-theme="light"] .bar.mint { background: var(--mint); }
+    [data-theme="light"] .bar.white { background: #ffffff; }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-12px); }
+    }
+
+    /* Gradient blobs */
+    .blob {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(100px);
+      pointer-events: none;
+    }
+
+    [data-theme="dark"] .blob-1 {
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, var(--mint) 0%, transparent 70%);
+      top: -100px;
+      right: 10%;
+      opacity: 0.15;
+    }
+
+    [data-theme="dark"] .blob-2 {
+      width: 400px;
+      height: 400px;
+      background: radial-gradient(circle, var(--purple) 0%, transparent 70%);
+      top: 200px;
+      right: 30%;
+      opacity: 0.12;
+    }
+
+    [data-theme="light"] .blob-1 {
+      width: 700px;
+      height: 700px;
+      background: radial-gradient(circle, var(--mint) 0%, transparent 70%);
+      top: -100px;
+      right: 5%;
+      opacity: 0.25;
+    }
+
+    [data-theme="light"] .blob-2 {
+      width: 400px;
+      height: 400px;
+      background: radial-gradient(circle, var(--cyan) 0%, transparent 70%);
+      top: 300px;
+      right: 25%;
+      opacity: 0.15;
+    }
+
+    /* MOBILE */
+    @media (max-width: 900px) {
+      .nav { padding: 16px 24px; }
+      .nav-links { display: none; }
+      
+      .hero { flex-direction: column; }
+      .hero-content { padding: 60px 24px; max-width: none; }
+      .hero-headline { font-size: 40px; }
+      .hero-sub { font-size: 16px; }
+      
+      .hero-visual {
+        position: relative;
+        width: 100%;
+        height: 400px;
+      }
+      
+      .blocks {
+        transform: scale(0.7);
+      }
+      
+      .hero-buttons { flex-direction: column; }
+      .btn { justify-content: center; }
+    }
+
+    @media (max-width: 500px) {
+      .hero-headline { font-size: 32px; }
+      .controls { 
+        bottom: 10px;
+        padding: 6px 10px;
+      }
+      .control-btn { padding: 5px 8px; font-size: 9px; }
     }
   </style>
 </head>
 <body>
 
+  <!-- Controls -->
   <div class="controls">
-    <button class="active" id="btn-dark" onclick="setTheme('dark')">Dark</button>
-    <button id="btn-light" onclick="setTheme('light')">Light</button>
+    <button class="control-btn active" id="btn-dark" onclick="setTheme('dark')">Dark</button>
+    <button class="control-btn" id="btn-light" onclick="setTheme('light')">Light</button>
+    <div class="control-sep"></div>
+    <button class="control-btn active" id="btn-roobert" onclick="setFont('roobert')">Roobert</button>
+    <button class="control-btn" id="btn-object" onclick="setFont('object')">Object</button>
   </div>
 
-  <h1>recrd Font Specimens</h1>
+  <!-- Nav -->
+  <nav class="nav">
+    <a href="/" class="nav-logo">
+      <svg viewBox="0 0 52 52" fill="none">
+        <rect x="0" y="16" width="28" height="28" fill="var(--purple)"/>
+        <rect x="16" y="0" width="28" height="28" rx="6" fill="var(--mint)"/>
+      </svg>
+      <span class="nav-wordmark">recrd</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="#">Features</a></li>
+      <li><a href="#">Pricing</a></li>
+      <li><a href="#">Docs</a></li>
+      <li><a href="#">Blog</a></li>
+    </ul>
+    <a href="#" class="nav-cta">Dashboard</a>
+  </nav>
 
-  <!-- ROOBERT -->
-  <section class="font-section">
-    <div class="font-name">Roobert (Variable 100-900)</div>
-    
-    <div class="specimen">
-      <div class="specimen-label">Headline · 700</div>
-      <div class="headline-specimen roobert" style="font-weight: 700;">AI agents that close deals</div>
-    </div>
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero-grid"></div>
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
 
-    <div class="specimen">
-      <div class="specimen-label">Subhead · 500</div>
-      <div class="subhead-specimen roobert" style="font-weight: 500;">Every conversation triggers an army of AI agents</div>
-    </div>
-
-    <div class="specimen">
-      <div class="specimen-label">Body · 300</div>
-      <div class="body-specimen roobert" style="font-weight: 300;">Record your sales calls. Let AI handle the follow-ups, CRM updates, and coaching insights — from your first call to your thousandth. One call. Six agents. Zero setup.</div>
-    </div>
-
-    <div class="weights">
-      <div class="weight-sample">
-        <div class="weight-label">100 Thin</div>
-        <div class="weight-text roobert" style="font-weight: 100;">Agents</div>
-      </div>
-      <div class="weight-sample">
-        <div class="weight-label">200 Extra Light</div>
-        <div class="weight-text roobert" style="font-weight: 200;">Agents</div>
-      </div>
-      <div class="weight-sample">
-        <div class="weight-label">300 Light</div>
-        <div class="weight-text roobert" style="font-weight: 300;">Agents</div>
-      </div>
-      <div class="weight-sample">
-        <div class="weight-label">400 Regular</div>
-        <div class="weight-text roobert" style="font-weight: 400;">Agents</div>
-      </div>
-      <div class="weight-sample">
-        <div class="weight-label">500 Medium</div>
-        <div class="weight-text roobert" style="font-weight: 500;">Agents</div>
-      </div>
-      <div class="weight-sample">
-        <div class="weight-label">600 Semi Bold</div>
-        <div class="weight-text roobert" style="font-weight: 600;">Agents</div>
-      </div>
-      <div class="weight-sample">
-        <div class="weight-label">700 Bold</div>
-        <div class="weight-text roobert" style="font-weight: 700;">Agents</div>
-      </div>
-      <div class="weight-sample">
-        <div class="weight-label">800 Extra Bold</div>
-        <div class="weight-text roobert" style="font-weight: 800;">Agents</div>
-      </div>
-      <div class="weight-sample">
-        <div class="weight-label">900 Black</div>
-        <div class="weight-text roobert" style="font-weight: 900;">Agents</div>
+    <div class="hero-content">
+      <h1 class="hero-headline">AI agents that <em>close deals</em></h1>
+      <p class="hero-sub">Record your sales calls. Let AI handle the follow-ups, CRM updates, and coaching insights — from your first call to your thousandth.</p>
+      <div class="hero-buttons">
+        <a href="#" class="btn btn-primary">
+          Get Started Free
+          <div class="btn-arrow">
+            <span></span><span></span><span></span>
+          </div>
+        </a>
+        <a href="#" class="btn btn-secondary">
+          Watch Demo
+          <div class="btn-arrow">
+            <span></span><span></span><span></span>
+          </div>
+        </a>
       </div>
     </div>
-  </section>
 
-  <!-- MATTER -->
-  <section class="font-section">
-    <div class="font-name">Matter (300, 400, 500 only)</div>
-    
-    <div class="specimen">
-      <div class="specimen-label">Headline · 500</div>
-      <div class="headline-specimen matter" style="font-weight: 500;">AI agents that close deals</div>
-    </div>
-
-    <div class="specimen">
-      <div class="specimen-label">Subhead · 400</div>
-      <div class="subhead-specimen matter" style="font-weight: 400;">Every conversation triggers an army of AI agents</div>
-    </div>
-
-    <div class="specimen">
-      <div class="specimen-label">Body · 300</div>
-      <div class="body-specimen matter" style="font-weight: 300;">Record your sales calls. Let AI handle the follow-ups, CRM updates, and coaching insights — from your first call to your thousandth. One call. Six agents. Zero setup.</div>
-    </div>
-
-    <div class="weights">
-      <div class="weight-sample">
-        <div class="weight-label">300 Light</div>
-        <div class="weight-text matter" style="font-weight: 300;">Agents</div>
+    <div class="hero-visual">
+      <div class="blocks">
+        <!-- Dark mode blocks -->
+        <div class="block purple">
+          <div class="bar white"></div>
+          <div class="bar mint"></div>
+          <div class="bar white"></div>
+        </div>
+        <div class="block mint"></div>
+        <div class="block dark">
+          <div class="bar purple"></div>
+          <div class="bar mint"></div>
+          <div class="bar purple"></div>
+          <div class="bar mint"></div>
+        </div>
+        <div class="block white"></div>
+        <div class="block purple">
+          <div class="bar white"></div>
+          <div class="bar mint"></div>
+        </div>
+        <div class="block mint"></div>
+        <div class="block dark">
+          <div class="bar mint"></div>
+          <div class="bar purple"></div>
+        </div>
+        <div class="block purple"></div>
       </div>
-      <div class="weight-sample">
-        <div class="weight-label">400 Regular</div>
-        <div class="weight-text matter" style="font-weight: 400;">Agents</div>
-      </div>
-      <div class="weight-sample">
-        <div class="weight-label">500 Medium</div>
-        <div class="weight-text matter" style="font-weight: 500;">Agents</div>
-      </div>
-    </div>
-  </section>
-
-  <!-- OBJECT SANS -->
-  <section class="font-section">
-    <div class="font-name">PP Object Sans (400, 900 only)</div>
-    
-    <div class="specimen">
-      <div class="specimen-label">Headline · 900 Heavy</div>
-      <div class="headline-specimen object" style="font-weight: 900;">AI agents that close deals</div>
-    </div>
-
-    <div class="specimen">
-      <div class="specimen-label">Subhead · 400</div>
-      <div class="subhead-specimen object" style="font-weight: 400;">Every conversation triggers an army of AI agents</div>
-    </div>
-
-    <div class="specimen">
-      <div class="specimen-label">Body · 400</div>
-      <div class="body-specimen object" style="font-weight: 400;">Record your sales calls. Let AI handle the follow-ups, CRM updates, and coaching insights — from your first call to your thousandth. One call. Six agents. Zero setup.</div>
-    </div>
-
-    <div class="weights">
-      <div class="weight-sample">
-        <div class="weight-label">400 Regular</div>
-        <div class="weight-text object" style="font-weight: 400;">Agents</div>
-      </div>
-      <div class="weight-sample">
-        <div class="weight-label">900 Heavy</div>
-        <div class="weight-text object" style="font-weight: 900;">Agents</div>
-      </div>
-    </div>
-  </section>
-
-  <!-- FRAKTION MONO -->
-  <section class="font-section">
-    <div class="font-name">PP Fraktion Mono (400 only)</div>
-    
-    <div class="specimen">
-      <div class="specimen-label">Data / Code</div>
-      <div class="subhead-specimen fraktion" style="font-weight: 400;">78% win probability</div>
-    </div>
-
-    <div class="specimen">
-      <div class="specimen-label">Labels</div>
-      <div class="body-specimen fraktion" style="font-weight: 400; font-size: 12px; text-transform: uppercase; letter-spacing: 2px;">LIVE · PROCESSING · 3 FIELDS UPDATED</div>
     </div>
   </section>
 
@@ -352,6 +529,19 @@
       document.documentElement.setAttribute('data-theme', theme);
       document.getElementById('btn-dark').classList.toggle('active', theme === 'dark');
       document.getElementById('btn-light').classList.toggle('active', theme === 'light');
+    }
+
+    function setFont(font) {
+      const root = document.documentElement;
+      if (font === 'roobert') {
+        root.style.setProperty('--heading-font', "'Roobert', system-ui, sans-serif");
+        root.style.setProperty('--body-font', "'Roobert', system-ui, sans-serif");
+      } else if (font === 'object') {
+        root.style.setProperty('--heading-font', "'Object Sans', system-ui, sans-serif");
+        root.style.setProperty('--body-font', "'Object Sans', system-ui, sans-serif");
+      }
+      document.getElementById('btn-roobert').classList.toggle('active', font === 'roobert');
+      document.getElementById('btn-object').classList.toggle('active', font === 'object');
     }
   </script>
 

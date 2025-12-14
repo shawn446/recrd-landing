@@ -928,12 +928,14 @@
     @media (max-width: 900px) {
       .hero {
         flex-direction: column;
-        justify-content: center;
+        justify-content: flex-start;
         text-align: center;
-        padding: 120px 24px 48px;
+        padding: 100px 24px 48px;
+        min-height: auto;
       }
       .hero-content {
         max-width: 100%;
+        margin-bottom: 40px;
       }
       .hero-buttons {
         justify-content: center;
@@ -943,9 +945,9 @@
         top: auto;
         right: auto;
         transform: none;
-        margin-top: 48px;
         width: 100%;
-        max-width: 600px;
+        max-width: 500px;
+        margin: 0 auto;
         height: auto;
         aspect-ratio: 7/6;
       }
@@ -955,39 +957,90 @@
       .nav-links {
         display: none;
       }
-    }
-
-    @media (max-width: 600px) {
-      .hero-headline {
-        font-size: 40px;
-      }
-      .hero-sub {
-        font-size: 22px;
-      }
-      .hero-body {
-        font-size: 16px;
-      }
-      .btn {
-        padding: 14px 24px;
-        font-size: 14px;
-      }
       .cell {
         padding: 8px;
+      }
+      .cell-header {
+        gap: 6px;
+        margin-bottom: 6px;
       }
       .cell-badge {
         font-size: 7px;
         padding: 3px 6px;
       }
       .cell-title {
-        font-size: 10px;
+        font-size: 11px;
+        margin-bottom: 2px;
       }
-      .cell-header {
-        gap: 6px;
-        margin-bottom: 6px;
+      .cell-desc,
+      .cell-meta {
+        display: none;
       }
       .cell-icon {
         width: 14px;
         height: 14px;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .hero {
+        padding: 90px 20px 40px;
+      }
+      .hero-headline {
+        font-size: 36px;
+      }
+      .hero-sub {
+        font-size: 20px;
+      }
+      .hero-body {
+        font-size: 15px;
+      }
+      .hero-buttons {
+        flex-direction: column;
+        gap: 12px;
+      }
+      .btn {
+        padding: 14px 24px;
+        font-size: 14px;
+        width: 100%;
+        justify-content: center;
+      }
+      .grid-container {
+        max-width: 100%;
+      }
+      .cell {
+        padding: 6px;
+      }
+      .cell-badge {
+        font-size: 6px;
+        padding: 2px 4px;
+      }
+      .cell-title {
+        font-size: 9px;
+      }
+      .cell-icon {
+        width: 12px;
+        height: 12px;
+      }
+    }
+
+    @media (max-width: 400px) {
+      .hero-headline {
+        font-size: 30px;
+      }
+      .hero-sub {
+        font-size: 18px;
+      }
+      .cell-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 4px;
+      }
+      .cell-title {
+        font-size: 8px;
+      }
+      .cell-badge {
+        font-size: 5px;
       }
     }
   </style>
@@ -1080,10 +1133,10 @@
              ========================================== -->
         
         <!-- Path 1 (mint): Cell1 bottom-right → down → right to Cell2 top-left
-             Cell1: (0,0)-(100,100), Cell2: (200,200)-(400,300)
-             Route: x=100 down to y=200, then right to x=200 -->
+             Cell1: (0,0)-(200,100) NOW 2 COLS WIDE, Cell2: (200,200)-(400,300)
+             Route: x=200 down to y=200, then stays at x=200 (Cell2 starts there) -->
         <path id="path1" class="grid-path" stroke="#46FCAF" 
-              d="M 100,100 L 100,200 L 200,200"/>
+              d="M 200,100 L 200,200"/>
         
         <!-- Path 2 (purple): Cell2 right edge → right to Cell3 left edge
              Cell2: (200,200)-(400,300), Cell3: (500,300)-(700,400)
@@ -1108,8 +1161,8 @@
            CELL CONTENT - with icons and more detail
            ========================================== -->
       
-      <!-- Cell 1: Row 1, Col 1 (0,0) - 100x100 -->
-      <div class="cell mint" id="cell1" style="left: 0%; top: 0%; width: 14.28%; height: 16.66%;">
+      <!-- Cell 1: Row 1, Col 1 (0,0) - spans 2 cells now for more content -->
+      <div class="cell mint" id="cell1" style="left: 0%; top: 0%; width: 28.57%; height: 16.66%;">
         <div class="cell-header">
           <div class="cell-icon">
             <!-- Phone icon -->
@@ -1119,7 +1172,9 @@
           </div>
           <span class="cell-badge">Trigger</span>
         </div>
-        <span class="cell-title">Sales Call</span>
+        <span class="cell-title">Call Completed</span>
+        <span class="cell-desc">Demo with Acme Corp ended</span>
+        <span class="cell-meta">32 min · Zoom</span>
       </div>
 
       <!-- Cell 2: Row 3, Cols 3-4 (200,200) - 200x100 -->

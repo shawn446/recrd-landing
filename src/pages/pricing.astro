@@ -234,7 +234,7 @@
     }
 
     .btn-featured { 
-      background: transparent;
+      background: var(--mint);
       color: #0a0a0a;
       border: 2px solid var(--mint);
     }
@@ -245,14 +245,27 @@
       left: 0;
       width: 0;
       height: 100%;
-      background: var(--mint);
+      background: #0a0a0a;
       transition: width 0.3s ease;
       z-index: -1;
     }
     .btn-featured:hover::before { width: 100%; }
     .btn-featured:hover { 
-      color: #0a0a0a;
+      color: var(--mint);
       border-color: var(--mint);
+    }
+    
+    [data-theme="light"] .btn-featured {
+      background: var(--purple);
+      color: #fff;
+      border-color: var(--purple);
+    }
+    [data-theme="light"] .btn-featured::before {
+      background: #fff;
+    }
+    [data-theme="light"] .btn-featured:hover {
+      color: var(--purple);
+      border-color: var(--purple);
     }
 
     .btn-secondary { 
@@ -328,6 +341,9 @@
     .pricing-card.featured {
       border: 2px solid var(--mint);
     }
+    [data-theme="light"] .pricing-card.featured {
+      border-color: var(--purple);
+    }
 
     .pricing-badge {
       position: absolute;
@@ -342,6 +358,10 @@
       text-transform: uppercase;
       letter-spacing: 0.1em;
       padding: 6px 16px;
+    }
+    [data-theme="light"] .pricing-badge {
+      background: var(--purple);
+      color: #fff;
     }
 
     .pricing-tier {

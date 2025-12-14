@@ -1,5 +1,5 @@
 ---
-// Hero Section - Simplified with Solid Color Cards
+// Hero Section - Stepped Grid with Solid Color Cards
 ---
 
 <!DOCTYPE html>
@@ -32,6 +32,8 @@
       --purple: #A678F4;
       --cyan: #02C0FF;
       --coral: #FF4F5E;
+      
+      --cell: 80px;
     }
 
     [data-theme="dark"] {
@@ -39,6 +41,7 @@
       --text: #ffffff;
       --text-muted: #888888;
       --border: rgba(255,255,255,0.12);
+      --grid-line: rgba(255,255,255,0.08);
     }
 
     [data-theme="light"] {
@@ -46,6 +49,7 @@
       --text: #0a0a0a;
       --text-muted: #666666;
       --border: rgba(0,0,0,0.1);
+      --grid-line: rgba(0,0,0,0.08);
     }
 
     * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -120,49 +124,8 @@
       overflow: hidden;
     }
 
-    /* Background Effects */
-    .hero-bg {
-      position: absolute;
-      inset: 0;
-      z-index: 0;
-      overflow: hidden;
-    }
-
-    .glow-orb {
-      position: absolute;
-      border-radius: 50%;
-      filter: blur(150px);
-    }
-
-    .glow-orb.mint {
-      width: 600px;
-      height: 600px;
-      background: var(--mint);
-      top: -15%;
-      right: 20%;
-      opacity: 0.12;
-    }
-
-    .glow-orb.purple {
-      width: 500px;
-      height: 500px;
-      background: var(--purple);
-      top: 40%;
-      right: 40%;
-      opacity: 0.1;
-    }
-
-    .glow-orb.coral {
-      width: 400px;
-      height: 400px;
-      background: var(--coral);
-      bottom: 10%;
-      right: 15%;
-      opacity: 0.08;
-    }
-
     .hero-content {
-      max-width: 520px;
+      max-width: 480px;
       z-index: 10;
       padding: 48px 0;
     }
@@ -209,58 +172,72 @@
     .btn-secondary:hover { background: var(--cyan); border-color: var(--cyan); color: #0a0a0a; }
 
     /* ========================================
-       CARDS SYSTEM
+       STEPPED GRID
        ======================================== */
     
-    .cards-container {
+    .grid-wrapper {
       position: absolute;
-      top: 72px;
-      right: 0;
-      bottom: 0;
-      width: 55%;
-      min-width: 600px;
+      top: 50%;
+      right: 40px;
+      transform: translateY(-50%);
+      width: calc(var(--cell) * 8);
+      height: calc(var(--cell) * 9);
       z-index: 5;
     }
 
-    /* SVG Paths */
-    .paths-svg {
+    /* Grid lines via CSS */
+    .grid-bg {
       position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      z-index: 1;
-      pointer-events: none;
+      inset: 0;
+      display: grid;
+      grid-template-columns: repeat(8, var(--cell));
+      grid-template-rows: repeat(9, var(--cell));
     }
 
-    .flow-path {
-      fill: none;
-      stroke-width: 2;
-      stroke-linecap: square;
-      stroke-linejoin: miter;
-      filter: drop-shadow(0 0 8px currentColor);
+    .grid-cell {
+      border: 1px solid var(--grid-line);
+      margin: -0.5px;
     }
 
-    /* Solid Color Cards */
+    /* Hide cells to create stepped effect */
+    /* Row 1: hide cols 1-2 */
+    .grid-cell:nth-child(1),
+    .grid-cell:nth-child(2) { border-color: transparent; }
+    
+    /* Row 2: hide col 1 */
+    .grid-cell:nth-child(9) { border-color: transparent; }
+    
+    /* Row 8: hide cols 7-8 */
+    .grid-cell:nth-child(63),
+    .grid-cell:nth-child(64) { border-color: transparent; }
+    
+    /* Row 9: hide cols 6-8 */
+    .grid-cell:nth-child(70),
+    .grid-cell:nth-child(71),
+    .grid-cell:nth-child(72) { border-color: transparent; }
+
+    /* Cards */
     .card {
       position: absolute;
-      padding: 24px 28px;
+      padding: 20px 24px;
       opacity: 0;
-      transform: translateY(20px) scale(0.95);
+      transform: scale(0.95);
       z-index: 10;
-      width: 300px;
+      /* Cards are 2 cells wide, ~1.5 cells tall */
+      width: calc(var(--cell) * 2.5);
+      min-height: calc(var(--cell) * 1.75);
     }
 
     .card-header {
       display: flex;
       align-items: center;
       gap: 10px;
-      margin-bottom: 14px;
+      margin-bottom: 12px;
     }
 
     .card-icon {
-      width: 22px;
-      height: 22px;
+      width: 20px;
+      height: 20px;
       flex-shrink: 0;
     }
     .card-icon svg {
@@ -281,38 +258,38 @@
     }
 
     .card-title {
-      font-size: 20px;
+      font-size: 17px;
       font-weight: 600;
       line-height: 1.3;
-      margin-bottom: 8px;
+      margin-bottom: 6px;
     }
 
     .card-content {
-      font-size: 14px;
+      font-size: 13px;
       line-height: 1.5;
       opacity: 0.9;
     }
 
     .card-meta {
       font-family: var(--mono);
-      font-size: 11px;
-      margin-top: 14px;
+      font-size: 10px;
+      margin-top: 12px;
       opacity: 0.7;
     }
 
-    /* Card solid colors */
+    /* Card colors */
     .card.mint {
       background: var(--mint);
       color: #0a0a0a;
-      box-shadow: 0 8px 40px rgba(70, 252, 175, 0.3);
+      box-shadow: 0 8px 32px rgba(70, 252, 175, 0.25);
     }
-    .card.mint .card-badge { background: rgba(0,0,0,0.15); }
+    .card.mint .card-badge { background: rgba(0,0,0,0.12); }
     .card.mint .card-icon svg { stroke: #0a0a0a; }
 
     .card.purple {
       background: var(--purple);
       color: #fff;
-      box-shadow: 0 8px 40px rgba(166, 120, 244, 0.35);
+      box-shadow: 0 8px 32px rgba(166, 120, 244, 0.3);
     }
     .card.purple .card-badge { background: rgba(255,255,255,0.2); }
     .card.purple .card-icon svg { stroke: #fff; }
@@ -320,76 +297,87 @@
     .card.cyan {
       background: var(--cyan);
       color: #0a0a0a;
-      box-shadow: 0 8px 40px rgba(2, 192, 255, 0.3);
+      box-shadow: 0 8px 32px rgba(2, 192, 255, 0.25);
     }
-    .card.cyan .card-badge { background: rgba(0,0,0,0.15); }
+    .card.cyan .card-badge { background: rgba(0,0,0,0.12); }
     .card.cyan .card-icon svg { stroke: #0a0a0a; }
 
     .card.coral {
       background: var(--coral);
       color: #fff;
-      box-shadow: 0 8px 40px rgba(255, 79, 94, 0.35);
+      box-shadow: 0 8px 32px rgba(255, 79, 94, 0.3);
     }
     .card.coral .card-badge { background: rgba(255,255,255,0.2); }
     .card.coral .card-icon svg { stroke: #fff; }
 
     /* Stats grid */
-    .stats-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 8px;
-      margin-top: 12px;
+    .stats-row {
+      display: flex;
+      gap: 12px;
+      margin-top: 10px;
     }
 
     .stat-item {
       background: rgba(255,255,255,0.15);
-      padding: 10px 12px;
+      padding: 8px 10px;
+      flex: 1;
     }
 
     .stat-label {
       font-family: var(--mono);
-      font-size: 9px;
+      font-size: 8px;
       text-transform: uppercase;
       letter-spacing: 0.1em;
       opacity: 0.8;
-      margin-bottom: 4px;
+      margin-bottom: 3px;
     }
 
     .stat-value {
-      font-size: 14px;
+      font-size: 13px;
       font-weight: 600;
     }
 
     /* Quote */
     .quote-text {
       font-style: italic;
-      padding: 12px;
+      padding: 10px 12px;
       background: rgba(255,255,255,0.15);
-      margin-bottom: 8px;
-      font-size: 13px;
+      font-size: 12px;
       line-height: 1.4;
     }
 
     /* MEDDIC */
     .meddic-bar {
       display: flex;
-      gap: 4px;
-      margin-top: 10px;
+      gap: 3px;
+      margin-top: 8px;
     }
     .meddic-dot {
       flex: 1;
-      height: 8px;
+      height: 6px;
       background: rgba(0,0,0,0.2);
     }
     .meddic-dot.filled {
-      background: rgba(0,0,0,0.5);
+      background: rgba(0,0,0,0.4);
     }
 
-    /* Card positions */
-    #card1 { top: 8%; left: 8%; }
-    #card2 { top: 28%; left: 45%; }
-    #card3 { top: 52%; left: 55%; }
-    #card4 { top: 72%; left: 15%; }
+    /* Card positions - snapped to grid cells */
+    #card1 { 
+      top: 0; 
+      left: calc(var(--cell) * 2); 
+    }
+    #card2 { 
+      top: calc(var(--cell) * 2); 
+      left: calc(var(--cell) * 4.5); 
+    }
+    #card3 { 
+      top: calc(var(--cell) * 4.5); 
+      left: calc(var(--cell) * 5); 
+    }
+    #card4 { 
+      top: calc(var(--cell) * 7); 
+      left: calc(var(--cell) * 0.5); 
+    }
 
     /* Theme toggle */
     .theme-toggle {
@@ -414,18 +402,22 @@
     .theme-toggle button.active { background: var(--text); color: var(--bg); }
 
     /* RESPONSIVE */
+    @media (max-width: 1400px) {
+      :root { --cell: 70px; }
+    }
+    
     @media (max-width: 1200px) {
-      .cards-container { width: 50%; min-width: 500px; }
-      .card { width: 260px; padding: 20px 24px; }
-      .card-title { font-size: 18px; }
+      :root { --cell: 60px; }
+      .card { padding: 16px 20px; }
+      .card-title { font-size: 15px; }
+      .card-content { font-size: 12px; }
     }
 
     @media (max-width: 1000px) {
-      .cards-container { width: 45%; min-width: 400px; }
-      .card { width: 220px; padding: 16px 20px; }
-      .card-title { font-size: 16px; }
-      .card-content { font-size: 12px; }
-      .stats-grid { display: none; }
+      :root { --cell: 50px; }
+      .card { padding: 14px 16px; width: calc(var(--cell) * 2.8); }
+      .card-title { font-size: 14px; }
+      .stats-row { display: none; }
     }
 
     @media (max-width: 900px) {
@@ -436,14 +428,14 @@
       }
       .hero-content { max-width: 100%; text-align: center; margin-bottom: 40px; }
       .hero-buttons { justify-content: center; }
-      .cards-container {
+      .grid-wrapper {
         position: relative;
-        width: 100%;
-        min-width: auto;
-        height: 500px;
+        top: auto;
+        right: auto;
+        transform: none;
+        margin: 0 auto;
+        --cell: 45px;
       }
-      .card { width: 200px; padding: 14px 16px; }
-      .card-title { font-size: 14px; }
       .card-content { display: none; }
       .card-meta { display: none; }
       .nav-links { display: none; }
@@ -455,11 +447,12 @@
       .hero-sub { font-size: 20px; }
       .hero-buttons { flex-direction: column; }
       .btn { width: 100%; text-align: center; }
-      .cards-container { height: 400px; }
-      .card { width: 160px; padding: 12px; }
+      :root { --cell: 38px; }
+      .card { padding: 10px 12px; width: calc(var(--cell) * 2.5); min-height: auto; }
       .card-badge { font-size: 7px; padding: 3px 6px; }
       .card-title { font-size: 12px; }
       .card-icon { width: 16px; height: 16px; }
+      .card-header { margin-bottom: 8px; }
     }
   </style>
 </head>
@@ -483,12 +476,6 @@
   </nav>
 
   <section class="hero">
-    <div class="hero-bg">
-      <div class="glow-orb mint"></div>
-      <div class="glow-orb purple"></div>
-      <div class="glow-orb coral"></div>
-    </div>
-
     <div class="hero-content">
       <h1 class="hero-headline">AI agents that <em>close deals</em></h1>
       <p class="hero-sub">One call. Six agents. Zero setup.</p>
@@ -499,21 +486,20 @@
       </div>
     </div>
 
-    <div class="cards-container">
-      <!-- SVG Paths -->
-      <svg class="paths-svg" viewBox="0 0 100 100" preserveAspectRatio="none">
-        <!-- Path 1: Card1 → Card2 -->
-        <path id="path1" class="flow-path" stroke="#46FCAF" vector-effect="non-scaling-stroke"
-              d="M 25,18 L 25,32 L 45,32"/>
-        
-        <!-- Path 2: Card2 → Card3 -->
-        <path id="path2" class="flow-path" stroke="#A678F4" vector-effect="non-scaling-stroke"
-              d="M 65,42 L 65,55"/>
-        
-        <!-- Path 3: Card3 → Card4 -->
-        <path id="path3" class="flow-path" stroke="#02C0FF" vector-effect="non-scaling-stroke"
-              d="M 55,65 L 55,76 L 35,76"/>
-      </svg>
+    <div class="grid-wrapper">
+      <!-- Grid background -->
+      <div class="grid-bg">
+        <!-- 8 cols × 9 rows = 72 cells -->
+        <div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div>
+        <div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div>
+        <div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div>
+        <div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div>
+        <div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div>
+        <div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div>
+        <div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div>
+        <div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div>
+        <div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div>
+      </div>
 
       <!-- Card 1: Call Completed -->
       <div class="card mint" id="card1">
@@ -523,11 +509,11 @@
               <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
             </svg>
           </div>
-          <span class="card-badge">Call Ended</span>
+          <span class="card-badge">Trigger</span>
         </div>
         <span class="card-title">Call completed</span>
-        <div class="card-content">Discovery call with Acme Corp</div>
-        <div class="card-meta">32 min · Zoom · Sarah Chen</div>
+        <div class="card-content">Demo with Acme Corp</div>
+        <div class="card-meta">32 min · Zoom</div>
       </div>
 
       <!-- Card 2: recrd Analyzes -->
@@ -541,11 +527,11 @@
           <span class="card-badge">Processing</span>
         </div>
         <span class="card-title">recrd analyzes</span>
-        <div class="card-content">Extracting insights from transcript</div>
-        <div class="stats-grid">
+        <div class="card-content">Extracting insights</div>
+        <div class="stats-row">
           <div class="stat-item">
             <div class="stat-label">Sentiment</div>
-            <div class="stat-value">87% Positive</div>
+            <div class="stat-value">87%</div>
           </div>
           <div class="stat-item">
             <div class="stat-label">Momentum</div>
@@ -566,7 +552,7 @@
           <span class="card-badge">CRM Agent</span>
         </div>
         <span class="card-title">Pipeline updated</span>
-        <div class="card-content">Stage → Negotiation<br>5/7 MEDDIC fields synced</div>
+        <div class="card-content">Stage → Negotiation</div>
         <div class="meddic-bar">
           <div class="meddic-dot filled"></div>
           <div class="meddic-dot filled"></div>
@@ -576,7 +562,7 @@
           <div class="meddic-dot"></div>
           <div class="meddic-dot"></div>
         </div>
-        <div class="card-meta">HubSpot · Auto-synced</div>
+        <div class="card-meta">HubSpot synced</div>
       </div>
 
       <!-- Card 4: Manager Notified -->
@@ -591,9 +577,9 @@
         </div>
         <span class="card-title">Manager notified</span>
         <div class="card-content">
-          <div class="quote-text">"Budget is tight this quarter, but we're interested in Q1."</div>
+          <div class="quote-text">"Budget is tight, but interested in Q1."</div>
         </div>
-        <div class="card-meta">Slack #deals · @mike</div>
+        <div class="card-meta">Slack #deals</div>
       </div>
     </div>
   </section>
@@ -622,55 +608,61 @@
     function raf(time) { lenis.raf(time); requestAnimationFrame(raf); }
     requestAnimationFrame(raf);
 
-    function createTimeline() {
-      const paths = document.querySelectorAll('.flow-path');
-      
-      paths.forEach(path => {
-        const length = path.getTotalLength();
-        path.style.strokeDasharray = length;
-        path.style.strokeDashoffset = length;
-      });
+    function animateCards() {
+      gsap.set('.card', { opacity: 0, scale: 0.9, y: 20 });
 
-      gsap.set('.card', { opacity: 0, y: 30, scale: 0.95 });
-
-      // No loop - plays once
       const tl = gsap.timeline();
 
-      // Card 1 appears first
-      tl.to('#card1', { opacity: 1, y: 0, scale: 1, duration: 0.8, ease: 'power2.out' });
+      // Card 1
+      tl.to('#card1', { 
+        opacity: 1, 
+        scale: 1, 
+        y: 0, 
+        duration: 0.7, 
+        ease: 'power2.out' 
+      });
       
-      // Pause to read
-      tl.to({}, { duration: 1 });
+      // Pause
+      tl.to({}, { duration: 0.8 });
       
-      // Path 1 draws AFTER card 1 is visible
-      tl.to('#path1', { strokeDashoffset: 0, duration: 1.2, ease: 'power1.inOut' });
+      // Card 2
+      tl.to('#card2', { 
+        opacity: 1, 
+        scale: 1, 
+        y: 0, 
+        duration: 0.7, 
+        ease: 'power2.out' 
+      });
       
-      // Card 2 appears at end of path
-      tl.to('#card2', { opacity: 1, y: 0, scale: 1, duration: 0.8, ease: 'power2.out' }, '-=0.2');
+      // Pause
+      tl.to({}, { duration: 0.8 });
       
-      // Pause to read
-      tl.to({}, { duration: 1.2 });
+      // Card 3
+      tl.to('#card3', { 
+        opacity: 1, 
+        scale: 1, 
+        y: 0, 
+        duration: 0.7, 
+        ease: 'power2.out' 
+      });
       
-      // Path 2 draws
-      tl.to('#path2', { strokeDashoffset: 0, duration: 1, ease: 'power1.inOut' });
+      // Pause
+      tl.to({}, { duration: 0.8 });
       
-      // Card 3 appears
-      tl.to('#card3', { opacity: 1, y: 0, scale: 1, duration: 0.8, ease: 'power2.out' }, '-=0.2');
-      
-      // Pause to read
-      tl.to({}, { duration: 1.2 });
-      
-      // Path 3 draws
-      tl.to('#path3', { strokeDashoffset: 0, duration: 1.2, ease: 'power1.inOut' });
-      
-      // Card 4 appears
-      tl.to('#card4', { opacity: 1, y: 0, scale: 1, duration: 0.8, ease: 'power2.out' }, '-=0.2');
+      // Card 4
+      tl.to('#card4', { 
+        opacity: 1, 
+        scale: 1, 
+        y: 0, 
+        duration: 0.7, 
+        ease: 'power2.out' 
+      });
 
       return tl;
     }
 
     document.addEventListener('DOMContentLoaded', () => {
-      setTimeout(createTimeline, 500);
+      setTimeout(animateCards, 500);
     });
   </script>
 </body>

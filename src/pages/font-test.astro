@@ -1,5 +1,5 @@
 ---
-// Hero Section - Diamond Stepped Grid with Rich Cards
+// Hero Section - Mirrored Stepped Grid
 ---
 
 <!DOCTYPE html>
@@ -42,6 +42,7 @@
       --text-muted: #888888;
       --border: rgba(255,255,255,0.12);
       --grid-line: rgba(255,255,255,0.1);
+      --btn-outline: rgba(255,255,255,0.4);
     }
 
     [data-theme="light"] {
@@ -50,6 +51,7 @@
       --text-muted: #666666;
       --border: rgba(0,0,0,0.1);
       --grid-line: rgba(0,0,0,0.1);
+      --btn-outline: rgba(0,0,0,0.8);
     }
 
     * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -77,6 +79,9 @@
       background: rgba(10,10,10,0.85);
       backdrop-filter: blur(20px);
       border-bottom: 1px solid var(--border);
+    }
+    [data-theme="light"] nav {
+      background: rgba(250,250,250,0.85);
     }
 
     .nav-logo {
@@ -125,66 +130,88 @@
     }
 
     .hero-content {
-      max-width: 480px;
+      max-width: 550px;
       z-index: 10;
       padding: 48px 0;
     }
 
     .hero-headline {
-      font-size: clamp(48px, 7vw, 80px);
-      font-weight: 700;
-      line-height: 0.95;
-      letter-spacing: -0.035em;
-      margin-bottom: 24px;
+      font-size: 90px;
+      font-weight: 350;
+      line-height: 1.0;
+      letter-spacing: -0.03em;
+      margin-bottom: 28px;
     }
-    .hero-headline em { font-style: normal; color: var(--mint); }
+    .hero-headline em { 
+      font-style: normal; 
+      color: var(--mint);
+      font-weight: 400;
+    }
     [data-theme="light"] .hero-headline em { color: var(--purple); }
 
     .hero-sub {
-      font-size: clamp(22px, 3vw, 32px);
-      font-weight: 500;
-      line-height: 1.2;
-      margin-bottom: 20px;
-      letter-spacing: -0.02em;
-    }
-
-    .hero-body {
-      font-size: 17px;
-      font-weight: 300;
-      color: var(--text-muted);
-      line-height: 1.6;
+      font-size: 20px;
+      font-weight: 400;
+      line-height: 1.5;
       margin-bottom: 40px;
+      color: var(--text-muted);
     }
 
     .hero-buttons { display: flex; gap: 16px; }
 
     .btn {
-      padding: 16px 32px;
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      padding: 18px 28px;
       font-weight: 500;
       font-size: 15px;
       text-decoration: none;
       transition: all 0.2s ease;
       cursor: pointer;
     }
-    .btn-primary { background: #fff; color: #0a0a0a; }
-    .btn-primary:hover { background: var(--mint); transform: translateY(-2px); }
-    .btn-secondary { background: transparent; color: var(--text); border: 1px solid var(--border); }
-    .btn-secondary:hover { background: var(--cyan); border-color: var(--cyan); color: #0a0a0a; }
+    
+    .btn-primary { 
+      background: var(--text); 
+      color: var(--bg); 
+    }
+    .btn-primary:hover { 
+      background: var(--mint); 
+      color: #0a0a0a;
+      transform: translateY(-2px); 
+    }
+    
+    .btn-secondary { 
+      background: transparent; 
+      color: var(--text); 
+      border: 1px solid var(--btn-outline);
+    }
+    .btn-secondary:hover { 
+      background: var(--text);
+      color: var(--bg);
+    }
+
+    .btn-arrow {
+      display: inline-flex;
+      transition: transform 0.2s ease;
+    }
+    .btn:hover .btn-arrow {
+      transform: translateX(4px);
+    }
 
     /* ========================================
-       STEPPED GRID
+       STEPPED GRID - Mirrored (steps on LEFT)
        Columns per row: 9,8,7,6,6,7,8,9
-       Creates diamond/hourglass shape
+       Steps indent FROM the left
        ======================================== */
     
     .grid-wrapper {
       position: absolute;
       top: 50%;
-      right: 20px;
-      transform: translateY(-50%);
-      /* 9 cols max × 8 rows */
+      right: 40px;
+      transform: translateY(-48%);
       width: calc(var(--cell) * 9);
-      height: calc(var(--cell) * 8);
+      height: calc(var(--cell) * 7);
       z-index: 5;
     }
 
@@ -202,7 +229,7 @@
     }
 
     /* ========================================
-       CARDS - 2×2 cells each (320×320px)
+       CARDS - 2×2 cells each
        ======================================== */
     
     .card {
@@ -213,7 +240,7 @@
       flex-direction: column;
       padding: 28px;
       opacity: 0;
-      transform: scale(0.95);
+      transform: translateX(-30px) scale(0.95);
       z-index: 10;
     }
 
@@ -225,8 +252,8 @@
     }
 
     .card-icon {
-      width: 26px;
-      height: 26px;
+      width: 24px;
+      height: 24px;
       flex-shrink: 0;
     }
     .card-icon svg {
@@ -247,14 +274,14 @@
     }
 
     .card-title {
-      font-size: 22px;
+      font-size: 20px;
       font-weight: 600;
       line-height: 1.2;
       margin-bottom: 8px;
     }
 
     .card-content {
-      font-size: 14px;
+      font-size: 13px;
       line-height: 1.5;
       opacity: 0.9;
       flex: 1;
@@ -262,7 +289,7 @@
 
     .card-meta {
       font-family: var(--mono);
-      font-size: 11px;
+      font-size: 10px;
       opacity: 0.7;
       margin-top: auto;
       padding-top: 12px;
@@ -302,114 +329,122 @@
     .card.coral .card-icon svg { stroke: #fff; }
     .card.coral .card-meta { border-color: rgba(255,255,255,0.2); }
 
-    /* Card content styles */
-    .stats-row {
-      display: flex;
-      gap: 16px;
-      margin-top: 12px;
+    /* Card content components */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-top: 8px;
     }
 
-    .stat {
-      flex: 1;
+    .stat-box {
+      background: rgba(255,255,255,0.15);
+      padding: 10px;
     }
 
     .stat-label {
       font-family: var(--mono);
-      font-size: 9px;
+      font-size: 8px;
       text-transform: uppercase;
       letter-spacing: 0.1em;
-      opacity: 0.7;
+      opacity: 0.8;
       margin-bottom: 4px;
     }
 
     .stat-value {
-      font-size: 18px;
+      font-size: 16px;
       font-weight: 600;
     }
 
+    .stat-value.positive { color: #46FCAF; }
+    .stat-value.highlight { color: #fff; }
+
     .talk-ratio {
       display: flex;
-      height: 8px;
+      height: 6px;
       gap: 2px;
-      margin-top: 8px;
-      border-radius: 4px;
+      margin-top: 10px;
+      border-radius: 3px;
       overflow: hidden;
     }
 
-    .talk-ratio .you {
+    .talk-ratio .rep {
       background: rgba(0,0,0,0.3);
       width: 35%;
     }
 
-    .talk-ratio .them {
+    .talk-ratio .prospect {
       background: rgba(0,0,0,0.15);
       width: 65%;
     }
 
-    .meddic-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 6px;
+    .meddic-row {
+      display: flex;
+      gap: 4px;
       margin-top: 10px;
     }
 
     .meddic-item {
-      background: rgba(0,0,0,0.1);
-      padding: 6px 8px;
+      flex: 1;
+      background: rgba(0,0,0,0.15);
+      padding: 8px 4px;
       font-family: var(--mono);
-      font-size: 9px;
+      font-size: 10px;
       text-align: center;
+      font-weight: 600;
     }
 
     .meddic-item.filled {
-      background: rgba(0,0,0,0.25);
+      background: rgba(0,0,0,0.3);
     }
 
-    .quote-text {
-      font-style: italic;
-      font-size: 13px;
-      line-height: 1.5;
+    .quote-block {
+      background: rgba(255,255,255,0.12);
       padding: 12px;
-      background: rgba(255,255,255,0.1);
-      margin-top: 8px;
+      margin-top: 6px;
+      font-style: italic;
+      font-size: 12px;
+      line-height: 1.4;
     }
 
     .quote-attr {
+      font-style: normal;
       font-size: 11px;
       opacity: 0.8;
       margin-top: 8px;
     }
 
-    /* Card positions
-       Row 0: 9 cols (cols 0-8)
-       Row 1: 8 cols (cols 0-7)
-       Row 2: 7 cols (cols 0-6)
-       Row 3: 6 cols (cols 0-5)
-       Row 4: 6 cols (cols 0-5)
-       Row 5: 7 cols (cols 0-6)
-       Row 6: 8 cols (cols 0-7)
-       Row 7: 9 cols (cols 0-8)
+    /* Card positions - diagonal cascade, no touching
+       Grid mirrored: steps on LEFT, full width on RIGHT
        
-       Card 1 (mint): row 0, cols 7-8
-       Card 2 (purple): row 2, cols 4-5 (adjusted for narrower row)
-       Card 3 (cyan): row 4, cols 4-5
-       Card 4 (coral): row 6, cols 1-2
+       Row 0: 9 cols (full)
+       Row 1: 8 cols (starts col 1)
+       Row 2: 7 cols (starts col 2)
+       Row 3: 6 cols (starts col 3)
+       Row 4: 7 cols (starts col 2)
+       Row 5: 8 cols (starts col 1)
+       Row 6: 9 cols (full)
+       
+       Card 1 (mint): row 0, cols 0-1
+       Card 2 (purple): row 1, cols 3-4
+       Card 3 (cyan): row 3, cols 5-6
+       Card 4 (coral): row 5, cols 7-8
     */
     #card1 {
       top: 0;
-      left: calc(var(--cell) * 7);
+      left: 0;
     }
     #card2 {
-      top: calc(var(--cell) * 2);
-      left: calc(var(--cell) * 4);
+      top: calc(var(--cell) * 1);
+      left: calc(var(--cell) * 3);
     }
     #card3 {
-      top: calc(var(--cell) * 4);
-      left: calc(var(--cell) * 4);
+      top: calc(var(--cell) * 3);
+      left: calc(var(--cell) * 5);
     }
     #card4 {
-      top: calc(var(--cell) * 6);
-      left: calc(var(--cell) * 1);
+      top: calc(var(--cell) * 5);
+      left: calc(var(--cell) * 7);
     }
 
     /* Theme toggle */
@@ -437,33 +472,38 @@
     /* RESPONSIVE */
     @media (max-width: 1800px) {
       :root { --cell: 140px; }
+      .hero-headline { font-size: 76px; }
     }
     
     @media (max-width: 1600px) {
       :root { --cell: 120px; }
+      .hero-headline { font-size: 68px; }
     }
     
     @media (max-width: 1400px) {
       :root { --cell: 100px; }
-      .card { padding: 22px; }
-      .card-title { font-size: 18px; }
-      .card-content { font-size: 12px; }
-      .stat-value { font-size: 15px; }
+      .hero-headline { font-size: 60px; }
+      .card { padding: 20px; }
+      .card-title { font-size: 16px; }
+      .card-content { font-size: 11px; }
+      .stat-value { font-size: 14px; }
     }
     
     @media (max-width: 1200px) {
       :root { --cell: 85px; }
-      .card { padding: 18px; }
-      .card-title { font-size: 16px; }
-      .stats-row { display: none; }
-      .meddic-grid { display: none; }
-      .quote-text { display: none; }
+      .hero-headline { font-size: 52px; }
+      .card { padding: 16px; }
+      .card-title { font-size: 14px; }
+      .stats-grid { display: none; }
+      .meddic-row { display: none; }
+      .quote-block { display: none; }
     }
 
     @media (max-width: 1000px) {
       :root { --cell: 70px; }
-      .card { padding: 14px; }
-      .card-title { font-size: 14px; }
+      .hero-headline { font-size: 44px; }
+      .card { padding: 12px; }
+      .card-title { font-size: 13px; }
       .card-content { display: none; }
       .card-meta { display: none; }
     }
@@ -475,6 +515,7 @@
         min-height: auto;
       }
       .hero-content { max-width: 100%; text-align: center; margin-bottom: 40px; }
+      .hero-headline { font-size: 48px; }
       .hero-buttons { justify-content: center; }
       .grid-wrapper {
         position: relative;
@@ -490,15 +531,15 @@
 
     @media (max-width: 600px) {
       .hero-headline { font-size: 36px; }
-      .hero-sub { font-size: 20px; }
+      .hero-sub { font-size: 16px; }
       .hero-buttons { flex-direction: column; }
-      .btn { width: 100%; text-align: center; }
+      .btn { width: 100%; justify-content: center; }
       :root { --cell: 45px; }
-      .card { padding: 10px; }
+      .card { padding: 8px; }
       .card-badge { font-size: 7px; padding: 3px 6px; }
-      .card-title { font-size: 11px; }
-      .card-icon { width: 16px; height: 16px; }
-      .card-header { margin-bottom: 8px; }
+      .card-title { font-size: 10px; }
+      .card-icon { width: 14px; height: 14px; }
+      .card-header { margin-bottom: 6px; gap: 6px; }
     }
   </style>
 </head>
@@ -523,70 +564,93 @@
 
   <section class="hero">
     <div class="hero-content">
-      <h1 class="hero-headline">AI agents that <em>close deals</em></h1>
-      <p class="hero-sub">One call. Six agents. Zero setup.</p>
-      <p class="hero-body">Record your sales calls and let AI handle the follow-ups, CRM updates, and coaching insights automatically.</p>
+      <h1 class="hero-headline">Your calls,<br><em>working for you</em></h1>
+      <p class="hero-sub">Every sales call triggers six AI agents that update your CRM, alert your team, and draft follow-ups—automatically.</p>
       <div class="hero-buttons">
-        <a href="#" class="btn btn-primary">Get Started Free</a>
-        <a href="#" class="btn btn-secondary">Watch Demo</a>
+        <a href="#" class="btn btn-primary">
+          Book a Demo
+          <span class="btn-arrow">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+              <rect x="1" y="7" width="2" height="2" fill="currentColor"/>
+              <rect x="4" y="7" width="2" height="2" fill="currentColor"/>
+              <rect x="7" y="7" width="2" height="2" fill="currentColor"/>
+              <rect x="10" y="7" width="2" height="2" fill="currentColor"/>
+              <rect x="10" y="4" width="2" height="2" fill="currentColor"/>
+              <rect x="12" y="6" width="2" height="2" fill="currentColor"/>
+              <rect x="10" y="10" width="2" height="2" fill="currentColor"/>
+              <rect x="12" y="8" width="2" height="2" fill="currentColor"/>
+            </svg>
+          </span>
+        </a>
+        <a href="#" class="btn btn-secondary">
+          See How It Works
+          <span class="btn-arrow">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+              <rect x="1" y="7" width="2" height="2" fill="currentColor"/>
+              <rect x="4" y="7" width="2" height="2" fill="currentColor"/>
+              <rect x="7" y="7" width="2" height="2" fill="currentColor"/>
+              <rect x="10" y="7" width="2" height="2" fill="currentColor"/>
+              <rect x="10" y="4" width="2" height="2" fill="currentColor"/>
+              <rect x="12" y="6" width="2" height="2" fill="currentColor"/>
+              <rect x="10" y="10" width="2" height="2" fill="currentColor"/>
+              <rect x="12" y="8" width="2" height="2" fill="currentColor"/>
+            </svg>
+          </span>
+        </a>
       </div>
     </div>
 
     <div class="grid-wrapper">
-      <!-- SVG Grid: 9 cols × 8 rows with stepped edges
-           Column pattern per row: 9,8,7,6,6,7,8,9
-           Cell = 160px, so multiply by 160 for coordinates
-           
-           Row widths:
-           Row 0: 9 cols = 1440px (x: 0-1440)
-           Row 1: 8 cols = 1280px (x: 0-1280)
-           Row 2: 7 cols = 1120px (x: 0-1120)
-           Row 3: 6 cols = 960px (x: 0-960)
-           Row 4: 6 cols = 960px (x: 0-960)
-           Row 5: 7 cols = 1120px (x: 0-1120)
-           Row 6: 8 cols = 1280px (x: 0-1280)
-           Row 7: 9 cols = 1440px (x: 0-1440)
+      <!-- SVG Grid: 9 cols × 7 rows, stepped on LEFT
+           Steps indent from left:
+           Row 0: full 9 cols (0-1440)
+           Row 1: 8 cols, starts at 160 (160-1440)
+           Row 2: 7 cols, starts at 320 (320-1440)
+           Row 3: 6 cols, starts at 480 (480-1440)
+           Row 4: 7 cols, starts at 320 (320-1440)
+           Row 5: 8 cols, starts at 160 (160-1440)
+           Row 6: full 9 cols (0-1440)
       -->
-      <svg class="grid-svg" viewBox="0 0 1440 1280" preserveAspectRatio="xMidYMid meet">
+      <svg class="grid-svg" viewBox="0 0 1440 1120" preserveAspectRatio="xMidYMid meet">
         <!-- Horizontal lines -->
         <line x1="0" y1="0" x2="1440" y2="0"/>
-        <line x1="0" y1="160" x2="1280" y2="160"/>
-        <line x1="0" y1="320" x2="1120" y2="320"/>
-        <line x1="0" y1="480" x2="960" y2="480"/>
-        <line x1="0" y1="640" x2="960" y2="640"/>
-        <line x1="0" y1="800" x2="1120" y2="800"/>
-        <line x1="0" y1="960" x2="1280" y2="960"/>
+        <line x1="160" y1="160" x2="1440" y2="160"/>
+        <line x1="320" y1="320" x2="1440" y2="320"/>
+        <line x1="480" y1="480" x2="1440" y2="480"/>
+        <line x1="320" y1="640" x2="1440" y2="640"/>
+        <line x1="160" y1="800" x2="1440" y2="800"/>
+        <line x1="0" y1="960" x2="1440" y2="960"/>
         <line x1="0" y1="1120" x2="1440" y2="1120"/>
-        <line x1="0" y1="1280" x2="1440" y2="1280"/>
 
-        <!-- Vertical lines - left edge -->
-        <line x1="0" y1="0" x2="0" y2="1280"/>
+        <!-- Vertical lines - right edge (always full) -->
+        <line x1="1440" y1="0" x2="1440" y2="1120"/>
         
-        <!-- Vertical lines - interior (all full height where they exist) -->
-        <line x1="160" y1="0" x2="160" y2="1280"/>
-        <line x1="320" y1="0" x2="320" y2="1280"/>
-        <line x1="480" y1="0" x2="480" y2="1280"/>
-        <line x1="640" y1="0" x2="640" y2="1280"/>
-        <line x1="800" y1="0" x2="800" y2="1280"/>
-        <line x1="960" y1="0" x2="960" y2="1280"/>
+        <!-- Vertical lines - interior -->
+        <line x1="1280" y1="0" x2="1280" y2="1120"/>
+        <line x1="1120" y1="0" x2="1120" y2="1120"/>
+        <line x1="960" y1="0" x2="960" y2="1120"/>
+        <line x1="800" y1="0" x2="800" y2="1120"/>
+        <line x1="640" y1="0" x2="640" y2="1120"/>
+        <line x1="480" y1="0" x2="480" y2="480"/>
+        <line x1="480" y1="640" x2="480" y2="1120"/>
         
-        <!-- Vertical lines - outer sections (stepped) -->
-        <line x1="1120" y1="0" x2="1120" y2="320"/>
-        <line x1="1120" y1="800" x2="1120" y2="1280"/>
+        <line x1="320" y1="0" x2="320" y2="320"/>
+        <line x1="320" y1="640" x2="320" y2="1120"/>
         
-        <line x1="1280" y1="0" x2="1280" y2="160"/>
-        <line x1="1280" y1="960" x2="1280" y2="1280"/>
+        <line x1="160" y1="0" x2="160" y2="160"/>
+        <line x1="160" y1="800" x2="160" y2="1120"/>
         
-        <line x1="1440" y1="0" x2="1440" y2="0"/>
-        <line x1="1440" y1="1120" x2="1440" y2="1280"/>
+        <!-- Left edge - stepped -->
+        <line x1="0" y1="0" x2="0" y2="160"/>
+        <line x1="0" y1="960" x2="0" y2="1120"/>
 
-        <!-- Right edge stepped connectors -->
-        <line x1="1280" y1="160" x2="1440" y2="160"/>
-        <line x1="1120" y1="320" x2="1280" y2="320"/>
-        <line x1="960" y1="480" x2="1120" y2="480"/>
-        <line x1="960" y1="800" x2="1120" y2="800"/>
-        <line x1="1120" y1="960" x2="1280" y2="960"/>
-        <line x1="1280" y1="1120" x2="1440" y2="1120"/>
+        <!-- Step connectors - left side -->
+        <line x1="0" y1="160" x2="160" y2="160"/>
+        <line x1="160" y1="320" x2="320" y2="320"/>
+        <line x1="320" y1="480" x2="480" y2="480"/>
+        <line x1="320" y1="640" x2="480" y2="640"/>
+        <line x1="160" y1="800" x2="320" y2="800"/>
+        <line x1="0" y1="960" x2="160" y2="960"/>
       </svg>
 
       <!-- Card 1: Call Completed -->
@@ -601,13 +665,13 @@
         </div>
         <span class="card-title">Call completed</span>
         <div class="card-content">
-          Discovery call with Sarah Chen at Acme Corp
+          Discovery call with Sarah Chen, VP Sales at Acme Corp
           <div class="talk-ratio">
-            <div class="you"></div>
-            <div class="them"></div>
+            <div class="rep"></div>
+            <div class="prospect"></div>
           </div>
         </div>
-        <div class="card-meta">32 min · 35/65 talk ratio · Zoom</div>
+        <div class="card-meta">32 min · 35/65 talk ratio</div>
       </div>
 
       <!-- Card 2: recrd Analyzes -->
@@ -622,18 +686,26 @@
         </div>
         <span class="card-title">recrd analyzes</span>
         <div class="card-content">
-          <div class="stats-row">
-            <div class="stat">
+          <div class="stats-grid">
+            <div class="stat-box">
               <div class="stat-label">Sentiment</div>
-              <div class="stat-value">87%</div>
+              <div class="stat-value positive">87%</div>
             </div>
-            <div class="stat">
+            <div class="stat-box">
               <div class="stat-label">Momentum</div>
-              <div class="stat-value">High</div>
+              <div class="stat-value highlight">High</div>
+            </div>
+            <div class="stat-box">
+              <div class="stat-label">Objections</div>
+              <div class="stat-value">2</div>
+            </div>
+            <div class="stat-box">
+              <div class="stat-label">Next Steps</div>
+              <div class="stat-value">4</div>
             </div>
           </div>
         </div>
-        <div class="card-meta">6 agents deployed · 14 action items</div>
+        <div class="card-meta">6 agents · 14 actions identified</div>
       </div>
 
       <!-- Card 3: Pipeline Updated -->
@@ -648,8 +720,8 @@
         </div>
         <span class="card-title">Pipeline updated</span>
         <div class="card-content">
-          Stage → Negotiation
-          <div class="meddic-grid">
+          Stage moved to Negotiation
+          <div class="meddic-row">
             <div class="meddic-item filled">M</div>
             <div class="meddic-item filled">E</div>
             <div class="meddic-item filled">D</div>
@@ -673,10 +745,10 @@
         </div>
         <span class="card-title">Manager notified</span>
         <div class="card-content">
-          <div class="quote-text">"Budget is tight this quarter, but we're very interested in Q1."</div>
+          <div class="quote-block">"Budget is tight this quarter, but we're very interested in Q1."</div>
           <div class="quote-attr">— Sarah Chen, VP Sales</div>
         </div>
-        <div class="card-meta">Slack #deals · @mike</div>
+        <div class="card-meta">Slack #enterprise · @mike</div>
       </div>
     </div>
   </section>
@@ -706,17 +778,16 @@
     requestAnimationFrame(raf);
 
     function animateCards() {
-      gsap.set('.card', { opacity: 0, scale: 0.9 });
+      // Start hidden and offset to left
+      gsap.set('.card', { opacity: 0, x: -30, scale: 0.95 });
 
       const tl = gsap.timeline();
 
-      tl.to('#card1', { opacity: 1, scale: 1, duration: 0.6, ease: 'power2.out' });
-      tl.to({}, { duration: 0.6 });
-      tl.to('#card2', { opacity: 1, scale: 1, duration: 0.6, ease: 'power2.out' });
-      tl.to({}, { duration: 0.6 });
-      tl.to('#card3', { opacity: 1, scale: 1, duration: 0.6, ease: 'power2.out' });
-      tl.to({}, { duration: 0.6 });
-      tl.to('#card4', { opacity: 1, scale: 1, duration: 0.6, ease: 'power2.out' });
+      // Cards animate in from left, cascade down-right
+      tl.to('#card1', { opacity: 1, x: 0, scale: 1, duration: 0.7, ease: 'power2.out' });
+      tl.to('#card2', { opacity: 1, x: 0, scale: 1, duration: 0.7, ease: 'power2.out' }, '-=0.3');
+      tl.to('#card3', { opacity: 1, x: 0, scale: 1, duration: 0.7, ease: 'power2.out' }, '-=0.3');
+      tl.to('#card4', { opacity: 1, x: 0, scale: 1, duration: 0.7, ease: 'power2.out' }, '-=0.3');
 
       return tl;
     }

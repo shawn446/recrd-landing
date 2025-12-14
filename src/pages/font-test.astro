@@ -371,171 +371,162 @@
       background: currentColor;
     }
 
-    /* FLOW VISUALIZATION */
+    /* GRID STORYTELLING */
     .hero-visual {
+      display: none; /* Remove old visual */
+    }
+
+    .hero-grid {
       position: absolute;
       top: 50%;
-      right: 5%;
+      right: 0;
       transform: translateY(-50%);
-      width: 520px;
-      height: 440px;
-      z-index: 5;
+      width: 60%;
+      height: auto;
+      z-index: 1;
     }
 
-    .flow {
-      position: relative;
+    .hero-grid svg {
       width: 100%;
-      height: 100%;
+      height: auto;
     }
 
-    .flow-node {
+    .hero-grid rect {
+      stroke: var(--grid-line);
+      fill: transparent;
+      transition: fill 0.4s ease, stroke 0.4s ease;
+    }
+
+    /* Cell content overlays */
+    .grid-content {
       position: absolute;
-      background: var(--bg-elevated);
-      border: 1px solid var(--border);
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding: 14px 18px;
-      font-size: 13px;
-      font-weight: 500;
-      font-family: var(--font);
-      color: var(--text);
-      transition: border-color 0.3s ease, transform 0.3s ease;
+      top: 50%;
+      right: 0;
+      transform: translateY(-50%);
+      width: 60%;
+      aspect-ratio: 897 / 785;
+      pointer-events: none;
+      z-index: 3;
     }
 
-    .flow-node:hover {
-      border-color: var(--mint);
-      transform: translateY(-2px);
-    }
-
-    .flow-node .icon {
-      width: 18px;
-      height: 18px;
+    .grid-cell-content {
+      position: absolute;
       display: flex;
-      align-items: center;
+      flex-direction: column;
       justify-content: center;
-      flex-shrink: 0;
+      padding: 12px;
+      font-family: var(--font);
+      opacity: 0;
+      transition: opacity 0.4s ease;
+      box-sizing: border-box;
     }
 
-    .flow-node .icon svg {
-      width: 100%;
-      height: 100%;
+    .grid-cell-content.active {
+      opacity: 1;
     }
 
-    /* Source node - Call */
-    .flow-source {
-      top: 50%;
-      left: 0;
-      transform: translateY(-50%);
-      background: var(--mint);
-      color: #0a0a0a;
-      border-color: var(--mint);
-      padding: 18px 22px;
+    .grid-cell-content .label {
+      font-size: 10px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-muted);
+      margin-bottom: 4px;
+    }
+
+    .grid-cell-content .value {
+      font-size: 13px;
       font-weight: 600;
-      font-size: 14px;
+      color: var(--text);
+      line-height: 1.3;
     }
 
-    .flow-source .icon svg {
-      fill: #0a0a0a;
-    }
-
-    /* Center hub - AI */
-    .flow-hub {
-      top: 50%;
-      left: 170px;
-      transform: translateY(-50%);
-      background: var(--purple);
-      color: white;
-      border-color: var(--purple);
-      padding: 20px 24px;
-      font-weight: 600;
-      font-size: 14px;
-    }
-
-    .flow-hub .icon svg {
-      stroke: white;
-      fill: none;
-    }
-
-    /* Connector line from source to hub */
-    .flow-connector {
-      position: absolute;
-      top: 50%;
-      left: 115px;
-      width: 55px;
-      height: 2px;
-      background: var(--mint);
-      transform: translateY(-50%);
-    }
-
-    .flow-connector::after {
+    /* Border trace animation */
+    .grid-cell-content::before {
       content: '';
       position: absolute;
-      right: 0;
-      top: 50%;
-      transform: translateY(-50%);
-      width: 0;
-      height: 0;
-      border-top: 5px solid transparent;
-      border-bottom: 5px solid transparent;
-      border-left: 6px solid var(--mint);
-    }
-
-    /* Agent nodes */
-    .flow-agent {
+      inset: 0;
+      border: 2px solid transparent;
       opacity: 0;
-      animation: agentAppear 5s ease-out infinite;
     }
 
-    .flow-agent-1 { top: 0; right: 0; animation-delay: 0.4s; }
-    .flow-agent-2 { top: 70px; right: 40px; animation-delay: 0.7s; }
-    .flow-agent-3 { top: 140px; right: 0; animation-delay: 1.0s; }
-    .flow-agent-4 { top: 210px; right: 40px; animation-delay: 1.3s; }
-    .flow-agent-5 { top: 280px; right: 0; animation-delay: 1.6s; }
-    .flow-agent-6 { top: 350px; right: 40px; animation-delay: 1.9s; }
-
-    .flow-agent .status {
-      width: 8px;
-      height: 8px;
-      background: var(--mint);
-      flex-shrink: 0;
+    .grid-cell-content.tracing::before {
+      animation: borderTrace 1.2s ease-out forwards;
     }
 
-    /* SVG Lines - angular L-shapes */
-    .flow-lines {
+    @keyframes borderTrace {
+      0% {
+        opacity: 1;
+        clip-path: polygon(0 0, 0 0, 0 0, 0 0);
+        border-color: var(--mint);
+      }
+      25% {
+        clip-path: polygon(0 0, 100% 0, 100% 0, 0 0);
+      }
+      50% {
+        clip-path: polygon(0 0, 100% 0, 100% 100%, 100% 100%);
+      }
+      75% {
+        clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+      }
+      100% {
+        opacity: 1;
+        clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%, 0 0);
+        border-color: var(--mint);
+      }
+    }
+
+    /* Connecting lines */
+    .grid-lines {
       position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
+      top: 50%;
+      right: 0;
+      transform: translateY(-50%);
+      width: 60%;
+      aspect-ratio: 897 / 785;
       pointer-events: none;
+      z-index: 2;
     }
 
-    .flow-line {
-      stroke: var(--border);
-      stroke-width: 1;
+    .connect-line {
+      stroke: var(--mint);
+      stroke-width: 2;
       fill: none;
+      stroke-dasharray: 2000;
+      stroke-dashoffset: 2000;
       opacity: 0;
-      animation: lineAppear 5s ease-out infinite;
     }
 
-    .flow-line:nth-child(1) { animation-delay: 0.4s; }
-    .flow-line:nth-child(2) { animation-delay: 0.7s; }
-    .flow-line:nth-child(3) { animation-delay: 1.0s; }
-    .flow-line:nth-child(4) { animation-delay: 1.3s; }
-    .flow-line:nth-child(5) { animation-delay: 1.6s; }
-    .flow-line:nth-child(6) { animation-delay: 1.9s; }
-
-    @keyframes agentAppear {
-      0%, 5% { opacity: 0; transform: translateX(8px); }
-      15%, 80% { opacity: 1; transform: translateX(0); }
-      90%, 100% { opacity: 0; transform: translateX(0); }
+    .connect-line.drawing {
+      opacity: 1;
+      animation: drawLine 1s ease-out forwards;
     }
 
-    @keyframes lineAppear {
-      0%, 5% { opacity: 0; stroke: var(--border); }
-      15%, 80% { opacity: 1; stroke: var(--mint); }
-      90%, 100% { opacity: 0; stroke: var(--border); }
+    @keyframes drawLine {
+      to {
+        stroke-dashoffset: 0;
+      }
+    }
+
+    /* Cell highlight states */
+    .cell-source { fill: var(--mint); }
+    .cell-hub { fill: var(--purple); }
+    .cell-output { fill: rgba(70,252,175,0.15); }
+
+    /* Source cell special styling */
+    .grid-cell-content.source .value {
+      color: #0a0a0a;
+    }
+    .grid-cell-content.source .label {
+      color: rgba(0,0,0,0.6);
+    }
+
+    /* Hub cell special styling */
+    .grid-cell-content.hub .value {
+      color: #ffffff;
+    }
+    .grid-cell-content.hub .label {
+      color: rgba(255,255,255,0.7);
     }
 
     /* Gradient blobs */
@@ -595,18 +586,21 @@
       .hero-sub { font-size: 18px; }
       
       .hero-visual {
+        display: none;
+      }
+      
+      .grid-content,
+      .grid-lines {
+        display: none;
+      }
+      
+      .hero-grid {
         position: relative;
         width: 100%;
-        height: 350px;
+        margin-top: 40px;
         right: auto;
         top: auto;
         transform: none;
-        margin-top: 40px;
-      }
-      
-      .flow {
-        transform: scale(0.75);
-        transform-origin: top center;
       }
       
       .hero-buttons { flex-direction: column; }
@@ -733,70 +727,67 @@
       </div>
     </div>
 
-    <div class="hero-visual">
-      <div class="flow">
-        <!-- Source: Call -->
-        <div class="flow-node flow-source">
-          <span class="icon">
-            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
-          </span>
-          <span>Sales Call</span>
-        </div>
-
-        <!-- Connector line -->
-        <div class="flow-connector"></div>
-
-        <!-- Hub: AI Processing -->
-        <div class="flow-node flow-hub">
-          <span class="icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
-          </span>
-          <span>recrd AI</span>
-        </div>
-
-        <!-- SVG Lines - angular L-shapes -->
-        <svg class="flow-lines" viewBox="0 0 520 440">
-          <!-- Line to agent 1 -->
-          <path class="flow-line" d="M280,220 L320,220 L320,25 L380,25"/>
-          <!-- Line to agent 2 -->
-          <path class="flow-line" d="M280,220 L340,220 L340,95 L360,95"/>
-          <!-- Line to agent 3 -->
-          <path class="flow-line" d="M280,220 L360,220 L360,165 L380,165"/>
-          <!-- Line to agent 4 -->
-          <path class="flow-line" d="M280,220 L340,220 L340,235 L360,235"/>
-          <!-- Line to agent 5 -->
-          <path class="flow-line" d="M280,220 L360,220 L360,305 L380,305"/>
-          <!-- Line to agent 6 -->
-          <path class="flow-line" d="M280,220 L320,220 L320,375 L360,375"/>
-        </svg>
-
-        <!-- Agent nodes -->
-        <div class="flow-node flow-agent flow-agent-1">
-          <span class="status"></span>
-          <span>CRM Update</span>
-        </div>
-        <div class="flow-node flow-agent flow-agent-2">
-          <span class="status"></span>
-          <span>Follow-up Email</span>
-        </div>
-        <div class="flow-node flow-agent flow-agent-3">
-          <span class="status"></span>
-          <span>Coaching Notes</span>
-        </div>
-        <div class="flow-node flow-agent flow-agent-4">
-          <span class="status"></span>
-          <span>Forecast Update</span>
-        </div>
-        <div class="flow-node flow-agent flow-agent-5">
-          <span class="status"></span>
-          <span>Deal Risk Alert</span>
-        </div>
-        <div class="flow-node flow-agent flow-agent-6">
-          <span class="status"></span>
-          <span>Content Snippet</span>
-        </div>
+    <!-- Cell content overlays - positioned to match grid cells -->
+    <div class="grid-content" id="gridContent">
+      <!-- Source: Sales Call - Row 1, Cell 1 (x=0, y=0) -->
+      <div class="grid-cell-content source" id="cell-source" style="top: 0%; left: 0%; width: 12.5%; height: 14.3%;">
+        <span class="label">Incoming</span>
+        <span class="value">Sales Call</span>
+      </div>
+      
+      <!-- Hub: recrd analyzes - Row 3, Cell 1 (x=224, y=224) -->
+      <div class="grid-cell-content hub" id="cell-hub" style="top: 28.5%; left: 25%; width: 12.5%; height: 14.3%;">
+        <span class="label">Processing</span>
+        <span class="value">recrd analyzes</span>
+      </div>
+      
+      <!-- Output 1: Updates Forecast - Row 1, Cell 7 (x=672, y=0) -->
+      <div class="grid-cell-content output" id="cell-output-1" style="top: 0%; left: 75%; width: 12.5%; height: 14.3%;">
+        <span class="label">Forecast</span>
+        <span class="value">Pipeline updated</span>
+      </div>
+      
+      <!-- Output 2: Notifies Manager - Row 3, Cell 5 (x=560, y=224) -->
+      <div class="grid-cell-content output" id="cell-output-2" style="top: 28.5%; left: 62.5%; width: 12.5%; height: 14.3%;">
+        <span class="label">Risk Alert</span>
+        <span class="value">Manager notified</span>
+      </div>
+      
+      <!-- Output 3: CRM Updated - Row 5, Cell 7 (x=784, y=448) -->
+      <div class="grid-cell-content output" id="cell-output-3" style="top: 57%; left: 87.5%; width: 12.5%; height: 14.3%;">
+        <span class="label">CRM</span>
+        <span class="value">HubSpot synced</span>
+      </div>
+      
+      <!-- Output 4: Content flagged - Row 7, Cell 4 (x=336, y=672) -->
+      <div class="grid-cell-content output" id="cell-output-4" style="top: 85.6%; left: 37.5%; width: 12.5%; height: 14.3%;">
+        <span class="label">Content</span>
+        <span class="value">Marketing alerted</span>
       </div>
     </div>
+
+    <!-- Connecting lines SVG - paths overlay exact grid borders -->
+    <svg class="grid-lines" id="gridLines" viewBox="0 0 897 785" preserveAspectRatio="xMidYMid meet">
+      <!-- Source cell bottom border, then left border of cells down to hub row, then top border to hub -->
+      <!-- Row 1 cell 1 is at x=0.5, y=0.5, 112x112 -->
+      <!-- Row 2 cell 1 is at x=112.5, y=112.5 (no cell at x=0) -->
+      <!-- Row 3 cell 1 is at x=224.5, y=224.5 -->
+      
+      <!-- Line 1: Source (0,0) down to Row 2, then right along top of Row 2, then down left edge to Hub (224,224) -->
+      <path class="connect-line" id="line-1" d="M 0.5,113 L 0.5,224.5 L 224.5,224.5 L 224.5,280"/>
+      
+      <!-- Line 2: Hub right edge → along row 3 top → up to row 1 → right to output 1 (cell 7, x=672) -->
+      <path class="connect-line" id="line-2" d="M 337,224.5 L 672.5,224.5 L 672.5,0.5 L 784.5,0.5"/>
+      
+      <!-- Line 3: Hub right edge → along to output 2 (row 3, cell 5 at x=560) -->
+      <path class="connect-line" id="line-3" d="M 337,280 L 560.5,280"/>
+      
+      <!-- Line 4: Hub bottom → down to row 5 → right to output 3 (cell 7 at x=784) -->
+      <path class="connect-line" id="line-4" d="M 280,337 L 280,448.5 L 784.5,448.5 L 784.5,504"/>
+      
+      <!-- Line 5: Hub bottom → down to row 7 → right to output 4 (cell 4 at x=336) -->
+      <path class="connect-line" id="line-5" d="M 280,337 L 280,672.5 L 336.5,672.5 L 336.5,728"/>
+    </svg>
   </section>
 
   <script is:inline>
@@ -806,35 +797,128 @@
       document.getElementById('btn-light').classList.toggle('active', theme === 'light');
     }
 
-    // Grid cell animation
-    function animateGrid() {
-      const cells = document.querySelectorAll('.hero-grid rect');
-      const colors = ['rgba(70,252,175,0.2)', 'rgba(166,120,244,0.15)', 'rgba(2,192,255,0.15)'];
+    // Grid storytelling animation
+    function runGridStory() {
+      const source = document.getElementById('cell-source');
+      const hub = document.getElementById('cell-hub');
+      const outputs = [
+        document.getElementById('cell-output-1'),
+        document.getElementById('cell-output-2'),
+        document.getElementById('cell-output-3'),
+        document.getElementById('cell-output-4')
+      ];
+      const lines = [
+        document.getElementById('line-1'),
+        document.getElementById('line-2'),
+        document.getElementById('line-3'),
+        document.getElementById('line-4'),
+        document.getElementById('line-5')
+      ];
       
-      function pulseRandomCell() {
-        const randomCell = cells[Math.floor(Math.random() * cells.length)];
-        const randomColor = colors[Math.floor(Math.random() * colors.length)];
+      // Grid cells by index (based on SVG rect order)
+      // Row 1: 0-7, Row 2: 8-14, Row 3: 15-20, Row 4: 21-26, Row 5: 27-33, Row 6: 34-40, Row 7: 41-48
+      const gridRects = document.querySelectorAll('.hero-grid rect');
+      
+      // Map cells to indices
+      const cellIndices = {
+        source: 0,       // Row 1, Cell 1
+        hub: 15,         // Row 3, Cell 1
+        output1: 6,      // Row 1, Cell 7
+        output2: 18,     // Row 3, Cell 4
+        output3: 33,     // Row 5, Cell 7
+        output4: 44      // Row 7, Cell 4
+      };
+      
+      function reset() {
+        source.classList.remove('active', 'tracing');
+        hub.classList.remove('active', 'tracing');
+        outputs.forEach(o => o.classList.remove('active', 'tracing'));
+        lines.forEach(l => l.classList.remove('drawing'));
+        gridRects.forEach(r => {
+          r.classList.remove('cell-source', 'cell-hub', 'cell-output');
+        });
+      }
+      
+      function animate() {
+        reset();
         
-        randomCell.style.fill = randomColor;
+        // Step 1: Source appears with border trace (0ms)
+        setTimeout(() => {
+          source.classList.add('active', 'tracing');
+          if (gridRects[cellIndices.source]) {
+            gridRects[cellIndices.source].classList.add('cell-source');
+          }
+        }, 0);
+        
+        // Step 2: Line draws to hub (1200ms)
+        setTimeout(() => {
+          lines[0].classList.add('drawing');
+        }, 1200);
+        
+        // Step 3: Hub appears with border trace (2000ms)
+        setTimeout(() => {
+          hub.classList.add('active', 'tracing');
+          if (gridRects[cellIndices.hub]) {
+            gridRects[cellIndices.hub].classList.add('cell-hub');
+          }
+        }, 2000);
+        
+        // Step 4: Lines fan out to outputs (3200ms+)
+        setTimeout(() => {
+          lines[1].classList.add('drawing');
+        }, 3200);
         
         setTimeout(() => {
-          randomCell.style.fill = 'transparent';
-        }, 800);
+          outputs[0].classList.add('active', 'tracing');
+          if (gridRects[cellIndices.output1]) {
+            gridRects[cellIndices.output1].classList.add('cell-output');
+          }
+        }, 3800);
+        
+        setTimeout(() => {
+          lines[2].classList.add('drawing');
+        }, 4000);
+        
+        setTimeout(() => {
+          outputs[1].classList.add('active', 'tracing');
+          if (gridRects[cellIndices.output2]) {
+            gridRects[cellIndices.output2].classList.add('cell-output');
+          }
+        }, 4400);
+        
+        setTimeout(() => {
+          lines[3].classList.add('drawing');
+        }, 4600);
+        
+        setTimeout(() => {
+          outputs[2].classList.add('active', 'tracing');
+          if (gridRects[cellIndices.output3]) {
+            gridRects[cellIndices.output3].classList.add('cell-output');
+          }
+        }, 5200);
+        
+        setTimeout(() => {
+          lines[4].classList.add('drawing');
+        }, 5400);
+        
+        setTimeout(() => {
+          outputs[3].classList.add('active', 'tracing');
+          if (gridRects[cellIndices.output4]) {
+            gridRects[cellIndices.output4].classList.add('cell-output');
+          }
+        }, 6000);
+        
+        // Hold for 2.5s, then restart
+        setTimeout(() => {
+          animate();
+        }, 8500);
       }
       
-      // Pulse a random cell every 400-800ms
-      setInterval(() => {
-        pulseRandomCell();
-      }, 400 + Math.random() * 400);
-      
-      // Start with a few cells lit
-      for (let i = 0; i < 3; i++) {
-        setTimeout(() => pulseRandomCell(), i * 200);
-      }
+      animate();
     }
 
     // Start animation when page loads
-    document.addEventListener('DOMContentLoaded', animateGrid);
+    document.addEventListener('DOMContentLoaded', runGridStory);
   </script>
 
 </body>

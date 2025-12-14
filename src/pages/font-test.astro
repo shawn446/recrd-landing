@@ -1,5 +1,5 @@
 ---
-// Hero Section - Floating Cards with Rich Content
+// Hero Section - Simplified with Solid Color Cards
 ---
 
 <!DOCTYPE html>
@@ -32,15 +32,20 @@
       --purple: #A678F4;
       --cyan: #02C0FF;
       --coral: #FF4F5E;
-      --yellow: #FFDC58;
     }
 
     [data-theme="dark"] {
       --bg: #0A0A0A;
-      --bg-card: #111111;
       --text: #ffffff;
       --text-muted: #888888;
       --border: rgba(255,255,255,0.12);
+    }
+
+    [data-theme="light"] {
+      --bg: #fafafa;
+      --text: #0a0a0a;
+      --text-muted: #666666;
+      --border: rgba(0,0,0,0.1);
     }
 
     * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -108,7 +113,6 @@
     /* HERO */
     .hero {
       min-height: 100vh;
-      height: 100vh;
       display: flex;
       align-items: center;
       padding: 72px 0 0 48px;
@@ -131,38 +135,29 @@
     }
 
     .glow-orb.mint {
-      width: 700px;
-      height: 700px;
-      background: var(--mint);
-      top: -20%;
-      right: 15%;
-      opacity: 0.15;
-    }
-
-    .glow-orb.purple {
       width: 600px;
       height: 600px;
-      background: var(--purple);
-      top: 35%;
-      right: 35%;
+      background: var(--mint);
+      top: -15%;
+      right: 20%;
       opacity: 0.12;
     }
 
-    .glow-orb.coral {
+    .glow-orb.purple {
       width: 500px;
       height: 500px;
-      background: var(--coral);
-      bottom: 5%;
-      right: 10%;
+      background: var(--purple);
+      top: 40%;
+      right: 40%;
       opacity: 0.1;
     }
 
-    .glow-orb.cyan {
+    .glow-orb.coral {
       width: 400px;
       height: 400px;
-      background: var(--cyan);
-      top: 60%;
-      right: 60%;
+      background: var(--coral);
+      bottom: 10%;
+      right: 15%;
       opacity: 0.08;
     }
 
@@ -180,6 +175,7 @@
       margin-bottom: 24px;
     }
     .hero-headline em { font-style: normal; color: var(--mint); }
+    [data-theme="light"] .hero-headline em { color: var(--purple); }
 
     .hero-sub {
       font-size: clamp(22px, 3vw, 32px);
@@ -213,7 +209,7 @@
     .btn-secondary:hover { background: var(--cyan); border-color: var(--cyan); color: #0a0a0a; }
 
     /* ========================================
-       FLOATING CARDS SYSTEM
+       CARDS SYSTEM
        ======================================== */
     
     .cards-container {
@@ -221,10 +217,9 @@
       top: 72px;
       right: 0;
       bottom: 0;
-      width: 60%;
-      min-width: 700px;
+      width: 55%;
+      min-width: 600px;
       z-index: 5;
-      padding-bottom: 40px;
     }
 
     /* SVG Paths */
@@ -243,27 +238,24 @@
       stroke-width: 2;
       stroke-linecap: square;
       stroke-linejoin: miter;
-      filter: drop-shadow(0 0 6px currentColor);
+      filter: drop-shadow(0 0 8px currentColor);
     }
 
-    /* Cards */
+    /* Solid Color Cards */
     .card {
       position: absolute;
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      padding: 20px 22px;
+      padding: 24px 28px;
       opacity: 0;
-      transform: translateY(20px);
+      transform: translateY(20px) scale(0.95);
       z-index: 10;
-      width: 280px;
-      backdrop-filter: blur(10px);
+      width: 300px;
     }
 
     .card-header {
       display: flex;
       align-items: center;
-      gap: 12px;
-      margin-bottom: 16px;
+      gap: 10px;
+      margin-bottom: 14px;
     }
 
     .card-icon {
@@ -282,346 +274,122 @@
 
     .card-badge {
       font-family: var(--mono);
-      font-size: 10px;
+      font-size: 9px;
       text-transform: uppercase;
       letter-spacing: 0.1em;
-      padding: 6px 12px;
+      padding: 5px 10px;
     }
 
     .card-title {
-      font-size: 16px;
+      font-size: 20px;
       font-weight: 600;
       line-height: 1.3;
-      margin-bottom: 10px;
+      margin-bottom: 8px;
     }
 
     .card-content {
-      font-size: 13px;
-      color: var(--text-muted);
+      font-size: 14px;
       line-height: 1.5;
+      opacity: 0.9;
     }
 
     .card-meta {
       font-family: var(--mono);
-      font-size: 10px;
-      color: var(--text-muted);
-      margin-top: 12px;
-      padding-top: 12px;
-      border-top: 1px solid var(--border);
-      display: flex;
-      align-items: center;
-      gap: 8px;
+      font-size: 11px;
+      margin-top: 14px;
+      opacity: 0.7;
     }
 
-    .card-meta .dot {
-      width: 6px;
-      height: 6px;
-      border-radius: 50%;
+    /* Card solid colors */
+    .card.mint {
       background: var(--mint);
-      animation: pulse 2s ease-in-out infinite;
+      color: #0a0a0a;
+      box-shadow: 0 8px 40px rgba(70, 252, 175, 0.3);
     }
+    .card.mint .card-badge { background: rgba(0,0,0,0.15); }
+    .card.mint .card-icon svg { stroke: #0a0a0a; }
 
-    @keyframes pulse {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.4; }
+    .card.purple {
+      background: var(--purple);
+      color: #fff;
+      box-shadow: 0 8px 40px rgba(166, 120, 244, 0.35);
     }
+    .card.purple .card-badge { background: rgba(255,255,255,0.2); }
+    .card.purple .card-icon svg { stroke: #fff; }
 
-    /* Card accent colors */
-    .card.mint { border-color: var(--mint); box-shadow: 0 0 40px rgba(70, 252, 175, 0.15); }
-    .card.mint .card-badge { background: var(--mint); color: #0a0a0a; }
-    .card.mint .card-icon svg { stroke: var(--mint); }
-
-    .card.purple { border-color: var(--purple); box-shadow: 0 0 40px rgba(166, 120, 244, 0.15); }
-    .card.purple .card-badge { background: var(--purple); color: #fff; }
-    .card.purple .card-icon svg { stroke: var(--purple); }
-
-    .card.cyan { border-color: var(--cyan); box-shadow: 0 0 40px rgba(2, 192, 255, 0.15); }
-    .card.cyan .card-badge { background: var(--cyan); color: #0a0a0a; }
-    .card.cyan .card-icon svg { stroke: var(--cyan); }
-
-    .card.coral { border-color: var(--coral); box-shadow: 0 0 40px rgba(255, 79, 94, 0.15); }
-    .card.coral .card-badge { background: var(--coral); color: #fff; }
-    .card.coral .card-icon svg { stroke: var(--coral); }
-
-    .card.yellow { border-color: var(--yellow); box-shadow: 0 0 40px rgba(255, 220, 88, 0.15); }
-    .card.yellow .card-badge { background: var(--yellow); color: #0a0a0a; }
-    .card.yellow .card-icon svg { stroke: var(--yellow); }
-
-    /* ========================================
-       Card Content Styles
-       ======================================== */
-    
-    /* Waveform animation */
-    .waveform {
-      display: flex;
-      align-items: center;
-      gap: 2px;
-      height: 32px;
-      margin-bottom: 12px;
-      padding: 6px 10px;
-      background: rgba(70, 252, 175, 0.08);
-      border: 1px solid rgba(70, 252, 175, 0.2);
+    .card.cyan {
+      background: var(--cyan);
+      color: #0a0a0a;
+      box-shadow: 0 8px 40px rgba(2, 192, 255, 0.3);
     }
+    .card.cyan .card-badge { background: rgba(0,0,0,0.15); }
+    .card.cyan .card-icon svg { stroke: #0a0a0a; }
 
-    .waveform-bar {
-      width: 3px;
-      background: var(--mint);
-      border-radius: 1px;
-      animation: wave 1.2s ease-in-out infinite;
+    .card.coral {
+      background: var(--coral);
+      color: #fff;
+      box-shadow: 0 8px 40px rgba(255, 79, 94, 0.35);
     }
+    .card.coral .card-badge { background: rgba(255,255,255,0.2); }
+    .card.coral .card-icon svg { stroke: #fff; }
 
-    @keyframes wave {
-      0%, 100% { height: 15%; }
-      50% { height: 100%; }
-    }
-
-    .waveform-bar:nth-child(1) { animation-delay: 0s; }
-    .waveform-bar:nth-child(2) { animation-delay: 0.1s; }
-    .waveform-bar:nth-child(3) { animation-delay: 0.2s; }
-    .waveform-bar:nth-child(4) { animation-delay: 0.15s; }
-    .waveform-bar:nth-child(5) { animation-delay: 0.3s; }
-    .waveform-bar:nth-child(6) { animation-delay: 0.25s; }
-    .waveform-bar:nth-child(7) { animation-delay: 0.4s; }
-    .waveform-bar:nth-child(8) { animation-delay: 0.35s; }
-    .waveform-bar:nth-child(9) { animation-delay: 0.2s; }
-    .waveform-bar:nth-child(10) { animation-delay: 0.45s; }
-    .waveform-bar:nth-child(11) { animation-delay: 0.1s; }
-    .waveform-bar:nth-child(12) { animation-delay: 0.3s; }
-
-    /* Stats grid for analyzing card */
+    /* Stats grid */
     .stats-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 8px;
+      margin-top: 12px;
     }
 
     .stat-item {
-      background: rgba(255,255,255,0.03);
+      background: rgba(255,255,255,0.15);
       padding: 10px 12px;
-      border-left: 2px solid var(--purple);
     }
 
     .stat-label {
       font-family: var(--mono);
-      font-size: 8px;
+      font-size: 9px;
       text-transform: uppercase;
-      letter-spacing: 0.12em;
-      color: var(--text-muted);
+      letter-spacing: 0.1em;
+      opacity: 0.8;
       margin-bottom: 4px;
     }
 
     .stat-value {
-      font-size: 13px;
+      font-size: 14px;
       font-weight: 600;
     }
 
-    .stat-value.positive { color: var(--mint); }
-    .stat-value.high { color: var(--cyan); }
-    .stat-value.warning { color: var(--yellow); }
-
-    /* Typewriter effect */
-    .typewriter-line {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      margin-bottom: 8px;
-      font-family: var(--mono);
-      font-size: 12px;
-    }
-
-    .typewriter-label {
-      color: var(--text-muted);
-      min-width: 100px;
-    }
-
-    .typewriter-value {
-      color: var(--text);
-      overflow: hidden;
-      white-space: nowrap;
-    }
-
-    .typewriter-cursor {
-      display: inline-block;
-      width: 2px;
-      height: 14px;
-      background: var(--purple);
-      animation: blink 0.8s step-end infinite;
-      margin-left: 2px;
-    }
-
-    @keyframes blink {
-      50% { opacity: 0; }
-    }
-
-    /* Quote style */
-    .quote-block {
-      background: rgba(255, 79, 94, 0.08);
-      border-left: 2px solid var(--coral);
-      padding: 10px 12px;
+    /* Quote */
+    .quote-text {
       font-style: italic;
-      font-size: 12px;
+      padding: 12px;
+      background: rgba(255,255,255,0.15);
+      margin-bottom: 8px;
+      font-size: 13px;
       line-height: 1.4;
-      color: var(--text);
     }
 
-    .quote-attr {
-      font-style: normal;
-      font-size: 10px;
-      color: var(--text-muted);
-      margin-top: 8px;
-      font-family: var(--mono);
-    }
-
-    /* MEDDIC progress */
-    .meddic-row {
+    /* MEDDIC */
+    .meddic-bar {
       display: flex;
-      align-items: center;
-      gap: 10px;
+      gap: 4px;
       margin-top: 10px;
     }
-
-    .meddic-label {
-      font-family: var(--mono);
-      font-size: 9px;
-      color: var(--text-muted);
-    }
-
-    .meddic-progress {
-      display: flex;
-      gap: 3px;
-      flex: 1;
-    }
-
     .meddic-dot {
       flex: 1;
-      height: 6px;
-      background: rgba(255,255,255,0.1);
+      height: 8px;
+      background: rgba(0,0,0,0.2);
+    }
+    .meddic-dot.filled {
+      background: rgba(0,0,0,0.5);
     }
 
-    .meddic-dot.filled { background: var(--cyan); }
-
-    /* Email preview */
-    .email-preview {
-      background: rgba(255,255,255,0.03);
-      border: 1px solid var(--border);
-      padding: 10px 12px;
-      font-size: 12px;
-    }
-
-    .email-header {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      margin-bottom: 8px;
-      padding-bottom: 8px;
-      border-bottom: 1px solid var(--border);
-    }
-
-    .email-avatar {
-      width: 26px;
-      height: 26px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, var(--purple), var(--cyan));
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 10px;
-      font-weight: 600;
-    }
-
-    .email-to {
-      font-size: 11px;
-    }
-
-    .email-to span { color: var(--text-muted); }
-
-    .email-subject {
-      font-weight: 600;
-      margin-bottom: 6px;
-      font-size: 12px;
-    }
-
-    .email-body {
-      color: var(--text-muted);
-      font-size: 11px;
-      line-height: 1.4;
-    }
-
-    /* Forecast card */
-    .forecast-big {
-      display: flex;
-      align-items: baseline;
-      gap: 10px;
-      margin-bottom: 6px;
-    }
-
-    .forecast-number {
-      font-size: 36px;
-      font-weight: 700;
-      line-height: 1;
-    }
-
-    .forecast-change {
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-      color: var(--mint);
-      font-weight: 600;
-      font-size: 14px;
-    }
-
-    .forecast-bar {
-      height: 6px;
-      background: rgba(255,255,255,0.1);
-      margin-top: 12px;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .forecast-fill {
-      height: 100%;
-      background: linear-gradient(90deg, var(--yellow), var(--mint));
-      width: 73%;
-      transition: width 1s ease-out;
-    }
-
-    /* Use case tag */
-    .use-case-tag {
-      display: inline-block;
-      background: rgba(70, 252, 175, 0.1);
-      border: 1px solid rgba(70, 252, 175, 0.3);
-      padding: 6px 10px;
-      font-size: 11px;
-      font-weight: 500;
-      margin-bottom: 10px;
-    }
-
-    .suggestion-list {
-      margin-top: 8px;
-    }
-
-    .suggestion-item {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      font-size: 11px;
-      color: var(--text-muted);
-      margin-bottom: 4px;
-    }
-
-    .suggestion-item .check {
-      color: var(--mint);
-      font-size: 12px;
-    }
-
-    /* Card positions - cleaner tree layout */
-    #card1 { top: 2%; left: 5%; }
-    #card2 { top: 15%; left: 42%; }
-    #card3 { top: 30%; left: 62%; }
-    #card4 { top: 38%; left: 5%; }
-    #card5 { top: 48%; left: 62%; }
-    #card6 { top: 65%; left: 22%; }
-    #card7 { top: 68%; left: 62%; }
+    /* Card positions */
+    #card1 { top: 8%; left: 8%; }
+    #card2 { top: 28%; left: 45%; }
+    #card3 { top: 52%; left: 55%; }
+    #card4 { top: 72%; left: 15%; }
 
     /* Theme toggle */
     .theme-toggle {
@@ -646,21 +414,18 @@
     .theme-toggle button.active { background: var(--text); color: var(--bg); }
 
     /* RESPONSIVE */
-    @media (max-width: 1400px) {
-      .cards-container { width: 55%; min-width: 650px; }
-      .card { width: 280px; padding: 20px 22px; }
-      .card-title { font-size: 16px; }
-      .forecast-number { font-size: 36px; }
+    @media (max-width: 1200px) {
+      .cards-container { width: 50%; min-width: 500px; }
+      .card { width: 260px; padding: 20px 24px; }
+      .card-title { font-size: 18px; }
     }
 
-    @media (max-width: 1100px) {
-      .cards-container { width: 50%; min-width: 550px; }
-      .card { width: 250px; padding: 16px 18px; }
-      .card-title { font-size: 15px; }
+    @media (max-width: 1000px) {
+      .cards-container { width: 45%; min-width: 400px; }
+      .card { width: 220px; padding: 16px 20px; }
+      .card-title { font-size: 16px; }
       .card-content { font-size: 12px; }
-      .stats-grid { grid-template-columns: 1fr; gap: 6px; }
-      .stat-item { padding: 8px 10px; }
-      .stat-value { font-size: 13px; }
+      .stats-grid { display: none; }
     }
 
     @media (max-width: 900px) {
@@ -675,16 +440,14 @@
         position: relative;
         width: 100%;
         min-width: auto;
-        height: 700px;
+        height: 500px;
       }
-      .card { width: 220px; padding: 14px; }
+      .card { width: 200px; padding: 14px 16px; }
       .card-title { font-size: 14px; }
       .card-content { display: none; }
       .card-meta { display: none; }
-      .waveform { display: none; }
       .nav-links { display: none; }
       nav { padding: 0 24px; }
-      .glow-orb { opacity: 0.08; }
     }
 
     @media (max-width: 600px) {
@@ -692,18 +455,11 @@
       .hero-sub { font-size: 20px; }
       .hero-buttons { flex-direction: column; }
       .btn { width: 100%; text-align: center; }
-      .cards-container { height: 550px; }
-      .card { width: 180px; padding: 12px; }
-      .card-badge { font-size: 8px; padding: 4px 8px; }
-      .card-title { font-size: 12px; margin-bottom: 6px; }
-      .card-icon { width: 18px; height: 18px; }
-      #card1 { top: 2%; left: 2%; }
-      #card2 { top: 12%; left: 45%; }
-      #card3 { top: 28%; left: 55%; }
-      #card4 { top: 40%; left: 2%; }
-      #card5 { top: 52%; left: 50%; }
-      #card6 { top: 68%; left: 5%; }
-      #card7 { top: 80%; left: 50%; }
+      .cards-container { height: 400px; }
+      .card { width: 160px; padding: 12px; }
+      .card-badge { font-size: 7px; padding: 3px 6px; }
+      .card-title { font-size: 12px; }
+      .card-icon { width: 16px; height: 16px; }
     }
   </style>
 </head>
@@ -727,12 +483,10 @@
   </nav>
 
   <section class="hero">
-    <!-- Background Effects -->
     <div class="hero-bg">
       <div class="glow-orb mint"></div>
       <div class="glow-orb purple"></div>
       <div class="glow-orb coral"></div>
-      <div class="glow-orb cyan"></div>
     </div>
 
     <div class="hero-content">
@@ -746,31 +500,19 @@
     </div>
 
     <div class="cards-container">
-      <!-- SVG Paths connecting cards with hard 90° angles -->
+      <!-- SVG Paths -->
       <svg class="paths-svg" viewBox="0 0 100 100" preserveAspectRatio="none">
-        <!-- Path 1: Card1 → Card2 (down then right) -->
+        <!-- Path 1: Card1 → Card2 -->
         <path id="path1" class="flow-path" stroke="#46FCAF" vector-effect="non-scaling-stroke"
-              d="M 20,10 L 20,18 L 42,18"/>
+              d="M 25,18 L 25,32 L 45,32"/>
         
-        <!-- Path 2: Card2 → Card3 (right then down) -->
+        <!-- Path 2: Card2 → Card3 -->
         <path id="path2" class="flow-path" stroke="#A678F4" vector-effect="non-scaling-stroke"
-              d="M 62,22 L 72,22 L 72,32"/>
+              d="M 65,42 L 65,55"/>
         
-        <!-- Path 3: Card2 → Card4 (down then left) -->
-        <path id="path3" class="flow-path" stroke="#A678F4" vector-effect="non-scaling-stroke"
-              d="M 52,25 L 52,42 L 28,42"/>
-        
-        <!-- Path 4: Card3 → Card5 (down) -->
-        <path id="path4" class="flow-path" stroke="#02C0FF" vector-effect="non-scaling-stroke"
-              d="M 72,42 L 72,50"/>
-        
-        <!-- Path 5: Card4 → Card6 (down then right) -->
-        <path id="path5" class="flow-path" stroke="#FF4F5E" vector-effect="non-scaling-stroke"
-              d="M 18,52 L 18,68 L 32,68"/>
-        
-        <!-- Path 6: Card5 → Card7 (down) -->
-        <path id="path6" class="flow-path" stroke="#46FCAF" vector-effect="non-scaling-stroke"
-              d="M 72,60 L 72,70"/>
+        <!-- Path 3: Card3 → Card4 -->
+        <path id="path3" class="flow-path" stroke="#02C0FF" vector-effect="non-scaling-stroke"
+              d="M 55,65 L 55,76 L 35,76"/>
       </svg>
 
       <!-- Card 1: Call Completed -->
@@ -783,26 +525,9 @@
           </div>
           <span class="card-badge">Call Ended</span>
         </div>
-        <div class="waveform">
-          <div class="waveform-bar"></div>
-          <div class="waveform-bar"></div>
-          <div class="waveform-bar"></div>
-          <div class="waveform-bar"></div>
-          <div class="waveform-bar"></div>
-          <div class="waveform-bar"></div>
-          <div class="waveform-bar"></div>
-          <div class="waveform-bar"></div>
-          <div class="waveform-bar"></div>
-          <div class="waveform-bar"></div>
-          <div class="waveform-bar"></div>
-          <div class="waveform-bar"></div>
-        </div>
-        <span class="card-title">Discovery call completed</span>
-        <div class="card-content">Acme Corp · Enterprise Demo</div>
-        <div class="card-meta">
-          <span class="dot"></span>
-          32 min · Zoom · Sarah Chen, VP Sales
-        </div>
+        <span class="card-title">Call completed</span>
+        <div class="card-content">Discovery call with Acme Corp</div>
+        <div class="card-meta">32 min · Zoom · Sarah Chen</div>
       </div>
 
       <!-- Card 2: recrd Analyzes -->
@@ -813,31 +538,21 @@
               <path d="M2 12h2"/><path d="M6 8v8"/><path d="M10 4v16"/><path d="M14 6v12"/><path d="M18 9v6"/><path d="M22 12h-2"/>
             </svg>
           </div>
-          <span class="card-badge">Analyzing</span>
+          <span class="card-badge">Processing</span>
         </div>
-        <span class="card-title">recrd processing...</span>
+        <span class="card-title">recrd analyzes</span>
+        <div class="card-content">Extracting insights from transcript</div>
         <div class="stats-grid">
           <div class="stat-item">
             <div class="stat-label">Sentiment</div>
-            <div class="stat-value positive">87% Positive</div>
+            <div class="stat-value">87% Positive</div>
           </div>
           <div class="stat-item">
             <div class="stat-label">Momentum</div>
-            <div class="stat-value high">High</div>
-          </div>
-          <div class="stat-item">
-            <div class="stat-label">Talk Ratio</div>
-            <div class="stat-value">62 / 38</div>
-          </div>
-          <div class="stat-item">
-            <div class="stat-label">Objections</div>
-            <div class="stat-value warning">2 flagged</div>
+            <div class="stat-value">High</div>
           </div>
         </div>
-        <div class="card-meta">
-          <span class="dot"></span>
-          6 agents deployed
-        </div>
+        <div class="card-meta">6 agents deployed</div>
       </div>
 
       <!-- Card 3: Pipeline Updated -->
@@ -851,26 +566,17 @@
           <span class="card-badge">CRM Agent</span>
         </div>
         <span class="card-title">Pipeline updated</span>
-        <div class="card-content">
-          Stage moved to <strong>Negotiation</strong><br>
-          Filled 5/7 MEDDIC fields in HubSpot
+        <div class="card-content">Stage → Negotiation<br>5/7 MEDDIC fields synced</div>
+        <div class="meddic-bar">
+          <div class="meddic-dot filled"></div>
+          <div class="meddic-dot filled"></div>
+          <div class="meddic-dot filled"></div>
+          <div class="meddic-dot filled"></div>
+          <div class="meddic-dot filled"></div>
+          <div class="meddic-dot"></div>
+          <div class="meddic-dot"></div>
         </div>
-        <div class="meddic-row">
-          <span class="meddic-label">MEDDIC</span>
-          <div class="meddic-progress">
-            <div class="meddic-dot filled"></div>
-            <div class="meddic-dot filled"></div>
-            <div class="meddic-dot filled"></div>
-            <div class="meddic-dot filled"></div>
-            <div class="meddic-dot filled"></div>
-            <div class="meddic-dot"></div>
-            <div class="meddic-dot"></div>
-          </div>
-        </div>
-        <div class="card-meta">
-          <span class="dot"></span>
-          HubSpot · Auto-synced
-        </div>
+        <div class="card-meta">HubSpot · Auto-synced</div>
       </div>
 
       <!-- Card 4: Manager Notified -->
@@ -885,93 +591,9 @@
         </div>
         <span class="card-title">Manager notified</span>
         <div class="card-content">
-          <div class="quote-block">
-            "Budget is tight this quarter, but we're very interested in moving forward once Q1 opens up."
-            <div class="quote-attr">— Sarah Chen, VP Sales</div>
-          </div>
+          <div class="quote-text">"Budget is tight this quarter, but we're interested in Q1."</div>
         </div>
-        <div class="card-meta">
-          <span class="dot"></span>
-          Slack #enterprise-deals · @mike
-        </div>
-      </div>
-
-      <!-- Card 5: Marketing Alerted -->
-      <div class="card mint" id="card5">
-        <div class="card-header">
-          <div class="card-icon">
-            <svg viewBox="0 0 24 24">
-              <path d="m3 11 18-5v12L3 13v-2z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/>
-            </svg>
-          </div>
-          <span class="card-badge">Content Agent</span>
-        </div>
-        <span class="card-title">Marketing alerted</span>
-        <div class="card-content">
-          <div class="use-case-tag">Enterprise compliance workflow</div>
-          <div class="suggestion-list">
-            <div class="suggestion-item"><span class="check">✓</span> Case study opportunity</div>
-            <div class="suggestion-item"><span class="check">✓</span> LinkedIn post drafted</div>
-            <div class="suggestion-item"><span class="check">✓</span> Added to campaign queue</div>
-          </div>
-        </div>
-        <div class="card-meta">
-          <span class="dot"></span>
-          New use case captured
-        </div>
-      </div>
-
-      <!-- Card 6: Follow-up Drafted -->
-      <div class="card purple" id="card6">
-        <div class="card-header">
-          <div class="card-icon">
-            <svg viewBox="0 0 24 24">
-              <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/>
-            </svg>
-          </div>
-          <span class="card-badge">Follow-up Agent</span>
-        </div>
-        <span class="card-title">Email drafted</span>
-        <div class="email-preview">
-          <div class="email-header">
-            <div class="email-avatar">SC</div>
-            <div class="email-to">
-              <span>To:</span> sarah.chen@acmecorp.com
-            </div>
-          </div>
-          <div class="email-subject">Re: Next steps + Q1 proposal</div>
-          <div class="email-body">Thanks for the great conversation today. As discussed, I've attached our proposal with the Q1 pricing we discussed...</div>
-        </div>
-        <div class="card-meta">
-          <span class="dot"></span>
-          Ready to send · 1 attachment
-        </div>
-      </div>
-
-      <!-- Card 7: Forecast Updated -->
-      <div class="card yellow" id="card7">
-        <div class="card-header">
-          <div class="card-icon">
-            <svg viewBox="0 0 24 24">
-              <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
-            </svg>
-          </div>
-          <span class="card-badge">Forecast Agent</span>
-        </div>
-        <span class="card-title">Win probability</span>
-        <div class="card-content">
-          <div class="forecast-big">
-            <span class="forecast-number">73%</span>
-            <span class="forecast-change">↑ +12%</span>
-          </div>
-          <div class="forecast-bar">
-            <div class="forecast-fill"></div>
-          </div>
-        </div>
-        <div class="card-meta">
-          <span class="dot"></span>
-          Based on 847 similar deals
-        </div>
+        <div class="card-meta">Slack #deals · @mike</div>
       </div>
     </div>
   </section>
@@ -1009,61 +631,46 @@
         path.style.strokeDashoffset = length;
       });
 
-      gsap.set('.card', { opacity: 0, y: 30, scale: 0.96 });
-      gsap.set('.forecast-fill', { width: '0%' });
+      gsap.set('.card', { opacity: 0, y: 30, scale: 0.95 });
 
-      // No repeat - plays once and stays
+      // No loop - plays once
       const tl = gsap.timeline();
 
-      // Card 1: Call completed
-      tl.to('#card1', { opacity: 1, y: 0, scale: 1, duration: 1, ease: 'power2.out' });
-      
-      // Pause to read
-      tl.to({}, { duration: 0.8 });
-      
-      // Path 1: to Card 2
-      tl.to('#path1', { strokeDashoffset: 0, duration: 1.5, ease: 'power1.inOut' });
-      
-      // Card 2: Analyzing
-      tl.to('#card2', { opacity: 1, y: 0, scale: 1, duration: 1, ease: 'power2.out' }, '-=0.3');
-      
-      // Pause while "analyzing"
-      tl.to({}, { duration: 1.5 });
-      
-      // Paths 2 & 3 branch out simultaneously
-      tl.to('#path2', { strokeDashoffset: 0, duration: 1.2, ease: 'power1.inOut' });
-      tl.to('#path3', { strokeDashoffset: 0, duration: 1.5, ease: 'power1.inOut' }, '-=1.2');
-      
-      // Cards 3 & 4 appear
-      tl.to('#card3', { opacity: 1, y: 0, scale: 1, duration: 0.8, ease: 'power2.out' }, '-=0.5');
-      tl.to('#card4', { opacity: 1, y: 0, scale: 1, duration: 0.8, ease: 'power2.out' }, '-=0.7');
+      // Card 1 appears first
+      tl.to('#card1', { opacity: 1, y: 0, scale: 1, duration: 0.8, ease: 'power2.out' });
       
       // Pause to read
       tl.to({}, { duration: 1 });
       
-      // Paths 4 & 5
-      tl.to('#path4', { strokeDashoffset: 0, duration: 1, ease: 'power1.inOut' });
-      tl.to('#path5', { strokeDashoffset: 0, duration: 1.2, ease: 'power1.inOut' }, '-=0.8');
+      // Path 1 draws AFTER card 1 is visible
+      tl.to('#path1', { strokeDashoffset: 0, duration: 1.2, ease: 'power1.inOut' });
       
-      // Cards 5 & 6
-      tl.to('#card5', { opacity: 1, y: 0, scale: 1, duration: 0.8, ease: 'power2.out' }, '-=0.4');
-      tl.to('#card6', { opacity: 1, y: 0, scale: 1, duration: 0.8, ease: 'power2.out' }, '-=0.6');
+      // Card 2 appears at end of path
+      tl.to('#card2', { opacity: 1, y: 0, scale: 1, duration: 0.8, ease: 'power2.out' }, '-=0.2');
       
       // Pause to read
-      tl.to({}, { duration: 0.8 });
+      tl.to({}, { duration: 1.2 });
       
-      // Path 6 & Card 7
-      tl.to('#path6', { strokeDashoffset: 0, duration: 0.8, ease: 'power1.inOut' });
-      tl.to('#card7', { opacity: 1, y: 0, scale: 1, duration: 0.8, ease: 'power2.out' }, '-=0.3');
+      // Path 2 draws
+      tl.to('#path2', { strokeDashoffset: 0, duration: 1, ease: 'power1.inOut' });
       
-      // Animate forecast fill
-      tl.to('.forecast-fill', { width: '73%', duration: 1.2, ease: 'power2.out' }, '-=0.5');
+      // Card 3 appears
+      tl.to('#card3', { opacity: 1, y: 0, scale: 1, duration: 0.8, ease: 'power2.out' }, '-=0.2');
+      
+      // Pause to read
+      tl.to({}, { duration: 1.2 });
+      
+      // Path 3 draws
+      tl.to('#path3', { strokeDashoffset: 0, duration: 1.2, ease: 'power1.inOut' });
+      
+      // Card 4 appears
+      tl.to('#card4', { opacity: 1, y: 0, scale: 1, duration: 0.8, ease: 'power2.out' }, '-=0.2');
 
       return tl;
     }
 
     document.addEventListener('DOMContentLoaded', () => {
-      setTimeout(createTimeline, 400);
+      setTimeout(createTimeline, 500);
     });
   </script>
 </body>

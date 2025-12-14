@@ -1,5 +1,5 @@
 ---
-// Hero Section - Stepped Grid with Consistent Borders
+// Hero Section - Clean Stepped Grid
 ---
 
 <!DOCTYPE html>
@@ -35,6 +35,8 @@
       --yellow: #FFDC58;
       
       --cell: 120px;
+      --grid-cols: 9;
+      --grid-rows: 8;
     }
 
     [data-theme="dark"] {
@@ -201,67 +203,21 @@
     }
 
     /* ========================================
-       GRID WRAPPER - CSS Grid based for consistent borders
+       GRID WRAPPER
        ======================================== */
     
     .grid-wrapper {
       position: absolute;
-      top: 72px;
+      top: 50%;
       right: 20px;
-      bottom: 0;
-      display: flex;
-      align-items: center;
+      transform: translateY(-50%);
+      width: calc(var(--cell) * var(--grid-cols));
+      height: calc(var(--cell) * var(--grid-rows));
       z-index: 5;
     }
 
-    /* CSS Grid for consistent cell borders */
-    .grid-bg {
-      display: grid;
-      grid-template-columns: repeat(9, var(--cell));
-      grid-template-rows: repeat(9, var(--cell));
-    }
-
-    .grid-cell {
-      border: 1px solid var(--grid-line);
-      margin: -0.5px; /* Overlap borders for single lines */
-    }
-
-    /* Hide cells to create stepped silhouette
-       9 cols × 9 rows = 81 cells
-       
-       Row 0 (cells 1-9): full
-       Row 1 (cells 10-18): hide cell 10 (col 0)
-       Row 2 (cells 19-27): hide cells 19-20 (cols 0-1)
-       Row 3 (cells 28-36): hide cells 28-30 (cols 0-2)
-       Row 4 (cells 37-45): hide cells 37-39 (cols 0-2)
-       Row 5 (cells 46-54): hide cells 46-48 (cols 0-2)
-       Row 6 (cells 55-63): hide cells 55-56 (cols 0-1)
-       Row 7 (cells 64-72): hide cell 64 (col 0)
-       Row 8 (cells 73-81): full
-    */
-    .grid-cell:nth-child(10),
-    .grid-cell:nth-child(19),
-    .grid-cell:nth-child(20),
-    .grid-cell:nth-child(28),
-    .grid-cell:nth-child(29),
-    .grid-cell:nth-child(30),
-    .grid-cell:nth-child(37),
-    .grid-cell:nth-child(38),
-    .grid-cell:nth-child(39),
-    .grid-cell:nth-child(46),
-    .grid-cell:nth-child(47),
-    .grid-cell:nth-child(48),
-    .grid-cell:nth-child(55),
-    .grid-cell:nth-child(56),
-    .grid-cell:nth-child(64) {
-      visibility: hidden;
-    }
-
-    /* ========================================
-       CARDS
-       ======================================== */
-    
-    .cards-layer {
+    /* SVG grid lines */
+    .grid-svg {
       position: absolute;
       top: 0;
       left: 0;
@@ -269,6 +225,15 @@
       height: 100%;
     }
 
+    .grid-svg line {
+      stroke: var(--grid-line);
+      stroke-width: 1;
+    }
+
+    /* ========================================
+       CARDS - exactly 2 cells × 2 cells
+       ======================================== */
+    
     .card {
       position: absolute;
       width: calc(var(--cell) * 2);
@@ -366,14 +331,6 @@
     .card.coral .card-icon svg { stroke: #fff; }
     .card.coral .card-meta { border-color: rgba(255,255,255,0.2); }
 
-    .card.yellow {
-      background: var(--yellow);
-      color: #0a0a0a;
-    }
-    .card.yellow .card-badge { background: rgba(0,0,0,0.1); }
-    .card.yellow .card-icon svg { stroke: #0a0a0a; }
-    .card.yellow .card-meta { border-color: rgba(0,0,0,0.15); }
-
     /* Card content components */
     .stats-grid {
       display: grid;
@@ -449,29 +406,14 @@
       margin-top: 6px;
     }
 
-    .checklist {
-      margin-top: 6px;
-    }
-    .checklist-item {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      font-size: 11px;
-      margin-bottom: 4px;
-    }
-    .checklist-item svg {
-      width: 12px;
-      height: 12px;
-      flex-shrink: 0;
-    }
-
-    /* Card positions - diagonal cascade within grid
-       Grid: 9 cols × 9 rows
+    /* Card positions - aligned to exact grid cells
+       Grid: 9 cols × 8 rows, cell = 120px
+       Cards are 2×2 cells = 240px × 240px
        
-       Card 1 (mint): row 0, cols 0-1 (top left)
-       Card 2 (purple): row 2, cols 3-4 (spaced down)
-       Card 3 (cyan): row 4, cols 6-7 (middle right)
-       Card 4 (coral): row 7, cols 7-8 (bottom right)
+       Card 1 (mint): row 0, col 0
+       Card 2 (purple): row 2, col 3
+       Card 3 (cyan): row 4, col 5
+       Card 4 (coral): row 6, col 7
     */
     #card1 {
       top: 0;
@@ -483,10 +425,10 @@
     }
     #card3 {
       top: calc(var(--cell) * 4);
-      left: calc(var(--cell) * 6);
+      left: calc(var(--cell) * 5);
     }
     #card4 {
-      top: calc(var(--cell) * 7);
+      top: calc(var(--cell) * 6);
       left: calc(var(--cell) * 7);
     }
 
@@ -519,12 +461,12 @@
     }
     
     @media (max-width: 1600px) {
-      :root { --cell: 100px; }
+      :root { --cell: 95px; }
       .hero-headline { font-size: 70px; }
     }
     
     @media (max-width: 1400px) {
-      :root { --cell: 85px; }
+      :root { --cell: 80px; }
       .hero-headline { font-size: 60px; }
       .card { padding: 18px; }
       .card-title { font-size: 15px; }
@@ -539,7 +481,6 @@
       .stats-grid { display: none; }
       .meddic-row { display: none; }
       .quote-block { display: none; }
-      .checklist { display: none; }
     }
 
     @media (max-width: 1000px) {
@@ -564,7 +505,7 @@
         position: relative;
         top: auto;
         right: auto;
-        bottom: auto;
+        transform: none;
         margin: 0 auto;
       }
       :root { --cell: 50px; }
@@ -644,118 +585,150 @@
     </div>
 
     <div class="grid-wrapper">
-      <!-- CSS Grid: 9 cols × 9 rows = 81 cells -->
-      <div class="grid-bg">
-        <div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div>
-        <div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div>
-        <div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div>
-        <div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div>
-        <div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div>
-        <div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div>
-        <div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div>
-        <div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div>
-        <div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div>
+      <!-- SVG Grid: 9 cols × 8 rows at 120px each = 1080×960
+           Hourglass pattern stepping in from left:
+           Row 0: 9 cols (full)
+           Row 1: 8 cols (start at col 1)
+           Row 2: 7 cols (start at col 2)
+           Row 3: 6 cols (start at col 3)
+           Row 4: 6 cols (start at col 3)
+           Row 5: 7 cols (start at col 2)
+           Row 6: 8 cols (start at col 1)
+           Row 7: 9 cols (full)
+      -->
+      <svg class="grid-svg" viewBox="0 0 1080 960" preserveAspectRatio="xMidYMid meet">
+        <!-- All horizontal lines -->
+        <line x1="0" y1="0" x2="1080" y2="0"/>
+        <line x1="120" y1="120" x2="1080" y2="120"/>
+        <line x1="240" y1="240" x2="1080" y2="240"/>
+        <line x1="360" y1="360" x2="1080" y2="360"/>
+        <line x1="360" y1="480" x2="1080" y2="480"/>
+        <line x1="240" y1="600" x2="1080" y2="600"/>
+        <line x1="120" y1="720" x2="1080" y2="720"/>
+        <line x1="0" y1="840" x2="1080" y2="840"/>
+        <line x1="0" y1="960" x2="1080" y2="960"/>
+
+        <!-- All vertical lines (right side always full) -->
+        <line x1="1080" y1="0" x2="1080" y2="960"/>
+        <line x1="960" y1="0" x2="960" y2="960"/>
+        <line x1="840" y1="0" x2="840" y2="960"/>
+        <line x1="720" y1="0" x2="720" y2="960"/>
+        <line x1="600" y1="0" x2="600" y2="960"/>
+        <line x1="480" y1="0" x2="480" y2="960"/>
+        <line x1="360" y1="0" x2="360" y2="360"/>
+        <line x1="360" y1="480" x2="360" y2="960"/>
+        <line x1="240" y1="0" x2="240" y2="240"/>
+        <line x1="240" y1="600" x2="240" y2="960"/>
+        <line x1="120" y1="0" x2="120" y2="120"/>
+        <line x1="120" y1="720" x2="120" y2="960"/>
+        <line x1="0" y1="0" x2="0" y2="0"/>
+        <line x1="0" y1="840" x2="0" y2="960"/>
+
+        <!-- Left edge step connectors -->
+        <line x1="0" y1="120" x2="120" y2="120"/>
+        <line x1="120" y1="240" x2="240" y2="240"/>
+        <line x1="240" y1="360" x2="360" y2="360"/>
+        <line x1="240" y1="600" x2="360" y2="600"/>
+        <line x1="120" y1="720" x2="240" y2="720"/>
+        <line x1="0" y1="840" x2="120" y2="840"/>
+      </svg>
+
+      <!-- Card 1: Call Completed - row 0, col 0 -->
+      <div class="card mint" id="card1">
+        <div class="card-header">
+          <div class="card-icon">
+            <svg viewBox="0 0 24 24">
+              <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+            </svg>
+          </div>
+          <span class="card-badge">Trigger</span>
+        </div>
+        <span class="card-title">Call completed</span>
+        <div class="card-content">
+          Discovery call with Sarah Chen, VP Sales at Acme Corp
+          <div class="talk-ratio">
+            <div class="rep"></div>
+            <div class="prospect"></div>
+          </div>
+        </div>
+        <div class="card-meta">32 min · 35/65 talk ratio</div>
       </div>
 
-      <!-- Cards layer -->
-      <div class="cards-layer">
-        <!-- Card 1: Call Completed -->
-        <div class="card mint" id="card1">
-          <div class="card-header">
-            <div class="card-icon">
-              <svg viewBox="0 0 24 24">
-                <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
-              </svg>
-            </div>
-            <span class="card-badge">Trigger</span>
+      <!-- Card 2: recrd Analyzes - row 2, col 3 -->
+      <div class="card purple" id="card2">
+        <div class="card-header">
+          <div class="card-icon">
+            <svg viewBox="0 0 24 24">
+              <path d="M2 12h2"/><path d="M6 8v8"/><path d="M10 4v16"/><path d="M14 6v12"/><path d="M18 9v6"/><path d="M22 12h-2"/>
+            </svg>
           </div>
-          <span class="card-title">Call completed</span>
-          <div class="card-content">
-            Discovery call with Sarah Chen, VP Sales at Acme Corp
-            <div class="talk-ratio">
-              <div class="rep"></div>
-              <div class="prospect"></div>
-            </div>
-          </div>
-          <div class="card-meta">32 min · 35/65 talk ratio</div>
+          <span class="card-badge">Processing</span>
         </div>
+        <span class="card-title">recrd analyzes</span>
+        <div class="card-content">
+          <div class="stats-grid">
+            <div class="stat-box">
+              <div class="stat-label">Sentiment</div>
+              <div class="stat-value positive">87%</div>
+            </div>
+            <div class="stat-box">
+              <div class="stat-label">Momentum</div>
+              <div class="stat-value highlight">High</div>
+            </div>
+            <div class="stat-box">
+              <div class="stat-label">Objections</div>
+              <div class="stat-value">2</div>
+            </div>
+            <div class="stat-box">
+              <div class="stat-label">Next Steps</div>
+              <div class="stat-value">4</div>
+            </div>
+          </div>
+        </div>
+        <div class="card-meta">6 agents · 14 actions</div>
+      </div>
 
-        <!-- Card 2: recrd Analyzes -->
-        <div class="card purple" id="card2">
-          <div class="card-header">
-            <div class="card-icon">
-              <svg viewBox="0 0 24 24">
-                <path d="M2 12h2"/><path d="M6 8v8"/><path d="M10 4v16"/><path d="M14 6v12"/><path d="M18 9v6"/><path d="M22 12h-2"/>
-              </svg>
-            </div>
-            <span class="card-badge">Processing</span>
+      <!-- Card 3: Pipeline Updated - row 4, col 5 -->
+      <div class="card cyan" id="card3">
+        <div class="card-header">
+          <div class="card-icon">
+            <svg viewBox="0 0 24 24">
+              <line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/>
+            </svg>
           </div>
-          <span class="card-title">recrd analyzes</span>
-          <div class="card-content">
-            <div class="stats-grid">
-              <div class="stat-box">
-                <div class="stat-label">Sentiment</div>
-                <div class="stat-value positive">87%</div>
-              </div>
-              <div class="stat-box">
-                <div class="stat-label">Momentum</div>
-                <div class="stat-value highlight">High</div>
-              </div>
-              <div class="stat-box">
-                <div class="stat-label">Objections</div>
-                <div class="stat-value">2</div>
-              </div>
-              <div class="stat-box">
-                <div class="stat-label">Next Steps</div>
-                <div class="stat-value">4</div>
-              </div>
-            </div>
-          </div>
-          <div class="card-meta">6 agents · 14 actions</div>
+          <span class="card-badge">CRM Agent</span>
         </div>
+        <span class="card-title">Pipeline updated</span>
+        <div class="card-content">
+          Stage → Negotiation
+          <div class="meddic-row">
+            <div class="meddic-item filled">M</div>
+            <div class="meddic-item filled">E</div>
+            <div class="meddic-item filled">D</div>
+            <div class="meddic-item filled">D</div>
+            <div class="meddic-item">I</div>
+            <div class="meddic-item filled">C</div>
+          </div>
+        </div>
+        <div class="card-meta">5/6 MEDDIC · 12 fields</div>
+      </div>
 
-        <!-- Card 3: Pipeline Updated -->
-        <div class="card cyan" id="card3">
-          <div class="card-header">
-            <div class="card-icon">
-              <svg viewBox="0 0 24 24">
-                <line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/>
-              </svg>
-            </div>
-            <span class="card-badge">CRM Agent</span>
+      <!-- Card 4: Manager Notified - row 6, col 7 -->
+      <div class="card coral" id="card4">
+        <div class="card-header">
+          <div class="card-icon">
+            <svg viewBox="0 0 24 24">
+              <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+            </svg>
           </div>
-          <span class="card-title">Pipeline updated</span>
-          <div class="card-content">
-            Stage → Negotiation
-            <div class="meddic-row">
-              <div class="meddic-item filled">M</div>
-              <div class="meddic-item filled">E</div>
-              <div class="meddic-item filled">D</div>
-              <div class="meddic-item filled">D</div>
-              <div class="meddic-item">I</div>
-              <div class="meddic-item filled">C</div>
-            </div>
-          </div>
-          <div class="card-meta">5/6 MEDDIC · 12 fields</div>
+          <span class="card-badge">Risk Alert</span>
         </div>
-
-        <!-- Card 4: Manager Notified -->
-        <div class="card coral" id="card4">
-          <div class="card-header">
-            <div class="card-icon">
-              <svg viewBox="0 0 24 24">
-                <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/>
-              </svg>
-            </div>
-            <span class="card-badge">Risk Alert</span>
-          </div>
-          <span class="card-title">Manager notified</span>
-          <div class="card-content">
-            <div class="quote-block">"Budget is tight this quarter, but we're very interested in Q1."</div>
-            <div class="quote-attr">— Sarah Chen, VP Sales</div>
-          </div>
-          <div class="card-meta">Slack #enterprise · @mike</div>
+        <span class="card-title">Manager notified</span>
+        <div class="card-content">
+          <div class="quote-block">"Budget is tight this quarter, but we're very interested in Q1."</div>
+          <div class="quote-attr">— Sarah Chen, VP Sales</div>
         </div>
+        <div class="card-meta">Slack #enterprise · @mike</div>
       </div>
     </div>
   </section>
@@ -789,7 +762,6 @@
 
       const tl = gsap.timeline();
 
-      // Cards cascade in order: top-left to bottom-right
       tl.to('#card1', { opacity: 1, x: 0, scale: 1, duration: 0.7, ease: 'power2.out' });
       tl.to('#card2', { opacity: 1, x: 0, scale: 1, duration: 0.7, ease: 'power2.out' }, '-=0.4');
       tl.to('#card3', { opacity: 1, x: 0, scale: 1, duration: 0.7, ease: 'power2.out' }, '-=0.4');

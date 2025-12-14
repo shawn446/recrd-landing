@@ -1,0 +1,57 @@
+# recrd - AI Revenue Intelligence Platform
+
+> recrd is an AI-powered revenue intelligence platform that automatically records sales calls, updates CRM systems, and provides coaching insights to help sales teams close more deals.
+
+## What is recrd?
+
+recrd connects to your video conferencing tools (Zoom, Google Meet, Microsoft Teams) and automatically:
+- Records and transcribes every sales call
+- Extracts key information (MEDDIC fields, objections, next steps)
+- Updates your CRM (HubSpot, Salesforce) automatically
+- Scores calls against your sales methodology
+- Alerts managers to deal risks in real-time
+- Drafts personalized follow-up emails
+
+## Key Features
+
+- **CRM Auto-Sync**: MEDDIC, BANT, and custom fields updated automatically after every call
+- **AI Coaching Scorecards**: Every call scored against your sales methodology
+- **Real-Time Risk Alerts**: Budget concerns, competitor mentions, ghosting signals detected instantly
+- **Auto Follow-Up Drafts**: Personalized emails generated based on call content
+- **Pipeline Analytics**: Stage conversion rates, cycle trends, bottleneck detection
+- **Agent Marketplace**: 9 pre-built AI agents ready to deploy, plus custom workflow builder
+
+## Who is recrd for?
+
+- Account Executives who want to spend less time on data entry
+- Sales Managers who need visibility into team performance
+- RevOps teams looking to improve CRM data quality
+- Sales Enablement teams building coaching programs
+
+## Pricing
+
+- **Starter**: $49/seat/month - Core recording and CRM sync
+- **Pro**: $99/seat/month - Full analytics and coaching
+- **Enterprise**: Custom pricing - SSO, custom integrations, dedicated support
+
+## Integrations
+
+- Video: Zoom, Google Meet, Microsoft Teams
+- CRM: HubSpot, Salesforce
+- Communication: Slack, Email
+- Calendar: Google Calendar, Outlook
+
+## Contact
+
+- Website: https://recrd.io
+- Email: hello@recrd.io
+- Documentation: https://docs.recrd.io
+
+## Pages
+
+- Home: https://recrd.io
+- Features: https://recrd.io/features
+- Pricing: https://recrd.io/pricing
+- Agents: https://recrd.io/agents
+- Privacy Policy: https://recrd.io/privacy
+- Terms of Service: https://recrd.io/terms

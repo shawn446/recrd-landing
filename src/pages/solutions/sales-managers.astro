@@ -1,0 +1,116 @@
+---
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+import ThemeToggle from '../components/ThemeToggle.astro';
+import BaseHead from '../components/BaseHead.astro';
+---
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <BaseHead title="recrd for Sales Managers - Coach Smarter, Not Harder" description="Stop listening to hours of call recordings. Get AI-powered coaching insights, deal risk alerts, and team performance data." />
+  <style>
+    .hero { padding: 160px 48px 100px; max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
+    .hero-content { max-width: 540px; }
+    .hero-badge { display: inline-flex; padding: 8px 16px; background: var(--bg-card); border: 1px solid var(--border); font-family: var(--mono); font-size: 12px; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 24px; color: var(--purple); }
+    .hero-headline { font-size: 56px; font-weight: 350; line-height: 1.1; letter-spacing: -0.03em; margin-bottom: 24px; }
+    .hero-headline em { font-style: normal; color: var(--purple); }
+    .hero-sub { font-size: 18px; color: var(--text-muted); line-height: 1.6; margin-bottom: 40px; }
+    .hero-cta { display: inline-flex; align-items: center; gap: 12px; padding: 18px 32px; font-weight: 500; font-size: 15px; text-decoration: none; position: relative; overflow: hidden; background: transparent; color: var(--text); border: 1px solid var(--btn-outline); transition: all 0.3s ease; }
+    .hero-cta::before { content: ''; position: absolute; top: 0; left: 0; width: 0; height: 100%; background: var(--purple); transition: width 0.3s ease; z-index: -1; }
+    .hero-cta:hover::before { width: 100%; }
+    .hero-cta:hover { color: #fff; border-color: var(--purple); }
+    .hero-visual { background: var(--bg-card); border: 1px solid var(--border); padding: 32px; }
+    .hero-mock-header { display: flex; align-items: center; justify-content: space-between; padding-bottom: 16px; border-bottom: 1px solid var(--border); margin-bottom: 20px; }
+    .hero-mock-title { font-weight: 600; font-size: 14px; }
+    .hero-mock-badge { font-family: var(--mono); font-size: 10px; padding: 6px 12px; background: var(--purple); color: #fff; text-transform: uppercase; }
+    .scorecard-row { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid var(--border); }
+    .scorecard-row:last-child { border-bottom: none; }
+    .scorecard-label { font-size: 14px; }
+    .scorecard-score { display: flex; align-items: center; gap: 12px; }
+    .scorecard-bar { width: 80px; height: 6px; background: var(--border); overflow: hidden; }
+    .scorecard-fill { height: 100%; }
+    .scorecard-fill.high { background: var(--mint); }
+    .scorecard-fill.mid { background: var(--yellow); }
+    .scorecard-fill.low { background: var(--coral); }
+    .scorecard-value { font-family: var(--mono); font-size: 13px; font-weight: 600; width: 40px; text-align: right; }
+    .pain-section { padding: 100px 48px; border-top: 1px solid var(--border); background: var(--bg-alt); }
+    .pain-header { text-align: center; max-width: 600px; margin: 0 auto 64px; }
+    .pain-label { font-family: var(--mono); font-size: 12px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--coral); margin-bottom: 16px; }
+    .pain-headline { font-size: 36px; font-weight: 350; line-height: 1.2; letter-spacing: -0.02em; }
+    .pain-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--border); max-width: 1000px; margin: 0 auto; }
+    .pain-card { background: var(--bg); padding: 40px 32px; text-align: center; }
+    .pain-stat { font-size: 48px; font-weight: 300; color: var(--coral); margin-bottom: 12px; font-family: var(--mono); }
+    .pain-desc { font-size: 15px; color: var(--text-muted); line-height: 1.5; }
+    .solution-section { padding: 120px 48px; border-top: 1px solid var(--border); }
+    .solution-header { text-align: center; max-width: 600px; margin: 0 auto 80px; }
+    .solution-label { font-family: var(--mono); font-size: 12px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--purple); margin-bottom: 16px; }
+    .solution-headline { font-size: 36px; font-weight: 350; line-height: 1.2; letter-spacing: -0.02em; margin-bottom: 16px; }
+    .solution-sub { font-size: 16px; color: var(--text-muted); }
+    .solution-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 48px; max-width: 1000px; margin: 0 auto; }
+    .solution-card { padding: 40px; background: var(--bg-card); border: 1px solid var(--border); }
+    .solution-icon { width: 48px; height: 48px; margin-bottom: 24px; }
+    .solution-title { font-size: 20px; font-weight: 600; margin-bottom: 12px; }
+    .solution-desc { font-size: 15px; color: var(--text-muted); line-height: 1.6; }
+    .quote-section { padding: 100px 48px; border-top: 1px solid var(--border); background: var(--bg-alt); }
+    .quote-container { max-width: 800px; margin: 0 auto; text-align: center; }
+    .quote-mark { font-size: 80px; line-height: 1; color: var(--purple); opacity: 0.3; margin-bottom: -20px; }
+    .quote-text { font-size: 28px; font-weight: 350; line-height: 1.5; margin-bottom: 32px; }
+    .quote-author { font-size: 15px; color: var(--text-muted); }
+    .quote-author strong { color: var(--text); font-weight: 600; }
+    .cta-section { padding: 120px 48px; text-align: center; border-top: 1px solid var(--border); }
+    .cta-headline { font-size: 40px; font-weight: 350; margin-bottom: 16px; }
+    .cta-sub { font-size: 18px; color: var(--text-muted); margin-bottom: 40px; }
+    .btn { display: inline-flex; align-items: center; gap: 12px; padding: 18px 28px; font-weight: 500; font-size: 15px; text-decoration: none; position: relative; overflow: hidden; background: transparent; color: var(--text); border: 1px solid var(--btn-outline); }
+    .btn::before { content: ''; position: absolute; top: 0; left: 0; width: 0; height: 100%; background: var(--purple); transition: width 0.3s ease; z-index: -1; }
+    .btn:hover::before { width: 100%; }
+    .btn:hover { color: #fff; border-color: var(--purple); }
+    @media (max-width: 1000px) { .hero { grid-template-columns: 1fr; gap: 48px; text-align: center; } .solution-grid { grid-template-columns: 1fr; } }
+    @media (max-width: 900px) { .hero { padding: 140px 24px 80px; } .hero-headline { font-size: 40px; } .pain-section { padding: 80px 24px; } .pain-grid { grid-template-columns: 1fr; } .solution-section { padding: 80px 24px; } .quote-section { padding: 80px 24px; } .quote-text { font-size: 22px; } .cta-section { padding: 80px 24px; } .cta-headline { font-size: 32px; } }
+  </style>
+</head>
+<body>
+  <Nav />
+  <section class="hero">
+    <div class="hero-content">
+      <div class="hero-badge">For Sales Managers</div>
+      <h1 class="hero-headline">Coach smarter, <em>not harder</em></h1>
+      <p class="hero-sub">Stop listening to hours of call recordings. Get AI-powered scorecards, deal risk alerts, and coaching insights—without the manual work.</p>
+      <a href="/#contact" class="hero-cta">Book a Demo</a>
+    </div>
+    <div class="hero-visual">
+      <div class="hero-mock-header"><span class="hero-mock-title">Team Scorecard</span><span class="hero-mock-badge">This Week</span></div>
+      <div class="scorecard-row"><span class="scorecard-label">Sarah K.</span><div class="scorecard-score"><div class="scorecard-bar"><div class="scorecard-fill high" style="width: 92%;"></div></div><span class="scorecard-value">92</span></div></div>
+      <div class="scorecard-row"><span class="scorecard-label">Mike R.</span><div class="scorecard-score"><div class="scorecard-bar"><div class="scorecard-fill high" style="width: 87%;"></div></div><span class="scorecard-value">87</span></div></div>
+      <div class="scorecard-row"><span class="scorecard-label">Alex T.</span><div class="scorecard-score"><div class="scorecard-bar"><div class="scorecard-fill mid" style="width: 68%;"></div></div><span class="scorecard-value">68</span></div></div>
+      <div class="scorecard-row"><span class="scorecard-label">Jordan P.</span><div class="scorecard-score"><div class="scorecard-bar"><div class="scorecard-fill low" style="width: 45%;"></div></div><span class="scorecard-value">45</span></div></div>
+    </div>
+  </section>
+  <section class="pain-section">
+    <div class="pain-header"><p class="pain-label">The Problem</p><h2 class="pain-headline">You can't coach what you can't see</h2></div>
+    <div class="pain-grid">
+      <div class="pain-card"><div class="pain-stat">2%</div><p class="pain-desc">Of calls managers actually review in full</p></div>
+      <div class="pain-card"><div class="pain-stat">3x</div><p class="pain-desc">More time spent finding coachable moments than coaching</p></div>
+      <div class="pain-card"><div class="pain-stat">72%</div><p class="pain-desc">Of deal risks discovered too late to save</p></div>
+    </div>
+  </section>
+  <section class="solution-section">
+    <div class="solution-header"><p class="solution-label">How recrd helps</p><h2 class="solution-headline">Visibility without the legwork</h2><p class="solution-sub">AI does the call review. You do the coaching.</p></div>
+    <div class="solution-grid">
+      <div class="solution-card"><div class="solution-icon"><svg viewBox="0 0 48 48" fill="none"><rect x="6" y="34" width="6" height="8" fill="var(--purple)" opacity="0.4"/><rect x="14" y="28" width="6" height="14" fill="var(--purple)" opacity="0.55"/><rect x="22" y="20" width="6" height="22" fill="var(--purple)" opacity="0.7"/><rect x="30" y="14" width="6" height="28" fill="var(--purple)" opacity="0.85"/><rect x="38" y="6" width="6" height="36" fill="var(--purple)"/></svg></div><h3 class="solution-title">AI Scorecards</h3><p class="solution-desc">Every call auto-scored against MEDDIC, BANT, or your custom framework. See exactly where each rep needs help.</p></div>
+      <div class="solution-card"><div class="solution-icon"><svg viewBox="0 0 48 48" fill="none"><rect x="20" y="4" width="8" height="4" fill="var(--coral)"/><rect x="16" y="8" width="16" height="4" fill="var(--coral)"/><rect x="12" y="12" width="24" height="16" fill="var(--coral)"/><rect x="8" y="28" width="32" height="4" fill="var(--coral)"/><rect x="20" y="32" width="8" height="4" fill="var(--coral)"/></svg></div><h3 class="solution-title">Deal Risk Alerts</h3><p class="solution-desc">Budget objections, competitor mentions, champion loss—get notified the moment a deal shows warning signs.</p></div>
+      <div class="solution-card"><div class="solution-icon"><svg viewBox="0 0 48 48" fill="none"><rect x="20" y="4" width="8" height="8" fill="var(--cyan)"/><rect x="6" y="20" width="8" height="8" fill="var(--cyan)" opacity="0.7"/><rect x="34" y="20" width="8" height="8" fill="var(--cyan)" opacity="0.7"/><rect x="12" y="36" width="8" height="8" fill="var(--cyan)" opacity="0.5"/><rect x="28" y="36" width="8" height="8" fill="var(--cyan)" opacity="0.5"/></svg></div><h3 class="solution-title">Team Performance</h3><p class="solution-desc">Compare reps across calls, deals, and time periods. Identify top performers and replicate what works.</p></div>
+      <div class="solution-card"><div class="solution-icon"><svg viewBox="0 0 48 48" fill="none"><rect x="8" y="8" width="32" height="32" fill="var(--mint)" opacity="0.2"/><rect x="12" y="16" width="24" height="3" fill="var(--mint)"/><rect x="12" y="24" width="18" height="3" fill="var(--mint)" opacity="0.7"/><rect x="12" y="32" width="20" height="3" fill="var(--mint)" opacity="0.5"/></svg></div><h3 class="solution-title">Coaching Comments</h3><p class="solution-desc">Leave timestamped feedback on specific call moments. Reps get actionable coaching, not vague notes.</p></div>
+    </div>
+  </section>
+  <section class="quote-section">
+    <div class="quote-container"><div class="quote-mark">"</div><p class="quote-text">I went from reviewing 3 calls a week to having visibility into every conversation. My team's MEDDIC scores went up 40% in one quarter.</p><p class="quote-author"><strong>Jennifer L.</strong> — VP of Sales</p></div>
+  </section>
+  <section class="cta-section">
+    <h2 class="cta-headline">Ready to coach at scale?</h2>
+    <p class="cta-sub">See how recrd gives you visibility into every conversation without the time sink.</p>
+    <a href="/#contact" class="btn">Book a Demo</a>
+  </section>
+  <Footer />
+  <ThemeToggle />
+</body>
+</html>

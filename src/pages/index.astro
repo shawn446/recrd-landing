@@ -1,6 +1,7 @@
 ---
 // Homepage - recrd
 import Nav from '../components/Nav.astro';
+import ComingSoon from '../components/ComingSoon.astro';
 import Footer from '../components/Footer.astro';
 import ThemeToggle from '../components/ThemeToggle.astro';
 import BaseHead from '../components/BaseHead.astro';
@@ -25,7 +26,7 @@ import BaseHead from '../components/BaseHead.astro';
       min-height: 100vh;
       display: flex;
       align-items: center;
-      padding: 72px 0 0 48px;
+      padding: 120px 0 0 48px; /* extra padding for banner */
       position: relative;
       overflow: hidden;
     }
@@ -229,13 +230,14 @@ import BaseHead from '../components/BaseHead.astro';
     @media (max-width: 1400px) { :root { --cell: 80px; } .hero-headline { font-size: 60px; } .card { padding: 18px; } .card-title { font-size: 15px; } .card-content { font-size: 11px; } }
     @media (max-width: 1200px) { :root { --cell: 70px; } .hero-headline { font-size: 52px; } .card { padding: 14px; } .card-title { font-size: 13px; } .stats-grid, .meddic-row, .quote-block { display: none; } .how-flow { flex-direction: column; max-width: 500px; } .how-step { margin-left: 0; margin-top: -1px; } .how-step:first-child { margin-top: 0; } .step-arrow { display: none; } }
     @media (max-width: 1000px) { :root { --cell: 60px; } .hero-headline { font-size: 44px; } .card { padding: 10px; } .card-title { font-size: 12px; } .card-content, .card-meta { display: none; } }
-    @media (max-width: 900px) { .hero { flex-direction: column; padding: 100px 24px 48px; min-height: auto; } .hero-content { max-width: 100%; text-align: center; margin-bottom: 40px; } .hero-headline { font-size: 48px; } .hero-buttons { justify-content: center; } .grid-wrapper { position: relative; top: auto; right: auto; transform: none; margin: 0 auto; } :root { --cell: 50px; } .logo-bar { padding: 60px 24px; } .logo-bar-grid { gap: 32px 48px; } .how-section, .features-section, .faq-section, .cta-section { padding: 80px 24px; } .features-grid, .faq-grid { grid-template-columns: 1fr; } }
+    @media (max-width: 900px) { .hero { flex-direction: column; padding: 140px 24px 48px; min-height: auto; } .hero-content { max-width: 100%; text-align: center; margin-bottom: 40px; } .hero-headline { font-size: 48px; } .hero-buttons { justify-content: center; } .grid-wrapper { position: relative; top: auto; right: auto; transform: none; margin: 0 auto; } :root { --cell: 50px; } .logo-bar { padding: 60px 24px; } .logo-bar-grid { gap: 32px 48px; } .how-section, .features-section, .faq-section, .cta-section { padding: 80px 24px; } .features-grid, .faq-grid { grid-template-columns: 1fr; } }
     @media (max-width: 600px) { .hero-headline { font-size: 36px; } .hero-sub { font-size: 16px; } .hero-buttons { flex-direction: column; } .btn { width: 100%; justify-content: center; } :root { --cell: 40px; } .card { padding: 6px; } .card-badge { font-size: 6px; padding: 2px 4px; } .card-title { font-size: 9px; } .card-icon { width: 12px; height: 12px; } .card-header { margin-bottom: 4px; gap: 4px; } .section-headline { font-size: 32px; } .cta-headline { font-size: 28px; } .cta-buttons { flex-direction: column; } }
   </style>
 </head>
 
 <body>
   <Nav />
+  <ComingSoon />
 
   <section class="hero">
     <div class="hero-content">

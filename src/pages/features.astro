@@ -1,0 +1,1370 @@
+---
+// Features Page
+---
+
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Features - recrd</title>
+  
+  <style>
+    @font-face {
+      font-family: 'Roobert';
+      src: url('/fonts/RoobertCollectionVF-TRIAL.woff2') format('woff2');
+      font-weight: 100 900;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'Fraktion Mono';
+      src: url('/fonts/PPFraktionMono-Regular.otf') format('opentype');
+      font-weight: 400;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'Matter';
+      src: url('/fonts/Matter-TRIAL-Light.otf') format('opentype');
+      font-weight: 300;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'Matter';
+      src: url('/fonts/Matter-TRIAL-Regular.otf') format('opentype');
+      font-weight: 400;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'Matter';
+      src: url('/fonts/Matter-TRIAL-Medium.ttf') format('truetype');
+      font-weight: 500;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'Object Sans';
+      src: url('/fonts/PPObjectSans-Regular.otf') format('opentype');
+      font-weight: 400;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'Object Sans';
+      src: url('/fonts/PPObjectSans-Heavy.otf') format('opentype');
+      font-weight: 800;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    :root {
+      --font: 'Roobert', -apple-system, BlinkMacSystemFont, sans-serif;
+      --mono: 'Fraktion Mono', 'SF Mono', monospace;
+      --mint: #46FCAF;
+      --purple: #A678F4;
+      --cyan: #02C0FF;
+      --coral: #FF4F5E;
+      --yellow: #FFDC58;
+    }
+
+    [data-theme="dark"] {
+      --bg: #0A0A0A;
+      --bg-alt: #0F0F0F;
+      --bg-card: #161616;
+      --text: #ffffff;
+      --text-muted: #888888;
+      --border: rgba(255,255,255,0.12);
+      --btn-outline: rgba(255,255,255,0.4);
+    }
+
+    [data-theme="light"] {
+      --bg: #fafafa;
+      --bg-alt: #ffffff;
+      --bg-card: #ffffff;
+      --text: #0a0a0a;
+      --text-muted: #666666;
+      --border: rgba(0,0,0,0.1);
+      --btn-outline: rgba(0,0,0,0.8);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body { overflow-x: hidden; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--font);
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    /* ========================================
+       NAV
+       ======================================== */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 72px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 48px;
+      z-index: 100;
+      background: rgba(10,10,10,0.85);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+    }
+    [data-theme="light"] nav {
+      background: rgba(250,250,250,0.85);
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+    }
+    .nav-logo:hover { opacity: 0.8; }
+    .nav-logo svg { width: 32px; height: 32px; }
+    .nav-wordmark { font-weight: 600; font-size: 18px; color: var(--text); }
+
+    .nav-links { display: flex; gap: 8px; list-style: none; }
+    .nav-links a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+      padding: 10px 16px;
+      transition: all 0.2s ease;
+    }
+    .nav-links li:nth-child(1) a:hover { background: var(--cyan); color: #0a0a0a; }
+    .nav-links li:nth-child(2) a:hover { background: var(--mint); color: #0a0a0a; }
+    .nav-links li:nth-child(3) a:hover { background: var(--purple); color: #fff; }
+    .nav-links li:nth-child(4) a:hover { background: var(--coral); color: #fff; }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .nav-contact {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+      padding: 10px 16px;
+      transition: color 0.2s ease;
+    }
+    .nav-contact:hover { color: var(--text); }
+
+    .nav-cta {
+      position: relative;
+      background: transparent;
+      color: var(--text);
+      padding: 12px 24px;
+      font-weight: 500;
+      font-size: 14px;
+      text-decoration: none;
+      border: 1px solid var(--btn-outline);
+      overflow: hidden;
+      transition: color 0.3s ease, border-color 0.3s ease;
+    }
+    .nav-cta::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 0;
+      height: 100%;
+      background: var(--mint);
+      transition: width 0.3s ease;
+      z-index: -1;
+    }
+    .nav-cta:hover::before { width: 100%; }
+    .nav-cta:hover { color: #0a0a0a; border-color: var(--mint); }
+
+    /* ========================================
+       HERO
+       ======================================== */
+    .hero {
+      padding: 160px 48px 100px;
+      text-align: center;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 16px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      font-family: var(--mono);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 32px;
+    }
+
+    .hero-headline {
+      font-size: 64px;
+      font-weight: 350;
+      line-height: 1.1;
+      letter-spacing: -0.03em;
+      margin-bottom: 24px;
+    }
+    .hero-headline em {
+      font-style: normal;
+      color: var(--cyan);
+    }
+    [data-theme="light"] .hero-headline em {
+      color: var(--purple);
+    }
+
+    .hero-sub {
+      font-size: 20px;
+      color: var(--text-muted);
+      line-height: 1.6;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    /* ========================================
+       FEATURE SECTIONS
+       ======================================== */
+    .feature-section {
+      padding: 120px 48px;
+      border-top: 1px solid var(--border);
+    }
+    .feature-section:nth-child(even) {
+      background: var(--bg-alt);
+    }
+
+    .feature-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: center;
+    }
+    .feature-container.reverse {
+      direction: rtl;
+    }
+    .feature-container.reverse > * {
+      direction: ltr;
+    }
+
+    .feature-content {
+      max-width: 480px;
+    }
+
+    .feature-label {
+      font-family: var(--mono);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 16px;
+    }
+    .feature-label.mint { color: var(--mint); }
+    .feature-label.purple { color: var(--purple); }
+    .feature-label.cyan { color: var(--cyan); }
+    .feature-label.coral { color: var(--coral); }
+    .feature-label.yellow { color: var(--yellow); }
+
+    .feature-headline {
+      font-size: 40px;
+      font-weight: 350;
+      line-height: 1.2;
+      letter-spacing: -0.02em;
+      margin-bottom: 20px;
+    }
+
+    .feature-desc {
+      font-size: 16px;
+      color: var(--text-muted);
+      line-height: 1.7;
+      margin-bottom: 32px;
+    }
+
+    .feature-list {
+      list-style: none;
+    }
+
+    .feature-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 15px;
+    }
+    .feature-list li:last-child {
+      border-bottom: none;
+    }
+
+    .feature-check {
+      width: 20px;
+      height: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+    .feature-check.mint { background: var(--mint); color: #0a0a0a; }
+    .feature-check.purple { background: var(--purple); color: #fff; }
+    .feature-check.cyan { background: var(--cyan); color: #0a0a0a; }
+    .feature-check.coral { background: var(--coral); color: #fff; }
+    .feature-check.yellow { background: var(--yellow); color: #0a0a0a; }
+
+    .feature-check svg {
+      width: 12px;
+      height: 12px;
+      stroke-width: 3;
+    }
+
+    /* Mock UI Panels */
+    .feature-visual {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      padding: 24px;
+    }
+    .feature-section:nth-child(even) .feature-visual {
+      background: var(--bg-card);
+    }
+
+    .mock-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 20px;
+    }
+
+    .mock-title {
+      font-weight: 600;
+      font-size: 14px;
+    }
+
+    .mock-badge {
+      font-family: var(--mono);
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      padding: 6px 12px;
+    }
+    .mock-badge.mint { background: var(--mint); color: #0a0a0a; }
+    .mock-badge.purple { background: var(--purple); color: #fff; }
+    .mock-badge.cyan { background: var(--cyan); color: #0a0a0a; }
+    .mock-badge.coral { background: var(--coral); color: #fff; }
+    .mock-badge.yellow { background: var(--yellow); color: #0a0a0a; }
+
+    /* CRM Sync Mock */
+    .crm-fields {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .crm-field {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 16px;
+      background: var(--bg-alt);
+      border: 1px solid var(--border);
+    }
+
+    .crm-field-label {
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    .crm-field-value {
+      font-family: var(--mono);
+      font-size: 12px;
+    }
+    .crm-field-value.synced {
+      color: var(--mint);
+    }
+
+    /* Analytics Mock */
+    .analytics-bars {
+      display: flex;
+      align-items: flex-end;
+      gap: 12px;
+      height: 140px;
+      padding-top: 20px;
+    }
+
+    .analytics-bar-group {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .analytics-bar {
+      width: 100%;
+      background: var(--purple);
+      transition: height 0.3s ease;
+    }
+
+    .analytics-bar-label {
+      font-family: var(--mono);
+      font-size: 10px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+    }
+
+    .analytics-stat {
+      display: flex;
+      justify-content: space-between;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .analytics-stat:last-child {
+      border-bottom: none;
+    }
+
+    .analytics-stat-label {
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    .analytics-stat-value {
+      font-family: var(--mono);
+      font-size: 13px;
+      font-weight: 600;
+    }
+    .analytics-stat-value.up { color: var(--mint); }
+    .analytics-stat-value.down { color: var(--coral); }
+
+    /* Forecast Mock */
+    .forecast-row {
+      display: grid;
+      grid-template-columns: 1fr 100px 80px;
+      gap: 16px;
+      padding: 14px 0;
+      border-bottom: 1px solid var(--border);
+      align-items: center;
+    }
+    .forecast-row:last-child {
+      border-bottom: none;
+    }
+
+    .forecast-deal {
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    .forecast-amount {
+      font-family: var(--mono);
+      font-size: 13px;
+      text-align: right;
+    }
+
+    .forecast-prob {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .forecast-prob-bar {
+      flex: 1;
+      height: 6px;
+      background: var(--border);
+      overflow: hidden;
+    }
+
+    .forecast-prob-fill {
+      height: 100%;
+      background: var(--mint);
+    }
+
+    .forecast-prob-value {
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--text-muted);
+      width: 32px;
+      text-align: right;
+    }
+
+    /* Coaching Mock */
+    .scorecard-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 14px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .scorecard-item:last-child {
+      border-bottom: none;
+    }
+
+    .scorecard-label {
+      font-size: 14px;
+    }
+
+    .scorecard-score {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .scorecard-bar {
+      width: 80px;
+      height: 6px;
+      background: var(--border);
+      overflow: hidden;
+    }
+
+    .scorecard-fill {
+      height: 100%;
+    }
+    .scorecard-fill.high { background: var(--mint); }
+    .scorecard-fill.mid { background: var(--yellow); }
+    .scorecard-fill.low { background: var(--coral); }
+
+    .scorecard-value {
+      font-family: var(--mono);
+      font-size: 13px;
+      font-weight: 600;
+      width: 40px;
+      text-align: right;
+    }
+
+    /* Risk Mock */
+    .risk-alert {
+      display: flex;
+      gap: 16px;
+      padding: 16px;
+      background: var(--bg-alt);
+      border: 1px solid var(--border);
+      margin-bottom: 12px;
+    }
+    .risk-alert:last-child {
+      margin-bottom: 0;
+    }
+
+    .risk-icon {
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .risk-icon.warning { background: var(--coral); }
+    .risk-icon.caution { background: var(--yellow); }
+
+    .risk-content {
+      flex: 1;
+    }
+
+    .risk-title {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .risk-desc {
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    /* Follow-up Mock */
+    .email-mock {
+      background: var(--bg-alt);
+      border: 1px solid var(--border);
+      padding: 20px;
+    }
+
+    .email-header {
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 16px;
+    }
+
+    .email-field {
+      display: flex;
+      gap: 12px;
+      font-size: 13px;
+      margin-bottom: 8px;
+    }
+    .email-field:last-child {
+      margin-bottom: 0;
+    }
+
+    .email-field-label {
+      color: var(--text-muted);
+      width: 60px;
+    }
+
+    .email-body {
+      font-size: 14px;
+      line-height: 1.7;
+      color: var(--text-muted);
+    }
+
+    .email-highlight {
+      background: var(--mint);
+      color: #0a0a0a;
+      padding: 0 4px;
+    }
+    [data-theme="light"] .email-highlight {
+      background: var(--purple);
+      color: #fff;
+    }
+
+    /* ========================================
+       CTA SECTION
+       ======================================== */
+    .cta-section {
+      padding: 120px 48px;
+      text-align: center;
+      border-top: 1px solid var(--border);
+    }
+
+    .cta-headline {
+      font-size: 40px;
+      font-weight: 350;
+      line-height: 1.2;
+      letter-spacing: -0.02em;
+      margin-bottom: 16px;
+    }
+
+    .cta-sub {
+      font-size: 18px;
+      color: var(--text-muted);
+      margin-bottom: 40px;
+      max-width: 500px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .cta-buttons {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      padding: 18px 28px;
+      font-weight: 500;
+      font-size: 15px;
+      text-decoration: none;
+      transition: all 0.2s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn-primary {
+      background: transparent;
+      color: var(--text);
+      border: 1px solid var(--btn-outline);
+    }
+    .btn-primary::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 0;
+      height: 100%;
+      background: var(--mint);
+      transition: width 0.3s ease;
+      z-index: -1;
+    }
+    .btn-primary:hover::before { width: 100%; }
+    .btn-primary:hover {
+      color: #0a0a0a;
+      border-color: var(--mint);
+    }
+
+    .btn-secondary {
+      background: transparent;
+      color: var(--text);
+      border: 1px solid var(--btn-outline);
+    }
+    .btn-secondary::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 0;
+      height: 100%;
+      background: var(--purple);
+      transition: width 0.3s ease;
+      z-index: -1;
+    }
+    .btn-secondary:hover::before { width: 100%; }
+    .btn-secondary:hover {
+      color: #fff;
+      border-color: var(--purple);
+    }
+
+    .btn-arrow {
+      display: inline-flex;
+      transition: transform 0.2s ease;
+    }
+    .btn:hover .btn-arrow {
+      transform: translateX(4px);
+    }
+
+    /* ========================================
+       FOOTER
+       ======================================== */
+    footer {
+      padding: 64px 48px;
+      border-top: 1px solid var(--border);
+    }
+
+    .footer-inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .footer-logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .footer-logo svg { width: 28px; height: 28px; }
+    .footer-logo span { font-weight: 600; font-size: 16px; }
+
+    .footer-links {
+      display: flex;
+      gap: 36px;
+      list-style: none;
+    }
+    .footer-links a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 14px;
+      transition: color 0.2s ease;
+    }
+    .footer-links a:hover { color: var(--text); }
+
+    .footer-copy {
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    /* Theme toggle */
+    .theme-toggle {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      z-index: 1000;
+    }
+    .theme-toggle button {
+      padding: 10px 20px;
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      font-size: 13px;
+      cursor: pointer;
+      font-family: var(--font);
+    }
+    .theme-toggle button:hover:not(.active) { color: var(--text); }
+    .theme-toggle button.active { background: var(--text); color: var(--bg); }
+
+    /* ========================================
+       RESPONSIVE
+       ======================================== */
+    @media (max-width: 1000px) {
+      .feature-container {
+        grid-template-columns: 1fr;
+        gap: 48px;
+      }
+      .feature-container.reverse {
+        direction: ltr;
+      }
+      .feature-content {
+        max-width: 100%;
+      }
+    }
+
+    @media (max-width: 900px) {
+      nav { padding: 0 24px; }
+      .nav-links { display: none; }
+      
+      .hero { padding: 140px 24px 80px; }
+      .hero-headline { font-size: 44px; }
+      
+      .feature-section { padding: 80px 24px; }
+      .feature-headline { font-size: 32px; }
+      
+      .cta-section { padding: 80px 24px; }
+      .cta-headline { font-size: 32px; }
+      .cta-buttons { flex-direction: column; }
+      .btn { width: 100%; justify-content: center; }
+      
+      footer { padding: 40px 24px; }
+      .footer-inner { flex-direction: column; gap: 24px; text-align: center; }
+      .footer-links { flex-wrap: wrap; justify-content: center; gap: 16px 24px; }
+    }
+
+    @media (max-width: 600px) {
+      .hero-headline { font-size: 36px; }
+      .hero-sub { font-size: 16px; }
+      
+      .forecast-row {
+        grid-template-columns: 1fr;
+        gap: 8px;
+      }
+      .forecast-amount {
+        text-align: left;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- NAV -->
+  <nav>
+    <a href="/" class="nav-logo">
+      <svg viewBox="0 0 52 52" fill="none">
+        <rect y="16" width="28" height="28" fill="#A678F4"/>
+        <rect x="16" width="28" height="28" rx="6" fill="#46FCAF"/>
+      </svg>
+      <span class="nav-wordmark">recrd</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="/features">Features</a></li>
+      <li><a href="/pricing">Pricing</a></li>
+      <li><a href="/agents">Agents</a></li>
+      <li><a href="#">Docs</a></li>
+    </ul>
+    <div class="nav-right">
+      <a href="/#contact" class="nav-contact">Contact</a>
+      <a href="#" class="nav-cta">Dashboard</a>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-badge">Platform</div>
+    <h1 class="hero-headline">Everything you need to <em>close more deals</em></h1>
+    <p class="hero-sub">From automatic CRM updates to AI-powered forecasting. Built for revenue teams who hate busywork.</p>
+  </section>
+
+  <!-- FEATURE 1: CRM Sync -->
+  <section class="feature-section" id="crm-sync">
+    <div class="feature-container">
+      <div class="feature-content">
+        <p class="feature-label mint">CRM Automation</p>
+        <h2 class="feature-headline">Your CRM, always current</h2>
+        <p class="feature-desc">Stop spending 30 minutes after every call updating HubSpot or Salesforce. recrd extracts and syncs 12+ fields automatically—MEDDIC qualification, next steps, deal stage, and more.</p>
+        
+        <ul class="feature-list">
+          <li>
+            <span class="feature-check mint"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><polyline points="20 6 9 17 4 12"/></svg></span>
+            MEDDIC, BANT, SPICED fields auto-populated
+          </li>
+          <li>
+            <span class="feature-check mint"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><polyline points="20 6 9 17 4 12"/></svg></span>
+            Deal stage recommendations based on call content
+          </li>
+          <li>
+            <span class="feature-check mint"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><polyline points="20 6 9 17 4 12"/></svg></span>
+            Next steps and follow-up dates extracted
+          </li>
+          <li>
+            <span class="feature-check mint"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><polyline points="20 6 9 17 4 12"/></svg></span>
+            Works with HubSpot and Salesforce
+          </li>
+        </ul>
+      </div>
+
+      <div class="feature-visual">
+        <div class="mock-header">
+          <span class="mock-title">HubSpot Sync</span>
+          <span class="mock-badge mint">Live</span>
+        </div>
+        <div class="crm-fields">
+          <div class="crm-field">
+            <span class="crm-field-label">Deal Stage</span>
+            <span class="crm-field-value synced">Demo Completed ✓</span>
+          </div>
+          <div class="crm-field">
+            <span class="crm-field-label">Decision Maker</span>
+            <span class="crm-field-value synced">Sarah Chen, VP Sales ✓</span>
+          </div>
+          <div class="crm-field">
+            <span class="crm-field-label">Budget</span>
+            <span class="crm-field-value synced">$45-60k confirmed ✓</span>
+          </div>
+          <div class="crm-field">
+            <span class="crm-field-label">Timeline</span>
+            <span class="crm-field-value synced">Q1 decision ✓</span>
+          </div>
+          <div class="crm-field">
+            <span class="crm-field-label">Next Step</span>
+            <span class="crm-field-value synced">Send proposal by Friday ✓</span>
+          </div>
+          <div class="crm-field">
+            <span class="crm-field-label">Competitor</span>
+            <span class="crm-field-value synced">Evaluating Gong ✓</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURE 2: Pipeline Analytics -->
+  <section class="feature-section" id="analytics">
+    <div class="feature-container reverse">
+      <div class="feature-content">
+        <p class="feature-label yellow">Pipeline Analytics</p>
+        <h2 class="feature-headline">See where deals stall</h2>
+        <p class="feature-desc">Identify bottlenecks before they kill your quarter. Track stage conversion rates, cycle length trends, and spot patterns across your entire pipeline.</p>
+        
+        <ul class="feature-list">
+          <li>
+            <span class="feature-check yellow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><polyline points="20 6 9 17 4 12"/></svg></span>
+            Stage-to-stage conversion tracking
+          </li>
+          <li>
+            <span class="feature-check yellow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><polyline points="20 6 9 17 4 12"/></svg></span>
+            Cycle length by segment, rep, and deal size
+          </li>
+          <li>
+            <span class="feature-check yellow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><polyline points="20 6 9 17 4 12"/></svg></span>
+            Win/loss pattern analysis
+          </li>
+          <li>
+            <span class="feature-check yellow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><polyline points="20 6 9 17 4 12"/></svg></span>
+            Team and individual benchmarks
+          </li>
+        </ul>
+      </div>
+
+      <div class="feature-visual">
+        <div class="mock-header">
+          <span class="mock-title">Stage Conversion</span>
+          <span class="mock-badge yellow">This Quarter</span>
+        </div>
+        <div class="analytics-bars">
+          <div class="analytics-bar-group">
+            <div class="analytics-bar" style="height: 100%; background: var(--yellow);"></div>
+            <span class="analytics-bar-label">Disc</span>
+          </div>
+          <div class="analytics-bar-group">
+            <div class="analytics-bar" style="height: 72%; background: var(--yellow); opacity: 0.85;"></div>
+            <span class="analytics-bar-label">Demo</span>
+          </div>
+          <div class="analytics-bar-group">
+            <div class="analytics-bar" style="height: 48%; background: var(--yellow); opacity: 0.7;"></div>
+            <span class="analytics-bar-label">Prop</span>
+          </div>
+          <div class="analytics-bar-group">
+            <div class="analytics-bar" style="height: 31%; background: var(--coral); opacity: 0.9;"></div>
+            <span class="analytics-bar-label">Nego</span>
+          </div>
+          <div class="analytics-bar-group">
+            <div class="analytics-bar" style="height: 24%; background: var(--mint);"></div>
+            <span class="analytics-bar-label">Won</span>
+          </div>
+        </div>
+        <div style="margin-top: 24px; padding-top: 16px; border-top: 1px solid var(--border);">
+          <div class="analytics-stat">
+            <span class="analytics-stat-label">Discovery → Demo</span>
+            <span class="analytics-stat-value up">72% ↑</span>
+          </div>
+          <div class="analytics-stat">
+            <span class="analytics-stat-label">Proposal → Negotiation</span>
+            <span class="analytics-stat-value down">64% ↓</span>
+          </div>
+          <div class="analytics-stat">
+            <span class="analytics-stat-label">Avg Cycle Length</span>
+            <span class="analytics-stat-value">34 days</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURE 3: AI Forecasting -->
+  <section class="feature-section" id="forecasting">
+    <div class="feature-container">
+      <div class="feature-content">
+        <p class="feature-label purple">AI Forecasting</p>
+        <h2 class="feature-headline">Know what's really going to close</h2>
+        <p class="feature-desc">Stop guessing. recrd analyzes deal signals, engagement patterns, and historical data to give you AI-weighted pipeline predictions that actually match reality.</p>
+        
+        <ul class="feature-list">
+          <li>
+            <span class="feature-check purple"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><polyline points="20 6 9 17 4 12"/></svg></span>
+            AI-scored probability for every deal
+          </li>
+          <li>
+            <span class="feature-check purple"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><polyline points="20 6 9 17 4 12"/></svg></span>
+            Weighted pipeline vs rep commits
+          </li>
+          <li>
+            <span class="feature-check purple"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><polyline points="20 6 9 17 4 12"/></svg></span>
+            Best case / commit / worst case views
+          </li>
+          <li>
+            <span class="feature-check purple"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><polyline points="20 6 9 17 4 12"/></svg></span>
+            Historical accuracy tracking
+          </li>
+        </ul>
+      </div>
+
+      <div class="feature-visual">
+        <div class="mock-header">
+          <span class="mock-title">Q1 Forecast</span>
+          <span class="mock-badge purple">AI Weighted</span>
+        </div>
+        <div class="forecast-row">
+          <span class="forecast-deal">Acme Corp - Enterprise</span>
+          <span class="forecast-amount">$85,000</span>
+          <div class="forecast-prob">
+            <div class="forecast-prob-bar"><div class="forecast-prob-fill" style="width: 87%;"></div></div>
+            <span class="forecast-prob-value">87%</span>
+          </div>
+        </div>
+        <div class="forecast-row">
+          <span class="forecast-deal">TechStart Series B</span>
+          <span class="forecast-amount">$42,000</span>
+          <div class="forecast-prob">
+            <div class="forecast-prob-bar"><div class="forecast-prob-fill" style="width: 72%;"></div></div>
+            <span class="forecast-prob-value">72%</span>
+          </div>
+        </div>
+        <div class="forecast-row">
+          <span class="forecast-deal">GlobalMfg Expansion</span>
+          <span class="forecast-amount">$120,000</span>
+          <div class="forecast-prob">
+            <div class="forecast-prob-bar"><div class="forecast-prob-fill" style="width: 45%; background: var(--yellow);"></div></div>
+            <span class="forecast-prob-value">45%</span>
+          </div>
+        </div>
+        <div class="forecast-row">
+          <span class="forecast-deal">StartupXYZ Pilot</span>
+          <span class="forecast-amount">$18,000</span>
+          <div class="forecast-prob">
+            <div class="forecast-prob-bar"><div class="forecast-prob-fill" style="width: 23%; background: var(--coral);"></div></div>
+            <span class="forecast-prob-value">23%</span>
+          </div>
+        </div>
+        <div style="margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--border); display: flex; justify-content: space-between;">
+          <span style="font-size: 13px; color: var(--text-muted);">Weighted Pipeline</span>
+          <span style="font-family: var(--mono); font-size: 14px; font-weight: 600; color: var(--mint);">$168,450</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURE 4: Coaching Scorecards -->
+  <section class="feature-section" id="coaching">
+    <div class="feature-container reverse">
+      <div class="feature-content">
+        <p class="feature-label cyan">AI Coaching</p>
+        <h2 class="feature-headline">Scorecards that actually help</h2>
+        <p class="feature-desc">Auto-generated scorecards based on MEDDIC, BANT, SPICED, or your custom framework. See exactly where each rep needs coaching—backed by conversation data, not gut feel.</p>
+        
+        <ul class="feature-list">
+          <li>
+            <span class="feature-check cyan"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><polyline points="20 6 9 17 4 12"/></svg></span>
+            15+ sales frameworks supported
+          </li>
+          <li>
+            <span class="feature-check cyan"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><polyline points="20 6 9 17 4 12"/></svg></span>
+            Per-call and aggregate scoring
+          </li>
+          <li>
+            <span class="feature-check cyan"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><polyline points="20 6 9 17 4 12"/></svg></span>
+            Specific coaching recommendations
+          </li>
+          <li>
+            <span class="feature-check cyan"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><polyline points="20 6 9 17 4 12"/></svg></span>
+            Custom scorecards for your methodology
+          </li>
+        </ul>
+      </div>
+
+      <div class="feature-visual">
+        <div class="mock-header">
+          <span class="mock-title">MEDDIC Scorecard</span>
+          <span class="mock-badge cyan">Call #47</span>
+        </div>
+        <div class="scorecard-item">
+          <span class="scorecard-label">Metrics</span>
+          <div class="scorecard-score">
+            <div class="scorecard-bar"><div class="scorecard-fill high" style="width: 90%;"></div></div>
+            <span class="scorecard-value">90%</span>
+          </div>
+        </div>
+        <div class="scorecard-item">
+          <span class="scorecard-label">Economic Buyer</span>
+          <div class="scorecard-score">
+            <div class="scorecard-bar"><div class="scorecard-fill high" style="width: 85%;"></div></div>
+            <span class="scorecard-value">85%</span>
+          </div>
+        </div>
+        <div class="scorecard-item">
+          <span class="scorecard-label">Decision Criteria</span>
+          <div class="scorecard-score">
+            <div class="scorecard-bar"><div class="scorecard-fill mid" style="width: 60%;"></div></div>
+            <span class="scorecard-value">60%</span>
+          </div>
+        </div>
+        <div class="scorecard-item">
+          <span class="scorecard-label">Decision Process</span>
+          <div class="scorecard-score">
+            <div class="scorecard-bar"><div class="scorecard-fill low" style="width: 35%;"></div></div>
+            <span class="scorecard-value">35%</span>
+          </div>
+        </div>
+        <div class="scorecard-item">
+          <span class="scorecard-label">Identify Pain</span>
+          <div class="scorecard-score">
+            <div class="scorecard-bar"><div class="scorecard-fill high" style="width: 95%;"></div></div>
+            <span class="scorecard-value">95%</span>
+          </div>
+        </div>
+        <div class="scorecard-item">
+          <span class="scorecard-label">Champion</span>
+          <div class="scorecard-score">
+            <div class="scorecard-bar"><div class="scorecard-fill mid" style="width: 70%;"></div></div>
+            <span class="scorecard-value">70%</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURE 5: Risk Alerts -->
+  <section class="feature-section" id="risk-alerts">
+    <div class="feature-container">
+      <div class="feature-content">
+        <p class="feature-label coral">Risk Detection</p>
+        <h2 class="feature-headline">Catch deal risks early</h2>
+        <p class="feature-desc">50+ signal types detected automatically. Budget objections, competitor mentions, champion loss, timeline slippage—get alerts before deals go sideways.</p>
+        
+        <ul class="feature-list">
+          <li>
+            <span class="feature-check coral"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><polyline points="20 6 9 17 4 12"/></svg></span>
+            Real-time signal detection
+          </li>
+          <li>
+            <span class="feature-check coral"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><polyline points="20 6 9 17 4 12"/></svg></span>
+            Slack and email notifications
+          </li>
+          <li>
+            <span class="feature-check coral"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><polyline points="20 6 9 17 4 12"/></svg></span>
+            Deal health scoring
+          </li>
+          <li>
+            <span class="feature-check coral"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><polyline points="20 6 9 17 4 12"/></svg></span>
+            Recommended actions for each risk
+          </li>
+        </ul>
+      </div>
+
+      <div class="feature-visual">
+        <div class="mock-header">
+          <span class="mock-title">Risk Alerts</span>
+          <span class="mock-badge coral">3 New</span>
+        </div>
+        <div class="risk-alert">
+          <div class="risk-icon warning">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2">
+              <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+              <line x1="12" y1="9" x2="12" y2="13"/>
+              <line x1="12" y1="17" x2="12.01" y2="17"/>
+            </svg>
+          </div>
+          <div class="risk-content">
+            <div class="risk-title">Budget objection detected</div>
+            <div class="risk-desc">Acme Corp: "This is higher than we budgeted"</div>
+          </div>
+        </div>
+        <div class="risk-alert">
+          <div class="risk-icon warning">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2">
+              <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+              <line x1="12" y1="9" x2="12" y2="13"/>
+              <line x1="12" y1="17" x2="12.01" y2="17"/>
+            </svg>
+          </div>
+          <div class="risk-content">
+            <div class="risk-title">Competitor mentioned</div>
+            <div class="risk-desc">TechStart: "We're also looking at Gong"</div>
+          </div>
+        </div>
+        <div class="risk-alert">
+          <div class="risk-icon caution">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#0a0a0a" stroke-width="2">
+              <circle cx="12" cy="12" r="10"/>
+              <line x1="12" y1="8" x2="12" y2="12"/>
+              <line x1="12" y1="16" x2="12.01" y2="16"/>
+            </svg>
+          </div>
+          <div class="risk-content">
+            <div class="risk-title">Timeline slipping</div>
+            <div class="risk-desc">GlobalMfg: Decision pushed to Q2</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURE 6: Follow-up Drafts -->
+  <section class="feature-section" id="follow-ups">
+    <div class="feature-container reverse">
+      <div class="feature-content">
+        <p class="feature-label mint">Auto Follow-Ups</p>
+        <h2 class="feature-headline">Personalized emails in 60 seconds</h2>
+        <p class="feature-desc">Stop writing the same follow-up email after every call. recrd drafts personalized emails that reference specific conversation points, next steps, and action items.</p>
+        
+        <ul class="feature-list">
+          <li>
+            <span class="feature-check mint"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><polyline points="20 6 9 17 4 12"/></svg></span>
+            Drafted within 60 seconds of call end
+          </li>
+          <li>
+            <span class="feature-check mint"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><polyline points="20 6 9 17 4 12"/></svg></span>
+            References specific call topics
+          </li>
+          <li>
+            <span class="feature-check mint"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><polyline points="20 6 9 17 4 12"/></svg></span>
+            Includes action items and next steps
+          </li>
+          <li>
+            <span class="feature-check mint"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><polyline points="20 6 9 17 4 12"/></svg></span>
+            Matches your writing style
+          </li>
+        </ul>
+      </div>
+
+      <div class="feature-visual">
+        <div class="mock-header">
+          <span class="mock-title">Draft Ready</span>
+          <span class="mock-badge mint">Auto-generated</span>
+        </div>
+        <div class="email-mock">
+          <div class="email-header">
+            <div class="email-field">
+              <span class="email-field-label">To:</span>
+              <span>sarah.chen@acme.com</span>
+            </div>
+            <div class="email-field">
+              <span class="email-field-label">Subject:</span>
+              <span>Next steps: Q1 implementation timeline</span>
+            </div>
+          </div>
+          <div class="email-body">
+            Hi Sarah,<br><br>
+            Great speaking with you today about <span class="email-highlight">scaling your SDR team's call reviews</span>. As discussed, I'll send over the proposal by <span class="email-highlight">Friday EOD</span> with the <span class="email-highlight">$52k annual</span> pricing we discussed.<br><br>
+            I'll also include the <span class="email-highlight">security documentation</span> for your IT review. Looking forward to connecting with <span class="email-highlight">Mike from procurement</span> next week.<br><br>
+            Best,<br>
+            Alex
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta-section">
+    <h2 class="cta-headline">Ready to see it in action?</h2>
+    <p class="cta-sub">Book a demo and see how recrd can save your team 20-30 minutes per call.</p>
+    <div class="cta-buttons">
+      <a href="#" class="btn btn-primary">
+        Book a Demo
+        <span class="btn-arrow">
+          <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
+            <rect x="2" y="0" width="2" height="2" fill="currentColor"/>
+            <rect x="4" y="2" width="2" height="2" fill="currentColor"/>
+            <rect x="6" y="4" width="2" height="2" fill="currentColor"/>
+            <rect x="4" y="6" width="2" height="2" fill="currentColor"/>
+            <rect x="2" y="8" width="2" height="2" fill="currentColor"/>
+          </svg>
+        </span>
+      </a>
+      <a href="/agents" class="btn btn-secondary">
+        Explore Agents
+        <span class="btn-arrow">
+          <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
+            <rect x="2" y="0" width="2" height="2" fill="currentColor"/>
+            <rect x="4" y="2" width="2" height="2" fill="currentColor"/>
+            <rect x="6" y="4" width="2" height="2" fill="currentColor"/>
+            <rect x="4" y="6" width="2" height="2" fill="currentColor"/>
+            <rect x="2" y="8" width="2" height="2" fill="currentColor"/>
+          </svg>
+        </span>
+      </a>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-logo">
+        <svg viewBox="0 0 52 52" fill="none">
+          <rect y="16" width="28" height="28" fill="#A678F4"/>
+          <rect x="16" width="28" height="28" rx="6" fill="#46FCAF"/>
+        </svg>
+        <span>recrd</span>
+      </div>
+      <ul class="footer-links">
+        <li><a href="/features">Features</a></li>
+        <li><a href="/pricing">Pricing</a></li>
+        <li><a href="/agents">Agents</a></li>
+        <li><a href="#">Docs</a></li>
+        <li><a href="#">Privacy</a></li>
+        <li><a href="#">Terms</a></li>
+      </ul>
+      <p class="footer-copy">© 2025 recrd. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <!-- THEME TOGGLE -->
+  <div class="theme-toggle">
+    <button id="btn-dark" class="active" onclick="setTheme('dark')">Dark</button>
+    <button id="btn-light" onclick="setTheme('light')">Light</button>
+  </div>
+
+  <script>
+    function setTheme(theme) {
+      document.documentElement.setAttribute('data-theme', theme);
+      document.getElementById('btn-dark')?.classList.toggle('active', theme === 'dark');
+      document.getElementById('btn-light')?.classList.toggle('active', theme === 'light');
+      localStorage.setItem('theme', theme);
+    }
+    
+    // Check for saved theme
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme) {
+      setTheme(savedTheme);
+    }
+    
+    window.setTheme = setTheme;
+  </script>
+</body>
+</html>

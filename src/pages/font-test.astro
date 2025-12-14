@@ -206,9 +206,11 @@
     
     .grid-wrapper {
       position: absolute;
-      top: 50%;
+      top: 72px;
       right: 20px;
-      transform: translateY(-50%);
+      bottom: 0;
+      display: flex;
+      align-items: center;
       z-index: 5;
     }
 
@@ -216,7 +218,7 @@
     .grid-bg {
       display: grid;
       grid-template-columns: repeat(9, var(--cell));
-      grid-template-rows: repeat(6, var(--cell));
+      grid-template-rows: repeat(9, var(--cell));
     }
 
     .grid-cell {
@@ -225,21 +227,33 @@
     }
 
     /* Hide cells to create stepped silhouette
-       9 cols × 6 rows = 54 cells
+       9 cols × 9 rows = 81 cells
        
-       Row 0 (cells 1-9): hide nothing - full 9 cols
+       Row 0 (cells 1-9): full
        Row 1 (cells 10-18): hide cell 10 (col 0)
        Row 2 (cells 19-27): hide cells 19-20 (cols 0-1)
-       Row 3 (cells 28-36): hide cells 28-29 (cols 0-1)
-       Row 4 (cells 37-45): hide cell 37 (col 0)
-       Row 5 (cells 46-54): hide nothing - full 9 cols
+       Row 3 (cells 28-36): hide cells 28-30 (cols 0-2)
+       Row 4 (cells 37-45): hide cells 37-39 (cols 0-2)
+       Row 5 (cells 46-54): hide cells 46-48 (cols 0-2)
+       Row 6 (cells 55-63): hide cells 55-56 (cols 0-1)
+       Row 7 (cells 64-72): hide cell 64 (col 0)
+       Row 8 (cells 73-81): full
     */
     .grid-cell:nth-child(10),
     .grid-cell:nth-child(19),
     .grid-cell:nth-child(20),
     .grid-cell:nth-child(28),
     .grid-cell:nth-child(29),
-    .grid-cell:nth-child(37) {
+    .grid-cell:nth-child(30),
+    .grid-cell:nth-child(37),
+    .grid-cell:nth-child(38),
+    .grid-cell:nth-child(39),
+    .grid-cell:nth-child(46),
+    .grid-cell:nth-child(47),
+    .grid-cell:nth-child(48),
+    .grid-cell:nth-child(55),
+    .grid-cell:nth-child(56),
+    .grid-cell:nth-child(64) {
       visibility: hidden;
     }
 
@@ -452,33 +466,28 @@
     }
 
     /* Card positions - diagonal cascade within grid
-       Grid: 9 cols × 6 rows
+       Grid: 9 cols × 9 rows
        
        Card 1 (mint): row 0, cols 0-1 (top left)
-       Card 2 (purple): row 1, cols 2-3
-       Card 3 (cyan): row 2, cols 5-6
-       Card 4 (coral): row 4, cols 7-8 (bottom right)
-       Card 5 (yellow): row 4, cols 2-3 (bottom left area)
+       Card 2 (purple): row 2, cols 3-4 (spaced down)
+       Card 3 (cyan): row 4, cols 6-7 (middle right)
+       Card 4 (coral): row 7, cols 7-8 (bottom right)
     */
     #card1 {
       top: 0;
       left: 0;
     }
     #card2 {
-      top: calc(var(--cell) * 1);
-      left: calc(var(--cell) * 2);
+      top: calc(var(--cell) * 2);
+      left: calc(var(--cell) * 3);
     }
     #card3 {
-      top: calc(var(--cell) * 2);
-      left: calc(var(--cell) * 5);
+      top: calc(var(--cell) * 4);
+      left: calc(var(--cell) * 6);
     }
     #card4 {
-      top: calc(var(--cell) * 4);
+      top: calc(var(--cell) * 7);
       left: calc(var(--cell) * 7);
-    }
-    #card5 {
-      top: calc(var(--cell) * 4);
-      left: calc(var(--cell) * 2);
     }
 
     /* Theme toggle */
@@ -510,12 +519,12 @@
     }
     
     @media (max-width: 1600px) {
-      :root { --cell: 95px; }
+      :root { --cell: 100px; }
       .hero-headline { font-size: 70px; }
     }
     
     @media (max-width: 1400px) {
-      :root { --cell: 80px; }
+      :root { --cell: 85px; }
       .hero-headline { font-size: 60px; }
       .card { padding: 18px; }
       .card-title { font-size: 15px; }
@@ -555,7 +564,7 @@
         position: relative;
         top: auto;
         right: auto;
-        transform: none;
+        bottom: auto;
         margin: 0 auto;
       }
       :root { --cell: 50px; }
@@ -635,8 +644,11 @@
     </div>
 
     <div class="grid-wrapper">
-      <!-- CSS Grid: 9 cols × 6 rows = 54 cells -->
+      <!-- CSS Grid: 9 cols × 9 rows = 81 cells -->
       <div class="grid-bg">
+        <div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div>
+        <div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div>
+        <div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div>
         <div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div>
         <div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div>
         <div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div>
@@ -744,42 +756,6 @@
           </div>
           <div class="card-meta">Slack #enterprise · @mike</div>
         </div>
-
-        <!-- Card 5: Marketing Alerted -->
-        <div class="card yellow" id="card5">
-          <div class="card-header">
-            <div class="card-icon">
-              <svg viewBox="0 0 24 24">
-                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
-              </svg>
-            </div>
-            <span class="card-badge">Content Agent</span>
-          </div>
-          <span class="card-title">Marketing alerted</span>
-          <div class="card-content">
-            <div class="checklist">
-              <div class="checklist-item">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
-                  <polyline points="20 6 9 17 4 12"/>
-                </svg>
-                Case study opportunity
-              </div>
-              <div class="checklist-item">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
-                  <polyline points="20 6 9 17 4 12"/>
-                </svg>
-                Quote captured
-              </div>
-              <div class="checklist-item">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
-                  <polyline points="20 6 9 17 4 12"/>
-                </svg>
-                Added to nurture
-              </div>
-            </div>
-          </div>
-          <div class="card-meta">3 actions queued</div>
-        </div>
       </div>
     </div>
   </section>
@@ -817,7 +793,6 @@
       tl.to('#card1', { opacity: 1, x: 0, scale: 1, duration: 0.7, ease: 'power2.out' });
       tl.to('#card2', { opacity: 1, x: 0, scale: 1, duration: 0.7, ease: 'power2.out' }, '-=0.4');
       tl.to('#card3', { opacity: 1, x: 0, scale: 1, duration: 0.7, ease: 'power2.out' }, '-=0.4');
-      tl.to('#card5', { opacity: 1, x: 0, scale: 1, duration: 0.7, ease: 'power2.out' }, '-=0.4');
       tl.to('#card4', { opacity: 1, x: 0, scale: 1, duration: 0.7, ease: 'power2.out' }, '-=0.4');
 
       return tl;

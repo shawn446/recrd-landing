@@ -1,1223 +1,221 @@
 ---
-// Agents - AI Studio / Agent Marketplace
+import Nav from './components/Nav.astro';
+import Footer from './components/Footer.astro';
+import ThemeToggle from './components/ThemeToggle.astro';
+import BaseHead from './components/BaseHead.astro';
 ---
 
 <!DOCTYPE html>
 <html lang="en" data-theme="dark">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AI Agents - recrd</title>
+  <BaseHead title="AI Agents - recrd" description="Pre-built AI agents for sales teams. CRM sync, risk alerts, coaching, follow-ups, and more. Deploy with one click." />
   
   <style>
-    @font-face {
-      font-family: 'Roobert';
-      src: url('/fonts/RoobertCollectionVF-TRIAL.woff2') format('woff2');
-      font-weight: 100 900;
-      font-style: normal;
-      font-display: swap;
-    }
-    @font-face {
-      font-family: 'Fraktion Mono';
-      src: url('/fonts/PPFraktionMono-Regular.otf') format('opentype');
-      font-weight: 400;
-      font-style: normal;
-      font-display: swap;
-    }
-    @font-face {
-      font-family: 'Matter';
-      src: url('/fonts/Matter-TRIAL-Light.otf') format('opentype');
-      font-weight: 300;
-      font-style: normal;
-      font-display: swap;
-    }
-    @font-face {
-      font-family: 'Matter';
-      src: url('/fonts/Matter-TRIAL-Regular.otf') format('opentype');
-      font-weight: 400;
-      font-style: normal;
-      font-display: swap;
-    }
-    @font-face {
-      font-family: 'Matter';
-      src: url('/fonts/Matter-TRIAL-Medium.ttf') format('truetype');
-      font-weight: 500;
-      font-style: normal;
-      font-display: swap;
-    }
-    @font-face {
-      font-family: 'Object Sans';
-      src: url('/fonts/PPObjectSans-Regular.otf') format('opentype');
-      font-weight: 400;
-      font-style: normal;
-      font-display: swap;
-    }
-    @font-face {
-      font-family: 'Object Sans';
-      src: url('/fonts/PPObjectSans-Heavy.otf') format('opentype');
-      font-weight: 800;
-      font-style: normal;
-      font-display: swap;
-    }
+    .hero { padding: 160px 48px 100px; text-align: center; max-width: 900px; margin: 0 auto; }
+    .hero-badge { display: inline-flex; align-items: center; gap: 10px; padding: 8px 16px; background: var(--bg-card); border: 1px solid var(--border); font-family: var(--mono); font-size: 12px; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 32px; }
+    .hero-badge-dot { width: 8px; height: 8px; background: var(--mint); border-radius: 50%; animation: pulse 2s infinite; }
+    @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+    .hero-headline { font-size: 64px; font-weight: 350; line-height: 1.1; letter-spacing: -0.03em; margin-bottom: 24px; }
+    .hero-headline em { font-style: normal; color: var(--purple); }
+    [data-theme="light"] .hero-headline em { color: var(--purple); }
+    .hero-sub { font-size: 20px; color: var(--text-muted); line-height: 1.6; max-width: 600px; margin: 0 auto; }
 
-    :root {
-      --font: 'Roobert', -apple-system, BlinkMacSystemFont, sans-serif;
-      --mono: 'Fraktion Mono', 'SF Mono', monospace;
-      --mint: #46FCAF;
-      --purple: #A678F4;
-      --cyan: #02C0FF;
-      --coral: #FF4F5E;
-      --yellow: #FFDC58;
-    }
+    .agents-section { padding: 80px 48px 120px; }
+    .section-header { text-align: center; margin-bottom: 60px; }
+    .section-label { font-family: var(--mono); font-size: 12px; text-transform: uppercase; letter-spacing: 0.15em; color: var(--text-muted); margin-bottom: 16px; }
+    .section-headline { font-size: 36px; font-weight: 350; line-height: 1.2; letter-spacing: -0.02em; }
 
-    [data-theme="dark"] {
-      --bg: #0A0A0A;
-      --bg-alt: #0F0F0F;
-      --bg-card: #161616;
-      --text: #ffffff;
-      --text-muted: #888888;
-      --border: rgba(255,255,255,0.12);
-      --btn-outline: rgba(255,255,255,0.4);
-    }
+    .agents-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--border); max-width: 1200px; margin: 0 auto; }
+    .agent-card { background: var(--bg); padding: 32px; position: relative; }
+    .agent-card:hover { background: var(--bg-card); }
+    .agent-header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 16px; }
+    .agent-icon { width: 40px; height: 40px; }
+    .agent-status { font-family: var(--mono); font-size: 10px; text-transform: uppercase; letter-spacing: 0.05em; padding: 4px 10px; }
+    .agent-status.active { background: var(--mint); color: #0a0a0a; }
+    .agent-status.soon { background: var(--border); color: var(--text-muted); }
+    .agent-name { font-size: 18px; font-weight: 600; margin-bottom: 8px; letter-spacing: -0.01em; }
+    .agent-desc { font-size: 14px; color: var(--text-muted); line-height: 1.5; margin-bottom: 16px; }
+    .agent-tags { display: flex; gap: 8px; flex-wrap: wrap; }
+    .agent-tag { font-family: var(--mono); font-size: 10px; text-transform: uppercase; letter-spacing: 0.05em; padding: 4px 8px; background: var(--bg-card); border: 1px solid var(--border); color: var(--text-muted); }
 
-    [data-theme="light"] {
-      --bg: #fafafa;
-      --bg-alt: #ffffff;
-      --bg-card: #ffffff;
-      --text: #0a0a0a;
-      --text-muted: #666666;
-      --border: rgba(0,0,0,0.1);
-      --btn-outline: rgba(0,0,0,0.8);
-    }
+    .workflow-section { padding: 120px 48px; background: var(--bg-alt); border-top: 1px solid var(--border); }
+    .workflow-container { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: 1.2fr 1fr; gap: 80px; align-items: center; }
+    .workflow-content { max-width: 450px; }
+    .workflow-headline { font-size: 36px; font-weight: 350; line-height: 1.2; letter-spacing: -0.02em; margin-bottom: 20px; }
+    .workflow-desc { font-size: 16px; color: var(--text-muted); line-height: 1.7; margin-bottom: 32px; }
+    .workflow-features { list-style: none; }
+    .workflow-features li { display: flex; align-items: center; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--border); font-size: 15px; }
+    .workflow-features li:last-child { border-bottom: none; }
+    .workflow-check { width: 20px; height: 20px; background: var(--purple); display: flex; align-items: center; justify-content: center; }
+    .workflow-check svg { width: 12px; height: 12px; stroke: #fff; stroke-width: 3; }
+    .workflow-cta { margin-top: 32px; }
+    
+    .workflow-visual { background: var(--bg); border: 1px solid var(--border); padding: 24px; }
+    .workflow-mock { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+    .workflow-step { background: var(--bg-card); border: 1px solid var(--border); padding: 16px; text-align: center; min-width: 100px; }
+    .workflow-step-icon { font-size: 20px; margin-bottom: 8px; }
+    .workflow-step-label { font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; }
+    .workflow-arrow { color: var(--text-muted); font-size: 20px; }
 
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    html, body { overflow-x: hidden; }
-    html { scroll-behavior: smooth; }
+    .request-section { padding: 100px 48px; border-top: 1px solid var(--border); text-align: center; }
+    .request-headline { font-size: 32px; font-weight: 350; letter-spacing: -0.02em; margin-bottom: 32px; }
+    .request-buttons { display: flex; gap: 16px; justify-content: center; }
 
-    body {
-      font-family: var(--font);
-      background: var(--bg);
-      color: var(--text);
-      min-height: 100vh;
-    }
-
-    /* ========================================
-       NAV
-       ======================================== */
-    nav {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 72px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 48px;
-      z-index: 100;
-      background: rgba(10,10,10,0.85);
-      backdrop-filter: blur(20px);
-      border-bottom: 1px solid var(--border);
-    }
-    [data-theme="light"] nav {
-      background: rgba(250,250,250,0.85);
-    }
-
-    .nav-logo {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      text-decoration: none;
-    }
-    .nav-logo:hover { opacity: 0.8; }
-    .nav-logo svg { width: 32px; height: 32px; }
-    .nav-wordmark { font-weight: 600; font-size: 18px; color: var(--text); }
-
-    .nav-links { display: flex; gap: 8px; list-style: none; }
-    .nav-links a {
-      color: var(--text-muted);
-      text-decoration: none;
-      font-size: 14px;
-      font-weight: 500;
-      padding: 10px 16px;
-      transition: all 0.2s ease;
-    }
-    .nav-links li:nth-child(1) a:hover { background: var(--cyan); color: #0a0a0a; }
-    .nav-links li:nth-child(2) a:hover { background: var(--mint); color: #0a0a0a; }
-    .nav-links li:nth-child(3) a:hover { background: var(--purple); color: #fff; }
-    .nav-links li:nth-child(4) a:hover { background: var(--coral); color: #fff; }
-
-    .nav-right {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .nav-contact {
-      color: var(--text-muted);
-      text-decoration: none;
-      font-size: 14px;
-      font-weight: 500;
-      padding: 10px 16px;
-      transition: color 0.2s ease;
-    }
-    .nav-contact:hover { color: var(--text); }
-
-    .nav-cta {
-      position: relative;
-      background: transparent;
-      color: var(--text);
-      padding: 12px 24px;
-      font-weight: 500;
-      font-size: 14px;
-      text-decoration: none;
-      border: 1px solid var(--btn-outline);
-      overflow: hidden;
-      transition: color 0.3s ease, border-color 0.3s ease;
-    }
-    .nav-cta::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 0;
-      height: 100%;
-      background: var(--mint);
-      transition: width 0.3s ease;
-      z-index: -1;
-    }
-    .nav-cta:hover::before { width: 100%; }
-    .nav-cta:hover { color: #0a0a0a; border-color: var(--mint); }
-
-    /* ========================================
-       HERO
-       ======================================== */
-    .hero {
-      padding: 160px 48px 100px;
-      text-align: center;
-      max-width: 900px;
-      margin: 0 auto;
-    }
-
-    .hero-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 8px 16px;
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      font-family: var(--mono);
-      font-size: 12px;
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-      margin-bottom: 32px;
-    }
-    .hero-badge-dot {
-      width: 8px;
-      height: 8px;
-      background: var(--mint);
-      border-radius: 50%;
-      animation: pulse 2s infinite;
-    }
-    @keyframes pulse {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.5; }
-    }
-
-    .hero-headline {
-      font-size: 64px;
-      font-weight: 350;
-      line-height: 1.1;
-      letter-spacing: -0.03em;
-      margin-bottom: 24px;
-    }
-    .hero-headline em {
-      font-style: normal;
-      color: var(--mint);
-    }
-    [data-theme="light"] .hero-headline em {
-      color: var(--purple);
-    }
-
-    .hero-sub {
-      font-size: 20px;
-      color: var(--text-muted);
-      line-height: 1.6;
-      max-width: 600px;
-      margin: 0 auto;
-    }
-
-    /* ========================================
-       AGENTS GRID
-       ======================================== */
-    .agents-section {
-      padding: 80px 48px 120px;
-      border-top: 1px solid var(--border);
-    }
-
-    .section-header {
-      max-width: 600px;
-      margin: 0 auto 64px;
-      text-align: center;
-    }
-
-    .section-label {
-      font-family: var(--mono);
-      font-size: 12px;
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-      color: var(--text-muted);
-      margin-bottom: 16px;
-    }
-
-    .section-headline {
-      font-size: 40px;
-      font-weight: 350;
-      line-height: 1.2;
-      letter-spacing: -0.02em;
-      margin-bottom: 16px;
-    }
-
-    .section-sub {
-      font-size: 16px;
-      color: var(--text-muted);
-      line-height: 1.6;
-    }
-
-    .agents-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 1px;
-      background: var(--border);
-      max-width: 1200px;
-      margin: 0 auto;
-    }
-
-    .agent-card {
-      background: var(--bg);
-      padding: 40px 32px;
-      display: flex;
-      flex-direction: column;
-      transition: background 0.2s ease;
-    }
-    .agent-card:hover {
-      background: var(--bg-card);
-    }
-
-    .agent-header {
-      display: flex;
-      align-items: flex-start;
-      justify-content: space-between;
-      margin-bottom: 20px;
-    }
-
-    .agent-icon {
-      width: 48px;
-      height: 48px;
-    }
-
-    .agent-status {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      font-family: var(--mono);
-      font-size: 10px;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      color: var(--text-muted);
-    }
-    .agent-status-dot {
-      width: 6px;
-      height: 6px;
-      border-radius: 50%;
-      background: var(--mint);
-    }
-    .agent-status.coming-soon .agent-status-dot {
-      background: var(--yellow);
-    }
-
-    .agent-name {
-      font-size: 20px;
-      font-weight: 600;
-      margin-bottom: 10px;
-      letter-spacing: -0.01em;
-    }
-
-    .agent-desc {
-      font-size: 14px;
-      color: var(--text-muted);
-      line-height: 1.6;
-      margin-bottom: 24px;
-      flex: 1;
-    }
-
-    .agent-meta {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-    }
-
-    .agent-tag {
-      font-family: var(--mono);
-      font-size: 10px;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      padding: 6px 10px;
-      background: var(--bg-alt);
-      border: 1px solid var(--border);
-    }
-    .agent-tag.trigger { color: var(--cyan); }
-    .agent-tag.output { color: var(--purple); }
-
-    /* ========================================
-       WORKFLOW BUILDER SECTION
-       ======================================== */
-    .workflow-section {
-      padding: 120px 48px;
-      background: var(--bg-alt);
-      border-top: 1px solid var(--border);
-    }
-
-    .workflow-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 80px;
-      max-width: 1200px;
-      margin: 0 auto;
-      align-items: center;
-    }
-
-    .workflow-content {
-      max-width: 480px;
-    }
-
-    .workflow-label {
-      font-family: var(--mono);
-      font-size: 12px;
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-      color: var(--purple);
-      margin-bottom: 16px;
-    }
-    [data-theme="light"] .workflow-label {
-      color: var(--purple);
-    }
-
-    .workflow-headline {
-      font-size: 40px;
-      font-weight: 350;
-      line-height: 1.2;
-      letter-spacing: -0.02em;
-      margin-bottom: 20px;
-    }
-
-    .workflow-desc {
-      font-size: 16px;
-      color: var(--text-muted);
-      line-height: 1.7;
-      margin-bottom: 32px;
-    }
-
-    .workflow-features {
-      list-style: none;
-      margin-bottom: 40px;
-    }
-
-    .workflow-features li {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding: 12px 0;
-      border-bottom: 1px solid var(--border);
-      font-size: 15px;
-    }
-    .workflow-features li:last-child {
-      border-bottom: none;
-    }
-
-    .workflow-check {
-      width: 20px;
-      height: 20px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: var(--purple);
-      color: #fff;
-    }
-    .workflow-check svg {
-      width: 12px;
-      height: 12px;
-      stroke-width: 3;
-    }
-
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 12px;
-      padding: 18px 28px;
-      font-weight: 500;
-      font-size: 15px;
-      text-decoration: none;
-      transition: all 0.2s ease;
-      cursor: pointer;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .btn-primary {
-      background: transparent;
-      color: var(--text);
-      border: 1px solid var(--btn-outline);
-    }
-    .btn-primary::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 0;
-      height: 100%;
-      background: var(--mint);
-      transition: width 0.3s ease;
-      z-index: -1;
-    }
+    .btn { display: inline-flex; align-items: center; gap: 12px; padding: 18px 28px; font-weight: 500; font-size: 15px; text-decoration: none; transition: all 0.2s ease; cursor: pointer; position: relative; overflow: hidden; }
+    .btn-primary { background: transparent; color: var(--text); border: 1px solid var(--btn-outline); }
+    .btn-primary::before { content: ''; position: absolute; top: 0; left: 0; width: 0; height: 100%; background: var(--purple); transition: width 0.3s ease; z-index: -1; }
     .btn-primary:hover::before { width: 100%; }
-    .btn-primary:hover {
-      color: #0a0a0a;
-      border-color: var(--mint);
-    }
-
-    .btn-arrow {
-      display: inline-flex;
-      transition: transform 0.2s ease;
-    }
-    .btn:hover .btn-arrow {
-      transform: translateX(4px);
-    }
-
-    /* Workflow visual mock */
-    .workflow-visual {
-      background: var(--bg);
-      border: 1px solid var(--border);
-      padding: 32px;
-    }
-
-    .workflow-mock-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding-bottom: 20px;
-      border-bottom: 1px solid var(--border);
-      margin-bottom: 24px;
-    }
-
-    .workflow-mock-title {
-      font-weight: 600;
-      font-size: 14px;
-    }
-
-    .workflow-mock-badge {
-      font-family: var(--mono);
-      font-size: 10px;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      padding: 6px 12px;
-      background: var(--purple);
-      color: #fff;
-    }
-
-    .workflow-node {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      padding: 16px;
-      background: var(--bg-alt);
-      border: 1px solid var(--border);
-      margin-bottom: 12px;
-    }
-
-    .workflow-node-icon {
-      width: 40px;
-      height: 40px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-    }
-    .workflow-node-icon.trigger { background: var(--cyan); }
-    .workflow-node-icon.process { background: var(--purple); }
-    .workflow-node-icon.condition { background: var(--yellow); }
-    .workflow-node-icon.output { background: var(--mint); }
-
-    .workflow-node-content {
-      flex: 1;
-    }
-
-    .workflow-node-label {
-      font-size: 13px;
-      font-weight: 600;
-      margin-bottom: 2px;
-    }
-
-    .workflow-node-desc {
-      font-size: 12px;
-      color: var(--text-muted);
-    }
-
-    .workflow-connector {
-      width: 2px;
-      height: 20px;
-      background: var(--border);
-      margin-left: 35px;
-      margin-bottom: 12px;
-    }
-
-    /* ========================================
-       REQUEST SECTION
-       ======================================== */
-    .request-section {
-      padding: 120px 48px;
-      text-align: center;
-      border-top: 1px solid var(--border);
-    }
-
-    .request-headline {
-      font-size: 40px;
-      font-weight: 350;
-      line-height: 1.2;
-      letter-spacing: -0.02em;
-      margin-bottom: 16px;
-    }
-
-    .request-sub {
-      font-size: 18px;
-      color: var(--text-muted);
-      margin-bottom: 40px;
-      max-width: 500px;
-      margin-left: auto;
-      margin-right: auto;
-    }
-
-    .request-buttons {
-      display: flex;
-      gap: 16px;
-      justify-content: center;
-    }
-
-    .btn-secondary {
-      background: transparent;
-      color: var(--text);
-      border: 1px solid var(--btn-outline);
-    }
-    .btn-secondary::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 0;
-      height: 100%;
-      background: var(--purple);
-      transition: width 0.3s ease;
-      z-index: -1;
-    }
+    .btn-primary:hover { color: #fff; border-color: var(--purple); }
+    .btn-secondary { background: transparent; color: var(--text); border: 1px solid var(--btn-outline); }
+    .btn-secondary::before { content: ''; position: absolute; top: 0; left: 0; width: 0; height: 100%; background: var(--mint); transition: width 0.3s ease; z-index: -1; }
     .btn-secondary:hover::before { width: 100%; }
-    .btn-secondary:hover {
-      color: #fff;
-      border-color: var(--purple);
-    }
+    .btn-secondary:hover { color: #0a0a0a; border-color: var(--mint); }
+    .btn-arrow { display: inline-flex; transition: transform 0.2s ease; }
+    .btn:hover .btn-arrow { transform: translateX(4px); }
 
-    /* ========================================
-       FOOTER
-       ======================================== */
-    footer {
-      padding: 64px 48px;
-      border-top: 1px solid var(--border);
-    }
-
-    .footer-inner {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      max-width: 1400px;
-      margin: 0 auto;
-    }
-
-    .footer-logo {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-    .footer-logo svg { width: 28px; height: 28px; }
-    .footer-logo span { font-weight: 600; font-size: 16px; }
-
-    .footer-links {
-      display: flex;
-      gap: 36px;
-      list-style: none;
-    }
-    .footer-links a {
-      color: var(--text-muted);
-      text-decoration: none;
-      font-size: 14px;
-      transition: color 0.2s ease;
-    }
-    .footer-links a:hover { color: var(--text); }
-
-    .footer-copy {
-      font-size: 13px;
-      color: var(--text-muted);
-    }
-
-    /* Theme toggle */
-    .theme-toggle {
-      position: fixed;
-      bottom: 24px;
-      left: 50%;
-      transform: translateX(-50%);
-      display: flex;
-      background: var(--bg);
-      border: 1px solid var(--border);
-      z-index: 1000;
-    }
-    .theme-toggle button {
-      padding: 10px 20px;
-      background: none;
-      border: none;
-      color: var(--text-muted);
-      font-size: 13px;
-      cursor: pointer;
-      font-family: var(--font);
-    }
-    .theme-toggle button:hover:not(.active) { color: var(--text); }
-    .theme-toggle button.active { background: var(--text); color: var(--bg); }
-
-    /* ========================================
-       RESPONSIVE
-       ======================================== */
-    @media (max-width: 1200px) {
-      .agents-grid {
-        grid-template-columns: repeat(2, 1fr);
-      }
-      .workflow-grid {
-        gap: 48px;
-      }
-    }
-
-    @media (max-width: 900px) {
-      nav { padding: 0 24px; }
-      .nav-links { display: none; }
-      
-      .hero { padding: 140px 24px 80px; }
-      .hero-headline { font-size: 44px; }
-      
-      .agents-section { padding: 60px 24px 80px; }
-      .agents-grid { grid-template-columns: 1fr; }
-      
-      .workflow-section { padding: 80px 24px; }
-      .workflow-grid {
-        grid-template-columns: 1fr;
-        gap: 48px;
-      }
-      .workflow-content { max-width: 100%; }
-      .workflow-headline { font-size: 32px; }
-      
-      .request-section { padding: 80px 24px; }
-      .request-headline { font-size: 32px; }
-      .request-buttons { flex-direction: column; }
-      .btn { width: 100%; justify-content: center; }
-      
-      footer { padding: 40px 24px; }
-      .footer-inner { flex-direction: column; gap: 24px; text-align: center; }
-      .footer-links { flex-wrap: wrap; justify-content: center; gap: 16px 24px; }
-    }
-
-    @media (max-width: 600px) {
-      .hero-headline { font-size: 36px; }
-      .hero-sub { font-size: 16px; }
-      .section-headline { font-size: 28px; }
-      .agent-card { padding: 32px 24px; }
-    }
+    @media (max-width: 1000px) { .agents-grid { grid-template-columns: repeat(2, 1fr); } .workflow-container { grid-template-columns: 1fr; gap: 48px; } }
+    @media (max-width: 900px) { .hero { padding: 140px 24px 80px; } .hero-headline { font-size: 44px; } .agents-section { padding: 60px 24px 80px; } .agents-grid { grid-template-columns: 1fr; } .workflow-section { padding: 80px 24px; } .request-section { padding: 80px 24px; } .request-buttons { flex-direction: column; } .btn { width: 100%; justify-content: center; } }
   </style>
 </head>
 
 <body>
-  <!-- NAV -->
-  <nav>
-    <a href="/" class="nav-logo">
-      <svg viewBox="0 0 52 52" fill="none">
-        <rect y="16" width="28" height="28" fill="#A678F4"/>
-        <rect x="16" width="28" height="28" rx="6" fill="#46FCAF"/>
-      </svg>
-      <span class="nav-wordmark">recrd</span>
-    </a>
-    <ul class="nav-links">
-      <li><a href="/features">Features</a></li>
-      <li><a href="/pricing">Pricing</a></li>
-      <li><a href="/agents">Agents</a></li>
-      <li><a href="#">Docs</a></li>
-    </ul>
-    <div class="nav-right">
-      <a href="/#contact" class="nav-contact">Contact</a>
-      <a href="#" class="nav-cta">Dashboard</a>
-    </div>
-  </nav>
+  <Nav />
 
-  <!-- HERO -->
   <section class="hero">
-    <div class="hero-badge">
-      <span class="hero-badge-dot"></span>
-      <span>Agent Marketplace</span>
-    </div>
-    <h1 class="hero-headline">Your <em>AI sales team</em></h1>
+    <div class="hero-badge"><span class="hero-badge-dot"></span> Agent Marketplace</div>
+    <h1 class="hero-headline">Your AI <em>sales team</em></h1>
     <p class="hero-sub">Pre-built agents that work out of the box. Enable with one click, or build your own custom workflows.</p>
   </section>
 
-  <!-- AGENTS GRID -->
   <section class="agents-section">
     <div class="section-header">
       <p class="section-label">Pre-Built Agents</p>
-      <h2 class="section-headline">Ready to deploy</h2>
-      <p class="section-sub">Each agent runs automatically after every call. Enable the ones you need.</p>
+      <h2 class="section-headline">Deploy in seconds, not sprints</h2>
     </div>
-
     <div class="agents-grid">
-      <!-- Agent 1: CRM Sync -->
       <div class="agent-card">
         <div class="agent-header">
-          <div class="agent-icon">
-            <svg viewBox="0 0 48 48" fill="none">
-              <rect x="8" y="6" width="32" height="6" fill="var(--mint)"/>
-              <rect x="8" y="14" width="32" height="6" fill="var(--mint)" opacity="0.7"/>
-              <rect x="8" y="22" width="32" height="6" fill="var(--mint)" opacity="0.5"/>
-              <rect x="8" y="30" width="32" height="6" fill="var(--mint)" opacity="0.3"/>
-              <rect x="32" y="34" width="4" height="4" fill="var(--purple)"/>
-              <rect x="36" y="34" width="4" height="4" fill="var(--purple)"/>
-              <rect x="40" y="34" width="4" height="4" fill="var(--purple)"/>
-              <rect x="40" y="38" width="4" height="4" fill="var(--purple)"/>
-              <rect x="40" y="42" width="4" height="4" fill="var(--purple)"/>
-            </svg>
-          </div>
-          <div class="agent-status">
-            <span class="agent-status-dot"></span>
-            <span>Active</span>
-          </div>
+          <div class="agent-icon"><svg viewBox="0 0 40 40" fill="none"><rect x="4" y="4" width="32" height="6" fill="var(--mint)"/><rect x="4" y="12" width="32" height="6" fill="var(--mint)" opacity="0.7"/><rect x="4" y="20" width="32" height="6" fill="var(--mint)" opacity="0.5"/><rect x="26" y="30" width="10" height="6" fill="var(--purple)"/></svg></div>
+          <span class="agent-status active">Active</span>
         </div>
         <h3 class="agent-name">CRM Sync Agent</h3>
-        <p class="agent-desc">Automatically updates HubSpot or Salesforce after every call. MEDDIC fields, deal stage, next steps—12+ fields synced.</p>
-        <div class="agent-meta">
-          <span class="agent-tag trigger">Post-call</span>
-          <span class="agent-tag output">CRM</span>
-        </div>
+        <p class="agent-desc">Auto-updates HubSpot or Salesforce with MEDDIC fields, deal stage, and next steps. 12+ fields synced per call.</p>
+        <div class="agent-tags"><span class="agent-tag">Post-call</span><span class="agent-tag">→ CRM</span></div>
       </div>
-
-      <!-- Agent 2: Risk Alert -->
       <div class="agent-card">
         <div class="agent-header">
-          <div class="agent-icon">
-            <svg viewBox="0 0 48 48" fill="none">
-              <rect x="20" y="4" width="8" height="4" fill="var(--coral)"/>
-              <rect x="16" y="8" width="16" height="4" fill="var(--coral)"/>
-              <rect x="12" y="12" width="24" height="4" fill="var(--coral)"/>
-              <rect x="12" y="16" width="24" height="12" fill="var(--coral)"/>
-              <rect x="8" y="28" width="32" height="4" fill="var(--coral)"/>
-              <rect x="20" y="32" width="8" height="4" fill="var(--coral)"/>
-              <rect x="34" y="4" width="4" height="4" fill="var(--yellow)"/>
-              <rect x="38" y="4" width="4" height="4" fill="var(--yellow)"/>
-              <rect x="34" y="8" width="4" height="4" fill="var(--yellow)"/>
-              <rect x="38" y="8" width="4" height="4" fill="var(--yellow)"/>
-            </svg>
-          </div>
-          <div class="agent-status">
-            <span class="agent-status-dot"></span>
-            <span>Active</span>
-          </div>
+          <div class="agent-icon"><svg viewBox="0 0 40 40" fill="none"><rect x="16" y="2" width="8" height="4" fill="var(--coral)"/><rect x="12" y="6" width="16" height="4" fill="var(--coral)"/><rect x="8" y="10" width="24" height="14" fill="var(--coral)"/><rect x="4" y="24" width="32" height="4" fill="var(--coral)"/><rect x="16" y="28" width="8" height="4" fill="var(--coral)"/></svg></div>
+          <span class="agent-status active">Active</span>
         </div>
         <h3 class="agent-name">Risk Alert Agent</h3>
-        <p class="agent-desc">Detects deal risks in real-time. Budget objections, ghosting signals, competitor mentions—alerts your team instantly.</p>
-        <div class="agent-meta">
-          <span class="agent-tag trigger">Real-time</span>
-          <span class="agent-tag output">Slack</span>
-        </div>
+        <p class="agent-desc">Detects budget objections, competitor mentions, ghosting signals and sends instant Slack alerts.</p>
+        <div class="agent-tags"><span class="agent-tag">Real-time</span><span class="agent-tag">→ Slack</span></div>
       </div>
-
-      <!-- Agent 3: Coaching Scorecard -->
       <div class="agent-card">
         <div class="agent-header">
-          <div class="agent-icon">
-            <svg viewBox="0 0 48 48" fill="none">
-              <rect x="6" y="34" width="6" height="8" fill="var(--purple)" opacity="0.4"/>
-              <rect x="14" y="28" width="6" height="14" fill="var(--purple)" opacity="0.55"/>
-              <rect x="22" y="20" width="6" height="22" fill="var(--purple)" opacity="0.7"/>
-              <rect x="30" y="14" width="6" height="28" fill="var(--purple)" opacity="0.85"/>
-              <rect x="38" y="6" width="6" height="36" fill="var(--purple)"/>
-              <rect x="4" y="42" width="42" height="2" fill="var(--purple)"/>
-            </svg>
-          </div>
-          <div class="agent-status">
-            <span class="agent-status-dot"></span>
-            <span>Active</span>
-          </div>
+          <div class="agent-icon"><svg viewBox="0 0 40 40" fill="none"><rect x="4" y="30" width="6" height="6" fill="var(--cyan)" opacity="0.4"/><rect x="12" y="24" width="6" height="12" fill="var(--cyan)" opacity="0.6"/><rect x="20" y="16" width="6" height="20" fill="var(--cyan)" opacity="0.8"/><rect x="28" y="6" width="6" height="30" fill="var(--cyan)"/></svg></div>
+          <span class="agent-status active">Active</span>
         </div>
         <h3 class="agent-name">Coaching Agent</h3>
-        <p class="agent-desc">Auto-generates scorecards based on MEDDIC, BANT, or your custom framework. See exactly where reps need help.</p>
-        <div class="agent-meta">
-          <span class="agent-tag trigger">Post-call</span>
-          <span class="agent-tag output">Dashboard</span>
-        </div>
+        <p class="agent-desc">Scores every call against MEDDIC, BANT, or custom frameworks. Surfaces specific coaching recommendations.</p>
+        <div class="agent-tags"><span class="agent-tag">Post-call</span><span class="agent-tag">→ Dashboard</span></div>
       </div>
-
-      <!-- Agent 4: Follow-up -->
       <div class="agent-card">
         <div class="agent-header">
-          <div class="agent-icon">
-            <svg viewBox="0 0 48 48" fill="none">
-              <rect x="4" y="12" width="40" height="4" fill="var(--cyan)"/>
-              <rect x="4" y="16" width="4" height="20" fill="var(--cyan)"/>
-              <rect x="40" y="16" width="4" height="20" fill="var(--cyan)"/>
-              <rect x="4" y="36" width="40" height="4" fill="var(--cyan)"/>
-              <rect x="8" y="16" width="4" height="4" fill="var(--cyan)" opacity="0.7"/>
-              <rect x="36" y="16" width="4" height="4" fill="var(--cyan)" opacity="0.7"/>
-              <rect x="12" y="20" width="4" height="4" fill="var(--cyan)" opacity="0.7"/>
-              <rect x="32" y="20" width="4" height="4" fill="var(--cyan)" opacity="0.7"/>
-              <rect x="16" y="24" width="4" height="4" fill="var(--cyan)" opacity="0.7"/>
-              <rect x="28" y="24" width="4" height="4" fill="var(--cyan)" opacity="0.7"/>
-              <rect x="20" y="28" width="8" height="4" fill="var(--cyan)" opacity="0.7"/>
-              <rect x="32" y="4" width="12" height="12" fill="var(--mint)"/>
-              <rect x="35" y="10" width="2" height="2" fill="#0a0a0a"/>
-              <rect x="37" y="12" width="2" height="2" fill="#0a0a0a"/>
-              <rect x="39" y="8" width="2" height="2" fill="#0a0a0a"/>
-              <rect x="41" y="6" width="2" height="2" fill="#0a0a0a"/>
-            </svg>
-          </div>
-          <div class="agent-status">
-            <span class="agent-status-dot"></span>
-            <span>Active</span>
-          </div>
+          <div class="agent-icon"><svg viewBox="0 0 40 40" fill="none"><rect x="4" y="8" width="32" height="4" fill="var(--yellow)"/><rect x="4" y="12" width="4" height="16" fill="var(--yellow)"/><rect x="32" y="12" width="4" height="16" fill="var(--yellow)"/><rect x="4" y="28" width="32" height="4" fill="var(--yellow)"/><rect x="26" y="2" width="10" height="10" fill="var(--mint)"/></svg></div>
+          <span class="agent-status active">Active</span>
         </div>
         <h3 class="agent-name">Follow-Up Agent</h3>
-        <p class="agent-desc">Drafts personalized follow-up emails within 60 seconds. References specific conversation points and next steps.</p>
-        <div class="agent-meta">
-          <span class="agent-tag trigger">Post-call</span>
-          <span class="agent-tag output">Email</span>
-        </div>
+        <p class="agent-desc">Drafts personalized follow-up emails within 60 seconds of call end. References specific conversation points.</p>
+        <div class="agent-tags"><span class="agent-tag">Post-call</span><span class="agent-tag">→ Email</span></div>
       </div>
-
-      <!-- Agent 5: Meeting Prep -->
       <div class="agent-card">
         <div class="agent-header">
-          <div class="agent-icon">
-            <svg viewBox="0 0 48 48" fill="none">
-              <rect x="8" y="4" width="32" height="4" fill="var(--yellow)"/>
-              <rect x="8" y="8" width="4" height="36" fill="var(--yellow)"/>
-              <rect x="36" y="8" width="4" height="36" fill="var(--yellow)"/>
-              <rect x="8" y="40" width="32" height="4" fill="var(--yellow)"/>
-              <rect x="14" y="14" width="12" height="3" fill="var(--yellow)" opacity="0.6"/>
-              <rect x="14" y="20" width="20" height="3" fill="var(--yellow)" opacity="0.6"/>
-              <rect x="14" y="26" width="16" height="3" fill="var(--yellow)" opacity="0.6"/>
-              <rect x="14" y="32" width="18" height="3" fill="var(--yellow)" opacity="0.6"/>
-            </svg>
-          </div>
-          <div class="agent-status">
-            <span class="agent-status-dot"></span>
-            <span>Active</span>
-          </div>
+          <div class="agent-icon"><svg viewBox="0 0 40 40" fill="none"><rect x="4" y="4" width="32" height="32" fill="var(--purple)" opacity="0.2"/><rect x="8" y="12" width="20" height="3" fill="var(--purple)"/><rect x="8" y="18" width="14" height="3" fill="var(--purple)" opacity="0.7"/><rect x="8" y="24" width="16" height="3" fill="var(--purple)" opacity="0.5"/></svg></div>
+          <span class="agent-status active">Active</span>
         </div>
         <h3 class="agent-name">Meeting Prep Agent</h3>
-        <p class="agent-desc">AI-generated pre-call briefs delivered before you join. Past interactions, stakeholder context, talking points.</p>
-        <div class="agent-meta">
-          <span class="agent-tag trigger">Pre-meeting</span>
-          <span class="agent-tag output">Email</span>
-        </div>
+        <p class="agent-desc">Sends pre-meeting briefs with past interactions, stakeholder context, and suggested talking points.</p>
+        <div class="agent-tags"><span class="agent-tag">Pre-meeting</span><span class="agent-tag">→ Email</span></div>
       </div>
-
-      <!-- Agent 6: Competitor Intel -->
       <div class="agent-card">
         <div class="agent-header">
-          <div class="agent-icon">
-            <svg viewBox="0 0 48 48" fill="none">
-              <rect x="4" y="20" width="18" height="18" fill="var(--coral)" opacity="0.6"/>
-              <rect x="26" y="10" width="18" height="18" fill="var(--purple)" opacity="0.6"/>
-              <rect x="14" y="20" width="16" height="10" fill="var(--coral)"/>
-              <circle cx="22" cy="25" r="3" fill="var(--bg)"/>
-            </svg>
-          </div>
-          <div class="agent-status">
-            <span class="agent-status-dot"></span>
-            <span>Active</span>
-          </div>
+          <div class="agent-icon"><svg viewBox="0 0 40 40" fill="none"><rect x="4" y="16" width="14" height="14" fill="var(--coral)" opacity="0.6"/><rect x="22" y="8" width="14" height="14" fill="var(--purple)" opacity="0.6"/><rect x="10" y="16" width="12" height="8" fill="var(--coral)"/></svg></div>
+          <span class="agent-status active">Active</span>
         </div>
         <h3 class="agent-name">Competitor Agent</h3>
-        <p class="agent-desc">Flags every competitor mention. Tracks positioning, objections, and win/loss patterns across all your deals.</p>
-        <div class="agent-meta">
-          <span class="agent-tag trigger">Real-time</span>
-          <span class="agent-tag output">Dashboard</span>
-        </div>
+        <p class="agent-desc">Flags every competitor mention, tracks positioning, objections, and win/loss patterns across all calls.</p>
+        <div class="agent-tags"><span class="agent-tag">Real-time</span><span class="agent-tag">→ Dashboard</span></div>
       </div>
-
-      <!-- Agent 7: Deal Signals -->
       <div class="agent-card">
         <div class="agent-header">
-          <div class="agent-icon">
-            <svg viewBox="0 0 48 48" fill="none">
-              <rect x="4" y="22" width="8" height="4" fill="var(--mint)"/>
-              <rect x="14" y="18" width="8" height="12" fill="var(--mint)"/>
-              <rect x="24" y="12" width="8" height="24" fill="var(--mint)"/>
-              <rect x="34" y="6" width="8" height="36" fill="var(--mint)"/>
-            </svg>
-          </div>
-          <div class="agent-status">
-            <span class="agent-status-dot"></span>
-            <span>Active</span>
-          </div>
+          <div class="agent-icon"><svg viewBox="0 0 40 40" fill="none"><rect x="4" y="18" width="6" height="4" fill="var(--mint)"/><rect x="12" y="14" width="6" height="12" fill="var(--mint)"/><rect x="20" y="8" width="6" height="24" fill="var(--mint)"/><rect x="28" y="4" width="6" height="32" fill="var(--mint)"/></svg></div>
+          <span class="agent-status active">Active</span>
         </div>
         <h3 class="agent-name">Deal Signal Agent</h3>
-        <p class="agent-desc">Detects 50+ buying signals. Champion emergence, budget approval, timeline commitment—scored and logged automatically.</p>
-        <div class="agent-meta">
-          <span class="agent-tag trigger">Real-time</span>
-          <span class="agent-tag output">CRM</span>
-        </div>
+        <p class="agent-desc">Detects 50+ buying signals and logs them to your CRM. Momentum shifts, champion emergence, and more.</p>
+        <div class="agent-tags"><span class="agent-tag">Real-time</span><span class="agent-tag">→ CRM</span></div>
       </div>
-
-      <!-- Agent 8: Forecast -->
       <div class="agent-card">
         <div class="agent-header">
-          <div class="agent-icon">
-            <svg viewBox="0 0 48 48" fill="none">
-              <rect x="4" y="38" width="40" height="2" fill="var(--purple)"/>
-              <rect x="4" y="8" width="2" height="32" fill="var(--purple)"/>
-              <rect x="10" y="30" width="4" height="4" fill="var(--purple)"/>
-              <rect x="18" y="24" width="4" height="4" fill="var(--purple)"/>
-              <rect x="26" y="18" width="4" height="4" fill="var(--purple)"/>
-              <rect x="34" y="12" width="4" height="4" fill="var(--mint)"/>
-              <rect x="12" y="28" width="8" height="2" fill="var(--purple)" opacity="0.5"/>
-              <rect x="20" y="22" width="8" height="2" fill="var(--purple)" opacity="0.5"/>
-              <rect x="28" y="16" width="8" height="2" fill="var(--purple)" opacity="0.5"/>
-            </svg>
-          </div>
-          <div class="agent-status">
-            <span class="agent-status-dot"></span>
-            <span>Active</span>
-          </div>
+          <div class="agent-icon"><svg viewBox="0 0 40 40" fill="none"><rect x="4" y="32" width="32" height="2" fill="var(--yellow)"/><rect x="4" y="6" width="2" height="28" fill="var(--yellow)"/><rect x="8" y="24" width="4" height="4" fill="var(--yellow)"/><rect x="14" y="20" width="4" height="4" fill="var(--yellow)"/><rect x="20" y="14" width="4" height="4" fill="var(--yellow)"/><rect x="26" y="10" width="4" height="4" fill="var(--mint)"/></svg></div>
+          <span class="agent-status active">Active</span>
         </div>
         <h3 class="agent-name">Forecast Agent</h3>
-        <p class="agent-desc">AI-weighted pipeline predictions. Combines deal signals, engagement patterns, and historical data for accurate forecasts.</p>
-        <div class="agent-meta">
-          <span class="agent-tag trigger">Daily</span>
-          <span class="agent-tag output">Dashboard</span>
-        </div>
+        <p class="agent-desc">AI-weighted pipeline predictions based on deal signals and engagement patterns. Updates daily.</p>
+        <div class="agent-tags"><span class="agent-tag">Daily</span><span class="agent-tag">→ Dashboard</span></div>
       </div>
-
-      <!-- Agent 9: Stakeholder Mapper -->
       <div class="agent-card">
         <div class="agent-header">
-          <div class="agent-icon">
-            <svg viewBox="0 0 48 48" fill="none">
-              <rect x="20" y="4" width="8" height="8" fill="var(--cyan)"/>
-              <rect x="6" y="20" width="8" height="8" fill="var(--cyan)" opacity="0.7"/>
-              <rect x="34" y="20" width="8" height="8" fill="var(--cyan)" opacity="0.7"/>
-              <rect x="12" y="36" width="8" height="8" fill="var(--cyan)" opacity="0.5"/>
-              <rect x="28" y="36" width="8" height="8" fill="var(--cyan)" opacity="0.5"/>
-              <rect x="23" y="12" width="2" height="8" fill="var(--cyan)" opacity="0.4"/>
-              <rect x="14" y="24" width="6" height="2" fill="var(--cyan)" opacity="0.4"/>
-              <rect x="28" y="24" width="6" height="2" fill="var(--cyan)" opacity="0.4"/>
-              <rect x="15" y="28" width="2" height="8" fill="var(--cyan)" opacity="0.4"/>
-              <rect x="31" y="28" width="2" height="8" fill="var(--cyan)" opacity="0.4"/>
-            </svg>
-          </div>
-          <div class="agent-status coming-soon">
-            <span class="agent-status-dot"></span>
-            <span>Coming Soon</span>
-          </div>
+          <div class="agent-icon"><svg viewBox="0 0 40 40" fill="none"><rect x="16" y="2" width="8" height="8" fill="var(--cyan)"/><rect x="4" y="16" width="8" height="8" fill="var(--cyan)" opacity="0.7"/><rect x="28" y="16" width="8" height="8" fill="var(--cyan)" opacity="0.7"/><rect x="10" y="30" width="8" height="8" fill="var(--cyan)" opacity="0.5"/><rect x="22" y="30" width="8" height="8" fill="var(--cyan)" opacity="0.5"/></svg></div>
+          <span class="agent-status soon">Coming Soon</span>
         </div>
         <h3 class="agent-name">Stakeholder Agent</h3>
-        <p class="agent-desc">Auto-maps the buying committee from conversation data. Champion, blocker, economic buyer—all identified and tracked.</p>
-        <div class="agent-meta">
-          <span class="agent-tag trigger">Post-call</span>
-          <span class="agent-tag output">CRM</span>
-        </div>
+        <p class="agent-desc">Auto-maps the buying committee from call mentions. Tracks relationships and engagement levels.</p>
+        <div class="agent-tags"><span class="agent-tag">Post-call</span><span class="agent-tag">→ CRM</span></div>
       </div>
     </div>
   </section>
 
-  <!-- WORKFLOW BUILDER -->
   <section class="workflow-section">
-    <div class="workflow-grid">
+    <div class="workflow-container">
       <div class="workflow-content">
-        <p class="workflow-label">Advanced</p>
-        <h2 class="workflow-headline">Build custom workflows</h2>
-        <p class="workflow-desc">Chain agents together. Create custom triggers. Route outputs to any destination. For power users who need full control.</p>
-        
+        <p class="section-label">Custom Workflows</p>
+        <h2 class="workflow-headline">Build your own agents</h2>
+        <p class="workflow-desc">Connect triggers, conditions, and outputs to create workflows that match exactly how your team sells.</p>
         <ul class="workflow-features">
-          <li>
-            <span class="workflow-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><polyline points="20 6 9 17 4 12"/></svg></span>
-            Custom trigger conditions
-          </li>
-          <li>
-            <span class="workflow-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><polyline points="20 6 9 17 4 12"/></svg></span>
-            Chain multiple agents together
-          </li>
-          <li>
-            <span class="workflow-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><polyline points="20 6 9 17 4 12"/></svg></span>
-            Conditional logic and branching
-          </li>
-          <li>
-            <span class="workflow-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><polyline points="20 6 9 17 4 12"/></svg></span>
-            Webhook outputs for any integration
-          </li>
+          <li><span class="workflow-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><polyline points="20 6 9 17 4 12"/></svg></span>Custom triggers (call ends, scheduled, deal events)</li>
+          <li><span class="workflow-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><polyline points="20 6 9 17 4 12"/></svg></span>Chain multiple agents together</li>
+          <li><span class="workflow-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><polyline points="20 6 9 17 4 12"/></svg></span>Conditional logic (if deal > $50k, then...)</li>
+          <li><span class="workflow-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><polyline points="20 6 9 17 4 12"/></svg></span>Webhook outputs to any system</li>
         </ul>
-
-        <a href="#" class="btn btn-primary">
-          Request Early Access
-          <span class="btn-arrow">
-            <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
-              <rect x="2" y="0" width="2" height="2" fill="currentColor"/>
-              <rect x="4" y="2" width="2" height="2" fill="currentColor"/>
-              <rect x="6" y="4" width="2" height="2" fill="currentColor"/>
-              <rect x="4" y="6" width="2" height="2" fill="currentColor"/>
-              <rect x="2" y="8" width="2" height="2" fill="currentColor"/>
-            </svg>
-          </span>
-        </a>
+        <div class="workflow-cta">
+          <a href="/#contact" class="btn btn-primary">Request Early Access <span class="btn-arrow"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><rect x="2" y="0" width="2" height="2" fill="currentColor"/><rect x="4" y="2" width="2" height="2" fill="currentColor"/><rect x="6" y="4" width="2" height="2" fill="currentColor"/><rect x="4" y="6" width="2" height="2" fill="currentColor"/><rect x="2" y="8" width="2" height="2" fill="currentColor"/></svg></span></a>
+        </div>
       </div>
-
       <div class="workflow-visual">
-        <div class="workflow-mock-header">
-          <span class="workflow-mock-title">Enterprise Risk Workflow</span>
-          <span class="workflow-mock-badge">Custom</span>
-        </div>
-
-        <div class="workflow-node">
-          <div class="workflow-node-icon trigger">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0a0a0a" stroke-width="2">
-              <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3"/>
-            </svg>
-          </div>
-          <div class="workflow-node-content">
-            <div class="workflow-node-label">Trigger: Call Ends</div>
-            <div class="workflow-node-desc">When any recorded call completes</div>
-          </div>
-        </div>
-
-        <div class="workflow-connector"></div>
-
-        <div class="workflow-node">
-          <div class="workflow-node-icon process">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2">
-              <circle cx="12" cy="12" r="10"/>
-              <path d="M12 6v6l4 2"/>
-            </svg>
-          </div>
-          <div class="workflow-node-content">
-            <div class="workflow-node-label">Analyze: Risk Signals</div>
-            <div class="workflow-node-desc">Check for budget, timeline, champion loss</div>
-          </div>
-        </div>
-
-        <div class="workflow-connector"></div>
-
-        <div class="workflow-node">
-          <div class="workflow-node-icon condition">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0a0a0a" stroke-width="2">
-              <polyline points="9 18 15 12 9 6"/>
-            </svg>
-          </div>
-          <div class="workflow-node-content">
-            <div class="workflow-node-label">Condition: Deal > $50k</div>
-            <div class="workflow-node-desc">Only for enterprise opportunities</div>
-          </div>
-        </div>
-
-        <div class="workflow-connector"></div>
-
-        <div class="workflow-node">
-          <div class="workflow-node-icon output">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0a0a0a" stroke-width="2">
-              <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
-            </svg>
-          </div>
-          <div class="workflow-node-content">
-            <div class="workflow-node-label">Output: Slack + CRM</div>
-            <div class="workflow-node-desc">Alert #enterprise-deals, update risk field</div>
-          </div>
+        <div class="workflow-mock">
+          <div class="workflow-step"><div class="workflow-step-icon">🎯</div><div class="workflow-step-label">Trigger</div></div>
+          <span class="workflow-arrow">→</span>
+          <div class="workflow-step"><div class="workflow-step-icon">🔍</div><div class="workflow-step-label">Analyze</div></div>
+          <span class="workflow-arrow">→</span>
+          <div class="workflow-step"><div class="workflow-step-icon">⚡</div><div class="workflow-step-label">Condition</div></div>
+          <span class="workflow-arrow">→</span>
+          <div class="workflow-step"><div class="workflow-step-icon">📤</div><div class="workflow-step-label">Output</div></div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- REQUEST SECTION -->
   <section class="request-section">
     <h2 class="request-headline">Need a custom agent?</h2>
-    <p class="request-sub">Tell us what you're trying to automate. We'll build it or help you create it with our workflow builder.</p>
     <div class="request-buttons">
-      <a href="#" class="btn btn-primary">
-        Request an Agent
-        <span class="btn-arrow">
-          <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
-            <rect x="2" y="0" width="2" height="2" fill="currentColor"/>
-            <rect x="4" y="2" width="2" height="2" fill="currentColor"/>
-            <rect x="6" y="4" width="2" height="2" fill="currentColor"/>
-            <rect x="4" y="6" width="2" height="2" fill="currentColor"/>
-            <rect x="2" y="8" width="2" height="2" fill="currentColor"/>
-          </svg>
-        </span>
-      </a>
-      <a href="/#contact" class="btn btn-secondary">
-        Talk to Sales
-        <span class="btn-arrow">
-          <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
-            <rect x="2" y="0" width="2" height="2" fill="currentColor"/>
-            <rect x="4" y="2" width="2" height="2" fill="currentColor"/>
-            <rect x="6" y="4" width="2" height="2" fill="currentColor"/>
-            <rect x="4" y="6" width="2" height="2" fill="currentColor"/>
-            <rect x="2" y="8" width="2" height="2" fill="currentColor"/>
-          </svg>
-        </span>
-      </a>
+      <a href="/#contact" class="btn btn-primary">Request an Agent <span class="btn-arrow"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><rect x="2" y="0" width="2" height="2" fill="currentColor"/><rect x="4" y="2" width="2" height="2" fill="currentColor"/><rect x="6" y="4" width="2" height="2" fill="currentColor"/><rect x="4" y="6" width="2" height="2" fill="currentColor"/><rect x="2" y="8" width="2" height="2" fill="currentColor"/></svg></span></a>
+      <a href="/#contact" class="btn btn-secondary">Talk to Sales <span class="btn-arrow"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><rect x="2" y="0" width="2" height="2" fill="currentColor"/><rect x="4" y="2" width="2" height="2" fill="currentColor"/><rect x="6" y="4" width="2" height="2" fill="currentColor"/><rect x="4" y="6" width="2" height="2" fill="currentColor"/><rect x="2" y="8" width="2" height="2" fill="currentColor"/></svg></span></a>
     </div>
   </section>
 
-  <!-- FOOTER -->
-  <footer>
-    <div class="footer-inner">
-      <div class="footer-logo">
-        <svg viewBox="0 0 52 52" fill="none">
-          <rect y="16" width="28" height="28" fill="#A678F4"/>
-          <rect x="16" width="28" height="28" rx="6" fill="#46FCAF"/>
-        </svg>
-        <span>recrd</span>
-      </div>
-      <ul class="footer-links">
-        <li><a href="/features">Features</a></li>
-        <li><a href="/pricing">Pricing</a></li>
-        <li><a href="/agents">Agents</a></li>
-        <li><a href="#">Docs</a></li>
-        <li><a href="#">Privacy</a></li>
-        <li><a href="#">Terms</a></li>
-      </ul>
-      <p class="footer-copy">© 2025 recrd. All rights reserved.</p>
-    </div>
-  </footer>
-
-  <!-- THEME TOGGLE -->
-  <div class="theme-toggle">
-    <button id="btn-dark" class="active" onclick="setTheme('dark')">Dark</button>
-    <button id="btn-light" onclick="setTheme('light')">Light</button>
-  </div>
-
-  <script>
-    function setTheme(theme) {
-      document.documentElement.setAttribute('data-theme', theme);
-      document.getElementById('btn-dark')?.classList.toggle('active', theme === 'dark');
-      document.getElementById('btn-light')?.classList.toggle('active', theme === 'light');
-      localStorage.setItem('theme', theme);
-    }
-    
-    // Check for saved theme
-    const savedTheme = localStorage.getItem('theme');
-    if (savedTheme) {
-      setTheme(savedTheme);
-    }
-    
-    window.setTheme = setTheme;
-  </script>
+  <Footer />
+  <ThemeToggle />
 </body>
 </html>

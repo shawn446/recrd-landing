@@ -1,0 +1,109 @@
+---
+// BaseHead Component - shared styles, fonts, CSS variables
+// Usage: import BaseHead from '../components/BaseHead.astro'; then <BaseHead title="Page Title" description="..." />
+
+interface Props {
+  title: string;
+  description?: string;
+}
+
+const { title, description = "Revenue intelligence for sales teams. Record calls, auto-update CRM, and get AI-powered coaching." } = Astro.props;
+---
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{title}</title>
+<meta name="description" content={description}>
+
+<style is:global>
+  @font-face {
+    font-family: 'Roobert';
+    src: url('/fonts/RoobertCollectionVF-TRIAL.woff2') format('woff2');
+    font-weight: 100 900;
+    font-style: normal;
+    font-display: swap;
+  }
+  @font-face {
+    font-family: 'Fraktion Mono';
+    src: url('/fonts/PPFraktionMono-Regular.otf') format('opentype');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+  }
+  @font-face {
+    font-family: 'Matter';
+    src: url('/fonts/Matter-TRIAL-Light.otf') format('opentype');
+    font-weight: 300;
+    font-style: normal;
+    font-display: swap;
+  }
+  @font-face {
+    font-family: 'Matter';
+    src: url('/fonts/Matter-TRIAL-Regular.otf') format('opentype');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+  }
+  @font-face {
+    font-family: 'Matter';
+    src: url('/fonts/Matter-TRIAL-Medium.ttf') format('truetype');
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+  }
+  @font-face {
+    font-family: 'Object Sans';
+    src: url('/fonts/PPObjectSans-Regular.otf') format('opentype');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+  }
+  @font-face {
+    font-family: 'Object Sans';
+    src: url('/fonts/PPObjectSans-Heavy.otf') format('opentype');
+    font-weight: 800;
+    font-style: normal;
+    font-display: swap;
+  }
+
+  :root {
+    --font: 'Roobert', -apple-system, BlinkMacSystemFont, sans-serif;
+    --mono: 'Fraktion Mono', 'SF Mono', monospace;
+    --mint: #46FCAF;
+    --purple: #A678F4;
+    --cyan: #02C0FF;
+    --coral: #FF4F5E;
+    --yellow: #FFDC58;
+  }
+
+  [data-theme="dark"] {
+    --bg: #0A0A0A;
+    --bg-alt: #0F0F0F;
+    --bg-card: #161616;
+    --text: #ffffff;
+    --text-muted: #888888;
+    --border: rgba(255,255,255,0.12);
+    --btn-outline: rgba(255,255,255,0.4);
+  }
+
+  [data-theme="light"] {
+    --bg: #fafafa;
+    --bg-alt: #ffffff;
+    --bg-card: #ffffff;
+    --text: #0a0a0a;
+    --text-muted: #666666;
+    --border: rgba(0,0,0,0.1);
+    --btn-outline: rgba(0,0,0,0.8);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { overflow-x: hidden; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: var(--font);
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+  }
+</style>

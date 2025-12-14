@@ -1,0 +1,112 @@
+---
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+import ThemeToggle from '../components/ThemeToggle.astro';
+import BaseHead from '../components/BaseHead.astro';
+---
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <BaseHead title="recrd for RevOps - Finally, Data You Can Trust" description="Clean CRM data, accurate forecasts, and pipeline visibility without chasing reps." />
+  <style>
+    .hero { padding: 160px 48px 100px; max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
+    .hero-content { max-width: 540px; }
+    .hero-badge { display: inline-flex; padding: 8px 16px; background: var(--bg-card); border: 1px solid var(--border); font-family: var(--mono); font-size: 12px; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 24px; color: var(--yellow); }
+    .hero-headline { font-size: 56px; font-weight: 350; line-height: 1.1; letter-spacing: -0.03em; margin-bottom: 24px; }
+    .hero-headline em { font-style: normal; color: var(--yellow); }
+    .hero-sub { font-size: 18px; color: var(--text-muted); line-height: 1.6; margin-bottom: 40px; }
+    .hero-cta { display: inline-flex; align-items: center; gap: 12px; padding: 18px 32px; font-weight: 500; font-size: 15px; text-decoration: none; position: relative; overflow: hidden; background: transparent; color: var(--text); border: 1px solid var(--btn-outline); transition: all 0.3s ease; }
+    .hero-cta::before { content: ''; position: absolute; top: 0; left: 0; width: 0; height: 100%; background: var(--yellow); transition: width 0.3s ease; z-index: -1; }
+    .hero-cta:hover::before { width: 100%; }
+    .hero-cta:hover { color: #0a0a0a; border-color: var(--yellow); }
+    .hero-visual { background: var(--bg-card); border: 1px solid var(--border); padding: 32px; }
+    .hero-mock-header { display: flex; align-items: center; justify-content: space-between; padding-bottom: 16px; border-bottom: 1px solid var(--border); margin-bottom: 20px; }
+    .hero-mock-title { font-weight: 600; font-size: 14px; }
+    .hero-mock-badge { font-family: var(--mono); font-size: 10px; padding: 6px 12px; background: var(--yellow); color: #0a0a0a; text-transform: uppercase; }
+    .data-row { display: flex; justify-content: space-between; align-items: center; padding: 14px 0; border-bottom: 1px solid var(--border); }
+    .data-row:last-child { border-bottom: none; }
+    .data-label { font-size: 14px; color: var(--text-muted); }
+    .data-value { display: flex; align-items: center; gap: 10px; }
+    .data-before { font-family: var(--mono); font-size: 13px; color: var(--coral); text-decoration: line-through; opacity: 0.6; }
+    .data-after { font-family: var(--mono); font-size: 13px; color: var(--mint); font-weight: 600; }
+    .pain-section { padding: 100px 48px; border-top: 1px solid var(--border); background: var(--bg-alt); }
+    .pain-header { text-align: center; max-width: 600px; margin: 0 auto 64px; }
+    .pain-label { font-family: var(--mono); font-size: 12px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--coral); margin-bottom: 16px; }
+    .pain-headline { font-size: 36px; font-weight: 350; line-height: 1.2; }
+    .pain-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--border); max-width: 1000px; margin: 0 auto; }
+    .pain-card { background: var(--bg); padding: 40px 32px; text-align: center; }
+    .pain-stat { font-size: 48px; font-weight: 300; color: var(--coral); margin-bottom: 12px; font-family: var(--mono); }
+    .pain-desc { font-size: 15px; color: var(--text-muted); line-height: 1.5; }
+    .solution-section { padding: 120px 48px; border-top: 1px solid var(--border); }
+    .solution-header { text-align: center; max-width: 600px; margin: 0 auto 80px; }
+    .solution-label { font-family: var(--mono); font-size: 12px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--yellow); margin-bottom: 16px; }
+    .solution-headline { font-size: 36px; font-weight: 350; line-height: 1.2; margin-bottom: 16px; }
+    .solution-sub { font-size: 16px; color: var(--text-muted); }
+    .solution-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 48px; max-width: 1000px; margin: 0 auto; }
+    .solution-card { padding: 40px; background: var(--bg-card); border: 1px solid var(--border); }
+    .solution-icon { width: 48px; height: 48px; margin-bottom: 24px; }
+    .solution-title { font-size: 20px; font-weight: 600; margin-bottom: 12px; }
+    .solution-desc { font-size: 15px; color: var(--text-muted); line-height: 1.6; }
+    .quote-section { padding: 100px 48px; border-top: 1px solid var(--border); background: var(--bg-alt); }
+    .quote-container { max-width: 800px; margin: 0 auto; text-align: center; }
+    .quote-mark { font-size: 80px; line-height: 1; color: var(--yellow); opacity: 0.3; margin-bottom: -20px; }
+    .quote-text { font-size: 28px; font-weight: 350; line-height: 1.5; margin-bottom: 32px; }
+    .quote-author { font-size: 15px; color: var(--text-muted); }
+    .quote-author strong { color: var(--text); font-weight: 600; }
+    .cta-section { padding: 120px 48px; text-align: center; border-top: 1px solid var(--border); }
+    .cta-headline { font-size: 40px; font-weight: 350; margin-bottom: 16px; }
+    .cta-sub { font-size: 18px; color: var(--text-muted); margin-bottom: 40px; }
+    .btn { display: inline-flex; align-items: center; gap: 12px; padding: 18px 28px; font-weight: 500; font-size: 15px; text-decoration: none; position: relative; overflow: hidden; background: transparent; color: var(--text); border: 1px solid var(--btn-outline); }
+    .btn::before { content: ''; position: absolute; top: 0; left: 0; width: 0; height: 100%; background: var(--yellow); transition: width 0.3s ease; z-index: -1; }
+    .btn:hover::before { width: 100%; }
+    .btn:hover { color: #0a0a0a; border-color: var(--yellow); }
+    @media (max-width: 1000px) { .hero { grid-template-columns: 1fr; gap: 48px; text-align: center; } .solution-grid { grid-template-columns: 1fr; } }
+    @media (max-width: 900px) { .hero { padding: 140px 24px 80px; } .hero-headline { font-size: 40px; } .pain-section { padding: 80px 24px; } .pain-grid { grid-template-columns: 1fr; } .solution-section { padding: 80px 24px; } .quote-section { padding: 80px 24px; } .cta-section { padding: 80px 24px; } }
+  </style>
+</head>
+<body>
+  <Nav />
+  <section class="hero">
+    <div class="hero-content">
+      <div class="hero-badge">For RevOps</div>
+      <h1 class="hero-headline">Finally, <em>data you can trust</em></h1>
+      <p class="hero-sub">Stop chasing reps for CRM updates. recrd captures deal data automatically so your forecasts actually mean something.</p>
+      <a href="/#contact" class="hero-cta">Book a Demo</a>
+    </div>
+    <div class="hero-visual">
+      <div class="hero-mock-header"><span class="hero-mock-title">CRM Data Quality</span><span class="hero-mock-badge">Before → After</span></div>
+      <div class="data-row"><span class="data-label">Field Completion Rate</span><div class="data-value"><span class="data-before">34%</span><span class="data-after">94%</span></div></div>
+      <div class="data-row"><span class="data-label">Forecast Accuracy</span><div class="data-value"><span class="data-before">62%</span><span class="data-after">89%</span></div></div>
+      <div class="data-row"><span class="data-label">Stale Opportunities</span><div class="data-value"><span class="data-before">127</span><span class="data-after">12</span></div></div>
+      <div class="data-row"><span class="data-label">Next Step Coverage</span><div class="data-value"><span class="data-before">41%</span><span class="data-after">98%</span></div></div>
+    </div>
+  </section>
+  <section class="pain-section">
+    <div class="pain-header"><p class="pain-label">The Problem</p><h2 class="pain-headline">Bad data kills good strategy</h2></div>
+    <div class="pain-grid">
+      <div class="pain-card"><div class="pain-stat">47%</div><p class="pain-desc">Of CRM fields are empty or outdated at any given time</p></div>
+      <div class="pain-card"><div class="pain-stat">8h</div><p class="pain-desc">Weekly hours spent chasing reps for pipeline updates</p></div>
+      <div class="pain-card"><div class="pain-stat">±38%</div><p class="pain-desc">Average forecast variance due to poor data hygiene</p></div>
+    </div>
+  </section>
+  <section class="solution-section">
+    <div class="solution-header"><p class="solution-label">How recrd helps</p><h2 class="solution-headline">Data that captures itself</h2><p class="solution-sub">Every call, every field, every time—without lifting a finger.</p></div>
+    <div class="solution-grid">
+      <div class="solution-card"><div class="solution-icon"><svg viewBox="0 0 48 48" fill="none"><rect x="8" y="6" width="32" height="6" fill="var(--yellow)"/><rect x="8" y="14" width="32" height="6" fill="var(--yellow)" opacity="0.7"/><rect x="8" y="22" width="32" height="6" fill="var(--yellow)" opacity="0.5"/><rect x="32" y="34" width="12" height="8" fill="var(--mint)"/></svg></div><h3 class="solution-title">Auto Field Population</h3><p class="solution-desc">MEDDIC, BANT, custom fields—all populated from call transcripts. No more empty required fields or Slack pings.</p></div>
+      <div class="solution-card"><div class="solution-icon"><svg viewBox="0 0 48 48" fill="none"><rect x="4" y="38" width="40" height="2" fill="var(--yellow)"/><rect x="4" y="8" width="2" height="32" fill="var(--yellow)"/><rect x="10" y="30" width="4" height="4" fill="var(--yellow)"/><rect x="18" y="24" width="4" height="4" fill="var(--yellow)"/><rect x="26" y="18" width="4" height="4" fill="var(--yellow)"/><rect x="34" y="12" width="4" height="4" fill="var(--mint)"/></svg></div><h3 class="solution-title">Forecast Confidence</h3><p class="solution-desc">AI-weighted pipeline based on actual deal signals, not rep optimism. Know what's really going to close.</p></div>
+      <div class="solution-card"><div class="solution-icon"><svg viewBox="0 0 48 48" fill="none"><rect x="4" y="6" width="40" height="6" fill="var(--yellow)"/><rect x="8" y="14" width="32" height="6" fill="var(--yellow)" opacity="0.8"/><rect x="14" y="22" width="20" height="6" fill="var(--yellow)" opacity="0.6"/><rect x="18" y="30" width="12" height="6" fill="var(--yellow)" opacity="0.4"/><rect x="22" y="38" width="4" height="6" fill="var(--mint)"/></svg></div><h3 class="solution-title">Pipeline Visibility</h3><p class="solution-desc">Stage conversion rates, bottleneck detection, velocity trends—see exactly where deals get stuck.</p></div>
+      <div class="solution-card"><div class="solution-icon"><svg viewBox="0 0 48 48" fill="none"><rect x="4" y="4" width="18" height="18" fill="var(--yellow)"/><rect x="26" y="4" width="18" height="18" fill="var(--yellow)" opacity="0.7"/><rect x="4" y="26" width="18" height="18" fill="var(--yellow)" opacity="0.5"/><rect x="26" y="26" width="18" height="18" fill="var(--mint)"/></svg></div><h3 class="solution-title">Custom Agents</h3><p class="solution-desc">Build workflows that match your sales process. Route data where it needs to go, automatically.</p></div>
+    </div>
+  </section>
+  <section class="quote-section">
+    <div class="quote-container"><div class="quote-mark">"</div><p class="quote-text">Our forecast accuracy went from 'educated guess' to 89% within two months. The board finally trusts our numbers.</p><p class="quote-author"><strong>Marcus T.</strong> — Head of RevOps</p></div>
+  </section>
+  <section class="cta-section">
+    <h2 class="cta-headline">Ready for data you can trust?</h2>
+    <p class="cta-sub">See how recrd turns messy CRM data into actionable intelligence.</p>
+    <a href="/#contact" class="btn">Book a Demo</a>
+  </section>
+  <Footer />
+  <ThemeToggle />
+</body>
+</html>

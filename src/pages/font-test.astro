@@ -1,5 +1,5 @@
 ---
-// Hero Section - Professional Grid Animation with GSAP + Lenis
+// Hero Section - CSS Grid with SVG Path Overlay
 ---
 
 <!DOCTYPE html>
@@ -25,41 +25,6 @@
       font-style: normal;
       font-display: swap;
     }
-    @font-face {
-      font-family: 'Object Sans';
-      src: url('/fonts/PPObjectSans-Regular.otf') format('opentype');
-      font-weight: 400;
-      font-style: normal;
-      font-display: swap;
-    }
-    @font-face {
-      font-family: 'Object Sans';
-      src: url('/fonts/PPObjectSans-Heavy.otf') format('opentype');
-      font-weight: 800;
-      font-style: normal;
-      font-display: swap;
-    }
-    @font-face {
-      font-family: 'Matter';
-      src: url('/fonts/Matter-TRIAL-Light.otf') format('opentype');
-      font-weight: 300;
-      font-style: normal;
-      font-display: swap;
-    }
-    @font-face {
-      font-family: 'Matter';
-      src: url('/fonts/Matter-TRIAL-Regular.otf') format('opentype');
-      font-weight: 400;
-      font-style: normal;
-      font-display: swap;
-    }
-    @font-face {
-      font-family: 'Matter';
-      src: url('/fonts/Matter-TRIAL-Medium.ttf') format('truetype');
-      font-weight: 500;
-      font-style: normal;
-      font-display: swap;
-    }
 
     :root {
       --font: 'Roobert', -apple-system, BlinkMacSystemFont, sans-serif;
@@ -69,17 +34,17 @@
       --cyan: #02C0FF;
       --coral: #FF4F5E;
       
-      /* Grid dimensions - 100px cells in viewBox */
-      --cell: 100px;
+      /* Grid config */
+      --cell-size: 120px;
       --cols: 7;
-      --rows: 6;
+      --rows: 8;
     }
 
     [data-theme="dark"] {
       --bg: #0A0A0A;
       --text: #ffffff;
       --text-muted: #888888;
-      --grid-line: rgba(255,255,255,0.12);
+      --grid-line: rgba(255,255,255,0.1);
     }
 
     [data-theme="light"] {
@@ -95,8 +60,8 @@
       box-sizing: border-box;
     }
 
-    html.lenis, html.lenis body {
-      height: auto;
+    html, body {
+      overflow-x: hidden;
     }
 
     body {
@@ -104,12 +69,6 @@
       background: var(--bg);
       color: var(--text);
       min-height: 100vh;
-      overflow-x: hidden;
-    }
-
-    /* Prevent horizontal scroll but allow grid visibility */
-    html {
-      overflow-x: hidden;
     }
 
     /* NAV */
@@ -126,7 +85,6 @@
       z-index: 100;
       background: var(--bg);
       border-bottom: 1px solid var(--grid-line);
-      font-family: var(--font);
     }
 
     .nav-logo {
@@ -137,9 +95,7 @@
       transition: opacity 0.2s ease;
     }
 
-    .nav-logo:hover {
-      opacity: 0.8;
-    }
+    .nav-logo:hover { opacity: 0.8; }
 
     .nav-logo svg {
       width: 32px;
@@ -147,7 +103,6 @@
     }
 
     .nav-wordmark {
-      font-family: var(--font);
       font-weight: 600;
       font-size: 18px;
       color: var(--text);
@@ -160,43 +115,20 @@
     }
 
     .nav-links a {
-      font-family: var(--font);
       color: var(--text-muted);
       text-decoration: none;
       font-size: 14px;
       font-weight: 500;
       padding: 10px 16px;
-      position: relative;
       transition: all 0.2s ease;
-      cursor: pointer;
     }
 
-    /* First nav link gets cyan hover */
-    .nav-links li:first-child a:hover {
-      background: var(--cyan);
-      color: #0a0a0a;
-    }
-
-    /* Second nav link gets mint hover */
-    .nav-links li:nth-child(2) a:hover {
-      background: var(--mint);
-      color: #0a0a0a;
-    }
-
-    /* Third nav link gets purple hover */
-    .nav-links li:nth-child(3) a:hover {
-      background: var(--purple);
-      color: #fff;
-    }
-
-    /* Fourth nav link gets coral hover */
-    .nav-links li:nth-child(4) a:hover {
-      background: var(--coral);
-      color: #fff;
-    }
+    .nav-links li:nth-child(1) a:hover { background: var(--cyan); color: #0a0a0a; }
+    .nav-links li:nth-child(2) a:hover { background: var(--mint); color: #0a0a0a; }
+    .nav-links li:nth-child(3) a:hover { background: var(--purple); color: #fff; }
+    .nav-links li:nth-child(4) a:hover { background: var(--coral); color: #fff; }
 
     .nav-cta {
-      font-family: var(--font);
       background: var(--text);
       color: var(--bg);
       padding: 12px 24px;
@@ -204,13 +136,11 @@
       font-size: 14px;
       text-decoration: none;
       transition: all 0.2s ease;
-      cursor: pointer;
     }
 
     .nav-cta:hover {
       background: var(--mint);
       color: #0a0a0a;
-      transform: translateY(-1px);
     }
 
     /* HERO */
@@ -218,14 +148,14 @@
       min-height: 100vh;
       display: flex;
       align-items: center;
-      padding: 120px 48px 48px;
+      padding: 72px 0 0 48px;
       position: relative;
-      overflow: visible;
     }
 
     .hero-content {
       max-width: 480px;
       z-index: 10;
+      padding: 48px 0;
     }
 
     .hero-headline {
@@ -268,7 +198,6 @@
 
     .btn {
       padding: 16px 32px;
-      font-family: var(--font);
       font-weight: 500;
       font-size: 15px;
       text-decoration: none;
@@ -302,165 +231,174 @@
       transform: translateY(-2px);
     }
 
-    [data-theme="light"] .btn-secondary:hover {
-      background: var(--purple);
-      border-color: var(--purple);
-      color: #fff;
-    }
-
     /* ========================================
-       GRID ANIMATION SYSTEM - 2X ENLARGED
+       GRID SYSTEM
        ======================================== */
     
-    .grid-container {
+    .grid-wrapper {
       position: absolute;
-      top: 50%;
-      right: 5%;
-      transform: translateY(-50%);
-      /* Sized to fit viewport without cutoff */
-      width: min(1000px, 50vw);
-      height: auto;
-      aspect-ratio: 7/6;
+      top: 72px;
+      right: 0;
+      width: calc(var(--cell-size) * var(--cols));
+      height: calc(var(--cell-size) * var(--rows));
+      display: grid;
+      grid-template-columns: repeat(var(--cols), var(--cell-size));
+      grid-template-rows: repeat(var(--rows), var(--cell-size));
     }
 
-    .grid-svg {
+    .grid-cell {
+      border: 1px solid var(--grid-line);
+      margin: -0.5px;
+    }
+
+    /* SVG overlay - explicit dimensions to match grid */
+    .path-overlay {
       position: absolute;
       top: 0;
       left: 0;
-      width: 100%;
-      height: 100%;
-      overflow: visible;
-      z-index: 1;
+      width: calc(var(--cell-size) * var(--cols));
+      height: calc(var(--cell-size) * var(--rows));
+      pointer-events: none;
+      z-index: 2;
     }
 
-    /* Grid cell outlines */
-    .grid-cell-bg {
-      fill: none;
-      stroke: var(--grid-line);
-      stroke-width: 1;
-    }
-
-    /* Animated connecting lines - thin to match grid */
-    .grid-path {
+    .flow-path {
       fill: none;
       stroke-width: 2;
-      stroke-linecap: square;
-      stroke-linejoin: miter;
-      filter: drop-shadow(0 0 6px currentColor);
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      filter: drop-shadow(0 0 8px currentColor);
     }
 
-    /* Cell content boxes - positioned over SVG */
-    .cell {
+    /* ========================================
+       CARDS
+       ======================================== */
+    
+    .card {
       position: absolute;
       display: flex;
       flex-direction: column;
-      justify-content: center;
-      padding: 28px;
+      padding: 20px 24px;
       opacity: 0;
-      transform: scale(0.92);
+      transform: scale(0.95);
       z-index: 5;
-      pointer-events: none;
     }
 
-    .cell-header {
+    .card-header {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 10px;
       margin-bottom: 12px;
     }
 
-    .cell-icon {
-      width: 28px;
-      height: 28px;
-      flex-shrink: 0;
+    .card-icon {
+      width: 22px;
+      height: 22px;
     }
 
-    .cell-icon svg {
+    .card-icon svg {
       width: 100%;
       height: 100%;
     }
 
-    .cell-badge {
+    .card-badge {
       font-family: var(--mono);
-      font-size: 11px;
+      font-size: 9px;
       text-transform: uppercase;
       letter-spacing: 0.1em;
-      padding: 6px 12px;
-      width: fit-content;
+      padding: 5px 10px;
     }
 
-    .cell-title {
-      font-size: 22px;
+    .card-title {
+      font-size: 18px;
       font-weight: 600;
-      line-height: 1.25;
-      margin-bottom: 8px;
+      line-height: 1.2;
+      margin-bottom: 6px;
     }
 
-    .cell-desc {
-      font-size: 14px;
-      font-weight: 400;
+    .card-desc {
+      font-size: 13px;
       line-height: 1.4;
       opacity: 0.85;
     }
 
-    .cell-meta {
+    .card-meta {
       font-family: var(--mono);
-      font-size: 12px;
-      margin-top: 10px;
+      font-size: 11px;
+      margin-top: auto;
+      padding-top: 8px;
       opacity: 0.7;
     }
 
-    /* Cell color variants */
-    .cell.mint {
+    /* Card colors */
+    .card.mint {
       background: var(--mint);
       color: #0a0a0a;
-      box-shadow: 0 4px 24px rgba(70, 252, 175, 0.25);
+      box-shadow: 0 4px 30px rgba(70, 252, 175, 0.3);
     }
-    .cell.mint .cell-badge {
-      background: rgba(0,0,0,0.12);
-    }
-    .cell.mint .cell-icon svg {
-      stroke: #0a0a0a;
-      fill: none;
-    }
+    .card.mint .card-badge { background: rgba(0,0,0,0.1); }
+    .card.mint .card-icon svg { stroke: #0a0a0a; fill: none; }
 
-    .cell.purple {
+    .card.purple {
       background: var(--purple);
       color: #fff;
-      box-shadow: 0 4px 24px rgba(166, 120, 244, 0.3);
+      box-shadow: 0 4px 30px rgba(166, 120, 244, 0.35);
     }
-    .cell.purple .cell-badge {
-      background: rgba(255,255,255,0.2);
-    }
-    .cell.purple .cell-icon svg {
-      stroke: #fff;
-      fill: none;
-    }
+    .card.purple .card-badge { background: rgba(255,255,255,0.2); }
+    .card.purple .card-icon svg { stroke: #fff; fill: none; }
 
-    .cell.cyan {
+    .card.cyan {
       background: var(--cyan);
       color: #0a0a0a;
-      box-shadow: 0 4px 24px rgba(2, 192, 255, 0.25);
+      box-shadow: 0 4px 30px rgba(2, 192, 255, 0.3);
     }
-    .cell.cyan .cell-badge {
-      background: rgba(0,0,0,0.12);
-    }
-    .cell.cyan .cell-icon svg {
-      stroke: #0a0a0a;
-      fill: none;
-    }
+    .card.cyan .card-badge { background: rgba(0,0,0,0.1); }
+    .card.cyan .card-icon svg { stroke: #0a0a0a; fill: none; }
 
-    .cell.coral {
+    .card.coral {
       background: var(--coral);
       color: #fff;
-      box-shadow: 0 4px 24px rgba(255, 79, 94, 0.3);
+      box-shadow: 0 4px 30px rgba(255, 79, 94, 0.35);
     }
-    .cell.coral .cell-badge {
-      background: rgba(255,255,255,0.2);
+    .card.coral .card-badge { background: rgba(255,255,255,0.2); }
+    .card.coral .card-icon svg { stroke: #fff; fill: none; }
+
+    /* Card positions - calculated from cell-size 
+       Each card snaps to grid intersections */
+    
+    #card1 {
+      top: calc(var(--cell-size) * 0);
+      left: calc(var(--cell-size) * 0);
+      width: calc(var(--cell-size) * 2.5);
+      height: calc(var(--cell-size) * 1.5);
     }
-    .cell.coral .cell-icon svg {
-      stroke: #fff;
-      fill: none;
+
+    #card2 {
+      top: calc(var(--cell-size) * 2);
+      left: calc(var(--cell-size) * 2);
+      width: calc(var(--cell-size) * 2.5);
+      height: calc(var(--cell-size) * 1.5);
+    }
+
+    #card3 {
+      top: calc(var(--cell-size) * 4);
+      left: calc(var(--cell-size) * 4.5);
+      width: calc(var(--cell-size) * 2.5);
+      height: calc(var(--cell-size) * 1.5);
+    }
+
+    #card4 {
+      top: calc(var(--cell-size) * 6);
+      left: calc(var(--cell-size) * 4.5);
+      width: calc(var(--cell-size) * 2.5);
+      height: calc(var(--cell-size) * 1.5);
+    }
+
+    #card5 {
+      top: calc(var(--cell-size) * 6);
+      left: calc(var(--cell-size) * 0);
+      width: calc(var(--cell-size) * 2.5);
+      height: calc(var(--cell-size) * 1.5);
     }
 
     /* Theme toggle */
@@ -480,7 +418,6 @@
       background: none;
       border: none;
       color: var(--text-muted);
-      font-family: var(--font);
       font-size: 13px;
       cursor: pointer;
       transition: all 0.2s ease;
@@ -496,552 +433,72 @@
       color: var(--bg);
     }
 
-    /* ========================================
-       HOW IT WORKS SECTION
-       ======================================== */
-    .how-section {
-      padding: 120px 48px;
-      border-top: 1px solid var(--grid-line);
-    }
-
-    .how-headline {
-      font-size: clamp(36px, 5vw, 56px);
-      font-weight: 600;
-      text-align: center;
-      margin-bottom: 80px;
-      letter-spacing: -0.03em;
-      font-style: italic;
-    }
-
-    .how-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 1px;
-      background: var(--grid-line);
-      max-width: 1400px;
-      margin: 0 auto;
-    }
-
-    .how-card {
-      background: var(--bg);
-      padding: 48px 40px;
-      display: flex;
-      flex-direction: column;
-    }
-
-    .how-step {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      width: 32px;
-      height: 32px;
-      font-family: var(--mono);
-      font-size: 14px;
-      font-weight: 600;
-      margin-bottom: 24px;
-    }
-
-    .how-card:nth-child(1) .how-step {
-      background: var(--mint);
-      color: #0a0a0a;
-    }
-
-    .how-card:nth-child(2) .how-step {
-      background: var(--purple);
-      color: #fff;
-    }
-
-    .how-card:nth-child(3) .how-step {
-      background: var(--coral);
-      color: #fff;
-    }
-
-    .how-title {
-      font-size: 20px;
-      font-weight: 600;
-      margin-bottom: 12px;
-    }
-
-    .how-desc {
-      font-size: 15px;
-      color: var(--text-muted);
-      line-height: 1.6;
-      margin-bottom: 32px;
-    }
-
-    .how-mock {
-      margin-top: auto;
-      background: rgba(255,255,255,0.03);
-      border: 1px solid var(--grid-line);
-      padding: 20px;
-      min-height: 200px;
-    }
-
-    [data-theme="light"] .how-mock {
-      background: rgba(0,0,0,0.02);
-    }
-
-    /* Mock UI elements */
-    .mock-input {
-      background: rgba(255,255,255,0.05);
-      border: 1px solid var(--grid-line);
-      padding: 12px 16px;
-      font-family: var(--mono);
-      font-size: 13px;
-      color: var(--text-muted);
-      margin-bottom: 16px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .mock-input::before {
-      content: '';
-      width: 8px;
-      height: 8px;
-      background: var(--coral);
-      border-radius: 50%;
-      animation: pulse 2s ease-in-out infinite;
-    }
-
-    @keyframes pulse {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.4; }
-    }
-
-    .mock-list {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-
-    .mock-item {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding: 12px 16px;
-      background: rgba(255,255,255,0.02);
-      transition: all 0.2s ease;
-    }
-
-    .mock-item:hover {
-      background: rgba(255,255,255,0.05);
-    }
-
-    .mock-item.active {
-      background: var(--mint);
-      color: #0a0a0a;
-    }
-
-    .mock-check {
-      width: 18px;
-      height: 18px;
-      border: 2px solid var(--grid-line);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .mock-item.active .mock-check {
-      border-color: #0a0a0a;
-      background: #0a0a0a;
-    }
-
-    .mock-check svg {
-      width: 12px;
-      height: 12px;
-      stroke: var(--mint);
-      opacity: 0;
-    }
-
-    .mock-item.active .mock-check svg {
-      opacity: 1;
-    }
-
-    .mock-item-text {
-      font-size: 14px;
-    }
-
-    /* Card 2 mock - Analysis */
-    .mock-analysis {
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-    }
-
-    .mock-row {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .mock-label {
-      font-family: var(--mono);
-      font-size: 11px;
-      color: var(--text-muted);
-      width: 100px;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-    }
-
-    .mock-field {
-      flex: 1;
-      background: rgba(255,255,255,0.05);
-      border: 1px solid var(--grid-line);
-      padding: 10px 14px;
-      font-size: 13px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-
-    .mock-field .check {
-      color: var(--mint);
-    }
-
-    /* Card 3 mock - Agents */
-    .mock-agents {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
-
-    .mock-agent-btn {
-      background: var(--purple);
-      color: #fff;
-      padding: 14px 20px;
-      font-family: var(--font);
-      font-size: 14px;
-      font-weight: 500;
-      text-align: center;
-      cursor: pointer;
-      transition: all 0.2s ease;
-    }
-
-    .mock-agent-btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 4px 20px rgba(166, 120, 244, 0.3);
-    }
-
-    .mock-agent-log {
-      background: rgba(0,0,0,0.3);
-      padding: 16px;
-      font-family: var(--mono);
-      font-size: 12px;
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-
-    [data-theme="light"] .mock-agent-log {
-      background: rgba(0,0,0,0.05);
-    }
-
-    .mock-log-item {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .mock-log-item .dot {
-      width: 6px;
-      height: 6px;
-      border-radius: 50%;
-    }
-
-    .mock-log-item .dot.mint { background: var(--mint); }
-    .mock-log-item .dot.purple { background: var(--purple); }
-    .mock-log-item .dot.cyan { background: var(--cyan); }
-
-    .mock-log-item .action {
-      color: var(--text);
-    }
-
-    .mock-log-item .time {
-      margin-left: auto;
-      color: var(--text-muted);
-      font-size: 11px;
-    }
-
-    /* ========================================
-       FEATURES SECTION - with pixel icons
-       ======================================== */
-    .features-section {
-      padding: 120px 48px;
-      border-top: 1px solid var(--grid-line);
-    }
-
-    .features-header {
-      text-align: center;
-      margin-bottom: 80px;
-    }
-
-    .features-badge {
-      font-family: var(--mono);
-      font-size: 12px;
-      text-transform: uppercase;
-      letter-spacing: 0.15em;
-      color: var(--mint);
-      margin-bottom: 20px;
-    }
-
-    .features-headline {
-      font-size: clamp(32px, 4vw, 48px);
-      font-weight: 600;
-      letter-spacing: -0.03em;
-    }
-
-    .features-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 1px;
-      background: var(--grid-line);
-      max-width: 1400px;
-      margin: 0 auto;
-    }
-
-    .feature-card {
-      background: var(--bg);
-      padding: 48px 32px;
-    }
-
-    .feature-icon {
-      width: 56px;
-      height: 56px;
-      margin-bottom: 24px;
-      image-rendering: pixelated;
-    }
-
-    .feature-title {
-      font-size: 18px;
-      font-weight: 600;
-      margin-bottom: 12px;
-    }
-
-    .feature-desc {
-      font-size: 14px;
-      color: var(--text-muted);
-      line-height: 1.6;
-    }
-
-    /* Responsive for new sections */
-    @media (max-width: 1100px) {
-      .how-grid {
-        grid-template-columns: 1fr;
-      }
-      .features-grid {
-        grid-template-columns: repeat(2, 1fr);
-      }
-    }
-
-    @media (max-width: 600px) {
-      .how-section,
-      .features-section {
-        padding: 80px 24px;
-      }
-      .features-grid {
-        grid-template-columns: 1fr;
-      }
-    }
-
-    /* ========================================
-       RESPONSIVE - scaled for 2x grid
-       ======================================== */
+    /* RESPONSIVE */
     @media (max-width: 1600px) {
-      .grid-container {
-        width: min(800px, 52vw);
-        right: 3%;
-      }
+      :root { --cell-size: 100px; }
     }
 
     @media (max-width: 1400px) {
-      .grid-container {
-        width: min(700px, 50vw);
-        right: 2%;
-      }
-      .cell {
-        padding: 16px;
-      }
-      .cell-title {
-        font-size: 16px;
-      }
-      .cell-desc {
-        font-size: 12px;
-      }
-      .cell-icon {
-        width: 22px;
-        height: 22px;
-      }
+      :root { --cell-size: 85px; }
+      .card { padding: 16px 20px; }
+      .card-title { font-size: 16px; }
+      .card-desc { font-size: 12px; }
     }
 
     @media (max-width: 1200px) {
-      .grid-container {
-        width: min(550px, 48vw);
-        right: 2%;
-      }
-      .cell {
-        padding: 12px;
-      }
-      .cell-header {
-        gap: 8px;
-        margin-bottom: 8px;
-      }
-      .cell-badge {
-        font-size: 9px;
-        padding: 4px 8px;
-      }
-      .cell-title {
-        font-size: 14px;
-        margin-bottom: 4px;
-      }
-      .cell-desc {
-        font-size: 11px;
-      }
-      .cell-meta {
-        display: none;
-      }
-      .cell-icon {
-        width: 18px;
-        height: 18px;
-      }
+      :root { --cell-size: 70px; }
+      .card { padding: 12px 16px; }
+      .card-header { gap: 8px; margin-bottom: 8px; }
+      .card-badge { font-size: 8px; padding: 4px 8px; }
+      .card-title { font-size: 14px; margin-bottom: 4px; }
+      .card-desc { font-size: 11px; }
+      .card-meta { display: none; }
+      .card-icon { width: 18px; height: 18px; }
     }
 
     @media (max-width: 1000px) {
-      .grid-container {
-        width: min(450px, 45vw);
-      }
-      .cell {
-        padding: 10px;
-      }
-      .cell-desc {
-        display: none;
-      }
-      .cell-title {
-        font-size: 12px;
-      }
-      .cell-icon {
-        width: 16px;
-        height: 16px;
-      }
+      :root { --cell-size: 55px; }
+      .card { padding: 10px 12px; }
+      .card-desc { display: none; }
+      .card-title { font-size: 11px; }
     }
 
     @media (max-width: 900px) {
       .hero {
         flex-direction: column;
-        justify-content: flex-start;
-        text-align: center;
         padding: 100px 24px 48px;
         min-height: auto;
       }
       .hero-content {
         max-width: 100%;
+        text-align: center;
         margin-bottom: 40px;
       }
-      .hero-buttons {
-        justify-content: center;
-      }
-      .grid-container {
+      .hero-buttons { justify-content: center; }
+      .grid-wrapper {
         position: relative;
-        top: auto;
-        right: auto;
-        transform: none;
         width: 100%;
         max-width: 500px;
         margin: 0 auto;
-        height: auto;
-        aspect-ratio: 7/6;
+        --cell-size: min(60px, calc((100vw - 48px) / 7));
+        height: calc(var(--cell-size) * var(--rows));
       }
-      nav {
-        padding: 0 24px;
-      }
-      .nav-links {
-        display: none;
-      }
-      .cell {
-        padding: 8px;
-      }
-      .cell-header {
-        gap: 6px;
-        margin-bottom: 6px;
-      }
-      .cell-badge {
-        font-size: 7px;
-        padding: 3px 6px;
-      }
-      .cell-title {
-        font-size: 11px;
-        margin-bottom: 2px;
-      }
-      .cell-desc,
-      .cell-meta {
-        display: none;
-      }
-      .cell-icon {
-        width: 14px;
-        height: 14px;
-      }
+      .nav-links { display: none; }
+      nav { padding: 0 24px; }
     }
 
     @media (max-width: 600px) {
-      .hero {
-        padding: 90px 20px 40px;
-      }
-      .hero-headline {
-        font-size: 36px;
-      }
-      .hero-sub {
-        font-size: 20px;
-      }
-      .hero-body {
-        font-size: 15px;
-      }
-      .hero-buttons {
-        flex-direction: column;
-        gap: 12px;
-      }
-      .btn {
-        padding: 14px 24px;
-        font-size: 14px;
-        width: 100%;
-        justify-content: center;
-      }
-      .grid-container {
-        max-width: 100%;
-      }
-      .cell {
-        padding: 6px;
-      }
-      .cell-badge {
-        font-size: 6px;
-        padding: 2px 4px;
-      }
-      .cell-title {
-        font-size: 9px;
-      }
-      .cell-icon {
-        width: 12px;
-        height: 12px;
-      }
-    }
-
-    @media (max-width: 400px) {
-      .hero-headline {
-        font-size: 30px;
-      }
-      .hero-sub {
-        font-size: 18px;
-      }
-      .cell-header {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 4px;
-      }
-      .cell-title {
-        font-size: 8px;
-      }
-      .cell-badge {
-        font-size: 5px;
-      }
+      .hero-headline { font-size: 36px; }
+      .hero-sub { font-size: 20px; }
+      .hero-body { font-size: 15px; }
+      .hero-buttons { flex-direction: column; }
+      .btn { width: 100%; justify-content: center; }
+      :root { --cell-size: calc((100vw - 48px) / 7); }
+      .card { padding: 6px 8px; }
+      .card-badge { font-size: 6px; padding: 2px 4px; }
+      .card-title { font-size: 9px; }
+      .card-icon { width: 12px; height: 12px; }
+      .card-header { gap: 4px; margin-bottom: 4px; }
     }
   </style>
 </head>
@@ -1075,463 +532,113 @@
       </div>
     </div>
 
-    <!-- Grid Animation - ViewBox 700x600, container scales it up -->
-    <div class="grid-container">
-      <svg class="grid-svg" viewBox="0 0 700 600" preserveAspectRatio="xMidYMid meet">
-        <!-- Row 1: 7 cells (x=0 to 700) -->
-        <rect class="grid-cell-bg" x="0" y="0" width="100" height="100"/>
-        <rect class="grid-cell-bg" x="100" y="0" width="100" height="100"/>
-        <rect class="grid-cell-bg" x="200" y="0" width="100" height="100"/>
-        <rect class="grid-cell-bg" x="300" y="0" width="100" height="100"/>
-        <rect class="grid-cell-bg" x="400" y="0" width="100" height="100"/>
-        <rect class="grid-cell-bg" x="500" y="0" width="100" height="100"/>
-        <rect class="grid-cell-bg" x="600" y="0" width="100" height="100"/>
-        
-        <!-- Row 2: 6 cells (x=100 to 700, offset left) -->
-        <rect class="grid-cell-bg" x="100" y="100" width="100" height="100"/>
-        <rect class="grid-cell-bg" x="200" y="100" width="100" height="100"/>
-        <rect class="grid-cell-bg" x="300" y="100" width="100" height="100"/>
-        <rect class="grid-cell-bg" x="400" y="100" width="100" height="100"/>
-        <rect class="grid-cell-bg" x="500" y="100" width="100" height="100"/>
-        <rect class="grid-cell-bg" x="600" y="100" width="100" height="100"/>
-        
-        <!-- Row 3: 6 cells (x=100 to 700, offset) -->
-        <rect class="grid-cell-bg" x="100" y="200" width="100" height="100"/>
-        <rect class="grid-cell-bg" x="200" y="200" width="100" height="100"/>
-        <rect class="grid-cell-bg" x="300" y="200" width="100" height="100"/>
-        <rect class="grid-cell-bg" x="400" y="200" width="100" height="100"/>
-        <rect class="grid-cell-bg" x="500" y="200" width="100" height="100"/>
-        <rect class="grid-cell-bg" x="600" y="200" width="100" height="100"/>
-        
-        <!-- Row 4: 6 cells (x=100 to 700, offset) -->
-        <rect class="grid-cell-bg" x="100" y="300" width="100" height="100"/>
-        <rect class="grid-cell-bg" x="200" y="300" width="100" height="100"/>
-        <rect class="grid-cell-bg" x="300" y="300" width="100" height="100"/>
-        <rect class="grid-cell-bg" x="400" y="300" width="100" height="100"/>
-        <rect class="grid-cell-bg" x="500" y="300" width="100" height="100"/>
-        <rect class="grid-cell-bg" x="600" y="300" width="100" height="100"/>
-        
-        <!-- Row 5: 6 cells (x=100 to 700, offset) -->
-        <rect class="grid-cell-bg" x="100" y="400" width="100" height="100"/>
-        <rect class="grid-cell-bg" x="200" y="400" width="100" height="100"/>
-        <rect class="grid-cell-bg" x="300" y="400" width="100" height="100"/>
-        <rect class="grid-cell-bg" x="400" y="400" width="100" height="100"/>
-        <rect class="grid-cell-bg" x="500" y="400" width="100" height="100"/>
-        <rect class="grid-cell-bg" x="600" y="400" width="100" height="100"/>
-        
-        <!-- Row 6: 7 cells (x=0 to 700, full width) -->
-        <rect class="grid-cell-bg" x="0" y="500" width="100" height="100"/>
-        <rect class="grid-cell-bg" x="100" y="500" width="100" height="100"/>
-        <rect class="grid-cell-bg" x="200" y="500" width="100" height="100"/>
-        <rect class="grid-cell-bg" x="300" y="500" width="100" height="100"/>
-        <rect class="grid-cell-bg" x="400" y="500" width="100" height="100"/>
-        <rect class="grid-cell-bg" x="500" y="500" width="100" height="100"/>
-        <rect class="grid-cell-bg" x="600" y="500" width="100" height="100"/>
+    <div class="grid-wrapper">
+      <!-- Grid cells for lines -->
+      <div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div>
+      <div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div>
+      <div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div>
+      <div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div>
+      <div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div>
+      <div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div>
+      <div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div>
+      <div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div>
 
-        <!-- ==========================================
-             ANIMATED PATHS - ALL ON GRID LINES
-             ========================================== -->
+      <!-- SVG Paths - viewBox matches grid: 7 cols × 8 rows = 700 × 800 units -->
+      <svg class="path-overlay" viewBox="0 0 700 800" preserveAspectRatio="none">
+        <!-- Card positions in grid units (multiply by 100 for viewBox coords):
+             Card1: (0,0) to (250,150) → right edge x=250, bottom y=150
+             Card2: (200,200) to (450,350) → left x=200, top y=200  
+             Card3: (450,400) to (700,550) → left x=450, top y=400
+             Card4: (450,600) to (700,750) → left x=450, top y=600
+             Card5: (0,600) to (250,750) → right x=250
+        -->
         
-        <!-- Path 1 (mint): Cell1 bottom-right → down → right to Cell2 top-left
-             Cell1: (0,0)-(200,100) NOW 2 COLS WIDE, Cell2: (200,200)-(400,300)
-             Route: x=200 down to y=200, then stays at x=200 (Cell2 starts there) -->
-        <path id="path1" class="grid-path" stroke="#46FCAF" 
-              d="M 200,100 L 200,200"/>
+        <!-- Path 1: Card1 right-bottom corner → down → left to Card2 top-left -->
+        <path id="path1" class="flow-path" stroke="#46FCAF"
+              d="M 250,150 L 250,200 L 200,200"/>
         
-        <!-- Path 2 (purple): Cell2 right edge → right to Cell3 left edge
-             Cell2: (200,200)-(400,300), Cell3: (500,300)-(700,400)
-             Route: along y=300 from x=400 to x=500 -->
-        <path id="path2" class="grid-path" stroke="#A678F4" 
-              d="M 400,300 L 500,300"/>
+        <!-- Path 2: Card2 right edge → right → down to Card3 top -->
+        <path id="path2" class="flow-path" stroke="#A678F4"
+              d="M 450,275 L 500,275 L 500,400 L 450,400"/>
         
-        <!-- Path 3 (cyan): Cell3 bottom-left → down to Cell4 top-left
-             Cell3: (500,300)-(700,400), Cell4: (500,500)-(700,600)
-             Route: along LEFT edge x=500 from y=400 to y=500 -->
-        <path id="path3" class="grid-path" stroke="#02C0FF" 
-              d="M 500,400 L 500,500"/>
+        <!-- Path 3: Card3 bottom → down to Card4 top -->
+        <path id="path3" class="flow-path" stroke="#02C0FF"
+              d="M 575,550 L 575,600"/>
         
-        <!-- Path 4 (coral): Cell4 left edge → left to Cell5 right edge
-             Cell4: (500,500)-(700,600), Cell5: (0,500)-(200,600)
-             Route: along y=500 from x=500 to x=200 (FIXED from y=550) -->
-        <path id="path4" class="grid-path" stroke="#FF4F5E" 
-              d="M 500,500 L 200,500"/>
+        <!-- Path 4: Card4 left → left to Card5 right -->
+        <path id="path4" class="flow-path" stroke="#FF4F5E"
+              d="M 450,675 L 250,675"/>
       </svg>
 
-      <!-- ==========================================
-           CELL CONTENT - with icons and more detail
-           ========================================== -->
-      
-      <!-- Cell 1: Row 1, Col 1 (0,0) - spans 2 cells now for more content -->
-      <div class="cell mint" id="cell1" style="left: 0%; top: 0%; width: 28.57%; height: 16.66%;">
-        <div class="cell-header">
-          <div class="cell-icon">
-            <!-- Phone icon -->
+      <!-- Cards -->
+      <div class="card mint" id="card1">
+        <div class="card-header">
+          <div class="card-icon">
             <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
             </svg>
           </div>
-          <span class="cell-badge">Trigger</span>
+          <span class="card-badge">Trigger</span>
         </div>
-        <span class="cell-title">Call Completed</span>
-        <span class="cell-desc">Demo with Acme Corp ended</span>
-        <span class="cell-meta">32 min · Zoom</span>
+        <span class="card-title">Call completed</span>
+        <span class="card-desc">Demo with Acme Corp</span>
+        <span class="card-meta">32 min · Zoom</span>
       </div>
 
-      <!-- Cell 2: Row 3, Cols 3-4 (200,200) - 200x100 -->
-      <div class="cell purple" id="cell2" style="left: 28.57%; top: 33.33%; width: 28.57%; height: 16.66%;">
-        <div class="cell-header">
-          <div class="cell-icon">
-            <!-- Waveform/scanning icon -->
+      <div class="card purple" id="card2">
+        <div class="card-header">
+          <div class="card-icon">
             <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M2 12h2"/>
-              <path d="M6 8v8"/>
-              <path d="M10 4v16"/>
-              <path d="M14 6v12"/>
-              <path d="M18 9v6"/>
-              <path d="M22 12h-2"/>
+              <path d="M2 12h2"/><path d="M6 8v8"/><path d="M10 4v16"/><path d="M14 6v12"/><path d="M18 9v6"/><path d="M22 12h-2"/>
             </svg>
           </div>
-          <span class="cell-badge">Processing</span>
+          <span class="card-badge">Processing</span>
         </div>
-        <span class="cell-title">recrd analyzes</span>
-        <span class="cell-desc">Transcript, sentiment, action items extracted</span>
-        <span class="cell-meta">6 agents deployed</span>
+        <span class="card-title">recrd analyzes</span>
+        <span class="card-desc">Extracting insights</span>
+        <span class="card-meta">6 agents deployed</span>
       </div>
 
-      <!-- Cell 3: Row 4, Cols 6-7 (500,300) - 200x100 -->
-      <div class="cell cyan" id="cell3" style="left: 71.42%; top: 50%; width: 28.57%; height: 16.66%;">
-        <div class="cell-header">
-          <div class="cell-icon">
-            <!-- Chart/pipeline icon -->
+      <div class="card cyan" id="card3">
+        <div class="card-header">
+          <div class="card-icon">
             <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <line x1="18" y1="20" x2="18" y2="10"/>
-              <line x1="12" y1="20" x2="12" y2="4"/>
-              <line x1="6" y1="20" x2="6" y2="14"/>
+              <line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/>
             </svg>
           </div>
-          <span class="cell-badge">CRM Agent</span>
+          <span class="card-badge">CRM Agent</span>
         </div>
-        <span class="cell-title">Pipeline updated</span>
-        <span class="cell-desc">Deal stage → Negotiation</span>
-        <span class="cell-meta">HubSpot synced</span>
+        <span class="card-title">Pipeline updated</span>
+        <span class="card-desc">Deal stage → Negotiation</span>
+        <span class="card-meta">HubSpot synced</span>
       </div>
 
-      <!-- Cell 4: Row 6, Cols 6-7 (500,500) - 200x100 -->
-      <div class="cell coral" id="cell4" style="left: 71.42%; top: 83.33%; width: 28.57%; height: 16.66%;">
-        <div class="cell-header">
-          <div class="cell-icon">
-            <!-- Bell/alert icon -->
+      <div class="card coral" id="card4">
+        <div class="card-header">
+          <div class="card-icon">
             <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
-              <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+              <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/>
             </svg>
           </div>
-          <span class="cell-badge">Risk Alert</span>
+          <span class="card-badge">Risk Alert</span>
         </div>
-        <span class="cell-title">Manager notified</span>
-        <span class="cell-desc">Budget concern flagged</span>
-        <span class="cell-meta">Slack #deals</span>
+        <span class="card-title">Manager notified</span>
+        <span class="card-desc">Budget concern flagged</span>
+        <span class="card-meta">Slack #deals</span>
       </div>
 
-      <!-- Cell 5: Row 6, Cols 1-2 (0,500) - 200x100 -->
-      <div class="cell mint" id="cell5" style="left: 0%; top: 83.33%; width: 28.57%; height: 16.66%;">
-        <div class="cell-header">
-          <div class="cell-icon">
-            <!-- Megaphone/marketing icon -->
+      <div class="card mint" id="card5">
+        <div class="card-header">
+          <div class="card-icon">
             <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="m3 11 18-5v12L3 13v-2z"/>
-              <path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/>
+              <path d="m3 11 18-5v12L3 13v-2z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/>
             </svg>
           </div>
-          <span class="cell-badge">Content Agent</span>
+          <span class="card-badge">Content Agent</span>
         </div>
-        <span class="cell-title">Marketing alerted</span>
-        <span class="cell-desc">Competitor quote captured</span>
-        <span class="cell-meta">Case study opp</span>
-      </div>
-    </div>
-  </section>
-
-  <!-- HOW IT WORKS -->
-  <section class="how-section">
-    <h2 class="how-headline">Call, analyze, act.</h2>
-    
-    <div class="how-grid">
-      <!-- Step 1 -->
-      <div class="how-card">
-        <span class="how-step">1</span>
-        <h3 class="how-title">Record your call</h3>
-        <p class="how-desc">Connect Zoom, Teams, or Google Meet. recrd automatically joins and records every sales conversation.</p>
-        
-        <div class="how-mock">
-          <div class="mock-input">Recording in progress...</div>
-          <div class="mock-list">
-            <div class="mock-item active">
-              <span class="mock-check">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
-                  <polyline points="20 6 9 17 4 12"/>
-                </svg>
-              </span>
-              <span class="mock-item-text">Zoom connected</span>
-            </div>
-            <div class="mock-item">
-              <span class="mock-check">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
-                  <polyline points="20 6 9 17 4 12"/>
-                </svg>
-              </span>
-              <span class="mock-item-text">Google Meet</span>
-            </div>
-            <div class="mock-item">
-              <span class="mock-check">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
-                  <polyline points="20 6 9 17 4 12"/>
-                </svg>
-              </span>
-              <span class="mock-item-text">Microsoft Teams</span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Step 2 -->
-      <div class="how-card">
-        <span class="how-step">2</span>
-        <h3 class="how-title">AI extracts insights</h3>
-        <p class="how-desc">Transcript, sentiment, objections, action items, deal signals—all extracted in seconds.</p>
-        
-        <div class="how-mock">
-          <div class="mock-analysis">
-            <div class="mock-row">
-              <span class="mock-label">Sentiment</span>
-              <span class="mock-field">Positive (87%) <span class="check">✓</span></span>
-            </div>
-            <div class="mock-row">
-              <span class="mock-label">Objections</span>
-              <span class="mock-field">Budget, Timeline <span class="check">✓</span></span>
-            </div>
-            <div class="mock-row">
-              <span class="mock-label">Next Steps</span>
-              <span class="mock-field">Send proposal by Friday <span class="check">✓</span></span>
-            </div>
-            <div class="mock-row">
-              <span class="mock-label">Deal Stage</span>
-              <span class="mock-field">→ Negotiation <span class="check">✓</span></span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Step 3 -->
-      <div class="how-card">
-        <span class="how-step">3</span>
-        <h3 class="how-title">Agents take action</h3>
-        <p class="how-desc">Six specialized agents automatically update your CRM, notify your team, and prep your follow-ups.</p>
-        
-        <div class="how-mock">
-          <div class="mock-agents">
-            <div class="mock-agent-btn">Deploy Agents</div>
-            <div class="mock-agent-log">
-              <div class="mock-log-item">
-                <span class="dot mint"></span>
-                <span class="action">CRM updated</span>
-                <span class="time">just now</span>
-              </div>
-              <div class="mock-log-item">
-                <span class="dot purple"></span>
-                <span class="action">Manager notified</span>
-                <span class="time">2s ago</span>
-              </div>
-              <div class="mock-log-item">
-                <span class="dot cyan"></span>
-                <span class="action">Follow-up drafted</span>
-                <span class="time">5s ago</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- FEATURES -->
-  <section class="features-section">
-    <div class="features-header">
-      <p class="features-badge">Platform Features</p>
-      <h2 class="features-headline">Everything you need to close faster</h2>
-    </div>
-
-    <div class="features-grid">
-      <!-- Feature 1 - Automatic Recording -->
-      <div class="feature-card">
-        <svg class="feature-icon" viewBox="0 0 56 56" fill="none">
-          <!-- Pixel art camera/record icon - coral/red theme -->
-          <rect x="8" y="16" width="8" height="8" fill="#FF4F5E"/>
-          <rect x="16" y="8" width="24" height="8" fill="#FF4F5E"/>
-          <rect x="16" y="16" width="24" height="24" fill="#FF6B7A"/>
-          <rect x="40" y="16" width="8" height="8" fill="#FF4F5E"/>
-          <rect x="8" y="24" width="8" height="16" fill="#FF6B7A"/>
-          <rect x="40" y="24" width="8" height="16" fill="#FF6B7A"/>
-          <rect x="16" y="40" width="24" height="8" fill="#FF4F5E"/>
-          <!-- Record dot -->
-          <rect x="24" y="24" width="8" height="8" fill="#0a0a0a"/>
-        </svg>
-        <h3 class="feature-title">Automatic Recording</h3>
-        <p class="feature-desc">Bot joins every call automatically. No manual setup, no missed conversations.</p>
-      </div>
-
-      <!-- Feature 2 - Real-time Transcription -->
-      <div class="feature-card">
-        <svg class="feature-icon" viewBox="0 0 56 56" fill="none">
-          <!-- Pixel art speech/text icon - cyan theme -->
-          <rect x="8" y="8" width="32" height="8" fill="#02C0FF"/>
-          <rect x="8" y="16" width="8" height="24" fill="#02C0FF"/>
-          <rect x="40" y="8" width="8" height="8" fill="#02C0FF"/>
-          <rect x="40" y="16" width="8" height="16" fill="#00A8E0"/>
-          <rect x="8" y="40" width="8" height="8" fill="#02C0FF"/>
-          <rect x="16" y="40" width="24" height="8" fill="#00A8E0"/>
-          <rect x="40" y="32" width="8" height="8" fill="#02C0FF"/>
-          <!-- Text lines -->
-          <rect x="16" y="20" width="20" height="4" fill="#0a0a0a"/>
-          <rect x="16" y="28" width="16" height="4" fill="#0a0a0a"/>
-        </svg>
-        <h3 class="feature-title">Real-time Transcription</h3>
-        <p class="feature-desc">Speaker-separated transcripts with sentiment analysis on every utterance.</p>
-      </div>
-
-      <!-- Feature 3 - Deal Intelligence -->
-      <div class="feature-card">
-        <svg class="feature-icon" viewBox="0 0 56 56" fill="none">
-          <!-- Pixel art chart/analytics icon - mint theme -->
-          <rect x="8" y="40" width="8" height="8" fill="#46FCAF"/>
-          <rect x="8" y="32" width="8" height="8" fill="#3DE09A"/>
-          <rect x="16" y="40" width="8" height="8" fill="#46FCAF"/>
-          <rect x="16" y="24" width="8" height="16" fill="#3DE09A"/>
-          <rect x="24" y="40" width="8" height="8" fill="#46FCAF"/>
-          <rect x="24" y="16" width="8" height="24" fill="#3DE09A"/>
-          <rect x="32" y="40" width="8" height="8" fill="#46FCAF"/>
-          <rect x="32" y="8" width="8" height="32" fill="#3DE09A"/>
-          <rect x="40" y="40" width="8" height="8" fill="#46FCAF"/>
-          <rect x="40" y="20" width="8" height="20" fill="#3DE09A"/>
-          <!-- Peak indicator -->
-          <rect x="32" y="4" width="8" height="4" fill="#46FCAF"/>
-        </svg>
-        <h3 class="feature-title">Deal Intelligence</h3>
-        <p class="feature-desc">Automatically detect buying signals, objections, and competitive mentions.</p>
-      </div>
-
-      <!-- Feature 4 - CRM Sync -->
-      <div class="feature-card">
-        <svg class="feature-icon" viewBox="0 0 56 56" fill="none">
-          <!-- Pixel art sync/database icon - purple theme -->
-          <rect x="16" y="8" width="24" height="8" fill="#A678F4"/>
-          <rect x="8" y="16" width="8" height="8" fill="#A678F4"/>
-          <rect x="40" y="16" width="8" height="8" fill="#A678F4"/>
-          <rect x="16" y="16" width="24" height="8" fill="#8B5CF6"/>
-          <!-- Middle section -->
-          <rect x="8" y="24" width="40" height="8" fill="#A678F4"/>
-          <!-- Bottom section -->
-          <rect x="8" y="32" width="8" height="8" fill="#A678F4"/>
-          <rect x="40" y="32" width="8" height="8" fill="#A678F4"/>
-          <rect x="16" y="32" width="24" height="8" fill="#8B5CF6"/>
-          <rect x="16" y="40" width="24" height="8" fill="#A678F4"/>
-          <!-- Arrow indicators -->
-          <rect x="24" y="20" width="8" height="4" fill="#0a0a0a"/>
-          <rect x="24" y="36" width="8" height="4" fill="#0a0a0a"/>
-        </svg>
-        <h3 class="feature-title">CRM Sync</h3>
-        <p class="feature-desc">HubSpot, Salesforce, Pipedrive—deals update automatically after every call.</p>
-      </div>
-
-      <!-- Feature 5 - Team Alerts -->
-      <div class="feature-card">
-        <svg class="feature-icon" viewBox="0 0 56 56" fill="none">
-          <!-- Pixel art bell/notification icon - coral theme -->
-          <rect x="24" y="4" width="8" height="4" fill="#FF4F5E"/>
-          <rect x="20" y="8" width="16" height="4" fill="#FF4F5E"/>
-          <rect x="16" y="12" width="24" height="4" fill="#FF6B7A"/>
-          <rect x="12" y="16" width="32" height="4" fill="#FF6B7A"/>
-          <rect x="12" y="20" width="32" height="12" fill="#FF4F5E"/>
-          <rect x="8" y="32" width="40" height="4" fill="#FF6B7A"/>
-          <rect x="8" y="36" width="40" height="4" fill="#FF4F5E"/>
-          <!-- Clapper -->
-          <rect x="24" y="44" width="8" height="4" fill="#FF4F5E"/>
-          <rect x="20" y="48" width="16" height="4" fill="#FF6B7A"/>
-        </svg>
-        <h3 class="feature-title">Team Alerts</h3>
-        <p class="feature-desc">Slack and email notifications for deal risks, coaching moments, and wins.</p>
-      </div>
-
-      <!-- Feature 6 - Coaching Insights -->
-      <div class="feature-card">
-        <svg class="feature-icon" viewBox="0 0 56 56" fill="none">
-          <!-- Pixel art brain/AI icon - cyan theme -->
-          <rect x="16" y="8" width="8" height="8" fill="#02C0FF"/>
-          <rect x="32" y="8" width="8" height="8" fill="#02C0FF"/>
-          <rect x="8" y="16" width="8" height="8" fill="#00A8E0"/>
-          <rect x="16" y="16" width="8" height="8" fill="#00A8E0"/>
-          <rect x="24" y="12" width="8" height="8" fill="#02C0FF"/>
-          <rect x="32" y="16" width="8" height="8" fill="#00A8E0"/>
-          <rect x="40" y="16" width="8" height="8" fill="#00A8E0"/>
-          <rect x="8" y="24" width="16" height="8" fill="#02C0FF"/>
-          <rect x="32" y="24" width="16" height="8" fill="#02C0FF"/>
-          <rect x="12" y="32" width="12" height="8" fill="#00A8E0"/>
-          <rect x="32" y="32" width="12" height="8" fill="#00A8E0"/>
-          <rect x="16" y="40" width="8" height="8" fill="#02C0FF"/>
-          <rect x="32" y="40" width="8" height="8" fill="#02C0FF"/>
-          <rect x="20" y="44" width="16" height="4" fill="#00A8E0"/>
-        </svg>
-        <h3 class="feature-title">Coaching Insights</h3>
-        <p class="feature-desc">AI-powered scorecards, talk ratios, and personalized improvement tips.</p>
-      </div>
-
-      <!-- Feature 7 - Follow-up Drafts -->
-      <div class="feature-card">
-        <svg class="feature-icon" viewBox="0 0 56 56" fill="none">
-          <!-- Pixel art email/draft icon - mint theme -->
-          <rect x="4" y="12" width="48" height="4" fill="#46FCAF"/>
-          <rect x="4" y="16" width="4" height="28" fill="#46FCAF"/>
-          <rect x="48" y="16" width="4" height="28" fill="#46FCAF"/>
-          <rect x="4" y="44" width="48" height="4" fill="#46FCAF"/>
-          <!-- Envelope flap -->
-          <rect x="8" y="16" width="8" height="8" fill="#3DE09A"/>
-          <rect x="40" y="16" width="8" height="8" fill="#3DE09A"/>
-          <rect x="16" y="24" width="8" height="8" fill="#3DE09A"/>
-          <rect x="32" y="24" width="8" height="8" fill="#3DE09A"/>
-          <rect x="24" y="32" width="8" height="8" fill="#3DE09A"/>
-          <!-- Content lines -->
-          <rect x="12" y="36" width="16" height="4" fill="#0a0a0a"/>
-        </svg>
-        <h3 class="feature-title">Follow-up Drafts</h3>
-        <p class="feature-desc">AI writes personalized follow-up emails based on conversation context.</p>
-      </div>
-
-      <!-- Feature 8 - Forecasting -->
-      <div class="feature-card">
-        <svg class="feature-icon" viewBox="0 0 56 56" fill="none">
-          <!-- Pixel art target/forecast icon - purple theme -->
-          <rect x="20" y="4" width="16" height="4" fill="#A678F4"/>
-          <rect x="12" y="8" width="8" height="4" fill="#A678F4"/>
-          <rect x="36" y="8" width="8" height="4" fill="#A678F4"/>
-          <rect x="8" y="12" width="4" height="8" fill="#A678F4"/>
-          <rect x="44" y="12" width="4" height="8" fill="#A678F4"/>
-          <rect x="4" y="20" width="4" height="16" fill="#8B5CF6"/>
-          <rect x="48" y="20" width="4" height="16" fill="#8B5CF6"/>
-          <rect x="8" y="36" width="4" height="8" fill="#A678F4"/>
-          <rect x="44" y="36" width="4" height="8" fill="#A678F4"/>
-          <rect x="12" y="44" width="8" height="4" fill="#A678F4"/>
-          <rect x="36" y="44" width="8" height="4" fill="#A678F4"/>
-          <rect x="20" y="48" width="16" height="4" fill="#A678F4"/>
-          <!-- Inner ring -->
-          <rect x="20" y="16" width="16" height="4" fill="#8B5CF6"/>
-          <rect x="16" y="20" width="4" height="16" fill="#8B5CF6"/>
-          <rect x="36" y="20" width="4" height="16" fill="#8B5CF6"/>
-          <rect x="20" y="36" width="16" height="4" fill="#8B5CF6"/>
-          <!-- Bullseye -->
-          <rect x="24" y="24" width="8" height="8" fill="#A678F4"/>
-        </svg>
-        <h3 class="feature-title">Pipeline Forecasting</h3>
-        <p class="feature-desc">Predict close rates and revenue with conversation-informed AI models.</p>
+        <span class="card-title">Marketing alerted</span>
+        <span class="card-desc">Competitor quote captured</span>
+        <span class="card-meta">Case study opp</span>
       </div>
     </div>
   </section>
@@ -1543,13 +650,8 @@
 
   <script>
     import { gsap } from 'gsap';
-    import { ScrollTrigger } from 'gsap/ScrollTrigger';
     import Lenis from 'lenis';
 
-    // Register GSAP plugins
-    gsap.registerPlugin(ScrollTrigger);
-
-    // Theme toggle
     function setTheme(theme) {
       document.documentElement.setAttribute('data-theme', theme);
       document.getElementById('btn-dark')?.classList.toggle('active', theme === 'dark');
@@ -1557,7 +659,6 @@
     }
     window.setTheme = setTheme;
 
-    // Initialize Lenis smooth scroll
     const lenis = new Lenis({
       duration: 1.2,
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
@@ -1570,123 +671,45 @@
     }
     requestAnimationFrame(raf);
 
-    // Calculate actual path lengths for accurate dash animation
-    function getPathLength(pathId) {
-      const path = document.querySelector(pathId);
-      return path ? path.getTotalLength() : 500;
-    }
-
-    // Create master timeline that loops
     function createTimeline() {
-      // Get actual path lengths
-      const path1Length = getPathLength('#path1');
-      const path2Length = getPathLength('#path2');
-      const path3Length = getPathLength('#path3');
-      const path4Length = getPathLength('#path4');
+      const paths = document.querySelectorAll('.flow-path');
+      
+      paths.forEach(path => {
+        const length = path.getTotalLength();
+        path.style.strokeDasharray = length;
+        path.style.strokeDashoffset = length;
+      });
 
-      // Set initial states with actual lengths
-      gsap.set('.cell', { opacity: 0, scale: 0.92 });
-      gsap.set('#path1', { strokeDasharray: path1Length, strokeDashoffset: path1Length });
-      gsap.set('#path2', { strokeDasharray: path2Length, strokeDashoffset: path2Length });
-      gsap.set('#path3', { strokeDasharray: path3Length, strokeDashoffset: path3Length });
-      gsap.set('#path4', { strokeDasharray: path4Length, strokeDashoffset: path4Length });
+      gsap.set('.card', { opacity: 0, scale: 0.95, y: 10 });
 
       const tl = gsap.timeline({
         repeat: -1,
         repeatDelay: 3,
         onRepeat: () => {
-          gsap.set('.cell', { opacity: 0, scale: 0.92 });
-          gsap.set('#path1', { strokeDashoffset: path1Length });
-          gsap.set('#path2', { strokeDashoffset: path2Length });
-          gsap.set('#path3', { strokeDashoffset: path3Length });
-          gsap.set('#path4', { strokeDashoffset: path4Length });
+          paths.forEach(path => {
+            const length = path.getTotalLength();
+            gsap.set(path, { strokeDashoffset: length });
+          });
+          gsap.set('.card', { opacity: 0, scale: 0.95, y: 10 });
         }
       });
 
-      // Cell 1 fades in (the trigger)
-      tl.to('#cell1', {
-        opacity: 1,
-        scale: 1,
-        duration: 0.6,
-        ease: 'power2.out'
-      });
-
-      // Path 1 draws as cell 1 settles
-      tl.to('#path1', {
-        strokeDashoffset: 0,
-        duration: 1.4,
-        ease: 'power1.inOut'
-      }, '-=0.1');
-
-      // Cell 2 fades in as path arrives
-      tl.to('#cell2', {
-        opacity: 1,
-        scale: 1,
-        duration: 0.6,
-        ease: 'power2.out'
-      }, '-=0.3');
-
-      // Brief pause to read cell 2
-      tl.to({}, { duration: 0.4 });
-
-      // Path 2 draws
-      tl.to('#path2', {
-        strokeDashoffset: 0,
-        duration: 0.8,
-        ease: 'power1.inOut'
-      });
-
-      // Cell 3 fades in
-      tl.to('#cell3', {
-        opacity: 1,
-        scale: 1,
-        duration: 0.6,
-        ease: 'power2.out'
-      }, '-=0.25');
-
-      // Brief pause
+      tl.to('#card1', { opacity: 1, scale: 1, y: 0, duration: 0.6, ease: 'power2.out' });
+      tl.to('#path1', { strokeDashoffset: 0, duration: 1.2, ease: 'power1.inOut' }, '-=0.1');
+      tl.to('#card2', { opacity: 1, scale: 1, y: 0, duration: 0.6, ease: 'power2.out' }, '-=0.3');
       tl.to({}, { duration: 0.3 });
-
-      // Path 3 draws
-      tl.to('#path3', {
-        strokeDashoffset: 0,
-        duration: 0.7,
-        ease: 'power1.inOut'
-      });
-
-      // Cell 4 fades in
-      tl.to('#cell4', {
-        opacity: 1,
-        scale: 1,
-        duration: 0.6,
-        ease: 'power2.out'
-      }, '-=0.2');
-
-      // Brief pause
-      tl.to({}, { duration: 0.3 });
-
-      // Path 4 draws (longest path)
-      tl.to('#path4', {
-        strokeDashoffset: 0,
-        duration: 1.6,
-        ease: 'power1.inOut'
-      });
-
-      // Cell 5 fades in
-      tl.to('#cell5', {
-        opacity: 1,
-        scale: 1,
-        duration: 0.6,
-        ease: 'power2.out'
-      }, '-=0.4');
-
-      // Hold at end before loop
-      tl.to({}, { duration: 1.5 });
+      tl.to('#path2', { strokeDashoffset: 0, duration: 1, ease: 'power1.inOut' });
+      tl.to('#card3', { opacity: 1, scale: 1, y: 0, duration: 0.6, ease: 'power2.out' }, '-=0.2');
+      tl.to('#path3', { strokeDashoffset: 0, duration: 0.6, ease: 'power1.inOut' }, '-=0.1');
+      tl.to('#card4', { opacity: 1, scale: 1, y: 0, duration: 0.6, ease: 'power2.out' }, '-=0.2');
+      tl.to({}, { duration: 0.2 });
+      tl.to('#path4', { strokeDashoffset: 0, duration: 1.4, ease: 'power1.inOut' });
+      tl.to('#card5', { opacity: 1, scale: 1, y: 0, duration: 0.6, ease: 'power2.out' }, '-=0.4');
+      tl.to({}, { duration: 2 });
 
       return tl;
     }
 
-    // Start animation when DOM ready
     document.addEventListener('DOMContentLoaded', () => {
       setTimeout(createTimeline, 100);
     });

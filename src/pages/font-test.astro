@@ -108,6 +108,7 @@
     /* HERO */
     .hero {
       min-height: 100vh;
+      height: 100vh;
       display: flex;
       align-items: center;
       padding: 72px 0 0 48px;
@@ -220,9 +221,10 @@
       top: 72px;
       right: 0;
       bottom: 0;
-      width: 58%;
-      min-width: 750px;
+      width: 60%;
+      min-width: 700px;
       z-index: 5;
+      padding-bottom: 40px;
     }
 
     /* SVG Paths */
@@ -239,9 +241,9 @@
     .flow-path {
       fill: none;
       stroke-width: 2;
-      stroke-linecap: round;
-      stroke-linejoin: round;
-      filter: drop-shadow(0 0 10px currentColor);
+      stroke-linecap: square;
+      stroke-linejoin: miter;
+      filter: drop-shadow(0 0 6px currentColor);
     }
 
     /* Cards */
@@ -249,11 +251,11 @@
       position: absolute;
       background: var(--bg-card);
       border: 1px solid var(--border);
-      padding: 24px 28px;
+      padding: 20px 22px;
       opacity: 0;
       transform: translateY(20px);
       z-index: 10;
-      width: 320px;
+      width: 280px;
       backdrop-filter: blur(10px);
     }
 
@@ -287,24 +289,24 @@
     }
 
     .card-title {
-      font-size: 18px;
+      font-size: 16px;
       font-weight: 600;
       line-height: 1.3;
-      margin-bottom: 12px;
+      margin-bottom: 10px;
     }
 
     .card-content {
-      font-size: 14px;
+      font-size: 13px;
       color: var(--text-muted);
-      line-height: 1.6;
+      line-height: 1.5;
     }
 
     .card-meta {
       font-family: var(--mono);
-      font-size: 11px;
+      font-size: 10px;
       color: var(--text-muted);
-      margin-top: 16px;
-      padding-top: 14px;
+      margin-top: 12px;
+      padding-top: 12px;
       border-top: 1px solid var(--border);
       display: flex;
       align-items: center;
@@ -353,18 +355,18 @@
     .waveform {
       display: flex;
       align-items: center;
-      gap: 3px;
-      height: 40px;
-      margin-bottom: 16px;
-      padding: 8px 12px;
+      gap: 2px;
+      height: 32px;
+      margin-bottom: 12px;
+      padding: 6px 10px;
       background: rgba(70, 252, 175, 0.08);
       border: 1px solid rgba(70, 252, 175, 0.2);
     }
 
     .waveform-bar {
-      width: 4px;
+      width: 3px;
       background: var(--mint);
-      border-radius: 2px;
+      border-radius: 1px;
       animation: wave 1.2s ease-in-out infinite;
     }
 
@@ -390,26 +392,26 @@
     .stats-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 10px;
+      gap: 8px;
     }
 
     .stat-item {
       background: rgba(255,255,255,0.03);
-      padding: 12px 14px;
-      border-left: 3px solid var(--purple);
+      padding: 10px 12px;
+      border-left: 2px solid var(--purple);
     }
 
     .stat-label {
       font-family: var(--mono);
-      font-size: 9px;
+      font-size: 8px;
       text-transform: uppercase;
       letter-spacing: 0.12em;
       color: var(--text-muted);
-      margin-bottom: 6px;
+      margin-bottom: 4px;
     }
 
     .stat-value {
-      font-size: 15px;
+      font-size: 13px;
       font-weight: 600;
     }
 
@@ -454,19 +456,19 @@
     /* Quote style */
     .quote-block {
       background: rgba(255, 79, 94, 0.08);
-      border-left: 3px solid var(--coral);
-      padding: 14px 16px;
+      border-left: 2px solid var(--coral);
+      padding: 10px 12px;
       font-style: italic;
-      font-size: 14px;
-      line-height: 1.5;
+      font-size: 12px;
+      line-height: 1.4;
       color: var(--text);
     }
 
     .quote-attr {
       font-style: normal;
-      font-size: 12px;
+      font-size: 10px;
       color: var(--text-muted);
-      margin-top: 10px;
+      margin-top: 8px;
       font-family: var(--mono);
     }
 
@@ -474,25 +476,25 @@
     .meddic-row {
       display: flex;
       align-items: center;
-      gap: 12px;
-      margin-top: 12px;
+      gap: 10px;
+      margin-top: 10px;
     }
 
     .meddic-label {
       font-family: var(--mono);
-      font-size: 11px;
+      font-size: 9px;
       color: var(--text-muted);
     }
 
     .meddic-progress {
       display: flex;
-      gap: 4px;
+      gap: 3px;
       flex: 1;
     }
 
     .meddic-dot {
       flex: 1;
-      height: 8px;
+      height: 6px;
       background: rgba(255,255,255,0.1);
     }
 
@@ -502,58 +504,59 @@
     .email-preview {
       background: rgba(255,255,255,0.03);
       border: 1px solid var(--border);
-      padding: 14px 16px;
-      font-size: 13px;
+      padding: 10px 12px;
+      font-size: 12px;
     }
 
     .email-header {
       display: flex;
       align-items: center;
-      gap: 10px;
-      margin-bottom: 12px;
-      padding-bottom: 12px;
+      gap: 8px;
+      margin-bottom: 8px;
+      padding-bottom: 8px;
       border-bottom: 1px solid var(--border);
     }
 
     .email-avatar {
-      width: 32px;
-      height: 32px;
+      width: 26px;
+      height: 26px;
       border-radius: 50%;
       background: linear-gradient(135deg, var(--purple), var(--cyan));
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 12px;
+      font-size: 10px;
       font-weight: 600;
     }
 
     .email-to {
-      font-size: 12px;
+      font-size: 11px;
     }
 
     .email-to span { color: var(--text-muted); }
 
     .email-subject {
       font-weight: 600;
-      margin-bottom: 8px;
+      margin-bottom: 6px;
+      font-size: 12px;
     }
 
     .email-body {
       color: var(--text-muted);
-      font-size: 12px;
-      line-height: 1.5;
+      font-size: 11px;
+      line-height: 1.4;
     }
 
     /* Forecast card */
     .forecast-big {
       display: flex;
       align-items: baseline;
-      gap: 12px;
-      margin-bottom: 8px;
+      gap: 10px;
+      margin-bottom: 6px;
     }
 
     .forecast-number {
-      font-size: 42px;
+      font-size: 36px;
       font-weight: 700;
       line-height: 1;
     }
@@ -564,13 +567,13 @@
       gap: 4px;
       color: var(--mint);
       font-weight: 600;
-      font-size: 16px;
+      font-size: 14px;
     }
 
     .forecast-bar {
-      height: 8px;
+      height: 6px;
       background: rgba(255,255,255,0.1);
-      margin-top: 16px;
+      margin-top: 12px;
       position: relative;
       overflow: hidden;
     }
@@ -587,38 +590,38 @@
       display: inline-block;
       background: rgba(70, 252, 175, 0.1);
       border: 1px solid rgba(70, 252, 175, 0.3);
-      padding: 8px 14px;
-      font-size: 13px;
+      padding: 6px 10px;
+      font-size: 11px;
       font-weight: 500;
-      margin-bottom: 12px;
+      margin-bottom: 10px;
     }
 
     .suggestion-list {
-      margin-top: 12px;
+      margin-top: 8px;
     }
 
     .suggestion-item {
       display: flex;
       align-items: center;
-      gap: 8px;
-      font-size: 13px;
+      gap: 6px;
+      font-size: 11px;
       color: var(--text-muted);
-      margin-bottom: 6px;
+      margin-bottom: 4px;
     }
 
     .suggestion-item .check {
       color: var(--mint);
-      font-size: 14px;
+      font-size: 12px;
     }
 
-    /* Card positions - flowing diagonal layout */
-    #card1 { top: 4%; left: 3%; }
-    #card2 { top: 16%; left: 38%; }
-    #card3 { top: 36%; left: 58%; }
-    #card4 { top: 48%; left: 5%; }
-    #card5 { top: 56%; left: 55%; }
-    #card6 { top: 74%; left: 20%; }
-    #card7 { top: 78%; left: 58%; }
+    /* Card positions - cleaner tree layout */
+    #card1 { top: 2%; left: 5%; }
+    #card2 { top: 15%; left: 42%; }
+    #card3 { top: 30%; left: 62%; }
+    #card4 { top: 38%; left: 5%; }
+    #card5 { top: 48%; left: 62%; }
+    #card6 { top: 65%; left: 22%; }
+    #card7 { top: 68%; left: 62%; }
 
     /* Theme toggle */
     .theme-toggle {
@@ -743,31 +746,31 @@
     </div>
 
     <div class="cards-container">
-      <!-- SVG Paths connecting cards with curves -->
+      <!-- SVG Paths connecting cards with hard 90° angles -->
       <svg class="paths-svg" viewBox="0 0 100 100" preserveAspectRatio="none">
-        <!-- Path 1: Card1 → Card2 -->
-        <path id="path1" class="flow-path" stroke="#46FCAF"
-              d="M 18,10 Q 30,12 48,20"/>
+        <!-- Path 1: Card1 → Card2 (down then right) -->
+        <path id="path1" class="flow-path" stroke="#46FCAF" vector-effect="non-scaling-stroke"
+              d="M 20,10 L 20,18 L 42,18"/>
         
-        <!-- Path 2: Card2 → Card3 -->
-        <path id="path2" class="flow-path" stroke="#A678F4"
-              d="M 58,26 Q 65,32 68,40"/>
+        <!-- Path 2: Card2 → Card3 (right then down) -->
+        <path id="path2" class="flow-path" stroke="#A678F4" vector-effect="non-scaling-stroke"
+              d="M 62,22 L 72,22 L 72,32"/>
         
-        <!-- Path 3: Card2 → Card4 (branches left) -->
-        <path id="path3" class="flow-path" stroke="#A678F4"
-              d="M 48,26 Q 30,38 20,52"/>
+        <!-- Path 3: Card2 → Card4 (down then left) -->
+        <path id="path3" class="flow-path" stroke="#A678F4" vector-effect="non-scaling-stroke"
+              d="M 52,25 L 52,42 L 28,42"/>
         
-        <!-- Path 4: Card3 → Card5 -->
-        <path id="path4" class="flow-path" stroke="#02C0FF"
-              d="M 72,48 Q 74,54 70,60"/>
+        <!-- Path 4: Card3 → Card5 (down) -->
+        <path id="path4" class="flow-path" stroke="#02C0FF" vector-effect="non-scaling-stroke"
+              d="M 72,42 L 72,50"/>
         
-        <!-- Path 5: Card4 → Card6 -->
-        <path id="path5" class="flow-path" stroke="#FF4F5E"
-              d="M 22,62 Q 28,70 35,78"/>
+        <!-- Path 5: Card4 → Card6 (down then right) -->
+        <path id="path5" class="flow-path" stroke="#FF4F5E" vector-effect="non-scaling-stroke"
+              d="M 18,52 L 18,68 L 32,68"/>
         
-        <!-- Path 6: Card5 → Card7 -->
-        <path id="path6" class="flow-path" stroke="#46FCAF"
-              d="M 70,68 Q 72,75 70,82"/>
+        <!-- Path 6: Card5 → Card7 (down) -->
+        <path id="path6" class="flow-path" stroke="#46FCAF" vector-effect="non-scaling-stroke"
+              d="M 72,60 L 72,70"/>
       </svg>
 
       <!-- Card 1: Call Completed -->
@@ -1009,58 +1012,52 @@
       gsap.set('.card', { opacity: 0, y: 30, scale: 0.96 });
       gsap.set('.forecast-fill', { width: '0%' });
 
-      const tl = gsap.timeline({
-        repeat: -1,
-        repeatDelay: 5,
-        onRepeat: () => {
-          paths.forEach(path => {
-            gsap.set(path, { strokeDashoffset: path.getTotalLength() });
-          });
-          gsap.set('.card', { opacity: 0, y: 30, scale: 0.96 });
-          gsap.set('.forecast-fill', { width: '0%' });
-        }
-      });
+      // No repeat - plays once and stays
+      const tl = gsap.timeline();
 
       // Card 1: Call completed
-      tl.to('#card1', { opacity: 1, y: 0, scale: 1, duration: 0.7, ease: 'power2.out' });
+      tl.to('#card1', { opacity: 1, y: 0, scale: 1, duration: 1, ease: 'power2.out' });
+      
+      // Pause to read
+      tl.to({}, { duration: 0.8 });
       
       // Path 1: to Card 2
-      tl.to('#path1', { strokeDashoffset: 0, duration: 1, ease: 'power1.inOut' }, '-=0.2');
+      tl.to('#path1', { strokeDashoffset: 0, duration: 1.5, ease: 'power1.inOut' });
       
       // Card 2: Analyzing
-      tl.to('#card2', { opacity: 1, y: 0, scale: 1, duration: 0.7, ease: 'power2.out' }, '-=0.4');
+      tl.to('#card2', { opacity: 1, y: 0, scale: 1, duration: 1, ease: 'power2.out' }, '-=0.3');
       
       // Pause while "analyzing"
-      tl.to({}, { duration: 1 });
+      tl.to({}, { duration: 1.5 });
       
       // Paths 2 & 3 branch out simultaneously
-      tl.to('#path2', { strokeDashoffset: 0, duration: 0.8, ease: 'power1.inOut' });
-      tl.to('#path3', { strokeDashoffset: 0, duration: 1, ease: 'power1.inOut' }, '-=0.8');
+      tl.to('#path2', { strokeDashoffset: 0, duration: 1.2, ease: 'power1.inOut' });
+      tl.to('#path3', { strokeDashoffset: 0, duration: 1.5, ease: 'power1.inOut' }, '-=1.2');
       
       // Cards 3 & 4 appear
-      tl.to('#card3', { opacity: 1, y: 0, scale: 1, duration: 0.6, ease: 'power2.out' }, '-=0.4');
-      tl.to('#card4', { opacity: 1, y: 0, scale: 1, duration: 0.6, ease: 'power2.out' }, '-=0.5');
+      tl.to('#card3', { opacity: 1, y: 0, scale: 1, duration: 0.8, ease: 'power2.out' }, '-=0.5');
+      tl.to('#card4', { opacity: 1, y: 0, scale: 1, duration: 0.8, ease: 'power2.out' }, '-=0.7');
       
-      // Pause
-      tl.to({}, { duration: 0.5 });
+      // Pause to read
+      tl.to({}, { duration: 1 });
       
       // Paths 4 & 5
-      tl.to('#path4', { strokeDashoffset: 0, duration: 0.7, ease: 'power1.inOut' });
-      tl.to('#path5', { strokeDashoffset: 0, duration: 0.8, ease: 'power1.inOut' }, '-=0.6');
+      tl.to('#path4', { strokeDashoffset: 0, duration: 1, ease: 'power1.inOut' });
+      tl.to('#path5', { strokeDashoffset: 0, duration: 1.2, ease: 'power1.inOut' }, '-=0.8');
       
       // Cards 5 & 6
-      tl.to('#card5', { opacity: 1, y: 0, scale: 1, duration: 0.6, ease: 'power2.out' }, '-=0.3');
-      tl.to('#card6', { opacity: 1, y: 0, scale: 1, duration: 0.6, ease: 'power2.out' }, '-=0.5');
+      tl.to('#card5', { opacity: 1, y: 0, scale: 1, duration: 0.8, ease: 'power2.out' }, '-=0.4');
+      tl.to('#card6', { opacity: 1, y: 0, scale: 1, duration: 0.8, ease: 'power2.out' }, '-=0.6');
+      
+      // Pause to read
+      tl.to({}, { duration: 0.8 });
       
       // Path 6 & Card 7
-      tl.to('#path6', { strokeDashoffset: 0, duration: 0.6, ease: 'power1.inOut' }, '-=0.2');
-      tl.to('#card7', { opacity: 1, y: 0, scale: 1, duration: 0.6, ease: 'power2.out' }, '-=0.3');
+      tl.to('#path6', { strokeDashoffset: 0, duration: 0.8, ease: 'power1.inOut' });
+      tl.to('#card7', { opacity: 1, y: 0, scale: 1, duration: 0.8, ease: 'power2.out' }, '-=0.3');
       
       // Animate forecast fill
-      tl.to('.forecast-fill', { width: '73%', duration: 1, ease: 'power2.out' }, '-=0.4');
-      
-      // Hold at end
-      tl.to({}, { duration: 4 });
+      tl.to('.forecast-fill', { width: '73%', duration: 1.2, ease: 'power2.out' }, '-=0.5');
 
       return tl;
     }

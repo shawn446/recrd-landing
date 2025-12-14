@@ -9,53 +9,63 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>recrd - AI agents that close deals</title>
   
-  <!-- Smooth Scroll -->
-  <script src="https://unpkg.com/lenis@1.0.42/dist/lenis.min.js"></script>
-  
-  <!-- GSAP + ScrollTrigger -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+  <!-- GSAP and Lenis loaded via npm -->
   
   <style>
+    /* Fonts */
     @font-face {
       font-family: 'Roobert';
-      src: url('/fonts/Roobert-Regular.woff2') format('woff2');
-      font-weight: 400;
-      font-style: normal;
-      font-display: swap;
-    }
-    @font-face {
-      font-family: 'Roobert';
-      src: url('/fonts/Roobert-Medium.woff2') format('woff2');
-      font-weight: 500;
-      font-style: normal;
-      font-display: swap;
-    }
-    @font-face {
-      font-family: 'Roobert';
-      src: url('/fonts/Roobert-SemiBold.woff2') format('woff2');
-      font-weight: 600;
-      font-style: normal;
-      font-display: swap;
-    }
-    @font-face {
-      font-family: 'Roobert';
-      src: url('/fonts/Roobert-Bold.woff2') format('woff2');
-      font-weight: 700;
+      src: url('/fonts/RoobertCollectionVF-TRIAL.woff2') format('woff2');
+      font-weight: 100 900;
       font-style: normal;
       font-display: swap;
     }
     @font-face {
       font-family: 'Fraktion Mono';
-      src: url('/fonts/FraktionMono-Regular.woff2') format('woff2');
+      src: url('/fonts/PPFraktionMono-Regular.otf') format('opentype');
       font-weight: 400;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'Object Sans';
+      src: url('/fonts/PPObjectSans-Regular.otf') format('opentype');
+      font-weight: 400;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'Object Sans';
+      src: url('/fonts/PPObjectSans-Heavy.otf') format('opentype');
+      font-weight: 800;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'Matter';
+      src: url('/fonts/Matter-TRIAL-Light.otf') format('opentype');
+      font-weight: 300;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'Matter';
+      src: url('/fonts/Matter-TRIAL-Regular.otf') format('opentype');
+      font-weight: 400;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'Matter';
+      src: url('/fonts/Matter-TRIAL-Medium.ttf') format('truetype');
+      font-weight: 500;
       font-style: normal;
       font-display: swap;
     }
 
     :root {
       --font: 'Roobert', -apple-system, BlinkMacSystemFont, sans-serif;
-      --mono: 'Fraktion Mono', monospace;
+      --mono: 'Fraktion Mono', 'SF Mono', monospace;
       --mint: #46FCAF;
       --purple: #A678F4;
       --cyan: #02C0FF;
@@ -275,6 +285,7 @@
       width: 100%;
       height: 100%;
       overflow: visible;
+      z-index: 1;
     }
 
     /* Grid cell outlines */
@@ -290,9 +301,10 @@
       stroke-width: 3;
       stroke-linecap: butt;
       stroke-linejoin: miter;
+      z-index: 2;
     }
 
-    /* Cell content boxes */
+    /* Cell content boxes - positioned over SVG */
     .cell {
       position: absolute;
       display: flex;
@@ -301,6 +313,8 @@
       padding: 16px;
       opacity: 0;
       transform: scale(0.92);
+      z-index: 5;
+      pointer-events: none;
     }
 
     .cell-badge {
@@ -627,12 +641,20 @@
   </div>
 
   <script>
+    import { gsap } from 'gsap';
+    import { ScrollTrigger } from 'gsap/ScrollTrigger';
+    import Lenis from 'lenis';
+
+    // Register GSAP plugins
+    gsap.registerPlugin(ScrollTrigger);
+
     // Theme toggle
     function setTheme(theme) {
       document.documentElement.setAttribute('data-theme', theme);
-      document.getElementById('btn-dark').classList.toggle('active', theme === 'dark');
-      document.getElementById('btn-light').classList.toggle('active', theme === 'light');
+      document.getElementById('btn-dark')?.classList.toggle('active', theme === 'dark');
+      document.getElementById('btn-light')?.classList.toggle('active', theme === 'light');
     }
+    window.setTheme = setTheme;
 
     // Initialize Lenis smooth scroll
     const lenis = new Lenis({
@@ -647,22 +669,18 @@
     }
     requestAnimationFrame(raf);
 
-    // GSAP Animation
-    gsap.registerPlugin(ScrollTrigger);
-
-    // Set initial states
-    gsap.set('.cell', { opacity: 0, scale: 0.92 });
-    gsap.set('.grid-path', { strokeDasharray: 1000, strokeDashoffset: 1000 });
-
     // Create master timeline that loops
     function createTimeline() {
+      // Set initial states
+      gsap.set('.cell', { opacity: 0, scale: 0.92 });
+      gsap.set('.grid-path', { strokeDasharray: 500, strokeDashoffset: 500 });
+
       const tl = gsap.timeline({
         repeat: -1,
         repeatDelay: 2.5,
         onRepeat: () => {
-          // Reset everything before repeat
           gsap.set('.cell', { opacity: 0, scale: 0.92 });
-          gsap.set('.grid-path', { strokeDashoffset: 1000 });
+          gsap.set('.grid-path', { strokeDashoffset: 500 });
         }
       });
 
@@ -674,14 +692,14 @@
         ease: 'power2.out'
       });
 
-      // Path 1 draws (starts slightly before cell1 finishes)
+      // Path 1 draws
       tl.to('#path1', {
         strokeDashoffset: 0,
         duration: 1.8,
         ease: 'power1.inOut'
       }, '-=0.2');
 
-      // Cell 2 fades in as path arrives
+      // Cell 2 fades in
       tl.to('#cell2', {
         opacity: 1,
         scale: 1,
@@ -704,7 +722,7 @@
         ease: 'power2.out'
       }, '-=0.4');
 
-      // Path 3 draws (short path)
+      // Path 3 draws
       tl.to('#path3', {
         strokeDashoffset: 0,
         duration: 1,
@@ -719,7 +737,7 @@
         ease: 'power2.out'
       }, '-=0.3');
 
-      // Path 4 draws (longer path)
+      // Path 4 draws
       tl.to('#path4', {
         strokeDashoffset: 0,
         duration: 2,
@@ -737,10 +755,9 @@
       return tl;
     }
 
-    // Start animation when page loads
+    // Start animation when DOM ready
     document.addEventListener('DOMContentLoaded', () => {
-      // Small delay to ensure everything is rendered
-      setTimeout(createTimeline, 300);
+      setTimeout(createTimeline, 100);
     });
   </script>
 </body>

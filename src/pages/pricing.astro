@@ -441,10 +441,15 @@
     .check-icon.mint svg { stroke: var(--mint); }
     .check-icon.purple svg { stroke: var(--purple); }
     .check-icon.coral svg { stroke: var(--coral); }
+    
+    [data-theme="light"] .check-icon.mint svg { stroke: var(--purple); }
 
     .feature-highlight {
       color: var(--mint);
       font-weight: 500;
+    }
+    [data-theme="light"] .feature-highlight {
+      color: var(--purple);
     }
 
     /* ========================================

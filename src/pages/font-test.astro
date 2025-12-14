@@ -121,6 +121,7 @@
       z-index: 100;
       background: var(--bg);
       border-bottom: 1px solid var(--grid-line);
+      font-family: var(--font);
     }
 
     .nav-logo {
@@ -128,6 +129,11 @@
       align-items: center;
       gap: 12px;
       text-decoration: none;
+      transition: opacity 0.2s ease;
+    }
+
+    .nav-logo:hover {
+      opacity: 0.8;
     }
 
     .nav-logo svg {
@@ -136,6 +142,7 @@
     }
 
     .nav-wordmark {
+      font-family: var(--font);
       font-weight: 600;
       font-size: 18px;
       color: var(--text);
@@ -143,35 +150,62 @@
 
     .nav-links {
       display: flex;
-      gap: 40px;
+      gap: 8px;
       list-style: none;
     }
 
     .nav-links a {
+      font-family: var(--font);
       color: var(--text-muted);
       text-decoration: none;
       font-size: 14px;
       font-weight: 500;
-      transition: color 0.2s;
+      padding: 10px 16px;
+      position: relative;
+      transition: all 0.2s ease;
+      cursor: pointer;
     }
 
-    .nav-links a:hover {
-      color: var(--text);
+    /* First nav link gets cyan hover */
+    .nav-links li:first-child a:hover {
+      background: var(--cyan);
+      color: #0a0a0a;
+    }
+
+    /* Second nav link gets mint hover */
+    .nav-links li:nth-child(2) a:hover {
+      background: var(--mint);
+      color: #0a0a0a;
+    }
+
+    /* Third nav link gets purple hover */
+    .nav-links li:nth-child(3) a:hover {
+      background: var(--purple);
+      color: #fff;
+    }
+
+    /* Fourth nav link gets coral hover */
+    .nav-links li:nth-child(4) a:hover {
+      background: var(--coral);
+      color: #fff;
     }
 
     .nav-cta {
+      font-family: var(--font);
       background: var(--text);
       color: var(--bg);
       padding: 12px 24px;
       font-weight: 500;
       font-size: 14px;
       text-decoration: none;
-      transition: background 0.2s, color 0.2s;
+      transition: all 0.2s ease;
+      cursor: pointer;
     }
 
     .nav-cta:hover {
       background: var(--mint);
       color: #0a0a0a;
+      transform: translateY(-1px);
     }
 
     /* HERO */
@@ -236,7 +270,8 @@
       display: inline-flex;
       align-items: center;
       gap: 12px;
-      transition: all 0.3s ease;
+      transition: all 0.2s ease;
+      cursor: pointer;
     }
 
     .btn-primary {
@@ -246,6 +281,7 @@
 
     .btn-primary:hover {
       background: var(--mint);
+      transform: translateY(-2px);
     }
 
     .btn-secondary {
@@ -255,25 +291,30 @@
     }
 
     .btn-secondary:hover {
-      border-color: var(--mint);
+      background: var(--cyan);
+      border-color: var(--cyan);
+      color: #0a0a0a;
+      transform: translateY(-2px);
     }
 
     [data-theme="light"] .btn-secondary:hover {
+      background: var(--purple);
       border-color: var(--purple);
+      color: #fff;
     }
 
     /* ========================================
-       GRID ANIMATION SYSTEM - ENLARGED
+       GRID ANIMATION SYSTEM - 2X ENLARGED
        ======================================== */
     
     .grid-container {
       position: absolute;
       top: 50%;
-      right: 2%;
+      right: -5%;
       transform: translateY(-50%);
-      /* SCALED UP: 840x720 (was 700x600) */
-      width: 840px;
-      height: 720px;
+      /* 2X SCALE: 1260x1080 (was 840x720) */
+      width: 1260px;
+      height: 1080px;
     }
 
     .grid-svg {
@@ -296,7 +337,7 @@
     /* Animated connecting lines */
     .grid-path {
       fill: none;
-      stroke-width: 3;
+      stroke-width: 4;
       stroke-linecap: square;
       stroke-linejoin: miter;
     }
@@ -307,7 +348,7 @@
       display: flex;
       flex-direction: column;
       justify-content: center;
-      padding: 20px;
+      padding: 28px;
       opacity: 0;
       transform: scale(0.92);
       z-index: 5;
@@ -317,13 +358,13 @@
     .cell-header {
       display: flex;
       align-items: center;
-      gap: 10px;
-      margin-bottom: 10px;
+      gap: 12px;
+      margin-bottom: 12px;
     }
 
     .cell-icon {
-      width: 24px;
-      height: 24px;
+      width: 28px;
+      height: 28px;
       flex-shrink: 0;
     }
 
@@ -334,22 +375,22 @@
 
     .cell-badge {
       font-family: var(--mono);
-      font-size: 10px;
+      font-size: 11px;
       text-transform: uppercase;
       letter-spacing: 0.1em;
-      padding: 5px 10px;
+      padding: 6px 12px;
       width: fit-content;
     }
 
     .cell-title {
-      font-size: 18px;
+      font-size: 22px;
       font-weight: 600;
       line-height: 1.25;
-      margin-bottom: 6px;
+      margin-bottom: 8px;
     }
 
     .cell-desc {
-      font-size: 13px;
+      font-size: 14px;
       font-weight: 400;
       line-height: 1.4;
       opacity: 0.85;
@@ -357,8 +398,8 @@
 
     .cell-meta {
       font-family: var(--mono);
-      font-size: 11px;
-      margin-top: 8px;
+      font-size: 12px;
+      margin-top: 10px;
       opacity: 0.7;
     }
 
@@ -431,7 +472,12 @@
       font-family: var(--font);
       font-size: 13px;
       cursor: pointer;
-      transition: all 0.2s;
+      transition: all 0.2s ease;
+    }
+
+    .theme-toggle button:hover:not(.active) {
+      color: var(--text);
+      background: var(--grid-line);
     }
 
     .theme-toggle button.active {
@@ -440,55 +486,64 @@
     }
 
     /* ========================================
-       RESPONSIVE
+       RESPONSIVE - scaled for 2x grid
        ======================================== */
+    @media (max-width: 1800px) {
+      .grid-container {
+        width: 1050px;
+        height: 900px;
+        right: -2%;
+      }
+    }
+
     @media (max-width: 1600px) {
       .grid-container {
-        width: 756px;
-        height: 648px;
+        width: 910px;
+        height: 780px;
+        right: 0%;
       }
     }
 
     @media (max-width: 1400px) {
       .grid-container {
-        width: 630px;
-        height: 540px;
-        right: 2%;
+        width: 770px;
+        height: 660px;
+        right: 0%;
       }
       .cell {
-        padding: 14px;
+        padding: 16px;
       }
       .cell-title {
-        font-size: 15px;
+        font-size: 16px;
       }
       .cell-desc {
         font-size: 12px;
       }
       .cell-icon {
-        width: 20px;
-        height: 20px;
+        width: 22px;
+        height: 22px;
       }
     }
 
     @media (max-width: 1200px) {
       .grid-container {
-        width: 504px;
-        height: 432px;
-        right: 1%;
+        width: 630px;
+        height: 540px;
+        right: 0%;
       }
       .cell {
-        padding: 12px;
+        padding: 14px;
       }
       .cell-header {
         gap: 8px;
         margin-bottom: 8px;
       }
       .cell-badge {
-        font-size: 8px;
+        font-size: 9px;
         padding: 4px 8px;
       }
       .cell-title {
-        font-size: 13px;
+        font-size: 14px;
         margin-bottom: 4px;
       }
       .cell-desc {
@@ -505,8 +560,11 @@
 
     @media (max-width: 1000px) {
       .grid-container {
-        width: 420px;
-        height: 360px;
+        width: 490px;
+        height: 420px;
+      }
+      .cell {
+        padding: 10px;
       }
       .cell-desc {
         display: none;
@@ -540,7 +598,7 @@
         transform: none;
         margin-top: 48px;
         width: 100%;
-        max-width: 560px;
+        max-width: 600px;
         height: auto;
         aspect-ratio: 7/6;
       }
@@ -686,11 +744,11 @@
         <path id="path2" class="grid-path" stroke="#A678F4" 
               d="M 400,300 L 500,300"/>
         
-        <!-- Path 3 (cyan): Cell3 bottom → down to Cell4 top
+        <!-- Path 3 (cyan): Cell3 bottom-left → down to Cell4 top-left
              Cell3: (500,300)-(700,400), Cell4: (500,500)-(700,600)
-             Route: along x=600 from y=400 to y=500 -->
+             Route: along LEFT edge x=500 from y=400 to y=500 -->
         <path id="path3" class="grid-path" stroke="#02C0FF" 
-              d="M 600,400 L 600,500"/>
+              d="M 500,400 L 500,500"/>
         
         <!-- Path 4 (coral): Cell4 left edge → left to Cell5 right edge
              Cell4: (500,500)-(700,600), Cell5: (0,500)-(200,600)

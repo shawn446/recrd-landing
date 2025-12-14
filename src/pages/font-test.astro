@@ -48,6 +48,7 @@
       --btn-secondary-fill: var(--mint);
       --grid-line: rgba(255,255,255,0.08);
       --grid-line-strong: rgba(255,255,255,0.15);
+      --cell-glow: rgba(70,252,175,0.15);
     }
 
     [data-theme="light"] {
@@ -66,6 +67,7 @@
       --btn-secondary-fill: var(--purple);
       --grid-line: rgba(0,0,0,0.08);
       --grid-line-strong: rgba(0,0,0,0.15);
+      --cell-glow: rgba(166,120,244,0.12);
     }
 
     /* RESET */
@@ -202,35 +204,36 @@
       overflow: hidden;
     }
 
-    /* GRID - Each row independently divided, right side only */
+    /* GRID */
     .hero-grid {
       position: absolute;
-      top: 0;
+      top: 50%;
       right: 0;
+      transform: translateY(-50%);
       width: 60%;
-      height: 100%;
+      height: auto;
       z-index: 0;
-      display: flex;
-      flex-direction: column;
     }
 
-    .grid-row {
-      flex: 1;
-      display: flex;
-      border-bottom: 1px solid var(--grid-line);
+    .hero-grid svg {
+      width: 100%;
+      height: auto;
     }
 
-    .grid-row:last-child {
-      border-bottom: none;
+    .hero-grid rect {
+      stroke: var(--grid-line);
+      fill: transparent;
+      transition: fill 0.4s ease, stroke 0.3s ease;
     }
 
-    .grid-cell {
-      flex: 1;
-      border-right: 1px solid var(--grid-line);
+    /* Random cell glow animation */
+    @keyframes cellPulse {
+      0%, 100% { fill: transparent; }
+      50% { fill: var(--cell-glow); }
     }
 
-    .grid-cell:last-child {
-      border-right: none;
+    .hero-grid rect.glow {
+      animation: cellPulse 2s ease-in-out;
     }
 
     .hero-content {
@@ -548,35 +551,59 @@
 
   <!-- Hero -->
   <section class="hero">
-    <!-- Grid - varied columns per row -->
+    <!-- Grid from Figma -->
     <div class="hero-grid">
-      <div class="grid-row">
-        <div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div>
-      </div>
-      <div class="grid-row">
-        <div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div>
-      </div>
-      <div class="grid-row">
-        <div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div>
-      </div>
-      <div class="grid-row">
-        <div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div>
-      </div>
-      <div class="grid-row">
-        <div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div>
-      </div>
-      <div class="grid-row">
-        <div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div>
-      </div>
-      <div class="grid-row">
-        <div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div>
-      </div>
-      <div class="grid-row">
-        <div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div>
-      </div>
-      <div class="grid-row">
-        <div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div>
-      </div>
+      <svg viewBox="0 0 897 785" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="0.5" y="0.5" width="112" height="112"/>
+        <rect x="112.5" y="0.5" width="112" height="112"/>
+        <rect x="224.5" y="0.5" width="112" height="112"/>
+        <rect x="336.5" y="0.5" width="112" height="112"/>
+        <rect x="448.5" y="0.5" width="112" height="112"/>
+        <rect x="560.5" y="0.5" width="112" height="112"/>
+        <rect x="672.5" y="0.5" width="112" height="112"/>
+        <rect x="784.5" y="0.5" width="112" height="112"/>
+        <rect x="112.5" y="112.5" width="112" height="112"/>
+        <rect x="224.5" y="112.5" width="112" height="112"/>
+        <rect x="336.5" y="112.5" width="112" height="112"/>
+        <rect x="448.5" y="112.5" width="112" height="112"/>
+        <rect x="560.5" y="112.5" width="112" height="112"/>
+        <rect x="672.5" y="112.5" width="112" height="112"/>
+        <rect x="784.5" y="112.5" width="112" height="112"/>
+        <rect x="224.5" y="224.5" width="112" height="112"/>
+        <rect x="336.5" y="224.5" width="112" height="112"/>
+        <rect x="448.5" y="224.5" width="112" height="112"/>
+        <rect x="560.5" y="224.5" width="112" height="112"/>
+        <rect x="672.5" y="224.5" width="112" height="112"/>
+        <rect x="784.5" y="224.5" width="112" height="112"/>
+        <rect x="224.5" y="336.5" width="112" height="112"/>
+        <rect x="336.5" y="336.5" width="112" height="112"/>
+        <rect x="448.5" y="336.5" width="112" height="112"/>
+        <rect x="560.5" y="336.5" width="112" height="112"/>
+        <rect x="672.5" y="336.5" width="112" height="112"/>
+        <rect x="784.5" y="336.5" width="112" height="112"/>
+        <rect x="112.5" y="448.5" width="112" height="112"/>
+        <rect x="224.5" y="448.5" width="112" height="112"/>
+        <rect x="336.5" y="448.5" width="112" height="112"/>
+        <rect x="448.5" y="448.5" width="112" height="112"/>
+        <rect x="560.5" y="448.5" width="112" height="112"/>
+        <rect x="672.5" y="448.5" width="112" height="112"/>
+        <rect x="784.5" y="448.5" width="112" height="112"/>
+        <rect x="112.5" y="560.5" width="112" height="112"/>
+        <rect x="224.5" y="560.5" width="112" height="112"/>
+        <rect x="336.5" y="560.5" width="112" height="112"/>
+        <rect x="448.5" y="560.5" width="112" height="112"/>
+        <rect x="560.5" y="560.5" width="112" height="112"/>
+        <rect x="672.5" y="560.5" width="112" height="112"/>
+        <rect x="784.5" y="560.5" width="112" height="112"/>
+        <rect x="0.5" y="672.5" width="112" height="112"/>
+        <rect x="112.5" y="672.5" width="112" height="112"/>
+        <rect x="224.5" y="672.5" width="112" height="112"/>
+        <rect x="336.5" y="672.5" width="112" height="112"/>
+        <rect x="448.5" y="672.5" width="112" height="112"/>
+        <rect x="560.5" y="672.5" width="112" height="112"/>
+        <rect x="672.5" y="672.5" width="112" height="112"/>
+        <rect x="784.5" y="672.5" width="112" height="112"/>
+      </svg>
     </div>
 
     <div class="blob blob-1"></div>
@@ -637,6 +664,36 @@
       document.getElementById('btn-dark').classList.toggle('active', theme === 'dark');
       document.getElementById('btn-light').classList.toggle('active', theme === 'light');
     }
+
+    // Grid cell animation
+    function animateGrid() {
+      const cells = document.querySelectorAll('.hero-grid rect');
+      const colors = ['rgba(70,252,175,0.2)', 'rgba(166,120,244,0.15)', 'rgba(2,192,255,0.15)'];
+      
+      function pulseRandomCell() {
+        const randomCell = cells[Math.floor(Math.random() * cells.length)];
+        const randomColor = colors[Math.floor(Math.random() * colors.length)];
+        
+        randomCell.style.fill = randomColor;
+        
+        setTimeout(() => {
+          randomCell.style.fill = 'transparent';
+        }, 800);
+      }
+      
+      // Pulse a random cell every 400-800ms
+      setInterval(() => {
+        pulseRandomCell();
+      }, 400 + Math.random() * 400);
+      
+      // Start with a few cells lit
+      for (let i = 0; i < 3; i++) {
+        setTimeout(() => pulseRandomCell(), i * 200);
+      }
+    }
+
+    // Start animation when page loads
+    document.addEventListener('DOMContentLoaded', animateGrid);
   </script>
 
 </body>

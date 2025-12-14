@@ -1,21 +1,200 @@
-<nav id="nav">
-  <a href="/" class="logo">
-    <div class="logo-icon">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/></svg>
-    </div>
-    recrd
+---
+// Nav Component
+// Usage: import Nav from '../components/Nav.astro'; then <Nav />
+---
+
+<nav>
+  <a href="/" class="nav-logo">
+    <svg viewBox="0 0 52 52" fill="none">
+      <rect y="16" width="28" height="28" fill="#A678F4"/>
+      <rect x="16" width="28" height="28" rx="6" fill="#46FCAF"/>
+    </svg>
+    <span class="nav-wordmark">recrd</span>
   </a>
-  <div class="nav-links">
-    <a href="/features">Product</a>
-    <a href="/pricing">Pricing</a>
-    <a href="/blog">Resources</a>
-  </div>
-  <div class="nav-ctas">
-    <a href="#" class="nav-btn secondary">Login</a>
-    <a href="#" class="nav-btn primary">Get Started</a>
+  <ul class="nav-links">
+    <li class="has-dropdown">
+      <a href="#">
+        Solutions
+        <svg class="nav-caret" viewBox="0 0 10 10" fill="none">
+          <path d="M2 3.5L5 6.5L8 3.5" stroke="currentColor" stroke-width="1.5"/>
+        </svg>
+      </a>
+      <div class="nav-dropdown">
+        <a href="/solutions/sales-reps">Sales Reps</a>
+        <a href="/solutions/sales-managers">Sales Managers</a>
+        <a href="/solutions/revops">RevOps</a>
+        <a href="/solutions/marketing">Marketing</a>
+        <a href="/solutions/customer-success">Customer Success</a>
+      </div>
+    </li>
+    <li><a href="/features">Features</a></li>
+    <li><a href="/pricing">Pricing</a></li>
+    <li><a href="/agents">Agents</a></li>
+  </ul>
+  <div class="nav-right">
+    <a href="/#contact" class="nav-contact">Contact</a>
+    <a href="https://app.recrd.io" class="nav-cta">Dashboard</a>
   </div>
 </nav>
-<script>
-  const nav = document.getElementById('nav');
-  window.addEventListener('scroll', () => nav?.classList.toggle('scrolled', window.scrollY > 20));
-</script>
+
+<style>
+  nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 72px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 48px;
+    z-index: 100;
+    background: rgba(10,10,10,0.85);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+  }
+  :global([data-theme="light"]) nav {
+    background: rgba(250,250,250,0.85);
+  }
+
+  .nav-logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+  }
+  .nav-logo:hover { opacity: 0.8; }
+  .nav-logo svg { width: 32px; height: 32px; }
+  .nav-wordmark { font-weight: 600; font-size: 18px; color: var(--text); }
+
+  .nav-links {
+    display: flex;
+    gap: 8px;
+    list-style: none;
+  }
+  .nav-links > li {
+    position: relative;
+  }
+  .nav-links > li > a {
+    color: var(--text-muted);
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+    padding: 10px 16px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.2s ease;
+  }
+  
+  /* Nav link hover colors */
+  .nav-links > li:nth-child(1) > a:hover { background: var(--purple); color: #fff; }
+  .nav-links > li:nth-child(2) > a:hover { background: var(--cyan); color: #0a0a0a; }
+  .nav-links > li:nth-child(3) > a:hover { background: var(--mint); color: #0a0a0a; }
+  .nav-links > li:nth-child(4) > a:hover { background: var(--coral); color: #fff; }
+
+  /* Dropdown caret */
+  .nav-caret {
+    width: 10px;
+    height: 10px;
+    transition: transform 0.2s ease;
+  }
+  
+  /* Dropdown panel */
+  .nav-dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    min-width: 200px;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-8px);
+    transition: all 0.2s ease;
+  }
+  
+  .nav-links > li:hover .nav-dropdown {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+  }
+  
+  .nav-links > li:hover .nav-caret {
+    transform: rotate(180deg);
+  }
+  
+  .nav-dropdown a {
+    display: block;
+    padding: 12px 20px;
+    color: var(--text-muted);
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+    border-bottom: 1px solid var(--border);
+    transition: all 0.15s ease;
+  }
+  .nav-dropdown a:last-child {
+    border-bottom: none;
+  }
+  .nav-dropdown a:hover {
+    background: var(--bg-card);
+    color: var(--text);
+    padding-left: 24px;
+  }
+  
+  /* Dropdown item accent colors on hover */
+  .nav-dropdown a:nth-child(1):hover { border-left: 3px solid var(--mint); }
+  .nav-dropdown a:nth-child(2):hover { border-left: 3px solid var(--purple); }
+  .nav-dropdown a:nth-child(3):hover { border-left: 3px solid var(--yellow); }
+  .nav-dropdown a:nth-child(4):hover { border-left: 3px solid var(--coral); }
+  .nav-dropdown a:nth-child(5):hover { border-left: 3px solid var(--cyan); }
+
+  .nav-right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .nav-contact {
+    color: var(--text-muted);
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+    padding: 10px 16px;
+    transition: color 0.2s ease;
+  }
+  .nav-contact:hover { color: var(--text); }
+
+  .nav-cta {
+    position: relative;
+    background: transparent;
+    color: var(--text);
+    padding: 12px 24px;
+    font-weight: 500;
+    font-size: 14px;
+    text-decoration: none;
+    border: 1px solid var(--btn-outline);
+    overflow: hidden;
+    transition: color 0.3s ease, border-color 0.3s ease;
+  }
+  .nav-cta::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 0;
+    height: 100%;
+    background: var(--mint);
+    transition: width 0.3s ease;
+    z-index: -1;
+  }
+  .nav-cta:hover::before { width: 100%; }
+  .nav-cta:hover { color: #0a0a0a; border-color: var(--mint); }
+
+  /* Mobile */
+  @media (max-width: 900px) {
+    nav { padding: 0 24px; }
+    .nav-links { display: none; }
+  }
+</style>

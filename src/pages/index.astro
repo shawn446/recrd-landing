@@ -1,537 +1,1580 @@
 ---
-import BaseLayout from '../layouts/BaseLayout.astro';
+// Hero Section - Clean Stepped Grid
 ---
-<BaseLayout title="recrd — AI agents for every sales conversation" description="One call. Six agents. Zero setup.">
-  <!-- HERO -->
-  <section class="hero">
-    <div class="hero-blob-3"></div>
-    <div class="hero-blob-4"></div>
+
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>recrd - AI agents that close deals</title>
+  
+  <style>
+    @font-face {
+      font-family: 'Roobert';
+      src: url('/fonts/RoobertCollectionVF-TRIAL.woff2') format('woff2');
+      font-weight: 100 900;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'Fraktion Mono';
+      src: url('/fonts/PPFraktionMono-Regular.otf') format('opentype');
+      font-weight: 400;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'Matter';
+      src: url('/fonts/Matter-TRIAL-Light.otf') format('opentype');
+      font-weight: 300;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'Matter';
+      src: url('/fonts/Matter-TRIAL-Regular.otf') format('opentype');
+      font-weight: 400;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'Matter';
+      src: url('/fonts/Matter-TRIAL-Medium.ttf') format('truetype');
+      font-weight: 500;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'Object Sans';
+      src: url('/fonts/PPObjectSans-Regular.otf') format('opentype');
+      font-weight: 400;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'Object Sans';
+      src: url('/fonts/PPObjectSans-Heavy.otf') format('opentype');
+      font-weight: 800;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    :root {
+      --font: 'Roobert', -apple-system, BlinkMacSystemFont, sans-serif;
+      --mono: 'Fraktion Mono', 'SF Mono', monospace;
+      --mint: #46FCAF;
+      --purple: #A678F4;
+      --cyan: #02C0FF;
+      --coral: #FF4F5E;
+      --yellow: #FFDC58;
+      
+      --cell: 120px;
+      --grid-cols: 9;
+      --grid-rows: 8;
+    }
+
+    [data-theme="dark"] {
+      --bg: #0A0A0A;
+      --bg-alt: #0F0F0F;
+      --bg-card: #161616;
+      --text: #ffffff;
+      --text-muted: #888888;
+      --border: rgba(255,255,255,0.12);
+      --grid-line: rgba(255,255,255,0.12);
+      --btn-outline: rgba(255,255,255,0.4);
+    }
+
+    [data-theme="light"] {
+      --bg: #fafafa;
+      --bg-alt: #ffffff;
+      --bg-card: #ffffff;
+      --text: #0a0a0a;
+      --text-muted: #666666;
+      --border: rgba(0,0,0,0.1);
+      --grid-line: rgba(0,0,0,0.12);
+      --btn-outline: rgba(0,0,0,0.8);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body { overflow-x: hidden; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--font);
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    /* ========================================
+       NAV - Updated with Contact + fill hover
+       ======================================== */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 72px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 48px;
+      z-index: 100;
+      background: rgba(10,10,10,0.85);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+    }
+    [data-theme="light"] nav {
+      background: rgba(250,250,250,0.85);
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+    }
+    .nav-logo:hover { opacity: 0.8; }
+    .nav-logo svg { width: 32px; height: 32px; }
+    .nav-wordmark { font-weight: 600; font-size: 18px; color: var(--text); }
+
+    .nav-links { display: flex; gap: 8px; list-style: none; }
+    .nav-links a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+      padding: 10px 16px;
+      transition: all 0.2s ease;
+    }
+    .nav-links li:nth-child(1) a:hover { background: var(--cyan); color: #0a0a0a; }
+    .nav-links li:nth-child(2) a:hover { background: var(--mint); color: #0a0a0a; }
+    .nav-links li:nth-child(3) a:hover { background: var(--purple); color: #fff; }
+    .nav-links li:nth-child(4) a:hover { background: var(--coral); color: #fff; }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .nav-contact {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+      padding: 10px 16px;
+      transition: color 0.2s ease;
+    }
+    .nav-contact:hover { color: var(--text); }
+
+    .nav-cta {
+      position: relative;
+      background: transparent;
+      color: var(--text);
+      padding: 12px 24px;
+      font-weight: 500;
+      font-size: 14px;
+      text-decoration: none;
+      border: 1px solid var(--btn-outline);
+      overflow: hidden;
+      transition: color 0.3s ease, border-color 0.3s ease;
+    }
+    .nav-cta::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 0;
+      height: 100%;
+      background: var(--mint);
+      transition: width 0.3s ease;
+      z-index: -1;
+    }
+    .nav-cta:hover::before { width: 100%; }
+    .nav-cta:hover { color: #0a0a0a; border-color: var(--mint); }
+
+    /* ========================================
+       HERO - EXACTLY AS PROVIDED
+       ======================================== */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      padding: 72px 0 0 48px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-content {
+      max-width: 550px;
+      z-index: 10;
+      padding: 48px 0;
+    }
+
+    .hero-headline {
+      font-size: 90px;
+      font-weight: 350;
+      line-height: 1.0;
+      letter-spacing: -0.03em;
+      margin-bottom: 28px;
+    }
+    .hero-headline em { 
+      font-style: normal; 
+      color: var(--mint);
+      font-weight: 400;
+    }
+    [data-theme="light"] .hero-headline em { color: var(--purple); }
+
+    .hero-sub {
+      font-size: 20px;
+      font-weight: 400;
+      line-height: 1.5;
+      margin-bottom: 40px;
+      color: var(--text-muted);
+    }
+
+    .hero-buttons { display: flex; gap: 16px; }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      padding: 18px 28px;
+      font-weight: 500;
+      font-size: 15px;
+      text-decoration: none;
+      transition: all 0.2s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
     
-    <a href="#" class="hero-announcement">
-      <span class="announcement-tag">New</span>
-      <span class="announcement-text">Read the launch guide →</span>
+    .btn-primary { 
+      background: transparent;
+      color: var(--text);
+      border: 1px solid var(--btn-outline);
+    }
+    .btn-primary::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 0;
+      height: 100%;
+      background: var(--mint);
+      transition: width 0.3s ease;
+      z-index: -1;
+    }
+    .btn-primary:hover::before { width: 100%; }
+    .btn-primary:hover { 
+      color: #0a0a0a;
+      border-color: var(--mint);
+      transform: translateY(-2px); 
+    }
+    
+    .btn-secondary { 
+      background: transparent; 
+      color: var(--text); 
+      border: 1px solid var(--btn-outline);
+    }
+    .btn-secondary::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 0;
+      height: 100%;
+      background: var(--purple);
+      transition: width 0.3s ease;
+      z-index: -1;
+    }
+    .btn-secondary:hover::before { width: 100%; }
+    .btn-secondary:hover {
+      color: #fff;
+      border-color: var(--purple);
+    }
+
+    .btn-arrow {
+      display: inline-flex;
+      transition: transform 0.2s ease;
+    }
+    .btn:hover .btn-arrow {
+      transform: translateX(4px);
+    }
+
+    /* ========================================
+       GRID WRAPPER - EXACTLY AS PROVIDED
+       ======================================== */
+    
+    .grid-wrapper {
+      position: absolute;
+      top: 50%;
+      right: 20px;
+      transform: translateY(-50%);
+      width: calc(var(--cell) * var(--grid-cols));
+      height: calc(var(--cell) * var(--grid-rows));
+      z-index: 5;
+    }
+
+    /* SVG grid lines */
+    .grid-svg {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    .grid-svg line {
+      stroke: var(--grid-line);
+      stroke-width: 1;
+    }
+
+    /* ========================================
+       CARDS - exactly 2 cells × 2 cells
+       ======================================== */
+    
+    .card {
+      position: absolute;
+      width: calc(var(--cell) * 2);
+      height: calc(var(--cell) * 2);
+      display: flex;
+      flex-direction: column;
+      padding: 24px;
+      opacity: 0;
+      transform: translateX(-30px) scale(0.95);
+      z-index: 10;
+    }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    .card-icon {
+      width: 22px;
+      height: 22px;
+      flex-shrink: 0;
+    }
+    .card-icon svg {
+      width: 100%;
+      height: 100%;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      fill: none;
+    }
+
+    .card-badge {
+      font-family: var(--mono);
+      font-size: 9px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      padding: 5px 10px;
+    }
+
+    .card-title {
+      font-size: 18px;
+      font-weight: 600;
+      line-height: 1.2;
+      margin-bottom: 6px;
+    }
+
+    .card-content {
+      font-size: 12px;
+      line-height: 1.5;
+      opacity: 0.9;
+      flex: 1;
+    }
+
+    .card-meta {
+      font-family: var(--mono);
+      font-size: 10px;
+      opacity: 0.7;
+      margin-top: auto;
+      padding-top: 10px;
+      border-top: 1px solid rgba(0,0,0,0.1);
+    }
+
+    /* Card colors */
+    .card.mint {
+      background: var(--mint);
+      color: #0a0a0a;
+    }
+    .card.mint .card-badge { background: rgba(0,0,0,0.1); }
+    .card.mint .card-icon svg { stroke: #0a0a0a; }
+    .card.mint .card-meta { border-color: rgba(0,0,0,0.15); }
+
+    .card.purple {
+      background: var(--purple);
+      color: #fff;
+    }
+    .card.purple .card-badge { background: rgba(255,255,255,0.2); }
+    .card.purple .card-icon svg { stroke: #fff; }
+    .card.purple .card-meta { border-color: rgba(255,255,255,0.2); }
+
+    .card.cyan {
+      background: var(--cyan);
+      color: #0a0a0a;
+    }
+    .card.cyan .card-badge { background: rgba(0,0,0,0.1); }
+    .card.cyan .card-icon svg { stroke: #0a0a0a; }
+    .card.cyan .card-meta { border-color: rgba(0,0,0,0.15); }
+
+    .card.coral {
+      background: var(--coral);
+      color: #fff;
+    }
+    .card.coral .card-badge { background: rgba(255,255,255,0.2); }
+    .card.coral .card-icon svg { stroke: #fff; }
+    .card.coral .card-meta { border-color: rgba(255,255,255,0.2); }
+
+    /* Card content components */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6px;
+      margin-top: 6px;
+    }
+
+    .stat-box {
+      background: rgba(255,255,255,0.15);
+      padding: 8px;
+    }
+
+    .stat-label {
+      font-family: var(--mono);
+      font-size: 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      opacity: 0.8;
+      margin-bottom: 2px;
+    }
+
+    .stat-value {
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .stat-value.positive { color: #46FCAF; }
+    .stat-value.highlight { color: #fff; }
+
+    .talk-ratio {
+      display: flex;
+      height: 6px;
+      gap: 2px;
+      margin-top: 8px;
+      border-radius: 3px;
+      overflow: hidden;
+    }
+
+    .talk-ratio .rep { background: rgba(0,0,0,0.3); width: 35%; }
+    .talk-ratio .prospect { background: rgba(0,0,0,0.15); width: 65%; }
+
+    .meddic-row {
+      display: flex;
+      gap: 4px;
+      margin-top: 8px;
+    }
+
+    .meddic-item {
+      flex: 1;
+      background: rgba(0,0,0,0.15);
+      padding: 6px 2px;
+      font-family: var(--mono);
+      font-size: 9px;
+      text-align: center;
+      font-weight: 600;
+    }
+    .meddic-item.filled { background: rgba(0,0,0,0.3); }
+
+    .quote-block {
+      background: rgba(255,255,255,0.12);
+      padding: 10px;
+      margin-top: 4px;
+      font-style: italic;
+      font-size: 11px;
+      line-height: 1.4;
+    }
+
+    .quote-attr {
+      font-style: normal;
+      font-size: 10px;
+      opacity: 0.8;
+      margin-top: 6px;
+    }
+
+    /* Card positions - aligned to exact grid cells */
+    #card1 { top: 0; left: 0; }
+    #card2 { top: calc(var(--cell) * 2); left: calc(var(--cell) * 3); }
+    #card3 { top: calc(var(--cell) * 4); left: calc(var(--cell) * 5); }
+    #card4 { top: calc(var(--cell) * 6); left: calc(var(--cell) * 7); }
+
+    /* ========================================
+       LOGO BAR - New Section
+       ======================================== */
+    .logo-bar {
+      padding: 80px 48px;
+      text-align: center;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      background: var(--bg);
+    }
+
+    .logo-bar-label {
+      font-size: 14px;
+      color: var(--text-muted);
+      margin-bottom: 48px;
+      letter-spacing: 0.02em;
+    }
+
+    .logo-bar-grid {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 56px 72px;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .logo-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      opacity: 0.4;
+      transition: opacity 0.2s ease;
+    }
+    .logo-item:hover { opacity: 0.8; }
+
+    .logo-item svg {
+      height: 24px;
+      width: auto;
+    }
+    [data-theme="dark"] .logo-item svg { fill: #fff; }
+    [data-theme="light"] .logo-item svg { fill: #000; }
+
+    .logo-item span {
+      font-weight: 600;
+      font-size: 17px;
+      letter-spacing: -0.01em;
+    }
+
+    /* ========================================
+       HOW IT WORKS - Refined Design
+       ======================================== */
+    .how-section {
+      padding: 140px 48px;
+      background: var(--bg-alt);
+    }
+
+    .section-header {
+      text-align: center;
+      max-width: 600px;
+      margin: 0 auto 80px;
+    }
+
+    .section-headline {
+      font-size: 52px;
+      font-weight: 350;
+      line-height: 1.15;
+      letter-spacing: -0.03em;
+      margin-bottom: 20px;
+    }
+
+    .section-sub {
+      font-size: 18px;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+    .how-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      max-width: 1200px;
+      margin: 0 auto;
+      background: var(--border);
+    }
+
+    .how-card {
+      background: var(--bg);
+      padding: 48px 40px;
+      position: relative;
+    }
+
+    .how-step-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 24px;
+    }
+
+    .how-step-num {
+      width: 24px;
+      height: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--mono);
+      font-size: 11px;
+      font-weight: 600;
+    }
+    .how-card:nth-child(1) .how-step-num { background: var(--mint); color: #0a0a0a; }
+    .how-card:nth-child(2) .how-step-num { background: var(--purple); color: #fff; }
+    .how-card:nth-child(3) .how-step-num { background: var(--cyan); color: #0a0a0a; }
+
+    .how-step-label {
+      font-family: var(--mono);
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--text-muted);
+    }
+
+    .how-card-title {
+      font-size: 22px;
+      font-weight: 600;
+      margin-bottom: 12px;
+      letter-spacing: -0.01em;
+    }
+
+    .how-card-desc {
+      font-size: 15px;
+      color: var(--text-muted);
+      line-height: 1.6;
+      margin-bottom: 32px;
+    }
+
+    /* Mock UI Styles - Varied per card */
+    .how-mock {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+    }
+
+    /* Card 1: Dropdown selector style */
+    .mock-dropdown {
+      padding: 16px;
+    }
+    .mock-search {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 14px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      margin-bottom: 8px;
+      font-family: var(--mono);
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+    .mock-search::after {
+      content: '|';
+      animation: blink 1s infinite;
+    }
+    @keyframes blink {
+      0%, 50% { opacity: 1; }
+      51%, 100% { opacity: 0; }
+    }
+    .mock-option {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 14px;
+      font-size: 13px;
+      border-left: 3px solid transparent;
+      transition: all 0.15s ease;
+    }
+    .mock-option:hover {
+      background: var(--bg);
+    }
+    .mock-option.selected {
+      background: var(--mint);
+      color: #0a0a0a;
+      border-left-color: #0a0a0a;
+    }
+    .mock-option .check {
+      width: 14px;
+      height: 14px;
+      opacity: 0.5;
+    }
+    .mock-option.selected .check {
+      opacity: 1;
+    }
+    .mock-option .check svg {
+      width: 14px;
+      height: 14px;
+      stroke-width: 2.5;
+    }
+
+    /* Card 2: Form fields style */
+    .mock-form {
+      padding: 20px;
+    }
+    .mock-field {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 12px;
+    }
+    .mock-field:last-of-type {
+      margin-bottom: 20px;
+    }
+    .mock-field-label {
+      width: 80px;
+      font-size: 11px;
+      color: var(--text-muted);
+      text-align: right;
+      flex-shrink: 0;
+    }
+    .mock-field-input {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 14px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      font-family: var(--mono);
+      font-size: 12px;
+    }
+    .mock-field-input .check-sm {
+      color: var(--mint);
+    }
+    .mock-btn-primary {
+      width: 100%;
+      padding: 14px;
+      background: var(--purple);
+      color: #fff;
+      font-weight: 600;
+      font-size: 14px;
+      text-align: center;
+      border: none;
+      cursor: pointer;
+      transition: opacity 0.2s;
+    }
+    .mock-btn-primary:hover {
+      opacity: 0.9;
+    }
+
+    /* Card 3: Activity log style */
+    .mock-activity {
+      padding: 0;
+    }
+    .mock-action-btn {
+      display: block;
+      width: 100%;
+      padding: 16px;
+      background: var(--cyan);
+      color: #0a0a0a;
+      font-weight: 600;
+      font-size: 14px;
+      text-align: center;
+      border: none;
+    }
+    .mock-status-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--border);
+    }
+    .mock-url {
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+    .mock-live-badge {
+      padding: 4px 10px;
+      background: var(--mint);
+      color: #0a0a0a;
+      font-family: var(--mono);
+      font-size: 10px;
+      font-weight: 600;
+    }
+    .mock-log-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--border);
+      font-size: 13px;
+    }
+    .mock-log-item:last-child {
+      border-bottom: none;
+    }
+    .mock-log-item .time {
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    /* ========================================
+       FEATURES - Premium Icons
+       ======================================== */
+    .features-section {
+      padding: 140px 48px;
+      border-top: 1px solid var(--border);
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1px;
+      background: var(--border);
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .feature-card {
+      background: var(--bg);
+      padding: 48px 36px;
+    }
+
+    /* Refined geometric icons - Render style */
+    .feature-icon {
+      width: 48px;
+      height: 48px;
+      margin-bottom: 28px;
+      position: relative;
+    }
+
+    .feature-title {
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 12px;
+      letter-spacing: -0.01em;
+    }
+
+    .feature-desc {
+      font-size: 14px;
+      color: var(--text-muted);
+      line-height: 1.65;
+    }
+
+    /* ========================================
+       CTA SECTION
+       ======================================== */
+    .cta-section {
+      padding: 140px 48px;
+      background: var(--bg-alt);
+      text-align: center;
+      border-top: 1px solid var(--border);
+    }
+
+    .cta-headline {
+      font-size: 48px;
+      font-weight: 350;
+      line-height: 1.2;
+      letter-spacing: -0.02em;
+      margin-bottom: 20px;
+    }
+
+    .cta-sub {
+      font-size: 18px;
+      color: var(--text-muted);
+      margin-bottom: 48px;
+    }
+
+    .cta-buttons {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+    }
+
+    /* ========================================
+       FOOTER
+       ======================================== */
+    footer {
+      padding: 64px 48px;
+      border-top: 1px solid var(--border);
+    }
+
+    .footer-inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .footer-logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .footer-logo svg { width: 28px; height: 28px; }
+    .footer-logo span { font-weight: 600; font-size: 16px; }
+
+    .footer-links {
+      display: flex;
+      gap: 36px;
+      list-style: none;
+    }
+    .footer-links a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 14px;
+      transition: color 0.2s ease;
+    }
+    .footer-links a:hover { color: var(--text); }
+
+    .footer-copy {
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    /* Theme toggle */
+    .theme-toggle {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      z-index: 1000;
+    }
+    .theme-toggle button {
+      padding: 10px 20px;
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      font-size: 13px;
+      cursor: pointer;
+      font-family: var(--font);
+    }
+    .theme-toggle button:hover:not(.active) { color: var(--text); }
+    .theme-toggle button.active { background: var(--text); color: var(--bg); }
+
+    /* ========================================
+       RESPONSIVE - EXACTLY AS PROVIDED
+       ======================================== */
+    @media (max-width: 1800px) {
+      :root { --cell: 110px; }
+      .hero-headline { font-size: 80px; }
+    }
+    
+    @media (max-width: 1600px) {
+      :root { --cell: 95px; }
+      .hero-headline { font-size: 70px; }
+    }
+    
+    @media (max-width: 1400px) {
+      :root { --cell: 80px; }
+      .hero-headline { font-size: 60px; }
+      .card { padding: 18px; }
+      .card-title { font-size: 15px; }
+      .card-content { font-size: 11px; }
+      .features-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    
+    @media (max-width: 1200px) {
+      :root { --cell: 70px; }
+      .hero-headline { font-size: 52px; }
+      .section-headline { font-size: 40px; }
+      .card { padding: 14px; }
+      .card-title { font-size: 13px; }
+      .stats-grid { display: none; }
+      .meddic-row { display: none; }
+      .quote-block { display: none; }
+    }
+
+    @media (max-width: 1000px) {
+      :root { --cell: 60px; }
+      .hero-headline { font-size: 44px; }
+      .how-grid { grid-template-columns: 1fr; }
+      .card { padding: 10px; }
+      .card-title { font-size: 12px; }
+      .card-content { display: none; }
+      .card-meta { display: none; }
+    }
+
+    @media (max-width: 900px) {
+      .hero {
+        flex-direction: column;
+        padding: 100px 24px 48px;
+        min-height: auto;
+      }
+      .hero-content { max-width: 100%; text-align: center; margin-bottom: 40px; }
+      .hero-headline { font-size: 48px; }
+      .hero-buttons { justify-content: center; }
+      .grid-wrapper {
+        position: relative;
+        top: auto;
+        right: auto;
+        transform: none;
+        margin: 0 auto;
+      }
+      :root { --cell: 50px; }
+      .nav-links { display: none; }
+      nav { padding: 0 24px; }
+      .logo-bar { padding: 60px 24px; }
+      .logo-bar-grid { gap: 32px 48px; }
+      .how-section { padding: 80px 24px; }
+      .features-section { padding: 80px 24px; }
+      .features-grid { grid-template-columns: 1fr; }
+      .cta-section { padding: 80px 24px; }
+      footer { padding: 40px 24px; }
+      .footer-inner { flex-direction: column; gap: 24px; text-align: center; }
+      .footer-links { flex-wrap: wrap; justify-content: center; gap: 16px 24px; }
+    }
+
+    @media (max-width: 600px) {
+      .hero-headline { font-size: 36px; }
+      .hero-sub { font-size: 16px; }
+      .hero-buttons { flex-direction: column; }
+      .btn { width: 100%; justify-content: center; }
+      :root { --cell: 40px; }
+      .card { padding: 6px; }
+      .card-badge { font-size: 6px; padding: 2px 4px; }
+      .card-title { font-size: 9px; }
+      .card-icon { width: 12px; height: 12px; }
+      .card-header { margin-bottom: 4px; gap: 4px; }
+      .section-headline { font-size: 32px; }
+      .cta-headline { font-size: 28px; }
+      .cta-buttons { flex-direction: column; }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- NAV - Updated with Contact button -->
+  <nav>
+    <a href="/" class="nav-logo">
+      <svg viewBox="0 0 52 52" fill="none">
+        <rect y="16" width="28" height="28" fill="#A678F4"/>
+        <rect x="16" width="28" height="28" rx="6" fill="#46FCAF"/>
+      </svg>
+      <span class="nav-wordmark">recrd</span>
     </a>
-    
-    <div class="hero-headline">
-      <h1>Every conversation triggers an army of <em>AI agents</em></h1>
+    <ul class="nav-links">
+      <li><a href="#features">Features</a></li>
+      <li><a href="pricing.html">Pricing</a></li>
+      <li><a href="#">Docs</a></li>
+      <li><a href="#">Blog</a></li>
+    </ul>
+    <div class="nav-right">
+      <a href="#contact" class="nav-contact">Contact</a>
+      <a href="#" class="nav-cta">Dashboard</a>
     </div>
-    
-    <p class="hero-sub">
-      One call. Six agents. Zero setup. They draft follow-ups, update your CRM, score deals, flag risks, and coach your team — automatically.
-    </p>
-    
-    <div class="hero-capture">
-      <input type="email" placeholder="What's your work email?">
-      <button>Get Started</button>
+  </nav>
+
+  <!-- HERO - EXACTLY AS PROVIDED -->
+  <section class="hero">
+    <div class="hero-content">
+      <h1 class="hero-headline">Your calls,<br><em>working for you</em></h1>
+      <p class="hero-sub">Every sales call triggers six AI agents that update your CRM, alert your team, and draft follow-ups—automatically.</p>
+      <div class="hero-buttons">
+        <a href="#" class="btn btn-primary">
+          Book a Demo
+          <span class="btn-arrow">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+              <rect x="1" y="7" width="2" height="2" fill="currentColor"/>
+              <rect x="4" y="7" width="2" height="2" fill="currentColor"/>
+              <rect x="7" y="7" width="2" height="2" fill="currentColor"/>
+              <rect x="10" y="7" width="2" height="2" fill="currentColor"/>
+              <rect x="10" y="4" width="2" height="2" fill="currentColor"/>
+              <rect x="12" y="6" width="2" height="2" fill="currentColor"/>
+              <rect x="10" y="10" width="2" height="2" fill="currentColor"/>
+              <rect x="12" y="8" width="2" height="2" fill="currentColor"/>
+            </svg>
+          </span>
+        </a>
+        <a href="#" class="btn btn-secondary">
+          See How It Works
+          <span class="btn-arrow">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+              <rect x="1" y="7" width="2" height="2" fill="currentColor"/>
+              <rect x="4" y="7" width="2" height="2" fill="currentColor"/>
+              <rect x="7" y="7" width="2" height="2" fill="currentColor"/>
+              <rect x="10" y="7" width="2" height="2" fill="currentColor"/>
+              <rect x="10" y="4" width="2" height="2" fill="currentColor"/>
+              <rect x="12" y="6" width="2" height="2" fill="currentColor"/>
+              <rect x="10" y="10" width="2" height="2" fill="currentColor"/>
+              <rect x="12" y="8" width="2" height="2" fill="currentColor"/>
+            </svg>
+          </span>
+        </a>
+      </div>
     </div>
-    
-    <!-- Hero graphic - AI Agents ecosystem -->
-    <div class="hero-ecosystem">
-      <!-- Central conversation node -->
-      <div class="ecosystem-center">
-        <div class="center-pulse"></div>
-        <div class="center-pulse delay"></div>
-        <div class="center-node">
-          <div class="center-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/>
-              <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
-              <line x1="12" y1="19" x2="12" y2="23"/>
-              <line x1="8" y1="23" x2="16" y2="23"/>
+
+    <div class="grid-wrapper">
+      <svg class="grid-svg" viewBox="0 0 1080 960" preserveAspectRatio="xMidYMid meet">
+        <!-- All horizontal lines -->
+        <line x1="0" y1="0" x2="1080" y2="0"/>
+        <line x1="120" y1="120" x2="1080" y2="120"/>
+        <line x1="240" y1="240" x2="1080" y2="240"/>
+        <line x1="360" y1="360" x2="1080" y2="360"/>
+        <line x1="360" y1="480" x2="1080" y2="480"/>
+        <line x1="240" y1="600" x2="1080" y2="600"/>
+        <line x1="120" y1="720" x2="1080" y2="720"/>
+        <line x1="0" y1="840" x2="1080" y2="840"/>
+        <line x1="0" y1="960" x2="1080" y2="960"/>
+
+        <!-- All vertical lines -->
+        <line x1="1080" y1="0" x2="1080" y2="960"/>
+        <line x1="960" y1="0" x2="960" y2="960"/>
+        <line x1="840" y1="0" x2="840" y2="960"/>
+        <line x1="720" y1="0" x2="720" y2="960"/>
+        <line x1="600" y1="0" x2="600" y2="960"/>
+        <line x1="480" y1="0" x2="480" y2="960"/>
+        <line x1="360" y1="0" x2="360" y2="360"/>
+        <line x1="360" y1="480" x2="360" y2="960"/>
+        <line x1="240" y1="0" x2="240" y2="240"/>
+        <line x1="240" y1="600" x2="240" y2="960"/>
+        <line x1="120" y1="0" x2="120" y2="120"/>
+        <line x1="120" y1="720" x2="120" y2="960"/>
+        <line x1="0" y1="0" x2="0" y2="0"/>
+        <line x1="0" y1="840" x2="0" y2="960"/>
+
+        <!-- Left edge step connectors -->
+        <line x1="0" y1="120" x2="120" y2="120"/>
+        <line x1="120" y1="240" x2="240" y2="240"/>
+        <line x1="240" y1="360" x2="360" y2="360"/>
+        <line x1="240" y1="600" x2="360" y2="600"/>
+        <line x1="120" y1="720" x2="240" y2="720"/>
+        <line x1="0" y1="840" x2="120" y2="840"/>
+      </svg>
+
+      <!-- Card 1: Call Completed -->
+      <div class="card mint" id="card1">
+        <div class="card-header">
+          <div class="card-icon">
+            <svg viewBox="0 0 24 24">
+              <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
             </svg>
           </div>
-          <span class="center-label">Every conversation</span>
+          <span class="card-badge">Trigger</span>
         </div>
-      </div>
-
-      <!-- Agent branches -->
-      <div class="agent-branch branch-1">
-        <div class="branch-line"></div>
-        <div class="agent-card">
-          <div class="agent-status live">Live</div>
-          <div class="agent-header">
-            <div class="agent-icon pink">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
-            </div>
-            <span class="agent-name">Follow-up Agent</span>
-          </div>
-          <div class="agent-output">
-            <div class="output-preview email">
-              <span class="preview-label">Draft ready</span>
-              <p>"Hi Sarah, following up on our call about the Q1 rollout..."</p>
-            </div>
+        <span class="card-title">Call completed</span>
+        <div class="card-content">
+          Discovery call with Sarah Chen, VP Sales at Acme Corp
+          <div class="talk-ratio">
+            <div class="rep"></div>
+            <div class="prospect"></div>
           </div>
         </div>
+        <div class="card-meta">32 min · 35/65 talk ratio</div>
       </div>
 
-      <div class="agent-branch branch-2">
-        <div class="branch-line"></div>
-        <div class="agent-card">
-          <div class="agent-status live">Live</div>
-          <div class="agent-header">
-            <div class="agent-icon teal">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>
-            </div>
-            <span class="agent-name">CRM Agent</span>
+      <!-- Card 2: recrd Analyzes -->
+      <div class="card purple" id="card2">
+        <div class="card-header">
+          <div class="card-icon">
+            <svg viewBox="0 0 24 24">
+              <path d="M2 12h2"/><path d="M6 8v8"/><path d="M10 4v16"/><path d="M14 6v12"/><path d="M18 9v6"/><path d="M22 12h-2"/>
+            </svg>
           </div>
-          <div class="agent-output">
-            <div class="output-preview crm">
-              <div class="crm-row">
-                <span>Stage</span>
-                <span class="updated">Negotiation ✓</span>
-              </div>
-              <div class="crm-row">
-                <span>Amount</span>
-                <span class="updated">$52,000 ✓</span>
-              </div>
-              <div class="crm-row">
-                <span>Close Date</span>
-                <span class="updated">Jan 15 ✓</span>
-              </div>
+          <span class="card-badge">Processing</span>
+        </div>
+        <span class="card-title">recrd analyzes</span>
+        <div class="card-content">
+          <div class="stats-grid">
+            <div class="stat-box">
+              <div class="stat-label">Sentiment</div>
+              <div class="stat-value positive">87%</div>
+            </div>
+            <div class="stat-box">
+              <div class="stat-label">Momentum</div>
+              <div class="stat-value highlight">High</div>
+            </div>
+            <div class="stat-box">
+              <div class="stat-label">Objections</div>
+              <div class="stat-value">2</div>
+            </div>
+            <div class="stat-box">
+              <div class="stat-label">Next Steps</div>
+              <div class="stat-value">4</div>
             </div>
           </div>
         </div>
+        <div class="card-meta">6 agents · 14 actions</div>
       </div>
 
-      <div class="agent-branch branch-3">
-        <div class="branch-line"></div>
-        <div class="agent-card">
-          <div class="agent-status live">Live</div>
-          <div class="agent-header">
-            <div class="agent-icon purple">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-            </div>
-            <span class="agent-name">Coaching Agent</span>
+      <!-- Card 3: Pipeline Updated -->
+      <div class="card cyan" id="card3">
+        <div class="card-header">
+          <div class="card-icon">
+            <svg viewBox="0 0 24 24">
+              <line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/>
+            </svg>
           </div>
-          <div class="agent-output">
-            <div class="output-preview coaching">
-              <div class="coaching-score">
-                <span class="score-num">8.4</span>
-                <span class="score-max">/10</span>
-              </div>
-              <p class="coaching-tip">"Strong discovery. Try asking about timeline earlier."</p>
-            </div>
+          <span class="card-badge">CRM Agent</span>
+        </div>
+        <span class="card-title">Pipeline updated</span>
+        <div class="card-content">
+          Stage → Negotiation
+          <div class="meddic-row">
+            <div class="meddic-item filled">M</div>
+            <div class="meddic-item filled">E</div>
+            <div class="meddic-item filled">D</div>
+            <div class="meddic-item filled">D</div>
+            <div class="meddic-item">I</div>
+            <div class="meddic-item filled">C</div>
+          </div>
+        </div>
+        <div class="card-meta">5/6 MEDDIC · 12 fields</div>
+      </div>
+
+      <!-- Card 4: Manager Notified -->
+      <div class="card coral" id="card4">
+        <div class="card-header">
+          <div class="card-icon">
+            <svg viewBox="0 0 24 24">
+              <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+            </svg>
+          </div>
+          <span class="card-badge">Risk Alert</span>
+        </div>
+        <span class="card-title">Manager notified</span>
+        <div class="card-content">
+          <div class="quote-block">"Budget is tight this quarter, but we're very interested in Q1."</div>
+          <div class="quote-attr">— Sarah Chen, VP Sales</div>
+        </div>
+        <div class="card-meta">Slack #enterprise · @mike</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================
+       NEW SECTIONS BELOW HERO
+       ======================================== -->
+
+  <!-- LOGO BAR -->
+  <section class="logo-bar">
+    <p class="logo-bar-label">Works with the tools you already use</p>
+    <div class="logo-bar-grid">
+      <div class="logo-item">
+        <svg viewBox="0 0 64 64" height="24"><circle cx="32" cy="32" r="14" stroke="currentColor" stroke-width="4" fill="none"/><path d="M32 4v12M32 48v12M4 32h12M48 32h12" stroke="currentColor" stroke-width="4"/></svg>
+        <span>Zoom</span>
+      </div>
+      <div class="logo-item">
+        <svg viewBox="0 0 64 64" height="24"><path d="M24 16h-8v32h8V16zM48 16h-8v32h8V16zM36 24h-8v16h8V24z" fill="currentColor"/></svg>
+        <span>Slack</span>
+      </div>
+      <div class="logo-item">
+        <svg viewBox="0 0 64 64" height="24"><path d="M32 8L8 24v16l24 16 24-16V24L32 8z" stroke="currentColor" stroke-width="4" fill="none"/><circle cx="32" cy="32" r="8" fill="currentColor"/></svg>
+        <span>HubSpot</span>
+      </div>
+      <div class="logo-item">
+        <svg viewBox="0 0 64 64" height="24"><rect x="8" y="8" width="20" height="20" fill="currentColor"/><rect x="36" y="8" width="20" height="20" fill="currentColor" opacity="0.7"/><rect x="8" y="36" width="20" height="20" fill="currentColor" opacity="0.7"/><rect x="36" y="36" width="20" height="20" fill="currentColor" opacity="0.4"/></svg>
+        <span>Microsoft</span>
+      </div>
+      <div class="logo-item">
+        <svg viewBox="0 0 64 64" height="24"><circle cx="32" cy="32" r="24" stroke="currentColor" stroke-width="4" fill="none"/><circle cx="32" cy="32" r="8" fill="currentColor"/></svg>
+        <span>Google</span>
+      </div>
+      <div class="logo-item">
+        <svg viewBox="0 0 64 64" height="24"><path d="M16 48c0-16 16-32 32-32" stroke="currentColor" stroke-width="4" fill="none"/><circle cx="48" cy="16" r="8" fill="currentColor"/><circle cx="16" cy="48" r="8" fill="currentColor"/></svg>
+        <span>Salesforce</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section class="how-section" id="how">
+    <div class="section-header">
+      <h2 class="section-headline">Click, click, done.</h2>
+      <p class="section-sub">Connect your calendar. AI agents start working on every call, automatically.</p>
+    </div>
+
+    <div class="how-grid">
+      <!-- Step 1: Dropdown selector -->
+      <div class="how-card">
+        <div class="how-step-badge">
+          <div class="how-step-num">1</div>
+          <span class="how-step-label">Connect</span>
+        </div>
+        <h3 class="how-card-title">Link your calendar</h3>
+        <p class="how-card-desc">Connect Google or Outlook. recrd automatically joins and records your sales calls.</p>
+        <div class="how-mock mock-dropdown">
+          <div class="mock-search">Integration type...</div>
+          <div class="mock-option selected">
+            <span class="check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><polyline points="20 6 9 17 4 12"/></svg></span>
+            Google Calendar
+          </div>
+          <div class="mock-option">
+            <span class="check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><polyline points="20 6 9 17 4 12"/></svg></span>
+            Microsoft Outlook
+          </div>
+          <div class="mock-option">
+            <span class="check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><polyline points="20 6 9 17 4 12"/></svg></span>
+            Zoom
+          </div>
+          <div class="mock-option">
+            <span class="check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><polyline points="20 6 9 17 4 12"/></svg></span>
+            HubSpot CRM
           </div>
         </div>
       </div>
 
-      <div class="agent-branch branch-4">
-        <div class="branch-line"></div>
-        <div class="agent-card">
-          <div class="agent-status live">Live</div>
-          <div class="agent-header">
-            <div class="agent-icon yellow">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg>
-            </div>
-            <span class="agent-name">Forecast Agent</span>
-          </div>
-          <div class="agent-output">
-            <div class="output-preview forecast">
-              <div class="forecast-prob">
-                <span class="prob-label">Win probability</span>
-                <span class="prob-value up">78% ↑</span>
-              </div>
-              <div class="forecast-bar">
-                <div class="forecast-fill" style="width: 78%"></div>
-              </div>
+      <!-- Step 2: Form fields -->
+      <div class="how-card">
+        <div class="how-step-badge">
+          <div class="how-step-num">2</div>
+          <span class="how-step-label">Analyze</span>
+        </div>
+        <h3 class="how-card-title">AI agents process</h3>
+        <p class="how-card-desc">Every call is transcribed, scored, and analyzed. Agents extract insights and flag risks.</p>
+        <div class="how-mock mock-form">
+          <div class="mock-field">
+            <span class="mock-field-label">Sentiment</span>
+            <div class="mock-field-input">
+              <span>87% positive</span>
+              <span class="check-sm">✓</span>
             </div>
           </div>
+          <div class="mock-field">
+            <span class="mock-field-label">MEDDIC</span>
+            <div class="mock-field-input">
+              <span>5 of 6 captured</span>
+              <span class="check-sm">✓</span>
+            </div>
+          </div>
+          <div class="mock-field">
+            <span class="mock-field-label">Risk signals</span>
+            <div class="mock-field-input">
+              <span>1 detected</span>
+              <span class="check-sm">✓</span>
+            </div>
+          </div>
+          <button class="mock-btn-primary">Process Call</button>
         </div>
       </div>
 
-      <div class="agent-branch branch-5">
-        <div class="branch-line"></div>
-        <div class="agent-card">
-          <div class="agent-status live">Live</div>
-          <div class="agent-header">
-            <div class="agent-icon blue">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
-            </div>
-            <span class="agent-name">Content Agent</span>
-          </div>
-          <div class="agent-output">
-            <div class="output-preview content">
-              <span class="preview-label">LinkedIn draft</span>
-              <p>"Just wrapped a great call about revenue ops. Here's what I learned..."</p>
-            </div>
-          </div>
+      <!-- Step 3: Activity log -->
+      <div class="how-card">
+        <div class="how-step-badge">
+          <div class="how-step-num">3</div>
+          <span class="how-step-label">Automate</span>
         </div>
-      </div>
-
-      <div class="agent-branch branch-6">
-        <div class="branch-line"></div>
-        <div class="agent-card">
-          <div class="agent-status live">Live</div>
-          <div class="agent-header">
-            <div class="agent-icon red">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-            </div>
-            <span class="agent-name">Risk Agent</span>
+        <h3 class="how-card-title">Actions happen</h3>
+        <p class="how-card-desc">CRM fields update. Managers get notified. Follow-up emails draft themselves.</p>
+        <div class="how-mock mock-activity">
+          <button class="mock-action-btn">Sync Complete</button>
+          <div class="mock-status-bar">
+            <span class="mock-url">acme-corp.hubspot.com</span>
+            <span class="mock-live-badge">Live</span>
           </div>
-          <div class="agent-output">
-            <div class="output-preview risk">
-              <div class="risk-status low">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
-                Low risk
-              </div>
-              <p class="risk-note">Champion engaged, budget confirmed</p>
-            </div>
+          <div class="mock-log-item">
+            <span>CRM Updated</span>
+            <span class="time">1:20:50 PM</span>
+          </div>
+          <div class="mock-log-item">
+            <span>Slack Alert Sent</span>
+            <span class="time">1:20:47 PM</span>
+          </div>
+          <div class="mock-log-item">
+            <span>Follow-up Drafted</span>
+            <span class="time">1:20:45 PM</span>
           </div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- FEATURES SECTION -->
-  <section class="features-section">
-    <div class="features-container">
-      <p class="features-label">For Sales Teams</p>
-      <h2 class="features-title">AI agents that actually understand your deals</h2>
-      
-      <div class="features-grid">
-        <div class="features-accordion">
-          <div class="accordion-item active" data-index="0">
-            <div class="accordion-header">
-              <span class="accordion-title">Deal Intelligence</span>
-              <svg class="accordion-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
-            </div>
-            <p class="accordion-text">Extract key moments, objections, and buying signals from every call. Know exactly where each deal stands.</p>
-          </div>
-          
-          <div class="accordion-item" data-index="1">
-            <div class="accordion-header">
-              <span class="accordion-title">Pipeline Forecasting</span>
-              <svg class="accordion-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
-            </div>
-            <p class="accordion-text">See which deals are real and which are wishful thinking — based on actual conversation signals.</p>
-          </div>
-          
-          <div class="accordion-item" data-index="2">
-            <div class="accordion-header">
-              <span class="accordion-title">1:1 Prep</span>
-              <svg class="accordion-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
-            </div>
-            <p class="accordion-text">Get AI-prepped briefings that surface what actually matters — risks, coaching moments, and wins.</p>
-          </div>
+  <!-- FEATURES -->
+  <section class="features-section" id="features">
+    <div class="features-grid">
+      <!-- Feature 1: CRM Sync -->
+      <div class="feature-card">
+        <div class="feature-icon">
+          <svg viewBox="0 0 48 48" fill="none">
+            <!-- Refined pixel database - 6x6 grid feel -->
+            <rect x="8" y="6" width="32" height="6" fill="var(--mint)"/>
+            <rect x="8" y="14" width="32" height="6" fill="var(--mint)" opacity="0.7"/>
+            <rect x="8" y="22" width="32" height="6" fill="var(--mint)" opacity="0.5"/>
+            <rect x="8" y="30" width="32" height="6" fill="var(--mint)" opacity="0.3"/>
+            <!-- Sync arrow overlay -->
+            <rect x="32" y="34" width="4" height="4" fill="var(--purple)"/>
+            <rect x="36" y="34" width="4" height="4" fill="var(--purple)"/>
+            <rect x="40" y="34" width="4" height="4" fill="var(--purple)"/>
+            <rect x="40" y="38" width="4" height="4" fill="var(--purple)"/>
+            <rect x="40" y="42" width="4" height="4" fill="var(--purple)"/>
+          </svg>
         </div>
-        
-        <div class="cards-display" data-active="0">
-          <div class="display-card card-1">
-            <p>"Budget mentioned 3 times. Decision maker engaged during ROI section. Next step: send proposal by Friday."</p>
-            <div class="card-play">
-              <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
-            </div>
-          </div>
-          <div class="display-card card-2">
-            <p>"Competitor Gong mentioned negatively — prospect frustrated with complexity. Highlight simplicity in follow-up."</p>
-            <div class="card-play">
-              <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
-            </div>
-          </div>
-          <div class="display-card card-3">
-            <p>"Deal at risk: No champion identified. Multi-threading recommended."</p>
-            <div class="card-play">
-              <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
-            </div>
-          </div>
+        <h3 class="feature-title">CRM Auto-Sync</h3>
+        <p class="feature-desc">Every call updates your CRM automatically. MEDDIC fields, next steps, deal stage—12+ fields synced with one click.</p>
+      </div>
+
+      <!-- Feature 2: Coaching -->
+      <div class="feature-card">
+        <div class="feature-icon">
+          <svg viewBox="0 0 48 48" fill="none">
+            <!-- Refined pixel chart -->
+            <rect x="6" y="34" width="6" height="8" fill="var(--purple)" opacity="0.4"/>
+            <rect x="14" y="28" width="6" height="14" fill="var(--purple)" opacity="0.55"/>
+            <rect x="22" y="20" width="6" height="22" fill="var(--purple)" opacity="0.7"/>
+            <rect x="30" y="14" width="6" height="28" fill="var(--purple)" opacity="0.85"/>
+            <rect x="38" y="6" width="6" height="36" fill="var(--purple)"/>
+            <!-- Baseline -->
+            <rect x="4" y="42" width="42" height="2" fill="var(--purple)"/>
+          </svg>
         </div>
+        <h3 class="feature-title">AI Coaching Scorecards</h3>
+        <p class="feature-desc">Auto-generated scorecards based on MEDDIC, BANT, or your custom framework. See exactly where reps need help.</p>
+      </div>
+
+      <!-- Feature 3: Alerts -->
+      <div class="feature-card">
+        <div class="feature-icon">
+          <svg viewBox="0 0 48 48" fill="none">
+            <!-- Refined pixel bell -->
+            <rect x="20" y="4" width="8" height="4" fill="var(--coral)"/>
+            <rect x="16" y="8" width="16" height="4" fill="var(--coral)"/>
+            <rect x="12" y="12" width="24" height="4" fill="var(--coral)"/>
+            <rect x="12" y="16" width="24" height="12" fill="var(--coral)"/>
+            <rect x="8" y="28" width="32" height="4" fill="var(--coral)"/>
+            <rect x="20" y="32" width="8" height="4" fill="var(--coral)"/>
+            <!-- Notification dot -->
+            <rect x="34" y="4" width="4" height="4" fill="var(--yellow)"/>
+            <rect x="38" y="4" width="4" height="4" fill="var(--yellow)"/>
+            <rect x="34" y="8" width="4" height="4" fill="var(--yellow)"/>
+            <rect x="38" y="8" width="4" height="4" fill="var(--yellow)"/>
+          </svg>
+        </div>
+        <h3 class="feature-title">Real-Time Risk Alerts</h3>
+        <p class="feature-desc">Deals at risk? Budget objections? Competitor mentions? Get Slack alerts the moment they happen.</p>
+      </div>
+
+      <!-- Feature 4: Follow-ups -->
+      <div class="feature-card">
+        <div class="feature-icon">
+          <svg viewBox="0 0 48 48" fill="none">
+            <!-- Refined pixel envelope -->
+            <rect x="4" y="12" width="40" height="4" fill="var(--cyan)"/>
+            <rect x="4" y="16" width="4" height="20" fill="var(--cyan)"/>
+            <rect x="40" y="16" width="4" height="20" fill="var(--cyan)"/>
+            <rect x="4" y="36" width="40" height="4" fill="var(--cyan)"/>
+            <!-- V shape for envelope flap -->
+            <rect x="8" y="16" width="4" height="4" fill="var(--cyan)" opacity="0.7"/>
+            <rect x="36" y="16" width="4" height="4" fill="var(--cyan)" opacity="0.7"/>
+            <rect x="12" y="20" width="4" height="4" fill="var(--cyan)" opacity="0.7"/>
+            <rect x="32" y="20" width="4" height="4" fill="var(--cyan)" opacity="0.7"/>
+            <rect x="16" y="24" width="4" height="4" fill="var(--cyan)" opacity="0.7"/>
+            <rect x="28" y="24" width="4" height="4" fill="var(--cyan)" opacity="0.7"/>
+            <rect x="20" y="28" width="8" height="4" fill="var(--cyan)" opacity="0.7"/>
+            <!-- Checkmark badge -->
+            <rect x="32" y="4" width="12" height="12" fill="var(--mint)"/>
+            <rect x="35" y="10" width="2" height="2" fill="#0a0a0a"/>
+            <rect x="37" y="12" width="2" height="2" fill="#0a0a0a"/>
+            <rect x="39" y="8" width="2" height="2" fill="#0a0a0a"/>
+            <rect x="41" y="6" width="2" height="2" fill="#0a0a0a"/>
+          </svg>
+        </div>
+        <h3 class="feature-title">Auto Follow-Up Drafts</h3>
+        <p class="feature-desc">Personalized follow-up emails drafted within 60 seconds of call end. Reference specific conversation points.</p>
       </div>
     </div>
   </section>
 
-  <!-- PRODUCT FEATURE SECTION -->
-  <section class="product-section">
-    <div class="product-container">
-      <div class="product-grid">
-        <!-- Mock UI -->
-        <div class="product-ui">
-          <div class="product-ui-window">
-            <div class="ui-dots">
-              <span class="dot red"></span>
-              <span class="dot yellow"></span>
-              <span class="dot green"></span>
-              <span class="ui-url">app.recrd.io</span>
-            </div>
-            <div class="ui-header">
-              <div class="ui-title">
-                <strong>Call with Anis Bennaceur</strong>
-                <span>Mar 7, 2025, 10:34 AM · 42 min</span>
-              </div>
-              <div class="ui-tabs">
-                <span class="tab">Comments</span>
-                <span class="tab active">CRM</span>
-                <span class="tab">Coaching</span>
-                <span class="tab">Insights</span>
-              </div>
-            </div>
-            <div class="ui-body">
-              <div class="ui-video">
-                <div class="video-placeholder">
-                  <div class="video-avatar">AB</div>
-                  <div class="video-play">
-                    <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
-                  </div>
-                </div>
-                <div class="video-progress">
-                  <div class="progress-fill"></div>
-                </div>
-              </div>
-              <div class="ui-sidebar">
-                <div class="sidebar-item">
-                  <div class="sidebar-avatar">SW</div>
-                  <div class="sidebar-content">
-                    <strong>Stewart White</strong>
-                    <span>@Jacob Fleisher Agreed!</span>
-                  </div>
-                </div>
-                <div class="sidebar-item highlight">
-                  <div class="sidebar-avatar">SW</div>
-                  <div class="sidebar-content">
-                    <strong>Stewart White</strong>
-                    <span>This part of the call is very interesting</span>
-                  </div>
-                </div>
-                <div class="sidebar-item">
-                  <div class="sidebar-avatar">JF</div>
-                  <div class="sidebar-content">
-                    <strong>Jacob Fleisher</strong>
-                    <span>Incredibly useful for revisiting key points</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="ui-transcript">
-              <span class="transcript-label">Transcript</span>
-              <div class="transcript-line">
-                <span class="transcript-name">Anis Bennaceur</span>
-                <span class="transcript-time">0:08</span>
-              </div>
-              <p class="transcript-text">So, I understand that CRM hygiene is top of mind for you...</p>
-            </div>
-          </div>
-        </div>
-
-        <!-- Content -->
-        <div class="product-content">
-          <span class="product-label">Call Recordings & Transcription</span>
-          <h2 class="product-title">Your sales calls are your best GTM data set. Capture them.</h2>
-          <p class="product-desc">recrd records, transcribes and summarizes your meetings across all call recording platforms.</p>
-          
-          <div class="product-features">
-            <div class="product-feature">
-              <div class="feature-icon">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
-              </div>
-              <div class="feature-text">
-                <strong>Works with any platform</strong>
-                <span>Zoom, Teams, Meet, Webex — we integrate with everything</span>
-              </div>
-            </div>
-            <div class="product-feature">
-              <div class="feature-icon">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg>
-              </div>
-              <div class="feature-text">
-                <strong>Easily shareable</strong>
-                <span>Commenting, snippets, and shareable links for your whole team</span>
-              </div>
-            </div>
-          </div>
-
-          <a href="#" class="product-btn">Learn more</a>
-        </div>
-      </div>
+  <!-- CTA -->
+  <section class="cta-section" id="contact">
+    <h2 class="cta-headline">Ready to stop losing winnable deals?</h2>
+    <p class="cta-sub">Join teams who save 20-30 minutes per call with AI-powered automation.</p>
+    <div class="cta-buttons">
+      <a href="#" class="btn btn-primary">
+        Book a Demo
+        <span class="btn-arrow">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+            <rect x="1" y="7" width="2" height="2" fill="currentColor"/>
+            <rect x="4" y="7" width="2" height="2" fill="currentColor"/>
+            <rect x="7" y="7" width="2" height="2" fill="currentColor"/>
+            <rect x="10" y="7" width="2" height="2" fill="currentColor"/>
+            <rect x="10" y="4" width="2" height="2" fill="currentColor"/>
+            <rect x="12" y="6" width="2" height="2" fill="currentColor"/>
+            <rect x="10" y="10" width="2" height="2" fill="currentColor"/>
+            <rect x="12" y="8" width="2" height="2" fill="currentColor"/>
+          </svg>
+        </span>
+      </a>
+      <a href="#" class="btn btn-secondary">
+        Contact Sales
+        <span class="btn-arrow">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+            <rect x="1" y="7" width="2" height="2" fill="currentColor"/>
+            <rect x="4" y="7" width="2" height="2" fill="currentColor"/>
+            <rect x="7" y="7" width="2" height="2" fill="currentColor"/>
+            <rect x="10" y="7" width="2" height="2" fill="currentColor"/>
+            <rect x="10" y="4" width="2" height="2" fill="currentColor"/>
+            <rect x="12" y="6" width="2" height="2" fill="currentColor"/>
+            <rect x="10" y="10" width="2" height="2" fill="currentColor"/>
+            <rect x="12" y="8" width="2" height="2" fill="currentColor"/>
+          </svg>
+        </span>
+      </a>
     </div>
   </section>
 
-  <!-- PERSONA TILES -->
-  <section class="personas-section">
-    <div class="personas-container">
-      <div class="personas-header">
-        <div class="personas-header-left">
-          <p class="personas-label">Built for your whole team</p>
-          <h2 class="personas-title">AI agents that know <em>exactly</em> what you need</h2>
-        </div>
-        <a href="#" class="personas-cta">View All Features</a>
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-logo">
+        <svg viewBox="0 0 52 52" fill="none">
+          <rect y="16" width="28" height="28" fill="#A678F4"/>
+          <rect x="16" width="28" height="28" rx="6" fill="#46FCAF"/>
+        </svg>
+        <span>recrd</span>
       </div>
-      
-      <div class="personas-grid">
-        <div class="persona-tile reps">
-          <h3 class="persona-tile-title">For Sales Reps</h3>
-          <p class="persona-tile-desc">Stop taking notes. Start closing deals. Every call analyzed, every follow-up prepped, every CRM field filled.</p>
-          <div class="persona-pills">
-            <span class="persona-pill">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/></svg>
-              Auto Notes
-            </span>
-            <span class="persona-pill">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
-              Email Drafts
-            </span>
-            <span class="persona-pill">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/></svg>
-              CRM Sync
-            </span>
-          </div>
-        </div>
-        
-        <div class="persona-tile managers">
-          <h3 class="persona-tile-title">For Sales Managers</h3>
-          <p class="persona-tile-desc">See every deal without watching every call. Coaching moments surfaced, risks flagged, forecasts you can trust.</p>
-          <div class="persona-pills">
-            <span class="persona-pill">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg>
-              Forecasting
-            </span>
-            <span class="persona-pill">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
-              1:1 Prep
-            </span>
-            <span class="persona-pill">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
-              Risk Alerts
-            </span>
-          </div>
-        </div>
-        
-        <div class="persona-tile revops">
-          <h3 class="persona-tile-title">For RevOps</h3>
-          <p class="persona-tile-desc">Clean CRM data without chasing reps. Every field filled, every stage updated, zero manual work.</p>
-          <div class="persona-pills">
-            <span class="persona-pill">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>
-              Data Hygiene
-            </span>
-            <span class="persona-pill">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
-              Pipeline
-            </span>
-            <span class="persona-pill">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg>
-              Reporting
-            </span>
-          </div>
-        </div>
-      </div>
+      <ul class="footer-links">
+        <li><a href="#features">Features</a></li>
+        <li><a href="pricing.html">Pricing</a></li>
+        <li><a href="#">Docs</a></li>
+        <li><a href="#">Blog</a></li>
+        <li><a href="#">Privacy</a></li>
+        <li><a href="#">Terms</a></li>
+      </ul>
+      <p class="footer-copy">© 2025 recrd. All rights reserved.</p>
     </div>
-  </section>
+  </footer>
 
-  <!-- AGENTS SHOWCASE -->
-  <section class="agents-section">
-    <div class="agents-container">
-      <div class="agents-card">
-        <span class="agents-badge">Pre-built Agents</span>
-        
-        <div class="agents-header">
-          <h2>Agents that work on day one</h2>
-          <p>No workflows to build. No API keys. Just results.</p>
-        </div>
-        
-        <div class="agents-grid">
-          <div class="agent-item featured">
-            <div class="agent-icon pink">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-            </div>
-            <div class="agent-content">
-              <div class="agent-title">Manager 1:1 Prep</div>
-              <div class="agent-desc">Auto-generated briefings with risks, wins, and coaching moments for every rep</div>
-            </div>
-            <svg class="agent-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
-          </div>
-          
-          <div class="agent-item">
-            <div class="agent-icon teal">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
-            </div>
-            <div class="agent-content">
-              <div class="agent-title">Marketing Collateral</div>
-              <div class="agent-desc">Generate case studies and one-pagers from customer calls</div>
-            </div>
-            <svg class="agent-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
-          </div>
-          
-          <div class="agent-item">
-            <div class="agent-icon lavender">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
-            </div>
-            <div class="agent-content">
-              <div class="agent-title">Social Posts</div>
-              <div class="agent-desc">Turn call insights into LinkedIn content for your team</div>
-            </div>
-            <svg class="agent-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
-          </div>
-          
-          <div class="agent-item">
-            <div class="agent-icon pink">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4"/><path d="M12 16h.01"/></svg>
-            </div>
-            <div class="agent-content">
-              <div class="agent-title">Churn Risk Detection</div>
-              <div class="agent-desc">Flag at-risk accounts before they slip away</div>
-            </div>
-            <svg class="agent-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
-          </div>
-          
-          <div class="agent-item">
-            <div class="agent-icon yellow">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg>
-            </div>
-            <div class="agent-content">
-              <div class="agent-title">Forecast Agent</div>
-              <div class="agent-desc">Predict close rates based on conversation patterns</div>
-            </div>
-            <svg class="agent-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
-          </div>
-          
-          <div class="agent-item">
-            <div class="agent-icon teal">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
-            </div>
-            <div class="agent-content">
-              <div class="agent-title">CRM Auto-fill</div>
-              <div class="agent-desc">Every field updated, every time, no rep action needed</div>
-            </div>
-            <svg class="agent-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
+  <!-- THEME TOGGLE -->
+  <div class="theme-toggle">
+    <button id="btn-dark" class="active" onclick="setTheme('dark')">Dark</button>
+    <button id="btn-light" onclick="setTheme('light')">Light</button>
+  </div>
 
-  <!-- CTA SECTION -->
-  <section class="cta-section">
-    <div class="cta-container">
-      <div class="cta-card">
-        <h2>Start closing more deals with AI agents that actually work</h2>
-        <p>No credit card required. Free for teams up to 5 users.</p>
-        <a href="#" class="cta-btn">Get Started For Free Today</a>
-      </div>
-    </div>
-  </section>
+  <!-- SCRIPTS - EXACTLY AS PROVIDED -->
+  <script>
+    import { gsap } from 'gsap';
+    import Lenis from 'lenis';
 
-  <!-- NEWSLETTER SECTION -->
-  <section class="newsletter-section">
-    <div class="newsletter-container">
-      <div class="newsletter-content">
-        <h3>Sign up for our newsletter to hear our latest product updates</h3>
-      </div>
-      <div class="newsletter-form">
-        <input type="email" placeholder="Enter email for updates*">
-        <button>Submit</button>
-      </div>
-    </div>
-  </section>
+    function setTheme(theme) {
+      document.documentElement.setAttribute('data-theme', theme);
+      document.getElementById('btn-dark')?.classList.toggle('active', theme === 'dark');
+      document.getElementById('btn-light')?.classList.toggle('active', theme === 'light');
+    }
+    window.setTheme = setTheme;
 
-
-<script>
-  const accordionItems = document.querySelectorAll('.accordion-item');
-  const cardsDisplay = document.querySelector('.cards-display');
-  accordionItems.forEach(item => {
-    item.addEventListener('click', () => {
-      accordionItems.forEach(i => i.classList.remove('active'));
-      item.classList.add('active');
-      if (cardsDisplay) cardsDisplay.dataset.active = item.dataset.index;
+    const lenis = new Lenis({
+      duration: 1.2,
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      smoothWheel: true,
     });
-  });
-</script>
-</BaseLayout>
+    function raf(time) { lenis.raf(time); requestAnimationFrame(raf); }
+    requestAnimationFrame(raf);
+
+    function animateCards() {
+      gsap.set('.card', { opacity: 0, x: -30, scale: 0.95 });
+
+      const tl = gsap.timeline();
+
+      tl.to('#card1', { opacity: 1, x: 0, scale: 1, duration: 0.7, ease: 'power2.out' });
+      tl.to('#card2', { opacity: 1, x: 0, scale: 1, duration: 0.7, ease: 'power2.out' }, '-=0.4');
+      tl.to('#card3', { opacity: 1, x: 0, scale: 1, duration: 0.7, ease: 'power2.out' }, '-=0.4');
+      tl.to('#card4', { opacity: 1, x: 0, scale: 1, duration: 0.7, ease: 'power2.out' }, '-=0.4');
+
+      return tl;
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      setTimeout(animateCards, 500);
+    });
+  </script>
+</body>
+</html>

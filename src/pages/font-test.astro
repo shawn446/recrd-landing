@@ -1,5 +1,5 @@
 ---
-// Hero Section - Grid Storytelling Animation
+// Hero Section - Professional Grid Animation with GSAP + Lenis
 ---
 
 <!DOCTYPE html>
@@ -8,6 +8,13 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>recrd - AI agents that close deals</title>
+  
+  <!-- Smooth Scroll -->
+  <script src="https://unpkg.com/lenis@1.0.42/dist/lenis.min.js"></script>
+  
+  <!-- GSAP + ScrollTrigger -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
   
   <style>
     @font-face {
@@ -53,19 +60,24 @@
       --purple: #A678F4;
       --cyan: #02C0FF;
       --coral: #FF4F5E;
+      
+      /* Grid dimensions - 100px cells */
+      --cell: 100px;
+      --cols: 7;
+      --rows: 6;
     }
 
     [data-theme="dark"] {
       --bg: #0A0A0A;
       --text: #ffffff;
-      --text-muted: #666666;
-      --grid-line: rgba(255,255,255,0.1);
+      --text-muted: #888888;
+      --grid-line: rgba(255,255,255,0.12);
     }
 
     [data-theme="light"] {
       --bg: #fafafa;
       --text: #0a0a0a;
-      --text-muted: #888888;
+      --text-muted: #666666;
       --grid-line: rgba(0,0,0,0.1);
     }
 
@@ -73,6 +85,10 @@
       margin: 0;
       padding: 0;
       box-sizing: border-box;
+    }
+
+    html.lenis, html.lenis body {
+      height: auto;
     }
 
     body {
@@ -142,6 +158,12 @@
       font-weight: 500;
       font-size: 14px;
       text-decoration: none;
+      transition: background 0.2s, color 0.2s;
+    }
+
+    .nav-cta:hover {
+      background: var(--mint);
+      color: #0a0a0a;
     }
 
     /* HERO */
@@ -151,19 +173,20 @@
       align-items: center;
       padding: 120px 48px 48px;
       position: relative;
+      overflow: hidden;
     }
 
     .hero-content {
-      max-width: 520px;
+      max-width: 480px;
       z-index: 10;
     }
 
     .hero-headline {
-      font-size: 90px;
+      font-size: clamp(48px, 8vw, 88px);
       font-weight: 700;
       line-height: 0.95;
       letter-spacing: -0.035em;
-      margin-bottom: 28px;
+      margin-bottom: 24px;
     }
 
     .hero-headline em {
@@ -176,7 +199,7 @@
     }
 
     .hero-sub {
-      font-size: 40px;
+      font-size: clamp(24px, 3.5vw, 38px);
       font-weight: 500;
       line-height: 1.2;
       margin-bottom: 20px;
@@ -188,7 +211,7 @@
       font-weight: 300;
       color: var(--text-muted);
       line-height: 1.6;
-      margin-bottom: 44px;
+      margin-bottom: 40px;
     }
 
     .hero-buttons {
@@ -205,8 +228,7 @@
       display: inline-flex;
       align-items: center;
       gap: 12px;
-      position: relative;
-      overflow: hidden;
+      transition: all 0.3s ease;
     }
 
     .btn-primary {
@@ -214,138 +236,92 @@
       color: #0a0a0a;
     }
 
-    .btn-primary::before {
-      content: '';
-      position: absolute;
-      left: 0;
-      top: 0;
-      width: 0%;
-      height: 100%;
+    .btn-primary:hover {
       background: var(--mint);
-      transition: width 0.4s ease;
-      z-index: -1;
-    }
-
-    .btn-primary:hover::before {
-      width: 100%;
     }
 
     .btn-secondary {
       background: transparent;
       color: var(--text);
-      border: 1px solid var(--mint);
+      border: 1px solid var(--grid-line);
     }
 
-    [data-theme="light"] .btn-secondary {
+    .btn-secondary:hover {
+      border-color: var(--mint);
+    }
+
+    [data-theme="light"] .btn-secondary:hover {
       border-color: var(--purple);
     }
 
     /* ========================================
-       GRID SYSTEM - Varied columns, square cells
+       GRID ANIMATION SYSTEM
        ======================================== */
     
     .grid-container {
       position: absolute;
       top: 50%;
-      right: 24px;
+      right: 5%;
       transform: translateY(-50%);
-      width: 62%;
-      max-width: 750px;
-      aspect-ratio: 640 / 560;
+      /* 7 cols x 6 rows of 100px cells = 700x600 */
+      width: 700px;
+      height: 600px;
     }
 
-    /* Base grid lines SVG - must match container exactly */
     .grid-svg {
       position: absolute;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
+      overflow: visible;
     }
 
-    .grid-line {
+    /* Grid cell outlines */
+    .grid-cell-bg {
+      fill: none;
       stroke: var(--grid-line);
       stroke-width: 1;
     }
 
-    /* Animated path that follows grid lines */
+    /* Animated connecting lines */
     .grid-path {
-      stroke-width: 3;
       fill: none;
-      stroke-dasharray: 1000;
-      stroke-dashoffset: 1000;
-      opacity: 0;
+      stroke-width: 3;
       stroke-linecap: butt;
       stroke-linejoin: miter;
-      will-change: stroke-dashoffset, opacity;
     }
 
-    .grid-path.active {
-      opacity: 1;
-      animation: tracePath var(--draw-duration, 2s) cubic-bezier(0.25, 0.1, 0.25, 1) forwards;
-    }
-
-    @keyframes tracePath {
-      to { stroke-dashoffset: 0; }
-    }
-
-    /* Cell content - positioned absolutely over SVG */
-    .grid-cells {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      pointer-events: none;
-    }
-
+    /* Cell content boxes */
     .cell {
       position: absolute;
-      opacity: 0;
-      transform: scale(0.96);
       display: flex;
       flex-direction: column;
       justify-content: center;
-      padding: 14px;
-      transition: none;
-      will-change: opacity, transform;
-      backface-visibility: hidden;
-    }
-
-    .cell.active {
-      animation: cellFadeIn 0.7s cubic-bezier(0.25, 0.1, 0.25, 1) forwards;
-    }
-
-    @keyframes cellFadeIn {
-      0% {
-        opacity: 0;
-        transform: scale(0.96);
-      }
-      100% {
-        opacity: 1;
-        transform: scale(1);
-      }
+      padding: 16px;
+      opacity: 0;
+      transform: scale(0.92);
     }
 
     .cell-badge {
       font-family: var(--mono);
       font-size: 10px;
       text-transform: uppercase;
-      letter-spacing: 0.08em;
+      letter-spacing: 0.1em;
       padding: 5px 10px;
-      margin-bottom: 8px;
+      margin-bottom: 10px;
       width: fit-content;
     }
 
     .cell-title {
-      font-size: 15px;
+      font-size: 16px;
       font-weight: 600;
-      line-height: 1.3;
-      margin-bottom: 4px;
+      line-height: 1.25;
+      margin-bottom: 6px;
     }
 
     .cell-desc {
-      font-size: 11px;
+      font-size: 12px;
       font-weight: 400;
       line-height: 1.4;
       opacity: 0.8;
@@ -357,7 +333,7 @@
       color: #0a0a0a;
     }
     .cell.mint .cell-badge {
-      background: rgba(0,0,0,0.12);
+      background: rgba(0,0,0,0.1);
     }
 
     .cell.purple {
@@ -373,7 +349,7 @@
       color: #0a0a0a;
     }
     .cell.cyan .cell-badge {
-      background: rgba(0,0,0,0.12);
+      background: rgba(0,0,0,0.1);
     }
 
     .cell.coral {
@@ -404,6 +380,7 @@
       font-family: var(--font);
       font-size: 13px;
       cursor: pointer;
+      transition: all 0.2s;
     }
 
     .theme-toggle button.active {
@@ -411,19 +388,101 @@
       color: var(--bg);
     }
 
-    /* Mobile */
-    @media (max-width: 1024px) {
+    /* ========================================
+       RESPONSIVE
+       ======================================== */
+    @media (max-width: 1400px) {
       .grid-container {
+        width: 560px;
+        height: 480px;
+        right: 3%;
+      }
+      .grid-container .cell {
+        padding: 12px;
+      }
+      .grid-container .cell-title {
+        font-size: 14px;
+      }
+      .grid-container .cell-desc {
+        font-size: 11px;
+      }
+    }
+
+    @media (max-width: 1100px) {
+      .grid-container {
+        width: 420px;
+        height: 360px;
+        right: 2%;
+      }
+      .grid-container .cell {
+        padding: 10px;
+      }
+      .grid-container .cell-badge {
+        font-size: 8px;
+        padding: 4px 8px;
+        margin-bottom: 6px;
+      }
+      .grid-container .cell-title {
+        font-size: 12px;
+        margin-bottom: 4px;
+      }
+      .grid-container .cell-desc {
+        font-size: 10px;
         display: none;
+      }
+    }
+
+    @media (max-width: 900px) {
+      .hero {
+        flex-direction: column;
+        justify-content: center;
+        text-align: center;
+        padding: 120px 24px 48px;
       }
       .hero-content {
         max-width: 100%;
       }
+      .hero-buttons {
+        justify-content: center;
+      }
+      .grid-container {
+        position: relative;
+        top: auto;
+        right: auto;
+        transform: none;
+        margin-top: 48px;
+        width: 100%;
+        max-width: 500px;
+        height: auto;
+        aspect-ratio: 7/6;
+      }
+      nav {
+        padding: 0 24px;
+      }
+      .nav-links {
+        display: none;
+      }
+    }
+
+    @media (max-width: 600px) {
       .hero-headline {
-        font-size: 56px;
+        font-size: 40px;
       }
       .hero-sub {
-        font-size: 28px;
+        font-size: 22px;
+      }
+      .hero-body {
+        font-size: 16px;
+      }
+      .btn {
+        padding: 14px 24px;
+        font-size: 14px;
+      }
+      .grid-container .cell-badge {
+        font-size: 7px;
+      }
+      .grid-container .cell-title {
+        font-size: 10px;
       }
     }
   </style>
@@ -458,137 +517,106 @@
       </div>
     </div>
 
-    <!-- Grid Animation Container -->
+    <!-- Grid Animation -->
     <div class="grid-container">
-      <!-- 
-        Grid structure - VARIED columns per row, 80x80 SQUARE cells:
-        Row 1: 8 cells starting at x=0
-        Row 2: 7 cells starting at x=80  (stepped in)
-        Row 3: 6 cells starting at x=160 (stepped in more)
-        Row 4: 6 cells starting at x=160
-        Row 5: 7 cells starting at x=80  (stepped out)
-        Row 6: 7 cells starting at x=80
-        Row 7: 8 cells starting at x=0   (full width)
+      <svg class="grid-svg" viewBox="0 0 700 600" preserveAspectRatio="xMidYMid meet">
+        <!-- Row 1: 7 cells -->
+        <rect class="grid-cell-bg" x="0" y="0" width="100" height="100"/>
+        <rect class="grid-cell-bg" x="100" y="0" width="100" height="100"/>
+        <rect class="grid-cell-bg" x="200" y="0" width="100" height="100"/>
+        <rect class="grid-cell-bg" x="300" y="0" width="100" height="100"/>
+        <rect class="grid-cell-bg" x="400" y="0" width="100" height="100"/>
+        <rect class="grid-cell-bg" x="500" y="0" width="100" height="100"/>
+        <rect class="grid-cell-bg" x="600" y="0" width="100" height="100"/>
         
-        Creates stepped left edge silhouette
-      -->
-      <svg class="grid-svg" viewBox="0 0 640 560" preserveAspectRatio="xMidYMid meet">
-        <!-- Row 1: 8 cells, x: 0-640 -->
-        <rect class="grid-line" x="0" y="0" width="80" height="80" fill="none"/>
-        <rect class="grid-line" x="80" y="0" width="80" height="80" fill="none"/>
-        <rect class="grid-line" x="160" y="0" width="80" height="80" fill="none"/>
-        <rect class="grid-line" x="240" y="0" width="80" height="80" fill="none"/>
-        <rect class="grid-line" x="320" y="0" width="80" height="80" fill="none"/>
-        <rect class="grid-line" x="400" y="0" width="80" height="80" fill="none"/>
-        <rect class="grid-line" x="480" y="0" width="80" height="80" fill="none"/>
-        <rect class="grid-line" x="560" y="0" width="80" height="80" fill="none"/>
+        <!-- Row 2: 6 cells (offset) -->
+        <rect class="grid-cell-bg" x="100" y="100" width="100" height="100"/>
+        <rect class="grid-cell-bg" x="200" y="100" width="100" height="100"/>
+        <rect class="grid-cell-bg" x="300" y="100" width="100" height="100"/>
+        <rect class="grid-cell-bg" x="400" y="100" width="100" height="100"/>
+        <rect class="grid-cell-bg" x="500" y="100" width="100" height="100"/>
+        <rect class="grid-cell-bg" x="600" y="100" width="100" height="100"/>
         
-        <!-- Row 2: 7 cells, x: 80-640 (stepped in 1) -->
-        <rect class="grid-line" x="80" y="80" width="80" height="80" fill="none"/>
-        <rect class="grid-line" x="160" y="80" width="80" height="80" fill="none"/>
-        <rect class="grid-line" x="240" y="80" width="80" height="80" fill="none"/>
-        <rect class="grid-line" x="320" y="80" width="80" height="80" fill="none"/>
-        <rect class="grid-line" x="400" y="80" width="80" height="80" fill="none"/>
-        <rect class="grid-line" x="480" y="80" width="80" height="80" fill="none"/>
-        <rect class="grid-line" x="560" y="80" width="80" height="80" fill="none"/>
+        <!-- Row 3: 6 cells (offset) -->
+        <rect class="grid-cell-bg" x="100" y="200" width="100" height="100"/>
+        <rect class="grid-cell-bg" x="200" y="200" width="100" height="100"/>
+        <rect class="grid-cell-bg" x="300" y="200" width="100" height="100"/>
+        <rect class="grid-cell-bg" x="400" y="200" width="100" height="100"/>
+        <rect class="grid-cell-bg" x="500" y="200" width="100" height="100"/>
+        <rect class="grid-cell-bg" x="600" y="200" width="100" height="100"/>
         
-        <!-- Row 3: 6 cells, x: 160-640 (stepped in 2) -->
-        <rect class="grid-line" x="160" y="160" width="80" height="80" fill="none"/>
-        <rect class="grid-line" x="240" y="160" width="80" height="80" fill="none"/>
-        <rect class="grid-line" x="320" y="160" width="80" height="80" fill="none"/>
-        <rect class="grid-line" x="400" y="160" width="80" height="80" fill="none"/>
-        <rect class="grid-line" x="480" y="160" width="80" height="80" fill="none"/>
-        <rect class="grid-line" x="560" y="160" width="80" height="80" fill="none"/>
+        <!-- Row 4: 6 cells (offset) -->
+        <rect class="grid-cell-bg" x="100" y="300" width="100" height="100"/>
+        <rect class="grid-cell-bg" x="200" y="300" width="100" height="100"/>
+        <rect class="grid-cell-bg" x="300" y="300" width="100" height="100"/>
+        <rect class="grid-cell-bg" x="400" y="300" width="100" height="100"/>
+        <rect class="grid-cell-bg" x="500" y="300" width="100" height="100"/>
+        <rect class="grid-cell-bg" x="600" y="300" width="100" height="100"/>
         
-        <!-- Row 4: 6 cells, x: 160-640 (same as row 3) -->
-        <rect class="grid-line" x="160" y="240" width="80" height="80" fill="none"/>
-        <rect class="grid-line" x="240" y="240" width="80" height="80" fill="none"/>
-        <rect class="grid-line" x="320" y="240" width="80" height="80" fill="none"/>
-        <rect class="grid-line" x="400" y="240" width="80" height="80" fill="none"/>
-        <rect class="grid-line" x="480" y="240" width="80" height="80" fill="none"/>
-        <rect class="grid-line" x="560" y="240" width="80" height="80" fill="none"/>
+        <!-- Row 5: 6 cells (offset) -->
+        <rect class="grid-cell-bg" x="100" y="400" width="100" height="100"/>
+        <rect class="grid-cell-bg" x="200" y="400" width="100" height="100"/>
+        <rect class="grid-cell-bg" x="300" y="400" width="100" height="100"/>
+        <rect class="grid-cell-bg" x="400" y="400" width="100" height="100"/>
+        <rect class="grid-cell-bg" x="500" y="400" width="100" height="100"/>
+        <rect class="grid-cell-bg" x="600" y="400" width="100" height="100"/>
         
-        <!-- Row 5: 7 cells, x: 80-640 (stepped out) -->
-        <rect class="grid-line" x="80" y="320" width="80" height="80" fill="none"/>
-        <rect class="grid-line" x="160" y="320" width="80" height="80" fill="none"/>
-        <rect class="grid-line" x="240" y="320" width="80" height="80" fill="none"/>
-        <rect class="grid-line" x="320" y="320" width="80" height="80" fill="none"/>
-        <rect class="grid-line" x="400" y="320" width="80" height="80" fill="none"/>
-        <rect class="grid-line" x="480" y="320" width="80" height="80" fill="none"/>
-        <rect class="grid-line" x="560" y="320" width="80" height="80" fill="none"/>
-        
-        <!-- Row 6: 7 cells, x: 80-640 -->
-        <rect class="grid-line" x="80" y="400" width="80" height="80" fill="none"/>
-        <rect class="grid-line" x="160" y="400" width="80" height="80" fill="none"/>
-        <rect class="grid-line" x="240" y="400" width="80" height="80" fill="none"/>
-        <rect class="grid-line" x="320" y="400" width="80" height="80" fill="none"/>
-        <rect class="grid-line" x="400" y="400" width="80" height="80" fill="none"/>
-        <rect class="grid-line" x="480" y="400" width="80" height="80" fill="none"/>
-        <rect class="grid-line" x="560" y="400" width="80" height="80" fill="none"/>
-        
-        <!-- Row 7: 8 cells, x: 0-640 (full) -->
-        <rect class="grid-line" x="0" y="480" width="80" height="80" fill="none"/>
-        <rect class="grid-line" x="80" y="480" width="80" height="80" fill="none"/>
-        <rect class="grid-line" x="160" y="480" width="80" height="80" fill="none"/>
-        <rect class="grid-line" x="240" y="480" width="80" height="80" fill="none"/>
-        <rect class="grid-line" x="320" y="480" width="80" height="80" fill="none"/>
-        <rect class="grid-line" x="400" y="480" width="80" height="80" fill="none"/>
-        <rect class="grid-line" x="480" y="480" width="80" height="80" fill="none"/>
-        <rect class="grid-line" x="560" y="480" width="80" height="80" fill="none"/>
+        <!-- Row 6: 7 cells -->
+        <rect class="grid-cell-bg" x="0" y="500" width="100" height="100"/>
+        <rect class="grid-cell-bg" x="100" y="500" width="100" height="100"/>
+        <rect class="grid-cell-bg" x="200" y="500" width="100" height="100"/>
+        <rect class="grid-cell-bg" x="300" y="500" width="100" height="100"/>
+        <rect class="grid-cell-bg" x="400" y="500" width="100" height="100"/>
+        <rect class="grid-cell-bg" x="500" y="500" width="100" height="100"/>
+        <rect class="grid-cell-bg" x="600" y="500" width="100" height="100"/>
 
-        <!-- Animated paths - follow EXACT grid lines between cells -->
-        <!-- Path 1 (mint): Cell1 (0-80,0-80) corner → down → right to Cell2 (160,160) -->
-        <path id="path1" class="grid-path" stroke="#46FCAF" 
-              d="M 80,80 V 160 H 160"/>
+        <!-- Animated paths - PIXEL PERFECT on grid lines -->
+        <!-- Path 1: Cell1 bottom (100,100) → down → right to Cell2 (200,200) -->
+        <path id="path1" class="grid-path" stroke="#46FCAF" d="M 100,100 L 100,200 L 200,200"/>
         
-        <!-- Path 2 (purple): Cell2 right (320,320) → right to Cell3 left (400,320) -->
-        <path id="path2" class="grid-path" stroke="#A678F4" 
-              d="M 320,320 H 400"/>
+        <!-- Path 2: Cell2 right (400,300) → right to Cell3 (500,300) -->
+        <path id="path2" class="grid-path" stroke="#A678F4" d="M 400,300 L 500,300"/>
         
-        <!-- Path 3 (cyan): Cell3 bottom (480,400) → down to Cell4 top (480,480) -->
-        <path id="path3" class="grid-path" stroke="#02C0FF" 
-              d="M 480,400 V 480"/>
+        <!-- Path 3: Cell3 bottom (600,400) → down to Cell4 (600,500) -->
+        <path id="path3" class="grid-path" stroke="#02C0FF" d="M 600,400 L 600,500"/>
         
-        <!-- Path 4 (coral): Cell4 left (400,480) → left along y=480 → to Cell5 right (160,480) -->
-        <path id="path4" class="grid-path" stroke="#FF4F5E" 
-              d="M 400,480 H 160"/>
+        <!-- Path 4: Cell4 left (500,550) → left to Cell5 (200,550) -->
+        <path id="path4" class="grid-path" stroke="#FF4F5E" d="M 500,550 L 200,550"/>
       </svg>
 
-      <!-- Cell Content Overlays -->
-      <div class="grid-cells">
-        <!-- Cell 1: Row 1, Col 1 (mint) - 0,0 to 80,80 -->
-        <div class="cell mint" id="cell1" style="left: 0%; top: 0%; width: 12.5%; height: 14.28%;">
-          <span class="cell-badge">Incoming</span>
-          <span class="cell-title">Sales Call</span>
-        </div>
+      <!-- Cell Content - positioned with exact pixel values as percentages -->
+      <!-- Cell 1: 0,0 - 100x100 -->
+      <div class="cell mint" id="cell1" style="left: 0%; top: 0%; width: 14.28%; height: 16.66%;">
+        <span class="cell-badge">Incoming</span>
+        <span class="cell-title">Sales Call</span>
+      </div>
 
-        <!-- Cell 2: Row 3-4, Cols 3-4 (purple) - 160,160 to 320,320 - spans 2 rows -->
-        <div class="cell purple" id="cell2" style="left: 25%; top: 28.57%; width: 25%; height: 28.57%;">
-          <span class="cell-badge">Processing</span>
-          <span class="cell-title">recrd analyzes</span>
-          <span class="cell-desc">AI extracts insights from your conversation</span>
-        </div>
+      <!-- Cell 2: 200,200 - 200x100 (2 cells wide) -->
+      <div class="cell purple" id="cell2" style="left: 28.57%; top: 33.33%; width: 28.57%; height: 16.66%;">
+        <span class="cell-badge">Processing</span>
+        <span class="cell-title">recrd analyzes</span>
+        <span class="cell-desc">AI extracts insights</span>
+      </div>
 
-        <!-- Cell 3: Row 5, Cols 6-7 (cyan) - 400,320 to 560,400 -->
-        <div class="cell cyan" id="cell3" style="left: 62.5%; top: 57.14%; width: 25%; height: 14.28%;">
-          <span class="cell-badge">Forecast</span>
-          <span class="cell-title">Pipeline updated</span>
-          <span class="cell-desc">Deal stage advanced</span>
-        </div>
+      <!-- Cell 3: 500,300 - 200x100 (2 cells wide) -->
+      <div class="cell cyan" id="cell3" style="left: 71.42%; top: 50%; width: 28.57%; height: 16.66%;">
+        <span class="cell-badge">Forecast</span>
+        <span class="cell-title">Pipeline updated</span>
+        <span class="cell-desc">Deal stage advanced</span>
+      </div>
 
-        <!-- Cell 4: Row 7, Cols 6-7 (coral) - 400,480 to 560,560 -->
-        <div class="cell coral" id="cell4" style="left: 62.5%; top: 85.71%; width: 25%; height: 14.28%;">
-          <span class="cell-badge">Risk Alert</span>
-          <span class="cell-title">Manager notified</span>
-          <span class="cell-desc">Budget concerns flagged</span>
-        </div>
+      <!-- Cell 4: 500,500 - 200x100 (2 cells wide) -->
+      <div class="cell coral" id="cell4" style="left: 71.42%; top: 83.33%; width: 28.57%; height: 16.66%;">
+        <span class="cell-badge">Risk Alert</span>
+        <span class="cell-title">Manager notified</span>
+        <span class="cell-desc">Budget flagged</span>
+      </div>
 
-        <!-- Cell 5: Row 7, Cols 1-2 (mint) - 0,480 to 160,560 -->
-        <div class="cell mint" id="cell5" style="left: 0%; top: 85.71%; width: 25%; height: 14.28%;">
-          <span class="cell-badge">Content</span>
-          <span class="cell-title">Marketing alerted</span>
-          <span class="cell-desc">Winning quote captured</span>
-        </div>
+      <!-- Cell 5: 0,500 - 200x100 (2 cells wide) -->
+      <div class="cell mint" id="cell5" style="left: 0%; top: 83.33%; width: 28.57%; height: 16.66%;">
+        <span class="cell-badge">Content</span>
+        <span class="cell-title">Marketing alerted</span>
+        <span class="cell-desc">Quote captured</span>
       </div>
     </div>
   </section>
@@ -599,74 +627,121 @@
   </div>
 
   <script>
+    // Theme toggle
     function setTheme(theme) {
       document.documentElement.setAttribute('data-theme', theme);
       document.getElementById('btn-dark').classList.toggle('active', theme === 'dark');
       document.getElementById('btn-light').classList.toggle('active', theme === 'light');
     }
 
-    // Smooth animation - cells fade in AS paths reach them
-    function runAnimation() {
-      const cell1 = document.getElementById('cell1');
-      const cell2 = document.getElementById('cell2');
-      const cell3 = document.getElementById('cell3');
-      const cell4 = document.getElementById('cell4');
-      const cell5 = document.getElementById('cell5');
-      
-      const path1 = document.getElementById('path1');
-      const path2 = document.getElementById('path2');
-      const path3 = document.getElementById('path3');
-      const path4 = document.getElementById('path4');
+    // Initialize Lenis smooth scroll
+    const lenis = new Lenis({
+      duration: 1.2,
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      smoothWheel: true,
+    });
 
-      // Set different durations based on path length
-      path1.style.setProperty('--draw-duration', '2s');
-      path2.style.setProperty('--draw-duration', '2s');
-      path3.style.setProperty('--draw-duration', '1s');
-      path4.style.setProperty('--draw-duration', '2.5s');
+    function raf(time) {
+      lenis.raf(time);
+      requestAnimationFrame(raf);
+    }
+    requestAnimationFrame(raf);
 
-      function reset() {
-        [cell1, cell2, cell3, cell4, cell5].forEach(c => c.classList.remove('active'));
-        [path1, path2, path3, path4].forEach(p => p.classList.remove('active'));
-      }
+    // GSAP Animation
+    gsap.registerPlugin(ScrollTrigger);
 
-      function animate() {
-        reset();
+    // Set initial states
+    gsap.set('.cell', { opacity: 0, scale: 0.92 });
+    gsap.set('.grid-path', { strokeDasharray: 1000, strokeDashoffset: 1000 });
 
-        // Cell 1 fades in
-        setTimeout(() => cell1.classList.add('active'), 0);
+    // Create master timeline that loops
+    function createTimeline() {
+      const tl = gsap.timeline({
+        repeat: -1,
+        repeatDelay: 2.5,
+        onRepeat: () => {
+          // Reset everything before repeat
+          gsap.set('.cell', { opacity: 0, scale: 0.92 });
+          gsap.set('.grid-path', { strokeDashoffset: 1000 });
+        }
+      });
 
-        // Path 1 starts after Cell 1 is visible
-        setTimeout(() => path1.classList.add('active'), 1200);
+      // Cell 1 fades in
+      tl.to('#cell1', {
+        opacity: 1,
+        scale: 1,
+        duration: 0.8,
+        ease: 'power2.out'
+      });
 
-        // Cell 2 starts fading in as path 1 nears end
-        setTimeout(() => cell2.classList.add('active'), 2800);
+      // Path 1 draws (starts slightly before cell1 finishes)
+      tl.to('#path1', {
+        strokeDashoffset: 0,
+        duration: 1.8,
+        ease: 'power1.inOut'
+      }, '-=0.2');
 
-        // Path 2 starts after Cell 2 settles
-        setTimeout(() => path2.classList.add('active'), 4200);
+      // Cell 2 fades in as path arrives
+      tl.to('#cell2', {
+        opacity: 1,
+        scale: 1,
+        duration: 0.8,
+        ease: 'power2.out'
+      }, '-=0.4');
 
-        // Cell 3 fades in as path 2 nears end
-        setTimeout(() => cell3.classList.add('active'), 5800);
+      // Path 2 draws
+      tl.to('#path2', {
+        strokeDashoffset: 0,
+        duration: 1.2,
+        ease: 'power1.inOut'
+      }, '-=0.2');
 
-        // Path 3 starts (shorter path)
-        setTimeout(() => path3.classList.add('active'), 7200);
+      // Cell 3 fades in
+      tl.to('#cell3', {
+        opacity: 1,
+        scale: 1,
+        duration: 0.8,
+        ease: 'power2.out'
+      }, '-=0.4');
 
-        // Cell 4 fades in
-        setTimeout(() => cell4.classList.add('active'), 7900);
+      // Path 3 draws (short path)
+      tl.to('#path3', {
+        strokeDashoffset: 0,
+        duration: 1,
+        ease: 'power1.inOut'
+      }, '-=0.2');
 
-        // Path 4 starts
-        setTimeout(() => path4.classList.add('active'), 9300);
+      // Cell 4 fades in
+      tl.to('#cell4', {
+        opacity: 1,
+        scale: 1,
+        duration: 0.8,
+        ease: 'power2.out'
+      }, '-=0.3');
 
-        // Cell 5 fades in as path 4 nears end
-        setTimeout(() => cell5.classList.add('active'), 11300);
+      // Path 4 draws (longer path)
+      tl.to('#path4', {
+        strokeDashoffset: 0,
+        duration: 2,
+        ease: 'power1.inOut'
+      }, '-=0.2');
 
-        // Hold complete state, then restart
-        setTimeout(() => animate(), 16000);
-      }
+      // Cell 5 fades in
+      tl.to('#cell5', {
+        opacity: 1,
+        scale: 1,
+        duration: 0.8,
+        ease: 'power2.out'
+      }, '-=0.5');
 
-      animate();
+      return tl;
     }
 
-    document.addEventListener('DOMContentLoaded', runAnimation);
+    // Start animation when page loads
+    document.addEventListener('DOMContentLoaded', () => {
+      // Small delay to ensure everything is rendered
+      setTimeout(createTimeline, 300);
+    });
   </script>
 </body>
 </html>

@@ -1,0 +1,505 @@
+---
+// Hero Test - Flipping Cards Prototype
+import BaseHead from '../components/BaseHead.astro';
+import Nav from '../components/Nav.astro';
+---
+
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <BaseHead title="Hero Test - Card Flip" description="Testing card flip animation" />
+  
+  <style>
+    :root { 
+      --cell: 100px; 
+      --grid-line: rgba(255,255,255,0.12); 
+    }
+
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      padding: 72px 0 0 48px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-content {
+      max-width: 550px;
+      z-index: 10;
+      padding: 48px 0;
+    }
+
+    .hero-headline {
+      font-size: 80px;
+      font-weight: 350;
+      line-height: 1.0;
+      letter-spacing: -0.03em;
+      margin-bottom: 28px;
+    }
+    .hero-headline em { 
+      font-style: normal; 
+      color: var(--mint);
+      font-weight: 400;
+    }
+
+    .hero-sub {
+      font-size: 20px;
+      font-weight: 400;
+      line-height: 1.5;
+      margin-bottom: 40px;
+      color: var(--text-muted);
+    }
+
+    .hero-buttons { display: flex; gap: 16px; }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      padding: 18px 28px;
+      font-weight: 500;
+      font-size: 15px;
+      text-decoration: none;
+      transition: all 0.2s ease;
+      cursor: pointer;
+    }
+    
+    .btn-primary { background: var(--text); color: var(--bg); }
+    .btn-primary:hover { background: var(--mint); color: #0a0a0a; transform: translateY(-2px); }
+
+    /* GRID WRAPPER */
+    .grid-wrapper {
+      position: absolute;
+      top: 50%;
+      right: 60px;
+      transform: translateY(-50%);
+      width: calc(var(--cell) * 6);
+      height: calc(var(--cell) * 6);
+      z-index: 5;
+    }
+
+    .grid-svg {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    .grid-svg line {
+      stroke: var(--grid-line);
+      stroke-width: 1;
+    }
+
+    /* CARD POSITIONS - 2 slots */
+    .card-slot {
+      position: absolute;
+      width: calc(var(--cell) * 2);
+      height: calc(var(--cell) * 3);
+      perspective: 1000px;
+    }
+
+    .card-slot-1 {
+      top: 0;
+      left: 0;
+    }
+
+    .card-slot-2 {
+      top: 0;
+      left: calc(var(--cell) * 2);
+    }
+
+    /* CARD FLIPPER */
+    .card-flipper {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      transform-style: preserve-3d;
+      transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .card-flipper.flipped {
+      transform: rotateY(180deg);
+    }
+
+    /* CARD FACES */
+    .card {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      backface-visibility: hidden;
+      display: flex;
+      flex-direction: column;
+      padding: 24px;
+      z-index: 10;
+    }
+
+    .card.back {
+      transform: rotateY(180deg);
+    }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+
+    .card-icon {
+      width: 28px;
+      height: 28px;
+      flex-shrink: 0;
+    }
+    .card-icon svg {
+      width: 100%;
+      height: 100%;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      fill: none;
+    }
+
+    .card-badge {
+      font-family: var(--mono);
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      padding: 6px 12px;
+    }
+
+    .card-title {
+      font-size: 22px;
+      font-weight: 600;
+      line-height: 1.2;
+      margin-bottom: 12px;
+    }
+
+    .card-content {
+      font-size: 14px;
+      line-height: 1.6;
+      opacity: 0.9;
+      flex: 1;
+    }
+
+    .card-meta {
+      font-family: var(--mono);
+      font-size: 11px;
+      opacity: 0.7;
+      margin-top: auto;
+      padding-top: 16px;
+      border-top: 1px solid rgba(0,0,0,0.1);
+    }
+
+    /* Card colors */
+    .card.mint { background: var(--mint); color: #0a0a0a; }
+    .card.mint .card-badge { background: rgba(0,0,0,0.1); }
+    .card.mint .card-icon svg { stroke: #0a0a0a; }
+    .card.mint .card-meta { border-color: rgba(0,0,0,0.15); }
+
+    .card.purple { background: var(--purple); color: #fff; }
+    .card.purple .card-badge { background: rgba(255,255,255,0.2); }
+    .card.purple .card-icon svg { stroke: #fff; }
+    .card.purple .card-meta { border-color: rgba(255,255,255,0.2); }
+
+    .card.cyan { background: var(--cyan); color: #0a0a0a; }
+    .card.cyan .card-badge { background: rgba(0,0,0,0.1); }
+    .card.cyan .card-icon svg { stroke: #0a0a0a; }
+    .card.cyan .card-meta { border-color: rgba(0,0,0,0.15); }
+
+    .card.coral { background: var(--coral); color: #fff; }
+    .card.coral .card-badge { background: rgba(255,255,255,0.2); }
+    .card.coral .card-icon svg { stroke: #fff; }
+    .card.coral .card-meta { border-color: rgba(255,255,255,0.2); }
+
+    .card.yellow { background: var(--yellow); color: #0a0a0a; }
+    .card.yellow .card-badge { background: rgba(0,0,0,0.1); }
+    .card.yellow .card-icon svg { stroke: #0a0a0a; }
+    .card.yellow .card-meta { border-color: rgba(0,0,0,0.15); }
+
+    .card.dark { background: #1a1a1a; color: #fff; border: 1px solid var(--border); }
+    .card.dark .card-badge { background: rgba(255,255,255,0.1); }
+    .card.dark .card-icon svg { stroke: #fff; }
+    .card.dark .card-meta { border-color: rgba(255,255,255,0.1); }
+
+    /* Card content extras */
+    .meddic-row {
+      display: flex;
+      gap: 4px;
+      margin-top: 12px;
+    }
+
+    .meddic-item {
+      flex: 1;
+      background: rgba(0,0,0,0.15);
+      padding: 8px 4px;
+      font-family: var(--mono);
+      font-size: 11px;
+      text-align: center;
+      font-weight: 600;
+    }
+    .meddic-item.filled { background: rgba(0,0,0,0.3); }
+
+    .score-ring {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: conic-gradient(rgba(0,0,0,0.3) 0deg 306deg, rgba(0,0,0,0.1) 306deg 360deg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 12px 0;
+    }
+
+    .score-value {
+      font-size: 20px;
+      font-weight: 700;
+    }
+
+    .stat-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 8px 0;
+      border-bottom: 1px solid rgba(0,0,0,0.1);
+      font-size: 13px;
+    }
+    .stat-row:last-child { border-bottom: none; }
+    .stat-label { opacity: 0.7; }
+    .stat-value { font-weight: 600; }
+
+    .quote-block {
+      background: rgba(255,255,255,0.12);
+      padding: 12px;
+      margin-top: 8px;
+      font-style: italic;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 1400px) {
+      :root { --cell: 85px; }
+      .hero-headline { font-size: 64px; }
+      .card-title { font-size: 18px; }
+      .card-content { font-size: 13px; }
+    }
+
+    @media (max-width: 1100px) {
+      :root { --cell: 70px; }
+      .hero-headline { font-size: 52px; }
+      .card { padding: 18px; }
+      .card-title { font-size: 16px; }
+      .card-content { font-size: 12px; }
+    }
+
+    @media (max-width: 900px) {
+      .hero {
+        flex-direction: column;
+        padding: 100px 24px 48px;
+        min-height: auto;
+      }
+      .hero-content { max-width: 100%; text-align: center; margin-bottom: 40px; }
+      .hero-headline { font-size: 44px; }
+      .hero-buttons { justify-content: center; }
+      .grid-wrapper {
+        position: relative;
+        top: auto;
+        right: auto;
+        transform: none;
+        margin: 0 auto;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <Nav />
+
+  <section class="hero">
+    <div class="hero-content">
+      <h1 class="hero-headline">Your calls,<br><em>working for you</em></h1>
+      <p class="hero-sub">Every sales call triggers six AI agents that update your CRM, alert your team, and draft follow-ups—automatically.</p>
+      <div class="hero-buttons">
+        <a href="#" class="btn btn-primary">Book a Demo</a>
+      </div>
+    </div>
+
+    <div class="grid-wrapper">
+      <!-- Grid: 6x6 -->
+      <svg class="grid-svg" viewBox="0 0 600 600" preserveAspectRatio="xMidYMid meet">
+        <!-- Horizontal -->
+        <line x1="0" y1="0" x2="600" y2="0"/>
+        <line x1="0" y1="100" x2="600" y2="100"/>
+        <line x1="0" y1="200" x2="600" y2="200"/>
+        <line x1="0" y1="300" x2="600" y2="300"/>
+        <line x1="0" y1="400" x2="600" y2="400"/>
+        <line x1="0" y1="500" x2="600" y2="500"/>
+        <line x1="0" y1="600" x2="600" y2="600"/>
+        <!-- Vertical -->
+        <line x1="0" y1="0" x2="0" y2="600"/>
+        <line x1="100" y1="0" x2="100" y2="600"/>
+        <line x1="200" y1="0" x2="200" y2="600"/>
+        <line x1="300" y1="0" x2="300" y2="600"/>
+        <line x1="400" y1="0" x2="400" y2="600"/>
+        <line x1="500" y1="0" x2="500" y2="600"/>
+        <line x1="600" y1="0" x2="600" y2="600"/>
+      </svg>
+
+      <!-- Card Slot 1 (Left) -->
+      <div class="card-slot card-slot-1">
+        <div class="card-flipper" id="flipper1">
+          <!-- Front -->
+          <div class="card mint front" id="card1-front">
+            <div class="card-header">
+              <div class="card-icon"><svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg></div>
+              <span class="card-badge">Trigger</span>
+            </div>
+            <span class="card-title">Call completed</span>
+            <div class="card-content">
+              Discovery call with Sarah Chen, VP Sales at Acme Corp finished.
+              <div class="stat-row"><span class="stat-label">Duration</span><span class="stat-value">32 min</span></div>
+              <div class="stat-row"><span class="stat-label">Talk ratio</span><span class="stat-value">35/65</span></div>
+            </div>
+            <div class="card-meta">Zoom · 2 participants</div>
+          </div>
+          <!-- Back -->
+          <div class="card cyan back" id="card1-back">
+            <div class="card-header">
+              <div class="card-icon"><svg viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></div>
+              <span class="card-badge">CRM Agent</span>
+            </div>
+            <span class="card-title">Pipeline updated</span>
+            <div class="card-content">
+              Deal moved to Negotiation. 12 fields synced to HubSpot.
+              <div class="meddic-row">
+                <div class="meddic-item filled">M</div>
+                <div class="meddic-item filled">E</div>
+                <div class="meddic-item filled">D</div>
+                <div class="meddic-item filled">D</div>
+                <div class="meddic-item">I</div>
+                <div class="meddic-item filled">C</div>
+              </div>
+            </div>
+            <div class="card-meta">5/6 MEDDIC complete</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card Slot 2 (Right) -->
+      <div class="card-slot card-slot-2">
+        <div class="card-flipper" id="flipper2">
+          <!-- Front -->
+          <div class="card purple front" id="card2-front">
+            <div class="card-header">
+              <div class="card-icon"><svg viewBox="0 0 24 24"><path d="M2 12h2"/><path d="M6 8v8"/><path d="M10 4v16"/><path d="M14 6v12"/><path d="M18 9v6"/><path d="M22 12h-2"/></svg></div>
+              <span class="card-badge">Processing</span>
+            </div>
+            <span class="card-title">recrd analyzes</span>
+            <div class="card-content">
+              Extracting insights, detecting signals, scoring call quality.
+              <div class="stat-row"><span class="stat-label">Sentiment</span><span class="stat-value" style="color:#46FCAF">87% positive</span></div>
+              <div class="stat-row"><span class="stat-label">Objections</span><span class="stat-value">2 detected</span></div>
+            </div>
+            <div class="card-meta">6 agents · 14 actions</div>
+          </div>
+          <!-- Back -->
+          <div class="card coral back" id="card2-back">
+            <div class="card-header">
+              <div class="card-icon"><svg viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg></div>
+              <span class="card-badge">Risk Alert</span>
+            </div>
+            <span class="card-title">Manager notified</span>
+            <div class="card-content">
+              <div class="quote-block">"Budget is tight this quarter, but we're very interested in Q1."</div>
+              <div style="margin-top:8px; font-size:12px; opacity:0.8;">— Sarah Chen, VP Sales</div>
+            </div>
+            <div class="card-meta">Slack #enterprise · @mike</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Hidden cards for cycling -->
+      <template id="card-templates">
+        <!-- Card 5: Follow-up -->
+        <div class="card yellow" data-card="5">
+          <div class="card-header">
+            <div class="card-icon"><svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></div>
+            <span class="card-badge">Email Agent</span>
+          </div>
+          <span class="card-title">Follow-up drafted</span>
+          <div class="card-content">
+            Personalized email ready. References 3 discussion points and proposed next steps.
+            <div class="stat-row"><span class="stat-label">Length</span><span class="stat-value">142 words</span></div>
+            <div class="stat-row"><span class="stat-label">Tone</span><span class="stat-value">Professional</span></div>
+          </div>
+          <div class="card-meta">Ready to send</div>
+        </div>
+
+        <!-- Card 6: Coaching -->
+        <div class="card dark" data-card="6">
+          <div class="card-header">
+            <div class="card-icon"><svg viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg></div>
+            <span class="card-badge">Coach Agent</span>
+          </div>
+          <span class="card-title">Scorecard ready</span>
+          <div class="card-content">
+            <div class="score-ring"><span class="score-value">85</span></div>
+            <div class="stat-row"><span class="stat-label">Discovery</span><span class="stat-value">Strong</span></div>
+            <div class="stat-row"><span class="stat-label">Needs work</span><span class="stat-value">Closing</span></div>
+          </div>
+          <div class="card-meta">MEDDIC methodology</div>
+        </div>
+      </template>
+    </div>
+  </section>
+
+  <script>
+    import { gsap } from 'gsap';
+
+    // Card cycling logic
+    const flipper1 = document.getElementById('flipper1');
+    const flipper2 = document.getElementById('flipper2');
+    
+    let cycle = 0;
+    const cycleDuration = 3500; // 3.5 seconds per state
+    const flipDelay = 300; // delay between card 1 and card 2 flipping
+
+    function flipCards() {
+      cycle++;
+      
+      // Flip card 1 first
+      setTimeout(() => {
+        flipper1?.classList.toggle('flipped');
+      }, 0);
+      
+      // Flip card 2 after delay
+      setTimeout(() => {
+        flipper2?.classList.toggle('flipped');
+      }, flipDelay);
+    }
+
+    // Start animation loop
+    document.addEventListener('DOMContentLoaded', () => {
+      // Initial entrance animation
+      gsap.from('.card-slot-1', { 
+        opacity: 0, 
+        rotateY: -90,
+        duration: 0.8, 
+        delay: 0.5,
+        ease: 'power2.out' 
+      });
+      
+      gsap.from('.card-slot-2', { 
+        opacity: 0, 
+        rotateY: -90,
+        duration: 0.8, 
+        delay: 0.8,
+        ease: 'power2.out' 
+      });
+
+      // Start cycling after initial display
+      setInterval(flipCards, cycleDuration);
+    });
+  </script>
+</body>
+</html>

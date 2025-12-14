@@ -1,1117 +1,153 @@
 ---
-// Pricing Page
+import Nav from './components/Nav.astro';
+import Footer from './components/Footer.astro';
+import ThemeToggle from './components/ThemeToggle.astro';
+import BaseHead from './components/BaseHead.astro';
 ---
 
 <!DOCTYPE html>
 <html lang="en" data-theme="dark">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Pricing — recrd</title>
-  <meta name="description" content="Simple, transparent pricing. Start free, upgrade when you're ready.">
+  <BaseHead title="Pricing - recrd" description="Simple pricing for AI-powered revenue intelligence. Start free, upgrade when ready." />
   
   <style>
-    @font-face {
-      font-family: 'Roobert';
-      src: url('/fonts/RoobertCollectionVF-TRIAL.woff2') format('woff2');
-      font-weight: 100 900;
-      font-style: normal;
-      font-display: swap;
-    }
-    @font-face {
-      font-family: 'Fraktion Mono';
-      src: url('/fonts/PPFraktionMono-Regular.otf') format('opentype');
-      font-weight: 400;
-      font-style: normal;
-      font-display: swap;
-    }
-    @font-face {
-      font-family: 'Matter';
-      src: url('/fonts/Matter-TRIAL-Light.otf') format('opentype');
-      font-weight: 300;
-      font-style: normal;
-      font-display: swap;
-    }
-    @font-face {
-      font-family: 'Matter';
-      src: url('/fonts/Matter-TRIAL-Regular.otf') format('opentype');
-      font-weight: 400;
-      font-style: normal;
-      font-display: swap;
-    }
-    @font-face {
-      font-family: 'Matter';
-      src: url('/fonts/Matter-TRIAL-Medium.ttf') format('truetype');
-      font-weight: 500;
-      font-style: normal;
-      font-display: swap;
-    }
-    @font-face {
-      font-family: 'Object Sans';
-      src: url('/fonts/PPObjectSans-Regular.otf') format('opentype');
-      font-weight: 400;
-      font-style: normal;
-      font-display: swap;
-    }
-    @font-face {
-      font-family: 'Object Sans';
-      src: url('/fonts/PPObjectSans-Heavy.otf') format('opentype');
-      font-weight: 800;
-      font-style: normal;
-      font-display: swap;
-    }
+    .pricing-header { padding: 160px 48px 80px; text-align: center; }
+    .pricing-headline { font-size: 64px; font-weight: 350; line-height: 1.1; letter-spacing: -0.03em; margin-bottom: 20px; }
+    .pricing-sub { font-size: 18px; color: var(--text-muted); max-width: 500px; margin: 0 auto; }
 
-    :root {
-      --font: 'Roobert', -apple-system, BlinkMacSystemFont, sans-serif;
-      --mono: 'Fraktion Mono', 'SF Mono', monospace;
-      --mint: #46FCAF;
-      --purple: #A678F4;
-      --cyan: #02C0FF;
-      --coral: #FF4F5E;
-      --yellow: #FFDC58;
-    }
+    .pricing-section { padding: 0 48px 120px; }
+    .pricing-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; max-width: 1200px; margin: 0 auto; }
 
-    [data-theme="dark"] {
-      --bg: #0A0A0A;
-      --bg-alt: #111111;
-      --bg-card: #161616;
-      --text: #ffffff;
-      --text-muted: #888888;
-      --border: rgba(255,255,255,0.12);
-      --grid-line: rgba(255,255,255,0.08);
-      --btn-outline: rgba(255,255,255,0.4);
-    }
+    .pricing-card { background: var(--bg-card); border: 1px solid var(--border); padding: 40px 32px; position: relative; }
+    .pricing-card.featured { border-color: var(--mint); }
+    .pricing-badge { position: absolute; top: -12px; left: 50%; transform: translateX(-50%); background: var(--mint); color: #0a0a0a; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; padding: 6px 16px; }
 
-    [data-theme="light"] {
-      --bg: #fafafa;
-      --bg-alt: #ffffff;
-      --bg-card: #ffffff;
-      --text: #0a0a0a;
-      --text-muted: #666666;
-      --border: rgba(0,0,0,0.1);
-      --grid-line: rgba(0,0,0,0.08);
-      --btn-outline: rgba(0,0,0,0.8);
-    }
+    .pricing-tier { font-size: 14px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); margin-bottom: 16px; }
+    .pricing-price { display: flex; align-items: baseline; gap: 2px; margin-bottom: 16px; }
+    .price-currency { font-size: 24px; font-weight: 500; }
+    .price-amount { font-size: 56px; font-weight: 350; letter-spacing: -0.03em; }
+    .price-period { font-size: 14px; color: var(--text-muted); }
+    .pricing-desc { font-size: 14px; color: var(--text-muted); line-height: 1.6; margin-bottom: 32px; min-height: 44px; }
 
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    html { scroll-behavior: smooth; }
-    html, body { overflow-x: hidden; }
-
-    body {
-      font-family: var(--font);
-      background: var(--bg);
-      color: var(--text);
-      min-height: 100vh;
-    }
-
-    /* ========================================
-       NAV
-       ======================================== */
-    nav {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 72px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 48px;
-      z-index: 100;
-      background: rgba(10,10,10,0.85);
-      backdrop-filter: blur(20px);
-      border-bottom: 1px solid var(--border);
-    }
-    [data-theme="light"] nav {
-      background: rgba(250,250,250,0.85);
-    }
-
-    .nav-logo {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      text-decoration: none;
-    }
-    .nav-logo:hover { opacity: 0.8; }
-    .nav-logo svg { width: 32px; height: 32px; }
-    .nav-wordmark { font-weight: 600; font-size: 18px; color: var(--text); }
-
-    .nav-links { display: flex; gap: 8px; list-style: none; }
-    .nav-links a {
-      color: var(--text-muted);
-      text-decoration: none;
-      font-size: 14px;
-      font-weight: 500;
-      padding: 10px 16px;
-      transition: all 0.2s ease;
-    }
-    .nav-links li:nth-child(1) a:hover { background: var(--cyan); color: #0a0a0a; }
-    .nav-links li:nth-child(2) a:hover { background: var(--mint); color: #0a0a0a; }
-    .nav-links li:nth-child(3) a:hover { background: var(--purple); color: #fff; }
-    .nav-links li:nth-child(4) a:hover { background: var(--coral); color: #fff; }
-    .nav-links li:nth-child(4) a:hover { background: var(--coral); color: #fff; }
-
-    .nav-right {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .nav-contact {
-      color: var(--text-muted);
-      text-decoration: none;
-      font-size: 14px;
-      font-weight: 500;
-      padding: 10px 16px;
-      transition: all 0.2s ease;
-    }
-    .nav-contact:hover { color: var(--text); }
-
-    .nav-cta {
-      position: relative;
-      background: transparent;
-      color: var(--text);
-      padding: 12px 24px;
-      font-weight: 500;
-      font-size: 14px;
-      text-decoration: none;
-      border: 1px solid var(--btn-outline);
-      overflow: hidden;
-      transition: color 0.3s ease;
-    }
-    .nav-cta::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 0;
-      height: 100%;
-      background: var(--mint);
-      transition: width 0.3s ease;
-      z-index: -1;
-    }
-    .nav-cta:hover::before { width: 100%; }
-    .nav-cta:hover { color: #0a0a0a; border-color: var(--mint); }
-
-    /* ========================================
-       BUTTONS
-       ======================================== */
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 12px;
-      padding: 16px 32px;
-      font-weight: 500;
-      font-size: 15px;
-      text-decoration: none;
-      cursor: pointer;
-      position: relative;
-      overflow: hidden;
-      transition: color 0.3s ease, border-color 0.3s ease;
-      font-family: var(--font);
-    }
-    
-    .btn-primary { 
-      background: transparent;
-      color: var(--text);
-      border: 1px solid var(--btn-outline);
-    }
-    .btn-primary::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 0;
-      height: 100%;
-      background: var(--mint);
-      transition: width 0.3s ease;
-      z-index: -1;
-    }
+    .pricing-cta { margin-bottom: 32px; }
+    .btn { display: inline-flex; align-items: center; gap: 12px; padding: 16px 28px; font-weight: 500; font-size: 14px; text-decoration: none; transition: all 0.2s ease; cursor: pointer; position: relative; overflow: hidden; width: 100%; justify-content: center; }
+    .btn-primary { background: transparent; color: var(--text); border: 1px solid var(--btn-outline); }
+    .btn-primary::before { content: ''; position: absolute; top: 0; left: 0; width: 0; height: 100%; background: var(--mint); transition: width 0.3s ease; z-index: -1; }
     .btn-primary:hover::before { width: 100%; }
-    .btn-primary:hover { 
-      color: #0a0a0a;
-      border-color: var(--mint);
-    }
-
-    .btn-featured { 
-      background: var(--mint);
-      color: #0a0a0a;
-      border: 2px solid var(--mint);
-    }
-    .btn-featured::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 0;
-      height: 100%;
-      background: #0a0a0a;
-      transition: width 0.3s ease;
-      z-index: -1;
-    }
-    .btn-featured:hover::before { width: 100%; }
-    .btn-featured:hover { 
-      color: var(--mint);
-      border-color: var(--mint);
-    }
-    
-    [data-theme="light"] .btn-featured {
-      background: var(--purple);
-      color: #fff;
-      border-color: var(--purple);
-    }
-    [data-theme="light"] .btn-featured::before {
-      background: #fff;
-    }
-    [data-theme="light"] .btn-featured:hover {
-      color: var(--purple);
-      border-color: var(--purple);
-    }
-
-    .btn-secondary { 
-      background: transparent; 
-      color: var(--text); 
-      border: 1px solid var(--btn-outline);
-    }
-    .btn-secondary::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 0;
-      height: 100%;
-      background: var(--purple);
-      transition: width 0.3s ease;
-      z-index: -1;
-    }
+    .btn-primary:hover { color: #0a0a0a; border-color: var(--mint); }
+    .btn-featured { background: var(--mint); color: #0a0a0a; border: 1px solid var(--mint); font-weight: 600; }
+    .btn-featured:hover { background: #3de09d; }
+    .btn-secondary { background: transparent; color: var(--text); border: 1px solid var(--btn-outline); }
+    .btn-secondary::before { content: ''; position: absolute; top: 0; left: 0; width: 0; height: 100%; background: var(--purple); transition: width 0.3s ease; z-index: -1; }
     .btn-secondary:hover::before { width: 100%; }
-    .btn-secondary:hover {
-      color: #ffffff;
-      border-color: var(--purple);
-    }
+    .btn-secondary:hover { color: #fff; border-color: var(--purple); }
 
-    /* ========================================
-       PRICING HEADER
-       ======================================== */
-    .pricing-header {
-      padding: 160px 48px 80px;
-      text-align: center;
-    }
-
-    .pricing-headline {
-      font-size: 64px;
-      font-weight: 350;
-      line-height: 1.1;
-      letter-spacing: -0.03em;
-      margin-bottom: 24px;
-    }
-
-    .pricing-sub {
-      font-size: 20px;
-      color: var(--text-muted);
-      max-width: 500px;
-      margin: 0 auto;
-      line-height: 1.6;
-    }
-
-    /* ========================================
-       PRICING GRID
-       ======================================== */
-    .pricing-section {
-      padding: 0 48px 120px;
-    }
-
-    .pricing-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 24px;
-      max-width: 1200px;
-      margin: 0 auto;
-    }
-
-    .pricing-card {
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      padding: 40px;
-      position: relative;
-      display: flex;
-      flex-direction: column;
-    }
-
-    .pricing-card.featured {
-      border: 2px solid var(--mint);
-    }
-    [data-theme="light"] .pricing-card.featured {
-      border-color: var(--purple);
-    }
-
-    .pricing-badge {
-      position: absolute;
-      top: -12px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: var(--mint);
-      color: #0a0a0a;
-      font-family: var(--mono);
-      font-size: 11px;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-      padding: 6px 16px;
-    }
-    [data-theme="light"] .pricing-badge {
-      background: var(--purple);
-      color: #fff;
-    }
-
-    .pricing-tier {
-      font-size: 14px;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-      color: var(--text-muted);
-      margin-bottom: 16px;
-    }
-
-    .pricing-price {
-      display: flex;
-      align-items: baseline;
-      gap: 4px;
-      margin-bottom: 8px;
-    }
-
-    .price-currency {
-      font-size: 24px;
-      font-weight: 400;
-      color: var(--text-muted);
-    }
-
-    .price-amount {
-      font-size: 56px;
-      font-weight: 350;
-      letter-spacing: -0.02em;
-    }
-
-    .price-period {
-      font-size: 16px;
-      color: var(--text-muted);
-    }
-
-    .pricing-desc {
-      font-size: 15px;
-      color: var(--text-muted);
-      line-height: 1.6;
-      margin-bottom: 32px;
-      min-height: 48px;
-    }
-
-    .pricing-cta {
-      margin-bottom: 32px;
-    }
-
-    .pricing-cta .btn {
-      width: 100%;
-    }
-
-    .pricing-features {
-      list-style: none;
-      flex: 1;
-    }
-
-    .pricing-features li {
-      display: flex;
-      align-items: flex-start;
-      gap: 12px;
-      padding: 12px 0;
-      border-bottom: 1px solid var(--border);
-      font-size: 14px;
-    }
-
-    .pricing-features li:last-child {
-      border-bottom: none;
-    }
-
-    .check-icon {
-      width: 18px;
-      height: 18px;
-      flex-shrink: 0;
-      margin-top: 2px;
-    }
-
+    .pricing-features { list-style: none; }
+    .pricing-features li { display: flex; align-items: flex-start; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--border); font-size: 14px; }
+    .pricing-features li:last-child { border-bottom: none; }
+    .check-icon { width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .check-icon svg { width: 14px; height: 14px; }
     .check-icon.mint svg { stroke: var(--mint); }
     .check-icon.purple svg { stroke: var(--purple); }
-    .check-icon.coral svg { stroke: var(--coral); }
-    
-    [data-theme="light"] .check-icon.mint svg { stroke: var(--purple); }
+    .feature-highlight { color: var(--mint); font-weight: 500; }
 
-    .feature-highlight {
-      color: var(--mint);
-      font-weight: 500;
-    }
-    [data-theme="light"] .feature-highlight {
-      color: var(--purple);
-    }
+    .faq-section { padding: 120px 48px; border-top: 1px solid var(--border); }
+    .faq-header { text-align: center; margin-bottom: 60px; }
+    .faq-headline { font-size: 40px; font-weight: 350; letter-spacing: -0.02em; }
+    .faq-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 32px; max-width: 1000px; margin: 0 auto; }
+    .faq-item { padding: 24px; background: var(--bg-card); border: 1px solid var(--border); }
+    .faq-question { font-size: 16px; font-weight: 600; margin-bottom: 12px; }
+    .faq-answer { font-size: 14px; color: var(--text-muted); line-height: 1.6; }
 
-    /* ========================================
-       COMPARISON TABLE
-       ======================================== */
-    .comparison-section {
-      padding: 80px 48px 120px;
-      background: var(--bg-alt);
-      border-top: 1px solid var(--border);
-    }
+    .cta-section { padding: 120px 48px; background: var(--bg-alt); text-align: center; border-top: 1px solid var(--border); }
+    .cta-headline { font-size: 48px; font-weight: 350; line-height: 1.2; letter-spacing: -0.02em; margin-bottom: 20px; }
+    .cta-sub { font-size: 18px; color: var(--text-muted); margin-bottom: 40px; }
+    .cta-buttons { display: flex; gap: 16px; justify-content: center; }
+    .cta-buttons .btn { width: auto; }
 
-    .comparison-header {
-      text-align: center;
-      margin-bottom: 60px;
-    }
-
-    .comparison-headline {
-      font-size: 40px;
-      font-weight: 350;
-      letter-spacing: -0.02em;
-      margin-bottom: 16px;
-    }
-
-    .comparison-sub {
-      font-size: 16px;
-      color: var(--text-muted);
-    }
-
-    .comparison-table {
-      max-width: 1000px;
-      margin: 0 auto;
-      border: 1px solid var(--border);
-      background: var(--bg-card);
-    }
-
-    .comparison-row {
-      display: grid;
-      grid-template-columns: 2fr 1fr 1fr 1fr;
-      border-bottom: 1px solid var(--border);
-    }
-
-    .comparison-row:last-child {
-      border-bottom: none;
-    }
-
-    .comparison-row.header {
-      background: var(--bg);
-    }
-
-    .comparison-cell {
-      padding: 16px 24px;
-      font-size: 14px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .comparison-cell:first-child {
-      justify-content: flex-start;
-      color: var(--text-muted);
-    }
-
-    .comparison-row.header .comparison-cell {
-      font-weight: 600;
-      color: var(--text);
-    }
-
-    .comparison-row.header .comparison-cell:first-child {
-      color: var(--text-muted);
-    }
-
-    .comparison-check {
-      width: 20px;
-      height: 20px;
-    }
-    .comparison-check svg {
-      stroke: var(--mint);
-      stroke-width: 2.5;
-    }
-
-    .comparison-x {
-      width: 20px;
-      height: 20px;
-      opacity: 0.3;
-    }
-    .comparison-x svg {
-      stroke: var(--text-muted);
-      stroke-width: 2;
-    }
-
-    .comparison-value {
-      font-family: var(--mono);
-      font-size: 13px;
-    }
-
-    /* ========================================
-       FAQ SECTION
-       ======================================== */
-    .faq-section {
-      padding: 120px 48px;
-      border-top: 1px solid var(--border);
-    }
-
-    .faq-header {
-      text-align: center;
-      margin-bottom: 60px;
-    }
-
-    .faq-headline {
-      font-size: 40px;
-      font-weight: 350;
-      letter-spacing: -0.02em;
-    }
-
-    .faq-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 32px;
-      max-width: 1000px;
-      margin: 0 auto;
-    }
-
-    .faq-item {
-      padding: 24px;
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-    }
-
-    .faq-question {
-      font-size: 16px;
-      font-weight: 600;
-      margin-bottom: 12px;
-    }
-
-    .faq-answer {
-      font-size: 14px;
-      color: var(--text-muted);
-      line-height: 1.6;
-    }
-
-    /* ========================================
-       CTA SECTION
-       ======================================== */
-    .cta-section {
-      padding: 120px 48px;
-      background: var(--bg-alt);
-      text-align: center;
-      border-top: 1px solid var(--border);
-    }
-
-    .cta-headline {
-      font-size: 48px;
-      font-weight: 350;
-      line-height: 1.2;
-      letter-spacing: -0.02em;
-      margin-bottom: 20px;
-    }
-
-    .cta-sub {
-      font-size: 18px;
-      color: var(--text-muted);
-      margin-bottom: 40px;
-    }
-
-    .cta-buttons {
-      display: flex;
-      gap: 16px;
-      justify-content: center;
-    }
-
-    /* ========================================
-       FOOTER
-       ======================================== */
-    footer {
-      padding: 60px 48px;
-      border-top: 1px solid var(--border);
-    }
-
-    .footer-inner {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      max-width: 1400px;
-      margin: 0 auto;
-    }
-
-    .footer-logo {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-    .footer-logo svg { width: 28px; height: 28px; }
-    .footer-logo span { font-weight: 600; font-size: 16px; }
-
-    .footer-links {
-      display: flex;
-      gap: 32px;
-      list-style: none;
-    }
-    .footer-links a {
-      color: var(--text-muted);
-      text-decoration: none;
-      font-size: 14px;
-      transition: color 0.2s ease;
-    }
-    .footer-links a:hover { color: var(--text); }
-
-    .footer-copy {
-      font-size: 13px;
-      color: var(--text-muted);
-    }
-
-    /* ========================================
-       THEME TOGGLE
-       ======================================== */
-    .theme-toggle {
-      position: fixed;
-      bottom: 24px;
-      left: 50%;
-      transform: translateX(-50%);
-      display: flex;
-      background: var(--bg);
-      border: 1px solid var(--border);
-      z-index: 1000;
-    }
-    .theme-toggle button {
-      padding: 10px 20px;
-      background: none;
-      border: none;
-      color: var(--text-muted);
-      font-size: 13px;
-      cursor: pointer;
-      font-family: var(--font);
-    }
-    .theme-toggle button:hover:not(.active) { color: var(--text); }
-    .theme-toggle button.active { background: var(--text); color: var(--bg); }
-
-    /* ========================================
-       RESPONSIVE
-       ======================================== */
-    @media (max-width: 1200px) {
-      .pricing-headline { font-size: 52px; }
-    }
-
-    @media (max-width: 1000px) {
-      .pricing-grid { grid-template-columns: 1fr; max-width: 450px; }
-      .comparison-section { display: none; }
-      .faq-grid { grid-template-columns: 1fr; }
-    }
-
-    @media (max-width: 900px) {
-      nav { padding: 0 24px; }
-      .nav-links { display: none; }
-      .pricing-header { padding: 120px 24px 60px; }
-      .pricing-section { padding: 0 24px 80px; }
-      .pricing-headline { font-size: 44px; }
-      .faq-section { padding: 80px 24px; }
-      .cta-section { padding: 80px 24px; }
-      footer { padding: 40px 24px; }
-      .footer-inner { flex-direction: column; gap: 24px; text-align: center; }
-      .footer-links { flex-wrap: wrap; justify-content: center; gap: 16px 24px; }
-    }
-
-    @media (max-width: 600px) {
-      .pricing-headline { font-size: 36px; }
-      .pricing-card { padding: 32px 24px; }
-      .price-amount { font-size: 44px; }
-      .cta-headline { font-size: 28px; }
-      .cta-buttons { flex-direction: column; }
-      .cta-buttons .btn { width: 100%; }
-    }
+    @media (max-width: 1000px) { .pricing-grid { grid-template-columns: 1fr; max-width: 450px; } }
+    @media (max-width: 900px) { .pricing-header { padding: 140px 24px 60px; } .pricing-headline { font-size: 44px; } .pricing-section { padding: 0 24px 80px; } .faq-section { padding: 80px 24px; } .faq-grid { grid-template-columns: 1fr; } .cta-section { padding: 80px 24px; } .cta-headline { font-size: 32px; } .cta-buttons { flex-direction: column; } .cta-buttons .btn { width: 100%; } }
   </style>
 </head>
 
 <body>
-  <!-- NAV -->
-  <nav>
-    <a href="/" class="nav-logo">
-      <svg viewBox="0 0 52 52" fill="none">
-        <rect y="16" width="28" height="28" fill="#A678F4"/>
-        <rect x="16" width="28" height="28" rx="6" fill="#46FCAF"/>
-      </svg>
-      <span class="nav-wordmark">recrd</span>
-    </a>
-    <ul class="nav-links">
-      <li><a href="/features">Features</a></li>
-      <li><a href="/pricing">Pricing</a></li>
-      <li><a href="/agents">Agents</a></li>
-      <li><a href="#">Docs</a></li>
-    </ul>
-    <div class="nav-right">
-      <a href="/#contact" class="nav-contact">Contact</a>
-      <a href="#" class="nav-cta">Dashboard</a>
-    </div>
-  </nav>
+  <Nav />
 
-  <!-- PRICING HEADER -->
   <section class="pricing-header">
     <h1 class="pricing-headline">Simple pricing,<br>powerful agents.</h1>
     <p class="pricing-sub">Start free. Upgrade when you're ready to unlock the full power of AI-driven revenue intelligence.</p>
   </section>
 
-  <!-- PRICING CARDS -->
   <section class="pricing-section">
     <div class="pricing-grid">
-      <!-- Starter -->
       <div class="pricing-card">
         <div class="pricing-tier">Starter</div>
-        <div class="pricing-price">
-          <span class="price-currency">$</span>
-          <span class="price-amount">0</span>
-          <span class="price-period">/month</span>
-        </div>
+        <div class="pricing-price"><span class="price-currency">$</span><span class="price-amount">0</span><span class="price-period">/month</span></div>
         <p class="pricing-desc">For individuals exploring AI-powered call notes and basic insights.</p>
-        <div class="pricing-cta">
-          <a href="#" class="btn btn-primary">Get Started Free</a>
-        </div>
+        <div class="pricing-cta"><a href="/pricing" class="btn btn-primary">Get Started Free</a></div>
         <ul class="pricing-features">
-          <li>
-            <div class="check-icon mint">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                <polyline points="20 6 9 17 4 12"/>
-              </svg>
-            </div>
-            Up to 10 calls / month
-          </li>
-          <li>
-            <div class="check-icon mint">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                <polyline points="20 6 9 17 4 12"/>
-              </svg>
-            </div>
-            AI transcription & summary
-          </li>
-          <li>
-            <div class="check-icon mint">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                <polyline points="20 6 9 17 4 12"/>
-              </svg>
-            </div>
-            Basic call insights
-          </li>
-          <li>
-            <div class="check-icon mint">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                <polyline points="20 6 9 17 4 12"/>
-              </svg>
-            </div>
-            1 user
-          </li>
-          <li>
-            <div class="check-icon mint">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                <polyline points="20 6 9 17 4 12"/>
-              </svg>
-            </div>
-            Zoom integration
-          </li>
+          <li><div class="check-icon mint"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></div>Up to 10 calls / month</li>
+          <li><div class="check-icon mint"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></div>AI transcription & summary</li>
+          <li><div class="check-icon mint"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></div>Basic call insights</li>
+          <li><div class="check-icon mint"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></div>1 user</li>
+          <li><div class="check-icon mint"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></div>Zoom integration</li>
         </ul>
       </div>
 
-      <!-- Pro -->
       <div class="pricing-card featured">
         <div class="pricing-badge">Most Popular</div>
         <div class="pricing-tier">Pro</div>
-        <div class="pricing-price">
-          <span class="price-currency">$</span>
-          <span class="price-amount">49</span>
-          <span class="price-period">/user/mo</span>
-        </div>
+        <div class="pricing-price"><span class="price-currency">$</span><span class="price-amount">49</span><span class="price-period">/user/mo</span></div>
         <p class="pricing-desc">For sales teams ready to automate CRM updates and unlock AI coaching.</p>
-        <div class="pricing-cta">
-          <a href="#" class="btn btn-featured">Start 14-Day Trial</a>
-        </div>
+        <div class="pricing-cta"><a href="/pricing" class="btn btn-featured">Start 14-Day Trial</a></div>
         <ul class="pricing-features">
-          <li>
-            <div class="check-icon mint">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                <polyline points="20 6 9 17 4 12"/>
-              </svg>
-            </div>
-            <span class="feature-highlight">Unlimited calls</span>
-          </li>
-          <li>
-            <div class="check-icon mint">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                <polyline points="20 6 9 17 4 12"/>
-              </svg>
-            </div>
-            <span class="feature-highlight">All AI agents included</span>
-          </li>
-          <li>
-            <div class="check-icon mint">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                <polyline points="20 6 9 17 4 12"/>
-              </svg>
-            </div>
-            CRM auto-sync (HubSpot, Salesforce)
-          </li>
-          <li>
-            <div class="check-icon mint">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                <polyline points="20 6 9 17 4 12"/>
-              </svg>
-            </div>
-            AI coaching scorecards
-          </li>
-          <li>
-            <div class="check-icon mint">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                <polyline points="20 6 9 17 4 12"/>
-              </svg>
-            </div>
-            Slack & email alerts
-          </li>
-          <li>
-            <div class="check-icon mint">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                <polyline points="20 6 9 17 4 12"/>
-              </svg>
-            </div>
-            Follow-up email drafts
-          </li>
-          <li>
-            <div class="check-icon mint">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                <polyline points="20 6 9 17 4 12"/>
-              </svg>
-            </div>
-            Up to 25 users
-          </li>
+          <li><div class="check-icon mint"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></div><span class="feature-highlight">Unlimited calls</span></li>
+          <li><div class="check-icon mint"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></div><span class="feature-highlight">All AI agents included</span></li>
+          <li><div class="check-icon mint"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></div>CRM auto-sync (HubSpot, Salesforce)</li>
+          <li><div class="check-icon mint"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></div>AI coaching scorecards</li>
+          <li><div class="check-icon mint"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></div>Slack & email alerts</li>
+          <li><div class="check-icon mint"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></div>Follow-up email drafts</li>
+          <li><div class="check-icon mint"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></div>Up to 25 users</li>
         </ul>
       </div>
 
-      <!-- Enterprise -->
       <div class="pricing-card">
         <div class="pricing-tier">Enterprise</div>
-        <div class="pricing-price">
-          <span class="price-amount">Custom</span>
-        </div>
+        <div class="pricing-price"><span class="price-amount">Custom</span></div>
         <p class="pricing-desc">For large teams needing advanced security, custom agents, and dedicated support.</p>
-        <div class="pricing-cta">
-          <a href="#" class="btn btn-secondary">Contact Sales</a>
-        </div>
+        <div class="pricing-cta"><a href="/#contact" class="btn btn-secondary">Contact Sales</a></div>
         <ul class="pricing-features">
-          <li>
-            <div class="check-icon purple">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                <polyline points="20 6 9 17 4 12"/>
-              </svg>
-            </div>
-            Everything in Pro
-          </li>
-          <li>
-            <div class="check-icon purple">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                <polyline points="20 6 9 17 4 12"/>
-              </svg>
-            </div>
-            <span class="feature-highlight">Custom AI agents</span>
-          </li>
-          <li>
-            <div class="check-icon purple">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                <polyline points="20 6 9 17 4 12"/>
-              </svg>
-            </div>
-            SSO & SAML
-          </li>
-          <li>
-            <div class="check-icon purple">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                <polyline points="20 6 9 17 4 12"/>
-              </svg>
-            </div>
-            Advanced security controls
-          </li>
-          <li>
-            <div class="check-icon purple">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                <polyline points="20 6 9 17 4 12"/>
-              </svg>
-            </div>
-            Dedicated success manager
-          </li>
-          <li>
-            <div class="check-icon purple">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                <polyline points="20 6 9 17 4 12"/>
-              </svg>
-            </div>
-            Custom integrations
-          </li>
-          <li>
-            <div class="check-icon purple">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                <polyline points="20 6 9 17 4 12"/>
-              </svg>
-            </div>
-            Unlimited users
-          </li>
+          <li><div class="check-icon purple"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></div>Everything in Pro</li>
+          <li><div class="check-icon purple"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></div>Custom AI agent builder</li>
+          <li><div class="check-icon purple"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></div>SSO & advanced security</li>
+          <li><div class="check-icon purple"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></div>Dedicated CSM</li>
+          <li><div class="check-icon purple"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></div>Custom integrations</li>
+          <li><div class="check-icon purple"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></div>Unlimited users</li>
         </ul>
       </div>
     </div>
   </section>
 
-  <!-- COMPARISON TABLE -->
-  <section class="comparison-section">
-    <div class="comparison-header">
-      <h2 class="comparison-headline">Compare plans</h2>
-      <p class="comparison-sub">Everything you need to make the right choice.</p>
-    </div>
-
-    <div class="comparison-table">
-      <div class="comparison-row header">
-        <div class="comparison-cell">Feature</div>
-        <div class="comparison-cell">Starter</div>
-        <div class="comparison-cell">Pro</div>
-        <div class="comparison-cell">Enterprise</div>
-      </div>
-      <div class="comparison-row">
-        <div class="comparison-cell">Monthly calls</div>
-        <div class="comparison-cell"><span class="comparison-value">10</span></div>
-        <div class="comparison-cell"><span class="comparison-value">Unlimited</span></div>
-        <div class="comparison-cell"><span class="comparison-value">Unlimited</span></div>
-      </div>
-      <div class="comparison-row">
-        <div class="comparison-cell">AI transcription</div>
-        <div class="comparison-cell"><div class="comparison-check"><svg viewBox="0 0 24 24" fill="none"><polyline points="20 6 9 17 4 12"/></svg></div></div>
-        <div class="comparison-cell"><div class="comparison-check"><svg viewBox="0 0 24 24" fill="none"><polyline points="20 6 9 17 4 12"/></svg></div></div>
-        <div class="comparison-cell"><div class="comparison-check"><svg viewBox="0 0 24 24" fill="none"><polyline points="20 6 9 17 4 12"/></svg></div></div>
-      </div>
-      <div class="comparison-row">
-        <div class="comparison-cell">AI agents</div>
-        <div class="comparison-cell"><div class="comparison-x"><svg viewBox="0 0 24 24" fill="none"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></div></div>
-        <div class="comparison-cell"><div class="comparison-check"><svg viewBox="0 0 24 24" fill="none"><polyline points="20 6 9 17 4 12"/></svg></div></div>
-        <div class="comparison-cell"><div class="comparison-check"><svg viewBox="0 0 24 24" fill="none"><polyline points="20 6 9 17 4 12"/></svg></div></div>
-      </div>
-      <div class="comparison-row">
-        <div class="comparison-cell">CRM auto-sync</div>
-        <div class="comparison-cell"><div class="comparison-x"><svg viewBox="0 0 24 24" fill="none"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></div></div>
-        <div class="comparison-cell"><div class="comparison-check"><svg viewBox="0 0 24 24" fill="none"><polyline points="20 6 9 17 4 12"/></svg></div></div>
-        <div class="comparison-cell"><div class="comparison-check"><svg viewBox="0 0 24 24" fill="none"><polyline points="20 6 9 17 4 12"/></svg></div></div>
-      </div>
-      <div class="comparison-row">
-        <div class="comparison-cell">Coaching scorecards</div>
-        <div class="comparison-cell"><div class="comparison-x"><svg viewBox="0 0 24 24" fill="none"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></div></div>
-        <div class="comparison-cell"><div class="comparison-check"><svg viewBox="0 0 24 24" fill="none"><polyline points="20 6 9 17 4 12"/></svg></div></div>
-        <div class="comparison-cell"><div class="comparison-check"><svg viewBox="0 0 24 24" fill="none"><polyline points="20 6 9 17 4 12"/></svg></div></div>
-      </div>
-      <div class="comparison-row">
-        <div class="comparison-cell">Slack & email alerts</div>
-        <div class="comparison-cell"><div class="comparison-x"><svg viewBox="0 0 24 24" fill="none"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></div></div>
-        <div class="comparison-cell"><div class="comparison-check"><svg viewBox="0 0 24 24" fill="none"><polyline points="20 6 9 17 4 12"/></svg></div></div>
-        <div class="comparison-cell"><div class="comparison-check"><svg viewBox="0 0 24 24" fill="none"><polyline points="20 6 9 17 4 12"/></svg></div></div>
-      </div>
-      <div class="comparison-row">
-        <div class="comparison-cell">Custom agents</div>
-        <div class="comparison-cell"><div class="comparison-x"><svg viewBox="0 0 24 24" fill="none"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></div></div>
-        <div class="comparison-cell"><div class="comparison-x"><svg viewBox="0 0 24 24" fill="none"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></div></div>
-        <div class="comparison-cell"><div class="comparison-check"><svg viewBox="0 0 24 24" fill="none"><polyline points="20 6 9 17 4 12"/></svg></div></div>
-      </div>
-      <div class="comparison-row">
-        <div class="comparison-cell">SSO / SAML</div>
-        <div class="comparison-cell"><div class="comparison-x"><svg viewBox="0 0 24 24" fill="none"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></div></div>
-        <div class="comparison-cell"><div class="comparison-x"><svg viewBox="0 0 24 24" fill="none"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></div></div>
-        <div class="comparison-cell"><div class="comparison-check"><svg viewBox="0 0 24 24" fill="none"><polyline points="20 6 9 17 4 12"/></svg></div></div>
-      </div>
-      <div class="comparison-row">
-        <div class="comparison-cell">Support</div>
-        <div class="comparison-cell"><span class="comparison-value">Email</span></div>
-        <div class="comparison-cell"><span class="comparison-value">Priority</span></div>
-        <div class="comparison-cell"><span class="comparison-value">Dedicated</span></div>
-      </div>
-    </div>
-  </section>
-
-  <!-- FAQ -->
   <section class="faq-section">
-    <div class="faq-header">
-      <h2 class="faq-headline">Frequently asked questions</h2>
-    </div>
-
+    <div class="faq-header"><h2 class="faq-headline">Frequently asked questions</h2></div>
     <div class="faq-grid">
-      <div class="faq-item">
-        <h3 class="faq-question">What happens after my trial ends?</h3>
-        <p class="faq-answer">After 14 days, you'll be prompted to choose a plan. Your data is preserved, and you can continue on Starter for free or upgrade to Pro.</p>
-      </div>
-      <div class="faq-item">
-        <h3 class="faq-question">Can I change plans later?</h3>
-        <p class="faq-answer">Absolutely. Upgrade or downgrade anytime. When upgrading, you'll get immediate access to new features. Downgrades take effect at your next billing cycle.</p>
-      </div>
-      <div class="faq-item">
-        <h3 class="faq-question">Which CRMs do you integrate with?</h3>
-        <p class="faq-answer">We currently support HubSpot and Salesforce. More integrations are on our roadmap—let us know what you need.</p>
-      </div>
-      <div class="faq-item">
-        <h3 class="faq-question">Is my call data secure?</h3>
-        <p class="faq-answer">Yes. We use industry-standard encryption (AES-256 at rest, TLS 1.3 in transit). Enterprise plans include additional security controls and compliance certifications.</p>
-      </div>
-      <div class="faq-item">
-        <h3 class="faq-question">Do I need to bring my own AI API keys?</h3>
-        <p class="faq-answer">No. Unlike other tools, recrd includes everything out of the box. No API keys, no workflow builders, no assembly required.</p>
-      </div>
-      <div class="faq-item">
-        <h3 class="faq-question">How does the AI coaching work?</h3>
-        <p class="faq-answer">After each call, our AI generates scorecards based on your sales methodology (MEDDIC, BANT, or custom). Managers see trends and can coach with precision.</p>
-      </div>
+      <div class="faq-item"><h3 class="faq-question">What happens after my trial ends?</h3><p class="faq-answer">Your account automatically converts to the free Starter plan. No charges unless you explicitly upgrade. All your data is preserved.</p></div>
+      <div class="faq-item"><h3 class="faq-question">Can I change plans anytime?</h3><p class="faq-answer">Yes. Upgrade, downgrade, or cancel anytime. Changes take effect immediately and we'll prorate any charges.</p></div>
+      <div class="faq-item"><h3 class="faq-question">What CRMs do you integrate with?</h3><p class="faq-answer">HubSpot and Salesforce are fully supported. We're adding more CRMs based on customer demand.</p></div>
+      <div class="faq-item"><h3 class="faq-question">Is my call data secure?</h3><p class="faq-answer">Yes. All data is encrypted at rest and in transit. Enterprise plans include SOC 2 compliance and custom data retention policies.</p></div>
     </div>
   </section>
 
-  <!-- CTA -->
   <section class="cta-section">
     <h2 class="cta-headline">Ready to get started?</h2>
-    <p class="cta-sub">Try recrd free for 14 days. No credit card required.</p>
+    <p class="cta-sub">Start free, no credit card required. See the impact in your first week.</p>
     <div class="cta-buttons">
-      <a href="#" class="btn btn-primary">Start Free Trial</a>
-      <a href="#" class="btn btn-secondary">Talk to Sales</a>
+      <a href="/pricing" class="btn btn-primary">Start Free Trial</a>
+      <a href="/#contact" class="btn btn-secondary">Talk to Sales</a>
     </div>
   </section>
 
-  <!-- FOOTER -->
-  <footer>
-    <div class="footer-inner">
-      <div class="footer-logo">
-        <svg viewBox="0 0 52 52" fill="none">
-          <rect y="16" width="28" height="28" fill="#A678F4"/>
-          <rect x="16" width="28" height="28" rx="6" fill="#46FCAF"/>
-        </svg>
-        <span>recrd</span>
-      </div>
-      <ul class="footer-links">
-        <li><a href="/features">Features</a></li>
-        <li><a href="/pricing">Pricing</a></li>
-        <li><a href="/agents">Agents</a></li>
-        <li><a href="#">Docs</a></li>
-        <li><a href="#">Privacy</a></li>
-        <li><a href="#">Terms</a></li>
-      </ul>
-      <p class="footer-copy">© 2025 recrd. All rights reserved.</p>
-    </div>
-  </footer>
-
-  <!-- THEME TOGGLE -->
-  <div class="theme-toggle">
-    <button id="btn-dark" class="active" onclick="setTheme('dark')">Dark</button>
-    <button id="btn-light" onclick="setTheme('light')">Light</button>
-  </div>
-
-  <script>
-    function setTheme(theme) {
-      document.documentElement.setAttribute('data-theme', theme);
-      document.getElementById('btn-dark')?.classList.toggle('active', theme === 'dark');
-      document.getElementById('btn-light')?.classList.toggle('active', theme === 'light');
-      localStorage.setItem('theme', theme);
-    }
-    window.setTheme = setTheme;
-
-    // Load saved theme
-    const savedTheme = localStorage.getItem('theme') || 'dark';
-    setTheme(savedTheme);
-  </script>
+  <Footer />
+  <ThemeToggle />
 </body>
 </html>

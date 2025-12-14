@@ -1,0 +1,50 @@
+---
+// ThemeToggle Component
+// Usage: import ThemeToggle from '../components/ThemeToggle.astro'; then <ThemeToggle />
+---
+
+<div class="theme-toggle">
+  <button id="btn-dark" class="active" onclick="setTheme('dark')">Dark</button>
+  <button id="btn-light" onclick="setTheme('light')">Light</button>
+</div>
+
+<script is:inline>
+  function setTheme(theme) {
+    document.documentElement.setAttribute('data-theme', theme);
+    document.getElementById('btn-dark')?.classList.toggle('active', theme === 'dark');
+    document.getElementById('btn-light')?.classList.toggle('active', theme === 'light');
+    localStorage.setItem('theme', theme);
+  }
+  
+  // Check for saved theme on load
+  const savedTheme = localStorage.getItem('theme');
+  if (savedTheme) {
+    setTheme(savedTheme);
+  }
+  
+  window.setTheme = setTheme;
+</script>
+
+<style>
+  .theme-toggle {
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    z-index: 1000;
+  }
+  .theme-toggle button {
+    padding: 10px 20px;
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    font-size: 13px;
+    cursor: pointer;
+    font-family: var(--font);
+  }
+  .theme-toggle button:hover:not(.active) { color: var(--text); }
+  .theme-toggle button:global(.active) { background: var(--text); color: var(--bg); }
+</style>

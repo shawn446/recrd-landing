@@ -249,10 +249,10 @@
     .hero-headline {
       font-family: var(--font);
       font-weight: 700;
-      font-size: 72px;
-      line-height: 1.0;
-      letter-spacing: -0.03em;
-      margin-bottom: 24px;
+      font-size: 90px;
+      line-height: 0.95;
+      letter-spacing: -0.035em;
+      margin-bottom: 28px;
     }
 
     .hero-headline em {
@@ -261,20 +261,21 @@
     }
 
     .hero-sub {
-      font-size: 20px;
+      font-size: 40px;
       font-weight: 500;
-      color: var(--text-secondary);
-      line-height: 1.5;
-      margin-bottom: 40px;
+      color: var(--text);
+      line-height: 1.2;
+      margin-bottom: 20px;
       max-width: 520px;
+      letter-spacing: -0.02em;
     }
 
     .hero-body {
-      font-size: 16px;
-      font-weight: 200;
+      font-size: 18px;
+      font-weight: 300;
       color: var(--text-secondary);
-      line-height: 1.7;
-      margin-bottom: 40px;
+      line-height: 1.6;
+      margin-bottom: 44px;
       max-width: 480px;
     }
 
@@ -370,75 +371,171 @@
       background: currentColor;
     }
 
-    /* HERO VISUAL - Floating blocks */
+    /* FLOW VISUALIZATION */
     .hero-visual {
       position: absolute;
-      top: 0;
-      right: 0;
-      width: 55%;
-      height: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      top: 50%;
+      right: 5%;
+      transform: translateY(-50%);
+      width: 520px;
+      height: 440px;
       z-index: 5;
     }
 
-    .blocks {
+    .flow {
       position: relative;
-      width: 500px;
-      height: 500px;
+      width: 100%;
+      height: 100%;
     }
 
-    .block {
+    .flow-node {
       position: absolute;
-      animation: float 6s ease-in-out infinite;
+      background: var(--bg-elevated);
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 18px;
+      font-size: 13px;
+      font-weight: 500;
+      font-family: var(--font);
+      color: var(--text);
+      transition: border-color 0.3s ease, transform 0.3s ease;
     }
 
-    .block:nth-child(1) { width: 180px; height: 120px; top: 60px; left: 80px; animation-delay: 0s; }
-    .block:nth-child(2) { width: 120px; height: 80px; top: 40px; left: 280px; animation-delay: 0.5s; }
-    .block:nth-child(3) { width: 200px; height: 140px; top: 160px; left: 160px; animation-delay: 1s; }
-    .block:nth-child(4) { width: 100px; height: 60px; top: 200px; left: 30px; animation-delay: 1.5s; }
-    .block:nth-child(5) { width: 160px; height: 100px; top: 280px; left: 260px; animation-delay: 2s; }
-    .block:nth-child(6) { width: 80px; height: 80px; top: 340px; left: 100px; animation-delay: 2.5s; }
-    .block:nth-child(7) { width: 140px; height: 90px; top: 380px; left: 200px; animation-delay: 3s; }
-    .block:nth-child(8) { width: 60px; height: 40px; top: 120px; left: 380px; animation-delay: 3.5s; }
+    .flow-node:hover {
+      border-color: var(--mint);
+      transform: translateY(-2px);
+    }
 
-    /* Dark mode blocks */
-    [data-theme="dark"] .block.purple { background: var(--purple); }
-    [data-theme="dark"] .block.mint { background: var(--mint); }
-    [data-theme="dark"] .block.dark { background: #151515; border: 1px solid #252525; }
-    [data-theme="dark"] .block.white { background: rgba(255,255,255,0.95); }
+    .flow-node .icon {
+      width: 18px;
+      height: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
 
-    /* Light mode blocks */
-    [data-theme="light"] .block.purple { background: var(--purple); }
-    [data-theme="light"] .block.mint { background: var(--mint); }
-    [data-theme="light"] .block.dark { background: #0a0a0a; }
-    [data-theme="light"] .block.white { background: #ffffff; border: 1px solid #e0e0e0; }
+    .flow-node .icon svg {
+      width: 100%;
+      height: 100%;
+    }
 
-    .block .bar {
+    /* Source node - Call */
+    .flow-source {
+      top: 50%;
+      left: 0;
+      transform: translateY(-50%);
+      background: var(--mint);
+      color: #0a0a0a;
+      border-color: var(--mint);
+      padding: 18px 22px;
+      font-weight: 600;
+      font-size: 14px;
+    }
+
+    .flow-source .icon svg {
+      fill: #0a0a0a;
+    }
+
+    /* Center hub - AI */
+    .flow-hub {
+      top: 50%;
+      left: 170px;
+      transform: translateY(-50%);
+      background: var(--purple);
+      color: white;
+      border-color: var(--purple);
+      padding: 20px 24px;
+      font-weight: 600;
+      font-size: 14px;
+    }
+
+    .flow-hub .icon svg {
+      stroke: white;
+      fill: none;
+    }
+
+    /* Connector line from source to hub */
+    .flow-connector {
       position: absolute;
+      top: 50%;
+      left: 115px;
+      width: 55px;
+      height: 2px;
+      background: var(--mint);
+      transform: translateY(-50%);
+    }
+
+    .flow-connector::after {
+      content: '';
+      position: absolute;
+      right: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 0;
+      height: 0;
+      border-top: 5px solid transparent;
+      border-bottom: 5px solid transparent;
+      border-left: 6px solid var(--mint);
+    }
+
+    /* Agent nodes */
+    .flow-agent {
+      opacity: 0;
+      animation: agentAppear 5s ease-out infinite;
+    }
+
+    .flow-agent-1 { top: 0; right: 0; animation-delay: 0.4s; }
+    .flow-agent-2 { top: 70px; right: 40px; animation-delay: 0.7s; }
+    .flow-agent-3 { top: 140px; right: 0; animation-delay: 1.0s; }
+    .flow-agent-4 { top: 210px; right: 40px; animation-delay: 1.3s; }
+    .flow-agent-5 { top: 280px; right: 0; animation-delay: 1.6s; }
+    .flow-agent-6 { top: 350px; right: 40px; animation-delay: 1.9s; }
+
+    .flow-agent .status {
+      width: 8px;
       height: 8px;
-      left: 12px;
+      background: var(--mint);
+      flex-shrink: 0;
     }
 
-    .block .bar:nth-child(1) { top: 16px; width: 55%; }
-    .block .bar:nth-child(2) { top: 32px; width: 75%; }
-    .block .bar:nth-child(3) { top: 48px; width: 35%; }
-    .block .bar:nth-child(4) { top: 64px; width: 65%; }
+    /* SVG Lines - angular L-shapes */
+    .flow-lines {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+    }
 
-    [data-theme="dark"] .bar.white { background: rgba(255,255,255,0.9); }
-    [data-theme="dark"] .bar.mint { background: var(--mint); }
-    [data-theme="dark"] .bar.purple { background: var(--purple); }
-    [data-theme="dark"] .bar.coral { background: var(--coral); }
+    .flow-line {
+      stroke: var(--border);
+      stroke-width: 1;
+      fill: none;
+      opacity: 0;
+      animation: lineAppear 5s ease-out infinite;
+    }
 
-    [data-theme="light"] .bar.dark { background: #0a0a0a; }
-    [data-theme="light"] .bar.mint { background: var(--mint); }
-    [data-theme="light"] .bar.purple { background: var(--purple); }
-    [data-theme="light"] .bar.white { background: #ffffff; }
+    .flow-line:nth-child(1) { animation-delay: 0.4s; }
+    .flow-line:nth-child(2) { animation-delay: 0.7s; }
+    .flow-line:nth-child(3) { animation-delay: 1.0s; }
+    .flow-line:nth-child(4) { animation-delay: 1.3s; }
+    .flow-line:nth-child(5) { animation-delay: 1.6s; }
+    .flow-line:nth-child(6) { animation-delay: 1.9s; }
 
-    @keyframes float {
-      0%, 100% { transform: translateY(0px); }
-      50% { transform: translateY(-12px); }
+    @keyframes agentAppear {
+      0%, 5% { opacity: 0; transform: translateX(8px); }
+      15%, 80% { opacity: 1; transform: translateX(0); }
+      90%, 100% { opacity: 0; transform: translateX(0); }
+    }
+
+    @keyframes lineAppear {
+      0%, 5% { opacity: 0; stroke: var(--border); }
+      15%, 80% { opacity: 1; stroke: var(--mint); }
+      90%, 100% { opacity: 0; stroke: var(--border); }
     }
 
     /* Gradient blobs */
@@ -493,17 +590,23 @@
       
       .hero { flex-direction: column; }
       .hero-content { padding: 60px 24px; max-width: none; }
-      .hero-headline { font-size: 52px; }
+      .hero-headline { font-size: 64px; }
+      .hero-sub { font-size: 28px; }
       .hero-sub { font-size: 18px; }
       
       .hero-visual {
         position: relative;
         width: 100%;
-        height: 400px;
+        height: 350px;
+        right: auto;
+        top: auto;
+        transform: none;
+        margin-top: 40px;
       }
       
-      .blocks {
-        transform: scale(0.7);
+      .flow {
+        transform: scale(0.75);
+        transform-origin: top center;
       }
       
       .hero-buttons { flex-direction: column; }
@@ -513,7 +616,8 @@
     }
 
     @media (max-width: 500px) {
-      .hero-headline { font-size: 40px; }
+      .hero-headline { font-size: 48px; }
+      .hero-sub { font-size: 22px; }
       .controls { 
         bottom: 10px;
         padding: 6px 10px;
@@ -630,30 +734,67 @@
     </div>
 
     <div class="hero-visual">
-      <div class="blocks">
-        <div class="block purple">
-          <div class="bar white"></div>
-          <div class="bar mint"></div>
-          <div class="bar white"></div>
+      <div class="flow">
+        <!-- Source: Call -->
+        <div class="flow-node flow-source">
+          <span class="icon">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
+          </span>
+          <span>Sales Call</span>
         </div>
-        <div class="block mint"></div>
-        <div class="block dark">
-          <div class="bar purple"></div>
-          <div class="bar mint"></div>
-          <div class="bar purple"></div>
-          <div class="bar mint"></div>
+
+        <!-- Connector line -->
+        <div class="flow-connector"></div>
+
+        <!-- Hub: AI Processing -->
+        <div class="flow-node flow-hub">
+          <span class="icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+          </span>
+          <span>recrd AI</span>
         </div>
-        <div class="block white"></div>
-        <div class="block purple">
-          <div class="bar white"></div>
-          <div class="bar mint"></div>
+
+        <!-- SVG Lines - angular L-shapes -->
+        <svg class="flow-lines" viewBox="0 0 520 440">
+          <!-- Line to agent 1 -->
+          <path class="flow-line" d="M280,220 L320,220 L320,25 L380,25"/>
+          <!-- Line to agent 2 -->
+          <path class="flow-line" d="M280,220 L340,220 L340,95 L360,95"/>
+          <!-- Line to agent 3 -->
+          <path class="flow-line" d="M280,220 L360,220 L360,165 L380,165"/>
+          <!-- Line to agent 4 -->
+          <path class="flow-line" d="M280,220 L340,220 L340,235 L360,235"/>
+          <!-- Line to agent 5 -->
+          <path class="flow-line" d="M280,220 L360,220 L360,305 L380,305"/>
+          <!-- Line to agent 6 -->
+          <path class="flow-line" d="M280,220 L320,220 L320,375 L360,375"/>
+        </svg>
+
+        <!-- Agent nodes -->
+        <div class="flow-node flow-agent flow-agent-1">
+          <span class="status"></span>
+          <span>CRM Update</span>
         </div>
-        <div class="block mint"></div>
-        <div class="block dark">
-          <div class="bar mint"></div>
-          <div class="bar coral"></div>
+        <div class="flow-node flow-agent flow-agent-2">
+          <span class="status"></span>
+          <span>Follow-up Email</span>
         </div>
-        <div class="block purple"></div>
+        <div class="flow-node flow-agent flow-agent-3">
+          <span class="status"></span>
+          <span>Coaching Notes</span>
+        </div>
+        <div class="flow-node flow-agent flow-agent-4">
+          <span class="status"></span>
+          <span>Forecast Update</span>
+        </div>
+        <div class="flow-node flow-agent flow-agent-5">
+          <span class="status"></span>
+          <span>Deal Risk Alert</span>
+        </div>
+        <div class="flow-node flow-agent flow-agent-6">
+          <span class="status"></span>
+          <span>Content Snippet</span>
+        </div>
       </div>
     </div>
   </section>

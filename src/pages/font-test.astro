@@ -34,7 +34,7 @@
       --coral: #FF4F5E;
       
       /* Single source of truth for grid */
-      --cell: 100px;
+      --cell: 160px;
     }
 
     [data-theme="dark"] {
@@ -231,7 +231,7 @@
       display: flex;
       flex-direction: column;
       justify-content: center;
-      padding: 24px;
+      padding: 32px;
       opacity: 0;
       transform: scale(0.95);
       z-index: 10;
@@ -240,13 +240,13 @@
     .card-header {
       display: flex;
       align-items: center;
-      gap: 10px;
-      margin-bottom: 14px;
+      gap: 12px;
+      margin-bottom: 18px;
     }
 
     .card-icon {
-      width: 22px;
-      height: 22px;
+      width: 28px;
+      height: 28px;
       flex-shrink: 0;
     }
     .card-icon svg {
@@ -260,29 +260,29 @@
 
     .card-badge {
       font-family: var(--mono);
-      font-size: 9px;
+      font-size: 11px;
       text-transform: uppercase;
       letter-spacing: 0.1em;
-      padding: 5px 10px;
+      padding: 6px 14px;
     }
 
     .card-title {
-      font-size: 18px;
+      font-size: 24px;
       font-weight: 600;
       line-height: 1.2;
-      margin-bottom: 8px;
+      margin-bottom: 10px;
     }
 
     .card-content {
-      font-size: 14px;
+      font-size: 16px;
       line-height: 1.4;
       opacity: 0.85;
     }
 
     .card-meta {
       font-family: var(--mono);
-      font-size: 11px;
-      margin-top: 12px;
+      font-size: 13px;
+      margin-top: 16px;
       opacity: 0.7;
     }
 
@@ -364,18 +364,26 @@
     .theme-toggle button.active { background: var(--text); color: var(--bg); }
 
     /* RESPONSIVE */
+    @media (max-width: 1800px) {
+      :root { --cell: 140px; }
+    }
+    
+    @media (max-width: 1600px) {
+      :root { --cell: 120px; }
+    }
+    
     @media (max-width: 1400px) {
-      :root { --cell: 85px; }
+      :root { --cell: 100px; }
     }
     
     @media (max-width: 1200px) {
-      :root { --cell: 75px; }
+      :root { --cell: 85px; }
       .card { padding: 20px; }
       .card-title { font-size: 16px; }
     }
 
     @media (max-width: 1000px) {
-      :root { --cell: 65px; }
+      :root { --cell: 70px; }
       .card { padding: 16px; }
       .card-title { font-size: 14px; }
       .card-content { font-size: 12px; }
@@ -397,7 +405,7 @@
         transform: none;
         margin: 0 auto;
       }
-      :root { --cell: 55px; }
+      :root { --cell: 60px; }
       .card-content { display: none; }
       .nav-links { display: none; }
       nav { padding: 0 24px; }
@@ -408,7 +416,7 @@
       .hero-sub { font-size: 20px; }
       .hero-buttons { flex-direction: column; }
       .btn { width: 100%; text-align: center; }
-      :root { --cell: 45px; }
+      :root { --cell: 50px; }
       .card { padding: 12px; }
       .card-badge { font-size: 7px; padding: 3px 6px; }
       .card-title { font-size: 12px; }

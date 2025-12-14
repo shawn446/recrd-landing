@@ -1,5 +1,5 @@
 ---
-// Hero Test - Origami Unfold Cards
+// Hero Test - Full Width Grid with Origami Cards
 import BaseHead from '../components/BaseHead.astro';
 import Nav from '../components/Nav.astro';
 ---
@@ -7,33 +7,78 @@ import Nav from '../components/Nav.astro';
 <!DOCTYPE html>
 <html lang="en" data-theme="dark">
 <head>
-  <BaseHead title="Hero Test - Origami Unfold" description="Testing origami card unfold animation" />
+  <BaseHead title="Hero Test - Full Grid" description="Testing full-width grid with origami cards" />
   
   <style>
     :root { 
-      --cell: 90px; 
-      --grid-cols: 8;
-      --grid-rows: 7;
-      --grid-line: rgba(255,255,255,0.12); 
+      --cell: 100px; 
+      --grid-line: rgba(255,255,255,0.06); 
     }
 
     .hero {
       min-height: 100vh;
       display: flex;
       align-items: center;
-      padding: 72px 0 0 48px;
+      padding: 72px 48px 0;
       position: relative;
       overflow: hidden;
     }
 
+    /* Full-width background grid */
+    .hero-grid {
+      position: absolute;
+      inset: 0;
+      background-image: 
+        linear-gradient(to right, var(--grid-line) 1px, transparent 1px),
+        linear-gradient(to bottom, var(--grid-line) 1px, transparent 1px);
+      background-size: var(--cell) var(--cell);
+      z-index: 1;
+    }
+
+    /* Gradient blobs */
+    .blob {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(120px);
+      opacity: 0.4;
+      z-index: 0;
+    }
+
+    .blob-1 {
+      width: 600px;
+      height: 600px;
+      background: var(--mint);
+      top: -200px;
+      right: 10%;
+      opacity: 0.15;
+    }
+
+    .blob-2 {
+      width: 500px;
+      height: 500px;
+      background: var(--purple);
+      bottom: -100px;
+      right: 30%;
+      opacity: 0.12;
+    }
+
+    .blob-3 {
+      width: 400px;
+      height: 400px;
+      background: var(--cyan);
+      top: 40%;
+      left: -100px;
+      opacity: 0.1;
+    }
+
     .hero-content {
-      max-width: 500px;
+      max-width: 550px;
       z-index: 10;
       padding: 48px 0;
     }
 
     .hero-headline {
-      font-size: 72px;
+      font-size: 80px;
       font-weight: 350;
       line-height: 1.0;
       letter-spacing: -0.03em;
@@ -70,48 +115,23 @@ import Nav from '../components/Nav.astro';
     .btn-primary { background: var(--text); color: var(--bg); }
     .btn-primary:hover { background: var(--mint); color: #0a0a0a; transform: translateY(-2px); }
 
-    /* GRID WRAPPER - larger grid */
-    .grid-wrapper {
+    /* CARD CONTAINER */
+    .cards-container {
       position: absolute;
       top: 50%;
-      right: 40px;
+      right: 80px;
       transform: translateY(-50%);
-      width: calc(var(--cell) * var(--grid-cols));
-      height: calc(var(--cell) * var(--grid-rows));
-      z-index: 5;
-    }
-
-    .grid-svg {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-    }
-
-    .grid-svg line {
-      stroke: var(--grid-line);
-      stroke-width: 1;
+      display: flex;
+      gap: calc(var(--cell) * 2);
+      z-index: 10;
     }
 
     /* ORIGAMI CARD */
     .origami-card {
-      position: absolute;
       display: grid;
       grid-template-columns: repeat(2, var(--cell));
       grid-template-rows: repeat(3, var(--cell));
-      z-index: 10;
-    }
-
-    /* Card positions - spaced apart */
-    .origami-card.card-1 {
-      top: 0;
-      left: 0;
-    }
-
-    .origami-card.card-2 {
-      top: calc(var(--cell) * 1);
-      left: calc(var(--cell) * 4);
+      position: relative;
     }
 
     /* Each cell/panel of the card */
@@ -120,21 +140,19 @@ import Nav from '../components/Nav.astro';
       height: var(--cell);
       position: relative;
       transform-style: preserve-3d;
-      perspective: 800px;
+      perspective: 1000px;
     }
 
     .panel-inner {
       position: absolute;
       width: 100%;
       height: 100%;
-      transform-origin: left center;
       backface-visibility: hidden;
       opacity: 0;
       transform: rotateY(-90deg);
-      transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
-    /* Alternate panels fold from different sides */
     .card-panel.from-top .panel-inner {
       transform-origin: top center;
       transform: rotateX(90deg);
@@ -145,27 +163,24 @@ import Nav from '../components/Nav.astro';
       transform: rotateY(-90deg);
     }
 
-    /* Revealed state */
     .card-panel.revealed .panel-inner {
       opacity: 1;
       transform: rotateY(0deg) rotateX(0deg);
     }
 
     /* Card colors */
-    .card-panel .panel-inner.mint { background: var(--mint); }
-    .card-panel .panel-inner.purple { background: var(--purple); }
-    .card-panel .panel-inner.cyan { background: var(--cyan); }
-    .card-panel .panel-inner.coral { background: var(--coral); }
-    .card-panel .panel-inner.yellow { background: var(--yellow); }
+    .panel-inner.mint { background: var(--mint); }
+    .panel-inner.purple { background: var(--purple); }
+    .panel-inner.cyan { background: var(--cyan); }
+    .panel-inner.coral { background: var(--coral); }
+    .panel-inner.yellow { background: var(--yellow); }
+    .panel-inner.dark { background: #1a1a1a; border: 1px solid var(--border); }
 
     /* Content inside panels */
     .panel-content {
       position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      padding: 12px;
+      inset: 0;
+      padding: 14px;
       display: flex;
       flex-direction: column;
       justify-content: center;
@@ -175,13 +190,14 @@ import Nav from '../components/Nav.astro';
     }
 
     .panel-inner.purple .panel-content,
-    .panel-inner.coral .panel-content {
+    .panel-inner.coral .panel-content,
+    .panel-inner.dark .panel-content {
       color: #fff;
     }
 
     .panel-icon {
-      width: 24px;
-      height: 24px;
+      width: 28px;
+      height: 28px;
       margin-bottom: 8px;
     }
 
@@ -197,96 +213,130 @@ import Nav from '../components/Nav.astro';
 
     .panel-badge {
       font-family: var(--mono);
-      font-size: 8px;
+      font-size: 9px;
       text-transform: uppercase;
       letter-spacing: 0.1em;
-      padding: 4px 8px;
+      padding: 5px 10px;
       background: rgba(0,0,0,0.1);
       display: inline-block;
-      margin-bottom: 6px;
       width: fit-content;
     }
 
     .panel-inner.purple .panel-badge,
-    .panel-inner.coral .panel-badge {
-      background: rgba(255,255,255,0.2);
+    .panel-inner.coral .panel-badge,
+    .panel-inner.dark .panel-badge {
+      background: rgba(255,255,255,0.15);
     }
 
     .panel-title {
-      font-size: 14px;
+      font-size: 16px;
       font-weight: 600;
       line-height: 1.2;
     }
 
     .panel-text {
-      font-size: 10px;
-      opacity: 0.8;
+      font-size: 11px;
+      opacity: 0.85;
       line-height: 1.4;
-      margin-top: 4px;
+      margin-top: 2px;
     }
 
     .panel-stat {
       display: flex;
       justify-content: space-between;
+      align-items: center;
       font-family: var(--mono);
-      font-size: 10px;
-      padding: 6px 0;
+      font-size: 11px;
+      padding: 8px 0;
       border-top: 1px solid rgba(0,0,0,0.1);
     }
 
     .panel-inner.purple .panel-stat,
-    .panel-inner.coral .panel-stat {
-      border-color: rgba(255,255,255,0.2);
+    .panel-inner.coral .panel-stat,
+    .panel-inner.dark .panel-stat {
+      border-color: rgba(255,255,255,0.15);
     }
+
+    .stat-value { font-weight: 600; }
+    .stat-positive { color: #0a0a0a; }
+    .panel-inner.purple .stat-positive,
+    .panel-inner.coral .stat-positive { color: var(--mint); }
+    .panel-inner.dark .stat-positive { color: var(--mint); }
 
     .meddic-mini {
       display: flex;
-      gap: 3px;
-      margin-top: 6px;
+      gap: 4px;
+      margin-top: 8px;
     }
 
     .meddic-mini span {
       flex: 1;
       text-align: center;
-      padding: 4px 2px;
-      background: rgba(0,0,0,0.15);
+      padding: 6px 2px;
+      background: rgba(0,0,0,0.12);
       font-family: var(--mono);
-      font-size: 8px;
+      font-size: 10px;
       font-weight: 600;
     }
 
     .meddic-mini span.filled {
-      background: rgba(0,0,0,0.3);
+      background: rgba(0,0,0,0.25);
+    }
+
+    .panel-inner.dark .meddic-mini span {
+      background: rgba(255,255,255,0.1);
+    }
+    .panel-inner.dark .meddic-mini span.filled {
+      background: rgba(255,255,255,0.25);
+    }
+
+    .score-circle {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: conic-gradient(var(--mint) 0deg 306deg, rgba(255,255,255,0.1) 306deg 360deg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      font-weight: 700;
+    }
+
+    .quote-text {
+      font-style: italic;
+      font-size: 10px;
+      line-height: 1.4;
+      opacity: 0.9;
+    }
+
+    .quote-attr {
+      font-size: 9px;
+      opacity: 0.7;
+      margin-top: 4px;
     }
 
     /* RESPONSIVE */
+    @media (max-width: 1600px) {
+      :root { --cell: 90px; }
+      .hero-headline { font-size: 70px; }
+    }
+
     @media (max-width: 1400px) {
       :root { --cell: 80px; }
       .hero-headline { font-size: 60px; }
+      .cards-container { right: 40px; gap: var(--cell); }
     }
 
-    @media (max-width: 1100px) {
+    @media (max-width: 1200px) {
       :root { --cell: 70px; }
       .hero-headline { font-size: 52px; }
+      .hero-content { max-width: 450px; }
     }
 
-    @media (max-width: 900px) {
-      .hero {
-        flex-direction: column;
-        padding: 100px 24px 48px;
-        min-height: auto;
-      }
-      .hero-content { max-width: 100%; text-align: center; margin-bottom: 40px; }
-      .hero-headline { font-size: 44px; }
+    @media (max-width: 1000px) {
+      .cards-container { display: none; }
+      .hero-content { max-width: 100%; text-align: center; }
       .hero-buttons { justify-content: center; }
-      .grid-wrapper {
-        position: relative;
-        top: auto;
-        right: auto;
-        transform: none;
-        margin: 0 auto;
-      }
-      :root { --cell: 60px; }
     }
   </style>
 </head>
@@ -295,6 +345,14 @@ import Nav from '../components/Nav.astro';
   <Nav />
 
   <section class="hero">
+    <!-- Background grid -->
+    <div class="hero-grid"></div>
+
+    <!-- Gradient blobs -->
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+    <div class="blob blob-3"></div>
+
     <div class="hero-content">
       <h1 class="hero-headline">Your calls,<br><em>working for you</em></h1>
       <p class="hero-sub">Every sales call triggers six AI agents that update your CRM, alert your team, and draft follow-ups—automatically.</p>
@@ -303,204 +361,219 @@ import Nav from '../components/Nav.astro';
       </div>
     </div>
 
-    <div class="grid-wrapper">
-      <!-- Grid: 8x7 -->
-      <svg class="grid-svg" viewBox="0 0 720 630" preserveAspectRatio="xMidYMid meet">
-        <!-- Horizontal lines -->
-        <line x1="0" y1="0" x2="720" y2="0"/>
-        <line x1="0" y1="90" x2="720" y2="90"/>
-        <line x1="0" y1="180" x2="720" y2="180"/>
-        <line x1="0" y1="270" x2="720" y2="270"/>
-        <line x1="0" y1="360" x2="720" y2="360"/>
-        <line x1="0" y1="450" x2="720" y2="450"/>
-        <line x1="0" y1="540" x2="720" y2="540"/>
-        <line x1="0" y1="630" x2="720" y2="630"/>
-        <!-- Vertical lines -->
-        <line x1="0" y1="0" x2="0" y2="630"/>
-        <line x1="90" y1="0" x2="90" y2="630"/>
-        <line x1="180" y1="0" x2="180" y2="630"/>
-        <line x1="270" y1="0" x2="270" y2="630"/>
-        <line x1="360" y1="0" x2="360" y2="630"/>
-        <line x1="450" y1="0" x2="450" y2="630"/>
-        <line x1="540" y1="0" x2="540" y2="630"/>
-        <line x1="630" y1="0" x2="630" y2="630"/>
-        <line x1="720" y1="0" x2="720" y2="630"/>
-      </svg>
-
-      <!-- Card 1: Call Completed (mint) - 2x3 grid of panels -->
-      <div class="origami-card card-1" id="card1">
-        <!-- Row 1 -->
-        <div class="card-panel from-left" data-delay="0">
-          <div class="panel-inner mint">
-            <div class="panel-content">
-              <div class="panel-icon"><svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72"/></svg></div>
-              <span class="panel-badge">Trigger</span>
-            </div>
-          </div>
-        </div>
-        <div class="card-panel from-left" data-delay="1">
-          <div class="panel-inner mint">
-            <div class="panel-content">
-              <span class="panel-title">Call completed</span>
-            </div>
-          </div>
-        </div>
-        <!-- Row 2 -->
-        <div class="card-panel from-top" data-delay="2">
-          <div class="panel-inner mint">
-            <div class="panel-content">
-              <span class="panel-text">Sarah Chen</span>
-              <span class="panel-text" style="opacity:0.6">VP Sales, Acme</span>
-            </div>
-          </div>
-        </div>
-        <div class="card-panel from-left" data-delay="3">
-          <div class="panel-inner mint">
-            <div class="panel-content">
-              <span class="panel-text">Discovery call</span>
-              <span class="panel-text" style="opacity:0.6">32 minutes</span>
-            </div>
-          </div>
-        </div>
-        <!-- Row 3 -->
-        <div class="card-panel from-top" data-delay="4">
-          <div class="panel-inner mint">
-            <div class="panel-content">
-              <div class="panel-stat"><span>Talk</span><span>35%</span></div>
-            </div>
-          </div>
-        </div>
-        <div class="card-panel from-left" data-delay="5">
-          <div class="panel-inner mint">
-            <div class="panel-content">
-              <div class="panel-stat"><span>Listen</span><span>65%</span></div>
-            </div>
-          </div>
-        </div>
+    <div class="cards-container">
+      <!-- Card Slot 1 -->
+      <div class="origami-card" id="card-slot-1">
+        <!-- Populated by JS -->
       </div>
 
-      <!-- Card 2: CRM Updated (cyan) - 2x3 grid of panels -->
-      <div class="origami-card card-2" id="card2">
-        <!-- Row 1 -->
-        <div class="card-panel from-left" data-delay="0">
-          <div class="panel-inner cyan">
-            <div class="panel-content">
-              <div class="panel-icon"><svg viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></div>
-              <span class="panel-badge">CRM Agent</span>
-            </div>
-          </div>
-        </div>
-        <div class="card-panel from-left" data-delay="1">
-          <div class="panel-inner cyan">
-            <div class="panel-content">
-              <span class="panel-title">Pipeline updated</span>
-            </div>
-          </div>
-        </div>
-        <!-- Row 2 -->
-        <div class="card-panel from-top" data-delay="2">
-          <div class="panel-inner cyan">
-            <div class="panel-content">
-              <span class="panel-text">Stage moved</span>
-              <span class="panel-text" style="font-weight:600">→ Negotiation</span>
-            </div>
-          </div>
-        </div>
-        <div class="card-panel from-left" data-delay="3">
-          <div class="panel-inner cyan">
-            <div class="panel-content">
-              <span class="panel-text">12 fields</span>
-              <span class="panel-text" style="opacity:0.6">synced</span>
-            </div>
-          </div>
-        </div>
-        <!-- Row 3 -->
-        <div class="card-panel from-top" data-delay="4">
-          <div class="panel-inner cyan">
-            <div class="panel-content">
-              <div class="meddic-mini">
-                <span class="filled">M</span>
-                <span class="filled">E</span>
-                <span class="filled">D</span>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="card-panel from-left" data-delay="5">
-          <div class="panel-inner cyan">
-            <div class="panel-content">
-              <div class="meddic-mini">
-                <span class="filled">D</span>
-                <span>I</span>
-                <span class="filled">C</span>
-              </div>
-            </div>
-          </div>
-        </div>
+      <!-- Card Slot 2 -->
+      <div class="origami-card" id="card-slot-2">
+        <!-- Populated by JS -->
       </div>
     </div>
   </section>
 
   <script>
-    import { gsap } from 'gsap';
+    // Card definitions - 6 cards total
+    const cards = [
+      {
+        color: 'mint',
+        panels: [
+          { type: 'icon-badge', icon: 'phone', badge: 'Trigger' },
+          { type: 'title', text: 'Call completed' },
+          { type: 'text', primary: 'Sarah Chen', secondary: 'VP Sales, Acme Corp' },
+          { type: 'text', primary: 'Discovery call', secondary: '32 minutes' },
+          { type: 'stat', label: 'Talk ratio', value: '35%' },
+          { type: 'stat', label: 'Questions', value: '12 asked' }
+        ]
+      },
+      {
+        color: 'purple',
+        panels: [
+          { type: 'icon-badge', icon: 'activity', badge: 'Processing' },
+          { type: 'title', text: 'Analyzing call' },
+          { type: 'stat', label: 'Sentiment', value: '87%', positive: true },
+          { type: 'stat', label: 'Momentum', value: 'High', positive: true },
+          { type: 'stat', label: 'Objections', value: '2 found' },
+          { type: 'stat', label: 'Actions', value: '14 items' }
+        ]
+      },
+      {
+        color: 'cyan',
+        panels: [
+          { type: 'icon-badge', icon: 'bar-chart', badge: 'CRM Agent' },
+          { type: 'title', text: 'Pipeline updated' },
+          { type: 'text', primary: 'Stage moved', secondary: '→ Negotiation' },
+          { type: 'text', primary: '12 fields', secondary: 'synced to HubSpot' },
+          { type: 'meddic', values: ['M', 'E', 'D'], filled: [true, true, true] },
+          { type: 'meddic', values: ['D', 'I', 'C'], filled: [true, false, true] }
+        ]
+      },
+      {
+        color: 'coral',
+        panels: [
+          { type: 'icon-badge', icon: 'bell', badge: 'Risk Alert' },
+          { type: 'title', text: 'Manager notified' },
+          { type: 'quote', text: '"Budget is tight this quarter..."' },
+          { type: 'quote-attr', text: '— Sarah Chen' },
+          { type: 'text', primary: 'Slack #enterprise', secondary: '@mike alerted' },
+          { type: 'stat', label: 'Risk level', value: 'Medium' }
+        ]
+      },
+      {
+        color: 'yellow',
+        panels: [
+          { type: 'icon-badge', icon: 'mail', badge: 'Email Agent' },
+          { type: 'title', text: 'Follow-up drafted' },
+          { type: 'text', primary: 'Personalized email', secondary: 'ready to send' },
+          { type: 'stat', label: 'Length', value: '142 words' },
+          { type: 'stat', label: 'Tone', value: 'Professional' },
+          { type: 'stat', label: 'References', value: '3 points' }
+        ]
+      },
+      {
+        color: 'dark',
+        panels: [
+          { type: 'icon-badge', icon: 'edit', badge: 'Coach Agent' },
+          { type: 'title', text: 'Scorecard ready' },
+          { type: 'score', value: '85' },
+          { type: 'stat', label: 'Discovery', value: 'Strong', positive: true },
+          { type: 'stat', label: 'Needs work', value: 'Closing' },
+          { type: 'text', primary: 'MEDDIC method', secondary: '3 suggestions' }
+        ]
+      }
+    ];
 
-    const UNFOLD_DELAY = 150; // ms between each panel
-    const CARD_DISPLAY_TIME = 4000; // how long card stays fully visible
-    const CARD_STAGGER = 800; // delay between card 1 and card 2 starting
+    const icons = {
+      phone: '<path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/>',
+      activity: '<polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>',
+      'bar-chart': '<line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/>',
+      bell: '<path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/>',
+      mail: '<path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/>',
+      edit: '<path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>'
+    };
 
-    function unfoldCard(card: Element) {
-      const panels = card.querySelectorAll('.card-panel');
+    function renderPanel(panel, color) {
+      let content = '';
       
-      panels.forEach((panel, index) => {
-        setTimeout(() => {
-          panel.classList.add('revealed');
-        }, index * UNFOLD_DELAY);
+      switch(panel.type) {
+        case 'icon-badge':
+          content = `
+            <div class="panel-icon"><svg viewBox="0 0 24 24">${icons[panel.icon]}</svg></div>
+            <span class="panel-badge">${panel.badge}</span>
+          `;
+          break;
+        case 'title':
+          content = `<span class="panel-title">${panel.text}</span>`;
+          break;
+        case 'text':
+          content = `
+            <span class="panel-text">${panel.primary}</span>
+            <span class="panel-text" style="opacity:0.6">${panel.secondary}</span>
+          `;
+          break;
+        case 'stat':
+          content = `
+            <div class="panel-stat">
+              <span>${panel.label}</span>
+              <span class="stat-value ${panel.positive ? 'stat-positive' : ''}">${panel.value}</span>
+            </div>
+          `;
+          break;
+        case 'meddic':
+          content = `
+            <div class="meddic-mini">
+              ${panel.values.map((v, i) => `<span class="${panel.filled[i] ? 'filled' : ''}">${v}</span>`).join('')}
+            </div>
+          `;
+          break;
+        case 'quote':
+          content = `<span class="quote-text">${panel.text}</span>`;
+          break;
+        case 'quote-attr':
+          content = `<span class="quote-attr">${panel.text}</span>`;
+          break;
+        case 'score':
+          content = `<div class="score-circle">${panel.value}</div>`;
+          break;
+      }
+
+      return content;
+    }
+
+    function buildCard(cardData) {
+      const foldDirections = ['from-left', 'from-left', 'from-top', 'from-left', 'from-top', 'from-left'];
+      
+      return cardData.panels.map((panel, i) => `
+        <div class="card-panel ${foldDirections[i]}" data-index="${i}">
+          <div class="panel-inner ${cardData.color}">
+            <div class="panel-content">
+              ${renderPanel(panel, cardData.color)}
+            </div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    const UNFOLD_DELAY = 120;
+    const DISPLAY_TIME = 3500;
+    const FOLD_PAUSE = 400;
+
+    let slot1Index = 0;
+    let slot2Index = 1;
+
+    function unfoldCard(slot) {
+      const panels = slot.querySelectorAll('.card-panel');
+      panels.forEach((panel, i) => {
+        setTimeout(() => panel.classList.add('revealed'), i * UNFOLD_DELAY);
       });
     }
 
-    function foldCard(card: Element) {
-      const panels = Array.from(card.querySelectorAll('.card-panel'));
-      
-      // Fold in reverse order
-      panels.reverse().forEach((panel, index) => {
-        setTimeout(() => {
-          panel.classList.remove('revealed');
-        }, index * UNFOLD_DELAY);
+    function foldCard(slot) {
+      const panels = Array.from(slot.querySelectorAll('.card-panel')).reverse();
+      panels.forEach((panel, i) => {
+        setTimeout(() => panel.classList.remove('revealed'), i * UNFOLD_DELAY);
       });
     }
 
-    function animateCards() {
-      const card1 = document.getElementById('card1');
-      const card2 = document.getElementById('card2');
-      
-      if (!card1 || !card2) return;
+    function cycleCards() {
+      const slot1 = document.getElementById('card-slot-1');
+      const slot2 = document.getElementById('card-slot-2');
 
-      // Initial unfold
-      unfoldCard(card1);
-      
+      // Fold current cards
+      foldCard(slot1);
+      setTimeout(() => foldCard(slot2), 150);
+
+      // After fold, update content and unfold
       setTimeout(() => {
-        unfoldCard(card2);
-      }, CARD_STAGGER);
+        slot1Index = (slot1Index + 2) % cards.length;
+        slot2Index = (slot2Index + 2) % cards.length;
 
-      // Start the cycle
-      const cycleDuration = CARD_DISPLAY_TIME + (6 * UNFOLD_DELAY * 2) + 500;
-      
-      setInterval(() => {
-        // Fold both cards
-        foldCard(card1);
-        setTimeout(() => foldCard(card2), 200);
+        slot1.innerHTML = buildCard(cards[slot1Index]);
+        slot2.innerHTML = buildCard(cards[slot2Index]);
 
-        // After fold completes, unfold again (simulating new content)
-        setTimeout(() => {
-          unfoldCard(card1);
-          setTimeout(() => unfoldCard(card2), CARD_STAGGER);
-        }, (6 * UNFOLD_DELAY) + 500);
-        
-      }, cycleDuration);
+        unfoldCard(slot1);
+        setTimeout(() => unfoldCard(slot2), 300);
+      }, (6 * UNFOLD_DELAY) + FOLD_PAUSE);
     }
 
     document.addEventListener('DOMContentLoaded', () => {
-      setTimeout(animateCards, 500);
+      const slot1 = document.getElementById('card-slot-1');
+      const slot2 = document.getElementById('card-slot-2');
+
+      // Initial render
+      slot1.innerHTML = buildCard(cards[0]);
+      slot2.innerHTML = buildCard(cards[1]);
+
+      // Initial unfold
+      setTimeout(() => {
+        unfoldCard(slot1);
+        setTimeout(() => unfoldCard(slot2), 300);
+      }, 500);
+
+      // Start cycling
+      setInterval(cycleCards, DISPLAY_TIME + (6 * UNFOLD_DELAY * 2) + FOLD_PAUSE + 500);
     });
   </script>
 </body>

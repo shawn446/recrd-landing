@@ -1,132 +1,102 @@
 ---
-// src/pages/font-test.astro
+// Hero Section - Grid Storytelling Animation
 ---
+
+<!DOCTYPE html>
 <html lang="en" data-theme="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>recrd — AI Agents for Revenue Teams</title>
+  <title>recrd - AI agents that close deals</title>
+  
   <style>
-    /* FONTS */
     @font-face {
       font-family: 'Roobert';
-      src: url('/fonts/RoobertCollectionVF-TRIAL.woff2') format('woff2');
-      font-weight: 100 900;
+      src: url('/fonts/Roobert-Regular.woff2') format('woff2');
+      font-weight: 400;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'Roobert';
+      src: url('/fonts/Roobert-Medium.woff2') format('woff2');
+      font-weight: 500;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'Roobert';
+      src: url('/fonts/Roobert-SemiBold.woff2') format('woff2');
+      font-weight: 600;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'Roobert';
+      src: url('/fonts/Roobert-Bold.woff2') format('woff2');
+      font-weight: 700;
+      font-style: normal;
       font-display: swap;
     }
     @font-face {
       font-family: 'Fraktion Mono';
-      src: url('/fonts/PPFraktionMono-Regular.otf') format('opentype');
+      src: url('/fonts/FraktionMono-Regular.woff2') format('woff2');
       font-weight: 400;
+      font-style: normal;
       font-display: swap;
     }
 
-    /* VARIABLES */
     :root {
+      --font: 'Roobert', -apple-system, BlinkMacSystemFont, sans-serif;
+      --mono: 'Fraktion Mono', monospace;
       --mint: #46FCAF;
       --purple: #A678F4;
       --cyan: #02C0FF;
       --coral: #FF4F5E;
-      --yellow: #FFE869;
-      --font: 'Roobert', system-ui, sans-serif;
-      --mono: 'Fraktion Mono', monospace;
     }
 
     [data-theme="dark"] {
       --bg: #0A0A0A;
-      --bg-elevated: #111111;
-      --border: #1a1a1a;
-      --border-strong: #333333;
       --text: #ffffff;
-      --text-secondary: #999999;
-      --text-muted: #555555;
-      --accent-text: var(--mint);
-      --btn-primary-bg: #ffffff;
-      --btn-primary-text: #0a0a0a;
-      --btn-primary-fill: var(--mint);
-      --btn-secondary-border: var(--mint);
-      --btn-secondary-fill: var(--mint);
-      --grid-line: rgba(255,255,255,0.08);
-      --grid-line-strong: rgba(255,255,255,0.15);
-      --cell-glow: rgba(70,252,175,0.15);
+      --text-muted: #666666;
+      --grid-line: rgba(255,255,255,0.1);
     }
 
     [data-theme="light"] {
       --bg: #fafafa;
-      --bg-elevated: #ffffff;
-      --border: #e5e5e5;
-      --border-strong: #cccccc;
       --text: #0a0a0a;
-      --text-secondary: #555555;
       --text-muted: #888888;
-      --accent-text: var(--purple);
-      --btn-primary-bg: #0a0a0a;
-      --btn-primary-text: #ffffff;
-      --btn-primary-fill: var(--mint);
-      --btn-secondary-border: var(--purple);
-      --btn-secondary-fill: var(--purple);
-      --grid-line: rgba(0,0,0,0.08);
-      --grid-line-strong: rgba(0,0,0,0.15);
-      --cell-glow: rgba(166,120,244,0.12);
+      --grid-line: rgba(0,0,0,0.1);
     }
 
-    /* RESET */
-    * { margin: 0; padding: 0; box-sizing: border-box; }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
     body {
+      font-family: var(--font);
       background: var(--bg);
       color: var(--text);
-      font-family: var(--font);
-      font-weight: 400;
-      line-height: 1.5;
-      transition: background 0.2s, color 0.2s;
-    }
-
-    /* CONTROLS */
-    .controls {
-      position: fixed;
-      bottom: 20px;
-      left: 50%;
-      transform: translateX(-50%);
-      display: flex;
-      gap: 6px;
-      background: var(--bg-elevated);
-      border: 1px solid var(--border);
-      padding: 8px 12px;
-      z-index: 1000;
-    }
-
-    .control-btn {
-      background: transparent;
-      border: 1px solid var(--border);
-      color: var(--text-muted);
-      padding: 6px 12px;
-      font-size: 10px;
-      font-family: var(--mono);
-      cursor: pointer;
-      transition: all 0.15s;
-    }
-
-    .control-btn:hover {
-      color: var(--text-secondary);
-      border-color: var(--text-muted);
-    }
-
-    .control-btn.active {
-      background: var(--mint);
-      color: #0a0a0a;
-      border-color: var(--mint);
+      min-height: 100vh;
+      overflow-x: hidden;
     }
 
     /* NAV */
-    .nav {
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 72px;
       display: flex;
-      justify-content: space-between;
       align-items: center;
-      padding: 20px 48px;
-      border-bottom: 1px solid var(--border);
-      position: relative;
-      z-index: 10;
+      justify-content: space-between;
+      padding: 0 48px;
+      z-index: 100;
+      background: var(--bg);
+      border-bottom: 1px solid var(--grid-line);
     }
 
     .nav-logo {
@@ -142,25 +112,23 @@
     }
 
     .nav-wordmark {
-      font-family: var(--font);
       font-weight: 600;
-      font-size: 22px;
+      font-size: 18px;
       color: var(--text);
-      letter-spacing: -0.02em;
     }
 
     .nav-links {
       display: flex;
-      gap: 36px;
+      gap: 40px;
       list-style: none;
     }
 
     .nav-links a {
-      color: var(--text-secondary);
+      color: var(--text-muted);
       text-decoration: none;
       font-size: 14px;
-      font-weight: 400;
-      transition: color 0.15s;
+      font-weight: 500;
+      transition: color 0.2s;
     }
 
     .nav-links a:hover {
@@ -168,88 +136,31 @@
     }
 
     .nav-cta {
-      background: var(--btn-primary-bg);
-      color: var(--btn-primary-text);
+      background: var(--text);
+      color: var(--bg);
       padding: 12px 24px;
-      font-family: var(--font);
       font-weight: 500;
       font-size: 14px;
       text-decoration: none;
-      position: relative;
-      overflow: hidden;
-      z-index: 1;
-    }
-
-    .nav-cta::before {
-      content: '';
-      position: absolute;
-      left: 0;
-      bottom: 0;
-      width: 0%;
-      height: 100%;
-      background: var(--cyan);
-      transition: width 0.3s ease;
-      z-index: -1;
-    }
-
-    .nav-cta:hover::before {
-      width: 100%;
     }
 
     /* HERO */
     .hero {
-      position: relative;
-      min-height: calc(100vh - 73px);
+      min-height: 100vh;
       display: flex;
-      overflow: hidden;
-    }
-
-    /* GRID */
-    .hero-grid {
-      position: absolute;
-      top: 50%;
-      right: 0;
-      transform: translateY(-50%);
-      width: 60%;
-      height: auto;
-      z-index: 0;
-    }
-
-    .hero-grid svg {
-      width: 100%;
-      height: auto;
-    }
-
-    .hero-grid rect {
-      stroke: var(--grid-line);
-      fill: transparent;
-      transition: fill 0.4s ease, stroke 0.3s ease;
-    }
-
-    /* Random cell glow animation */
-    @keyframes cellPulse {
-      0%, 100% { fill: transparent; }
-      50% { fill: var(--cell-glow); }
-    }
-
-    .hero-grid rect.glow {
-      animation: cellPulse 2s ease-in-out;
+      align-items: center;
+      padding: 120px 48px 48px;
+      position: relative;
     }
 
     .hero-content {
-      position: relative;
+      max-width: 520px;
       z-index: 10;
-      padding: 100px 48px;
-      max-width: 640px;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
     }
 
     .hero-headline {
-      font-family: var(--font);
-      font-weight: 700;
       font-size: 90px;
+      font-weight: 700;
       line-height: 0.95;
       letter-spacing: -0.035em;
       margin-bottom: 28px;
@@ -257,385 +168,254 @@
 
     .hero-headline em {
       font-style: normal;
-      color: var(--accent-text);
+      color: var(--mint);
+    }
+
+    [data-theme="light"] .hero-headline em {
+      color: var(--purple);
     }
 
     .hero-sub {
       font-size: 40px;
       font-weight: 500;
-      color: var(--text);
       line-height: 1.2;
       margin-bottom: 20px;
-      max-width: 520px;
       letter-spacing: -0.02em;
     }
 
     .hero-body {
       font-size: 18px;
       font-weight: 300;
-      color: var(--text-secondary);
+      color: var(--text-muted);
       line-height: 1.6;
       margin-bottom: 44px;
-      max-width: 480px;
     }
 
     .hero-buttons {
       display: flex;
-      gap: 12px;
+      gap: 16px;
     }
 
-    /* BUTTONS WITH FILL HOVER */
     .btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 12px;
-      padding: 16px 28px;
+      padding: 16px 32px;
       font-family: var(--font);
       font-weight: 500;
       font-size: 15px;
       text-decoration: none;
-      cursor: pointer;
-      border: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
       position: relative;
       overflow: hidden;
-      transition: color 0.3s ease;
     }
 
     .btn-primary {
-      background: var(--btn-primary-bg);
-      color: var(--btn-primary-text);
+      background: #fff;
+      color: #0a0a0a;
     }
 
     .btn-primary::before {
       content: '';
       position: absolute;
       left: 0;
-      bottom: 0;
+      top: 0;
       width: 0%;
       height: 100%;
-      background: var(--btn-primary-fill);
+      background: var(--mint);
       transition: width 0.4s ease;
-      z-index: 0;
+      z-index: -1;
     }
 
     .btn-primary:hover::before {
       width: 100%;
     }
 
-    .btn-primary span {
-      position: relative;
-      z-index: 1;
-    }
-
     .btn-secondary {
       background: transparent;
-      border: 1px solid var(--btn-secondary-border);
       color: var(--text);
+      border: 1px solid var(--mint);
     }
 
-    .btn-secondary::before {
-      content: '';
-      position: absolute;
-      left: 0;
-      bottom: 0;
-      width: 0%;
-      height: 100%;
-      background: var(--btn-secondary-fill);
-      transition: width 0.4s ease;
-      z-index: 0;
+    [data-theme="light"] .btn-secondary {
+      border-color: var(--purple);
     }
 
-    .btn-secondary:hover {
-      color: #0a0a0a;
-    }
-
-    .btn-secondary:hover::before {
-      width: 100%;
-    }
-
-    .btn-secondary span {
-      position: relative;
-      z-index: 1;
-    }
-
-    .btn-arrow {
-      position: relative;
-      z-index: 1;
-      display: flex;
-      gap: 2px;
-    }
-
-    .btn-arrow i {
-      width: 4px;
-      height: 4px;
-      background: currentColor;
-    }
-
-    /* GRID STORYTELLING */
-    .hero-visual {
-      display: none; /* Remove old visual */
-    }
-
-    .hero-grid {
+    /* ========================================
+       GRID SYSTEM - Varied columns, square cells
+       ======================================== */
+    
+    .grid-container {
       position: absolute;
       top: 50%;
-      right: 0;
+      right: 48px;
       transform: translateY(-50%);
-      width: 60%;
-      height: auto;
-      z-index: 1;
+      width: 55%;
+      max-width: 640px;
+      aspect-ratio: 640 / 560;
     }
 
-    .hero-grid svg {
+    /* Base grid lines SVG */
+    .grid-svg {
       width: 100%;
       height: auto;
+      display: block;
     }
 
-    .hero-grid rect {
+    .grid-line {
       stroke: var(--grid-line);
-      fill: transparent;
-      transition: fill 0.5s ease;
+      stroke-width: 1;
     }
 
-    /* Cell content overlays */
-    .grid-content {
+    /* Animated path that follows grid lines */
+    .grid-path {
+      stroke-width: 3;
+      fill: none;
+      stroke-dasharray: 3000;
+      stroke-dashoffset: 3000;
+      opacity: 0;
+    }
+
+    .grid-path.active {
+      opacity: 1;
+      animation: tracePath 2s ease-out forwards;
+    }
+
+    @keyframes tracePath {
+      to { stroke-dashoffset: 0; }
+    }
+
+    /* Cell content - positioned absolutely over SVG */
+    .grid-cells {
       position: absolute;
-      top: 50%;
-      right: 0;
-      transform: translateY(-50%);
-      width: 60%;
-      aspect-ratio: 897 / 785;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
       pointer-events: none;
-      z-index: 3;
     }
 
-    .grid-cell-content {
+    .cell {
       position: absolute;
+      opacity: 0;
       display: flex;
       flex-direction: column;
       justify-content: center;
       padding: 12px;
-      font-family: var(--font);
-      opacity: 0;
-      transform: scale(0.95);
-      transition: opacity 0.5s ease, transform 0.5s ease;
-      box-sizing: border-box;
+      transition: opacity 0.5s ease;
     }
 
-    .grid-cell-content.active {
+    .cell.active {
       opacity: 1;
-      transform: scale(1);
     }
 
-    .grid-cell-content .label {
-      font-size: 10px;
-      font-weight: 500;
+    .cell-badge {
+      font-family: var(--mono);
+      font-size: 9px;
       text-transform: uppercase;
-      letter-spacing: 0.05em;
-      margin-bottom: 4px;
+      letter-spacing: 0.1em;
+      padding: 4px 8px;
+      margin-bottom: 6px;
+      width: fit-content;
     }
 
-    .grid-cell-content .value {
+    .cell-title {
       font-size: 13px;
       font-weight: 600;
       line-height: 1.3;
+      margin-bottom: 3px;
     }
 
-    /* Connecting lines */
-    .grid-lines {
-      position: absolute;
-      top: 50%;
-      right: 0;
-      transform: translateY(-50%);
-      width: 60%;
-      aspect-ratio: 897 / 785;
-      pointer-events: none;
-      z-index: 2;
+    .cell-desc {
+      font-size: 10px;
+      font-weight: 400;
+      line-height: 1.4;
+      opacity: 0.75;
     }
 
-    .connect-line {
-      stroke-width: 2;
-      fill: none;
-      stroke-dasharray: 2000;
-      stroke-dashoffset: 2000;
-      opacity: 0;
-      stroke-linecap: square;
-      stroke-linejoin: miter;
-    }
-
-    .connect-line.drawing {
-      opacity: 1;
-      animation: drawLine 2s ease-out forwards;
-    }
-
-    /* Line colors match source cell */
-    #line-1 { stroke: var(--mint); }   /* from source (mint) */
-    #line-2 { stroke: var(--purple); } /* from hub (purple) */
-    #line-3 { stroke: var(--purple); } /* from hub (purple) */
-    #line-4 { stroke: var(--purple); } /* from hub (purple) */
-    #line-5 { stroke: var(--purple); } /* from hub (purple) */
-
-    @keyframes drawLine {
-      to {
-        stroke-dashoffset: 0;
-      }
-    }
-
-    /* Cell highlight states - solid fills */
-    .cell-source { fill: var(--mint); }
-    .cell-hub { fill: var(--purple); }
-    .cell-output-1 { fill: var(--cyan); }
-    .cell-output-2 { fill: var(--coral); }
-    .cell-output-3 { fill: var(--mint); }
-    .cell-output-4 { fill: var(--purple); }
-
-    /* Source cell - mint bg, dark text */
-    .grid-cell-content.source {
+    /* Cell color variants */
+    .cell.mint {
+      background: var(--mint);
       color: #0a0a0a;
     }
-    .grid-cell-content.source .label {
-      color: rgba(0,0,0,0.6);
+    .cell.mint .cell-badge {
+      background: rgba(0,0,0,0.12);
     }
-    .grid-cell-content.source .value {
+
+    .cell.purple {
+      background: var(--purple);
+      color: #fff;
+    }
+    .cell.purple .cell-badge {
+      background: rgba(255,255,255,0.2);
+    }
+
+    .cell.cyan {
+      background: var(--cyan);
       color: #0a0a0a;
     }
-
-    /* Hub cell - purple bg, white text */
-    .grid-cell-content.hub {
-      color: #ffffff;
-    }
-    .grid-cell-content.hub .label {
-      color: rgba(255,255,255,0.7);
-    }
-    .grid-cell-content.hub .value {
-      color: #ffffff;
+    .cell.cyan .cell-badge {
+      background: rgba(0,0,0,0.12);
     }
 
-    /* Output cells - cyan and mint get dark text, coral and purple get white */
-    .grid-cell-content.output-1 .label,  /* cyan */
-    .grid-cell-content.output-3 .label { /* mint */
-      color: rgba(0,0,0,0.6);
+    .cell.coral {
+      background: var(--coral);
+      color: #fff;
     }
-    .grid-cell-content.output-1 .value,
-    .grid-cell-content.output-3 .value {
-      color: #0a0a0a;
-    }
-    
-    .grid-cell-content.output-2 .label,  /* coral */
-    .grid-cell-content.output-4 .label { /* purple */
-      color: rgba(255,255,255,0.7);
-    }
-    .grid-cell-content.output-2 .value,
-    .grid-cell-content.output-4 .value {
-      color: #ffffff;
+    .cell.coral .cell-badge {
+      background: rgba(255,255,255,0.2);
     }
 
-    /* Gradient blobs */
-    .blob {
-      position: absolute;
-      border-radius: 50%;
-      filter: blur(120px);
-      pointer-events: none;
-      z-index: 1;
+    /* Theme toggle */
+    .theme-toggle {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      background: var(--bg);
+      border: 1px solid var(--grid-line);
+      z-index: 1000;
     }
 
-    [data-theme="dark"] .blob-1 {
-      width: 600px;
-      height: 600px;
-      background: radial-gradient(circle, var(--mint) 0%, transparent 70%);
-      top: -150px;
-      right: 10%;
-      opacity: 0.12;
+    .theme-toggle button {
+      padding: 10px 20px;
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      font-family: var(--font);
+      font-size: 13px;
+      cursor: pointer;
     }
 
-    [data-theme="dark"] .blob-2 {
-      width: 400px;
-      height: 400px;
-      background: radial-gradient(circle, var(--purple) 0%, transparent 70%);
-      top: 250px;
-      right: 25%;
-      opacity: 0.1;
+    .theme-toggle button.active {
+      background: var(--text);
+      color: var(--bg);
     }
 
-    [data-theme="light"] .blob-1 {
-      width: 700px;
-      height: 700px;
-      background: radial-gradient(circle, var(--mint) 0%, transparent 70%);
-      top: -100px;
-      right: 5%;
-      opacity: 0.3;
-    }
-
-    [data-theme="light"] .blob-2 {
-      width: 500px;
-      height: 500px;
-      background: radial-gradient(circle, var(--purple) 0%, transparent 70%);
-      top: 300px;
-      right: 20%;
-      opacity: 0.2;
-    }
-
-    /* MOBILE */
-    @media (max-width: 900px) {
-      .nav { padding: 16px 24px; }
-      .nav-links { display: none; }
-      
-      .hero { flex-direction: column; }
-      .hero-content { padding: 60px 24px; max-width: none; }
-      .hero-headline { font-size: 64px; }
-      .hero-sub { font-size: 28px; }
-      .hero-sub { font-size: 18px; }
-      
-      .hero-visual {
+    /* Mobile */
+    @media (max-width: 1024px) {
+      .grid-container {
         display: none;
       }
-      
-      .grid-content,
-      .grid-lines {
-        display: none;
+      .hero-content {
+        max-width: 100%;
       }
-      
-      .hero-grid {
-        position: relative;
-        width: 100%;
-        margin-top: 40px;
-        right: auto;
-        top: auto;
-        transform: none;
+      .hero-headline {
+        font-size: 56px;
       }
-      
-      .hero-buttons { flex-direction: column; }
-      .btn { justify-content: center; }
-
-      .grid-cell { height: 60px; }
-    }
-
-    @media (max-width: 500px) {
-      .hero-headline { font-size: 48px; }
-      .hero-sub { font-size: 22px; }
-      .controls { 
-        bottom: 10px;
-        padding: 6px 10px;
+      .hero-sub {
+        font-size: 28px;
       }
-      .control-btn { padding: 5px 8px; font-size: 9px; }
-      .grid-cell { height: 50px; }
     }
   </style>
 </head>
+
 <body>
-
-  <!-- Controls -->
-  <div class="controls">
-    <button class="control-btn active" id="btn-dark" onclick="setTheme('dark')">Dark</button>
-    <button class="control-btn" id="btn-light" onclick="setTheme('light')">Light</button>
-  </div>
-
-  <!-- Nav -->
-  <nav class="nav">
+  <nav>
     <a href="/" class="nav-logo">
       <svg viewBox="0 0 52 52" fill="none">
-        <rect x="0" y="16" width="28" height="28" fill="var(--purple)"/>
-        <rect x="16" y="0" width="28" height="28" rx="6" fill="var(--mint)"/>
+        <rect y="16" width="28" height="28" fill="#A678F4"/>
+        <rect x="16" width="28" height="28" rx="6" fill="#46FCAF"/>
       </svg>
       <span class="nav-wordmark">recrd</span>
     </a>
@@ -648,290 +428,240 @@
     <a href="#" class="nav-cta">Dashboard</a>
   </nav>
 
-  <!-- Hero -->
   <section class="hero">
-    <!-- Grid from Figma -->
-    <div class="hero-grid">
-      <svg viewBox="0 0 897 785" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <rect x="0.5" y="0.5" width="112" height="112"/>
-        <rect x="112.5" y="0.5" width="112" height="112"/>
-        <rect x="224.5" y="0.5" width="112" height="112"/>
-        <rect x="336.5" y="0.5" width="112" height="112"/>
-        <rect x="448.5" y="0.5" width="112" height="112"/>
-        <rect x="560.5" y="0.5" width="112" height="112"/>
-        <rect x="672.5" y="0.5" width="112" height="112"/>
-        <rect x="784.5" y="0.5" width="112" height="112"/>
-        <rect x="112.5" y="112.5" width="112" height="112"/>
-        <rect x="224.5" y="112.5" width="112" height="112"/>
-        <rect x="336.5" y="112.5" width="112" height="112"/>
-        <rect x="448.5" y="112.5" width="112" height="112"/>
-        <rect x="560.5" y="112.5" width="112" height="112"/>
-        <rect x="672.5" y="112.5" width="112" height="112"/>
-        <rect x="784.5" y="112.5" width="112" height="112"/>
-        <rect x="224.5" y="224.5" width="112" height="112"/>
-        <rect x="336.5" y="224.5" width="112" height="112"/>
-        <rect x="448.5" y="224.5" width="112" height="112"/>
-        <rect x="560.5" y="224.5" width="112" height="112"/>
-        <rect x="672.5" y="224.5" width="112" height="112"/>
-        <rect x="784.5" y="224.5" width="112" height="112"/>
-        <rect x="224.5" y="336.5" width="112" height="112"/>
-        <rect x="336.5" y="336.5" width="112" height="112"/>
-        <rect x="448.5" y="336.5" width="112" height="112"/>
-        <rect x="560.5" y="336.5" width="112" height="112"/>
-        <rect x="672.5" y="336.5" width="112" height="112"/>
-        <rect x="784.5" y="336.5" width="112" height="112"/>
-        <rect x="112.5" y="448.5" width="112" height="112"/>
-        <rect x="224.5" y="448.5" width="112" height="112"/>
-        <rect x="336.5" y="448.5" width="112" height="112"/>
-        <rect x="448.5" y="448.5" width="112" height="112"/>
-        <rect x="560.5" y="448.5" width="112" height="112"/>
-        <rect x="672.5" y="448.5" width="112" height="112"/>
-        <rect x="784.5" y="448.5" width="112" height="112"/>
-        <rect x="112.5" y="560.5" width="112" height="112"/>
-        <rect x="224.5" y="560.5" width="112" height="112"/>
-        <rect x="336.5" y="560.5" width="112" height="112"/>
-        <rect x="448.5" y="560.5" width="112" height="112"/>
-        <rect x="560.5" y="560.5" width="112" height="112"/>
-        <rect x="672.5" y="560.5" width="112" height="112"/>
-        <rect x="784.5" y="560.5" width="112" height="112"/>
-        <rect x="0.5" y="672.5" width="112" height="112"/>
-        <rect x="112.5" y="672.5" width="112" height="112"/>
-        <rect x="224.5" y="672.5" width="112" height="112"/>
-        <rect x="336.5" y="672.5" width="112" height="112"/>
-        <rect x="448.5" y="672.5" width="112" height="112"/>
-        <rect x="560.5" y="672.5" width="112" height="112"/>
-        <rect x="672.5" y="672.5" width="112" height="112"/>
-        <rect x="784.5" y="672.5" width="112" height="112"/>
-      </svg>
-    </div>
-
-    <div class="blob blob-1"></div>
-    <div class="blob blob-2"></div>
-
     <div class="hero-content">
       <h1 class="hero-headline">AI agents that <em>close deals</em></h1>
       <p class="hero-sub">One call. Six agents. Zero setup.</p>
-      <p class="hero-body">Record your sales calls and let AI handle the follow-ups, CRM updates, and coaching insights — from your first call to your thousandth.</p>
+      <p class="hero-body">Record your sales calls and let AI handle the follow-ups, CRM updates, and coaching insights.</p>
       <div class="hero-buttons">
-        <a href="#" class="btn btn-primary">
-          <span>Get Started Free</span>
-          <div class="btn-arrow">
-            <i></i><i></i><i></i>
-          </div>
-        </a>
-        <a href="#" class="btn btn-secondary">
-          <span>Watch Demo</span>
-          <div class="btn-arrow">
-            <i></i><i></i><i></i>
-          </div>
-        </a>
+        <a href="#" class="btn btn-primary">Get Started Free</a>
+        <a href="#" class="btn btn-secondary">Watch Demo</a>
       </div>
     </div>
 
-    <!-- Cell content overlays - positioned to match grid cells -->
-    <div class="grid-content" id="gridContent">
-      <!-- Source: Sales Call - Row 1, Cell 1 -->
-      <div class="grid-cell-content source" id="cell-source" style="top: 0%; left: 0%; width: 12.5%; height: 14.3%;">
-        <span class="label">Incoming</span>
-        <span class="value">Sales Call</span>
-      </div>
-      
-      <!-- Hub: recrd analyzes - Row 3, Cell 1 -->
-      <div class="grid-cell-content hub" id="cell-hub" style="top: 28.5%; left: 25%; width: 12.5%; height: 14.3%;">
-        <span class="label">Processing</span>
-        <span class="value">recrd analyzes</span>
-      </div>
-      
-      <!-- Output 1: Updates Forecast - Row 1, Cell 7 (cyan) -->
-      <div class="grid-cell-content output-1" id="cell-output-1" style="top: 0%; left: 75%; width: 12.5%; height: 14.3%;">
-        <span class="label">Forecast</span>
-        <span class="value">Pipeline updated</span>
-      </div>
-      
-      <!-- Output 2: Risk Alert - Row 3, Cell 5 (coral) -->
-      <div class="grid-cell-content output-2" id="cell-output-2" style="top: 28.5%; left: 62.5%; width: 12.5%; height: 14.3%;">
-        <span class="label">Risk Alert</span>
-        <span class="value">Manager notified</span>
-      </div>
-      
-      <!-- Output 3: CRM Updated - Row 5, Cell 8 (mint) -->
-      <div class="grid-cell-content output-3" id="cell-output-3" style="top: 57%; left: 87.5%; width: 12.5%; height: 14.3%;">
-        <span class="label">CRM</span>
-        <span class="value">HubSpot synced</span>
-      </div>
-      
-      <!-- Output 4: Content flagged - Row 7, Cell 4 (purple) -->
-      <div class="grid-cell-content output-4" id="cell-output-4" style="top: 85.6%; left: 37.5%; width: 12.5%; height: 14.3%;">
-        <span class="label">Content</span>
-        <span class="value">Marketing alerted</span>
+    <!-- Grid Animation Container -->
+    <div class="grid-container">
+      <!-- 
+        Grid structure - VARIED columns per row, 80x80 SQUARE cells:
+        Row 1: 8 cells starting at x=0
+        Row 2: 7 cells starting at x=80  (stepped in)
+        Row 3: 6 cells starting at x=160 (stepped in more)
+        Row 4: 6 cells starting at x=160
+        Row 5: 7 cells starting at x=80  (stepped out)
+        Row 6: 7 cells starting at x=80
+        Row 7: 8 cells starting at x=0   (full width)
+        
+        Creates stepped left edge silhouette
+      -->
+      <svg class="grid-svg" viewBox="0 0 640 560" preserveAspectRatio="xMidYMid meet">
+        <!-- Row 1: 8 cells, x: 0-640 -->
+        <rect class="grid-line" x="0" y="0" width="80" height="80" fill="none"/>
+        <rect class="grid-line" x="80" y="0" width="80" height="80" fill="none"/>
+        <rect class="grid-line" x="160" y="0" width="80" height="80" fill="none"/>
+        <rect class="grid-line" x="240" y="0" width="80" height="80" fill="none"/>
+        <rect class="grid-line" x="320" y="0" width="80" height="80" fill="none"/>
+        <rect class="grid-line" x="400" y="0" width="80" height="80" fill="none"/>
+        <rect class="grid-line" x="480" y="0" width="80" height="80" fill="none"/>
+        <rect class="grid-line" x="560" y="0" width="80" height="80" fill="none"/>
+        
+        <!-- Row 2: 7 cells, x: 80-640 (stepped in 1) -->
+        <rect class="grid-line" x="80" y="80" width="80" height="80" fill="none"/>
+        <rect class="grid-line" x="160" y="80" width="80" height="80" fill="none"/>
+        <rect class="grid-line" x="240" y="80" width="80" height="80" fill="none"/>
+        <rect class="grid-line" x="320" y="80" width="80" height="80" fill="none"/>
+        <rect class="grid-line" x="400" y="80" width="80" height="80" fill="none"/>
+        <rect class="grid-line" x="480" y="80" width="80" height="80" fill="none"/>
+        <rect class="grid-line" x="560" y="80" width="80" height="80" fill="none"/>
+        
+        <!-- Row 3: 6 cells, x: 160-640 (stepped in 2) -->
+        <rect class="grid-line" x="160" y="160" width="80" height="80" fill="none"/>
+        <rect class="grid-line" x="240" y="160" width="80" height="80" fill="none"/>
+        <rect class="grid-line" x="320" y="160" width="80" height="80" fill="none"/>
+        <rect class="grid-line" x="400" y="160" width="80" height="80" fill="none"/>
+        <rect class="grid-line" x="480" y="160" width="80" height="80" fill="none"/>
+        <rect class="grid-line" x="560" y="160" width="80" height="80" fill="none"/>
+        
+        <!-- Row 4: 6 cells, x: 160-640 (same as row 3) -->
+        <rect class="grid-line" x="160" y="240" width="80" height="80" fill="none"/>
+        <rect class="grid-line" x="240" y="240" width="80" height="80" fill="none"/>
+        <rect class="grid-line" x="320" y="240" width="80" height="80" fill="none"/>
+        <rect class="grid-line" x="400" y="240" width="80" height="80" fill="none"/>
+        <rect class="grid-line" x="480" y="240" width="80" height="80" fill="none"/>
+        <rect class="grid-line" x="560" y="240" width="80" height="80" fill="none"/>
+        
+        <!-- Row 5: 7 cells, x: 80-640 (stepped out) -->
+        <rect class="grid-line" x="80" y="320" width="80" height="80" fill="none"/>
+        <rect class="grid-line" x="160" y="320" width="80" height="80" fill="none"/>
+        <rect class="grid-line" x="240" y="320" width="80" height="80" fill="none"/>
+        <rect class="grid-line" x="320" y="320" width="80" height="80" fill="none"/>
+        <rect class="grid-line" x="400" y="320" width="80" height="80" fill="none"/>
+        <rect class="grid-line" x="480" y="320" width="80" height="80" fill="none"/>
+        <rect class="grid-line" x="560" y="320" width="80" height="80" fill="none"/>
+        
+        <!-- Row 6: 7 cells, x: 80-640 -->
+        <rect class="grid-line" x="80" y="400" width="80" height="80" fill="none"/>
+        <rect class="grid-line" x="160" y="400" width="80" height="80" fill="none"/>
+        <rect class="grid-line" x="240" y="400" width="80" height="80" fill="none"/>
+        <rect class="grid-line" x="320" y="400" width="80" height="80" fill="none"/>
+        <rect class="grid-line" x="400" y="400" width="80" height="80" fill="none"/>
+        <rect class="grid-line" x="480" y="400" width="80" height="80" fill="none"/>
+        <rect class="grid-line" x="560" y="400" width="80" height="80" fill="none"/>
+        
+        <!-- Row 7: 8 cells, x: 0-640 (full) -->
+        <rect class="grid-line" x="0" y="480" width="80" height="80" fill="none"/>
+        <rect class="grid-line" x="80" y="480" width="80" height="80" fill="none"/>
+        <rect class="grid-line" x="160" y="480" width="80" height="80" fill="none"/>
+        <rect class="grid-line" x="240" y="480" width="80" height="80" fill="none"/>
+        <rect class="grid-line" x="320" y="480" width="80" height="80" fill="none"/>
+        <rect class="grid-line" x="400" y="480" width="80" height="80" fill="none"/>
+        <rect class="grid-line" x="480" y="480" width="80" height="80" fill="none"/>
+        <rect class="grid-line" x="560" y="480" width="80" height="80" fill="none"/>
+
+        <!-- Animated paths - follow EXACT grid lines between cells -->
+        <!-- Path 1 (mint): Cell1 (0-80,0-80) → right along y=80 → to Cell2 (160-320,80-160) -->
+        <path id="path1" class="grid-path" stroke="#46FCAF" 
+              d="M 80,80 H 160"/>
+        
+        <!-- Path 2 (purple): Cell2 bottom-right → down → right to Cell3 (400-560,240-320) -->
+        <path id="path2" class="grid-path" stroke="#A678F4" 
+              d="M 320,160 V 240 H 400"/>
+        
+        <!-- Path 3 (cyan): Cell3 bottom → down to Cell4 (400-560,400-480) -->
+        <path id="path3" class="grid-path" stroke="#02C0FF" 
+              d="M 480,320 V 400"/>
+        
+        <!-- Path 4 (coral): Cell4 bottom-left → left along y=480 → to Cell5 (0-160,480-560) -->
+        <path id="path4" class="grid-path" stroke="#FF4F5E" 
+              d="M 400,480 H 160"/>
+      </svg>
+
+      <!-- Cell Content Overlays -->
+      <div class="grid-cells">
+        <!-- Cell 1: Row 1, Col 1 (mint) -->
+        <div class="cell mint" id="cell1" style="left: 0%; top: 0%; width: 12.5%; height: 14.28%;">
+          <span class="cell-badge">Incoming</span>
+          <span class="cell-title">Sales Call</span>
+        </div>
+
+        <!-- Cell 2: Row 2, Cols 3-4 (purple) - 160,80 -->
+        <div class="cell purple" id="cell2" style="left: 25%; top: 14.28%; width: 25%; height: 14.28%;">
+          <span class="cell-badge">Processing</span>
+          <span class="cell-title">recrd analyzes</span>
+          <span class="cell-desc">AI extracts insights</span>
+        </div>
+
+        <!-- Cell 3: Row 4, Cols 6-7 (cyan) - 400,240 -->
+        <div class="cell cyan" id="cell3" style="left: 62.5%; top: 42.85%; width: 25%; height: 14.28%;">
+          <span class="cell-badge">Forecast</span>
+          <span class="cell-title">Pipeline updated</span>
+          <span class="cell-desc">Deal advanced</span>
+        </div>
+
+        <!-- Cell 4: Row 6, Cols 6-7 (coral) - 400,400 -->
+        <div class="cell coral" id="cell4" style="left: 62.5%; top: 71.42%; width: 25%; height: 14.28%;">
+          <span class="cell-badge">Risk Alert</span>
+          <span class="cell-title">Manager notified</span>
+          <span class="cell-desc">Budget flagged</span>
+        </div>
+
+        <!-- Cell 5: Row 7, Cols 1-2 (mint) - 0,480 -->
+        <div class="cell mint" id="cell5" style="left: 0%; top: 85.71%; width: 25%; height: 14.28%;">
+          <span class="cell-badge">Content</span>
+          <span class="cell-title">Marketing alerted</span>
+          <span class="cell-desc">Quote captured</span>
+        </div>
       </div>
     </div>
-
-    <!-- Connecting lines SVG - paths follow exact grid borders -->
-    <svg class="grid-lines" id="gridLines" viewBox="0 0 897 785" preserveAspectRatio="xMidYMid meet">
-      <!-- Line 1: Source bottom → right along row 1 bottom → down → right to hub top
-           Grid lines: y=112.5 (row 1 bottom), x=112.5 (column edge), y=224.5 (row 3 top) -->
-      <path class="connect-line" id="line-1" d="M 56,112.5 H 112.5 V 224.5 H 280"/>
-      
-      <!-- Line 2: Hub right → along row 3 top → up column → right to output 1
-           Hub right edge at x=336.5, row 3 top at y=224.5, need to go up to row 1 -->
-      <path class="connect-line" id="line-2" d="M 336.5,280 H 672.5 V 56"/>
-      
-      <!-- Line 3: Hub right → along row 3 middle to output 2
-           Straight horizontal line along y=280 (middle of row 3) -->
-      <path class="connect-line" id="line-3" d="M 336.5,280 H 616"/>
-      
-      <!-- Line 4: Hub bottom → down to row 5 → right to output 3
-           Hub bottom at y=336.5, row 5 at y=448.5 -->
-      <path class="connect-line" id="line-4" d="M 280,336.5 V 504 H 840"/>
-      
-      <!-- Line 5: Hub bottom → down to row 7 → right to output 4 -->
-      <path class="connect-line" id="line-5" d="M 280,336.5 V 728 H 392"/>
-    </svg>
   </section>
 
-  <script is:inline>
+  <div class="theme-toggle">
+    <button id="btn-dark" class="active" onclick="setTheme('dark')">Dark</button>
+    <button id="btn-light" onclick="setTheme('light')">Light</button>
+  </div>
+
+  <script>
     function setTheme(theme) {
       document.documentElement.setAttribute('data-theme', theme);
       document.getElementById('btn-dark').classList.toggle('active', theme === 'dark');
       document.getElementById('btn-light').classList.toggle('active', theme === 'light');
     }
 
-    // Grid storytelling animation - 18 second cycle
-    function runGridStory() {
-      const source = document.getElementById('cell-source');
-      const hub = document.getElementById('cell-hub');
-      const outputs = [
-        document.getElementById('cell-output-1'),
-        document.getElementById('cell-output-2'),
-        document.getElementById('cell-output-3'),
-        document.getElementById('cell-output-4')
-      ];
-      const lines = [
-        document.getElementById('line-1'),
-        document.getElementById('line-2'),
-        document.getElementById('line-3'),
-        document.getElementById('line-4'),
-        document.getElementById('line-5')
-      ];
+    // Animation sequence - 18 second total cycle
+    function runAnimation() {
+      const cell1 = document.getElementById('cell1');
+      const cell2 = document.getElementById('cell2');
+      const cell3 = document.getElementById('cell3');
+      const cell4 = document.getElementById('cell4');
+      const cell5 = document.getElementById('cell5');
       
-      const gridRects = document.querySelectorAll('.hero-grid rect');
-      
-      // Map cells to indices based on SVG rect order
-      // Row 1: indices 0-7 (8 cells)
-      // Row 2: indices 8-14 (7 cells, starts at x=112.5)
-      // Row 3: indices 15-20 (6 cells, starts at x=224.5)
-      // Row 4: indices 21-26 (6 cells)
-      // Row 5: indices 27-33 (7 cells, starts at x=112.5)
-      // Row 6: indices 34-40 (7 cells)
-      // Row 7: indices 41-48 (8 cells)
-      const cellIndices = {
-        source: 0,       // Row 1, Cell 1 (x=0.5)
-        hub: 15,         // Row 3, Cell 1 (x=224.5)
-        output1: 6,      // Row 1, Cell 7 (x=672.5)
-        output2: 18,     // Row 3, Cell 4 (x=560.5)
-        output3: 33,     // Row 5, Cell 7 (x=784.5)
-        output4: 44      // Row 7, Cell 4 (x=336.5)
-      };
-      
+      const path1 = document.getElementById('path1');
+      const path2 = document.getElementById('path2');
+      const path3 = document.getElementById('path3');
+      const path4 = document.getElementById('path4');
+
       function reset() {
-        source.classList.remove('active');
-        hub.classList.remove('active');
-        outputs.forEach(o => o.classList.remove('active'));
-        lines.forEach(l => l.classList.remove('drawing'));
-        gridRects.forEach(r => {
-          r.classList.remove('cell-source', 'cell-hub', 'cell-output-1', 'cell-output-2', 'cell-output-3', 'cell-output-4');
-        });
+        [cell1, cell2, cell3, cell4, cell5].forEach(c => c.classList.remove('active'));
+        [path1, path2, path3, path4].forEach(p => p.classList.remove('active'));
       }
-      
+
       function animate() {
         reset();
-        
-        // Step 1: Source cell fills mint, text appears (0ms)
+
+        // Step 1: Cell 1 appears (0s)
         setTimeout(() => {
-          source.classList.add('active');
-          if (gridRects[cellIndices.source]) {
-            gridRects[cellIndices.source].classList.add('cell-source');
-          }
+          cell1.classList.add('active');
         }, 0);
-        
-        // Step 2: Line 1 draws from source to hub (2000ms)
+
+        // Step 2: Path 1 draws (2.5s)
         setTimeout(() => {
-          lines[0].classList.add('drawing');
-        }, 2000);
-        
-        // Step 3: Hub cell fills purple, text appears (4000ms)
+          path1.classList.add('active');
+        }, 2500);
+
+        // Step 3: Cell 2 appears (5s)
         setTimeout(() => {
-          hub.classList.add('active');
-          if (gridRects[cellIndices.hub]) {
-            gridRects[cellIndices.hub].classList.add('cell-hub');
-          }
-        }, 4000);
-        
-        // Step 4: Line 2 draws to output 1 (6000ms)
+          cell2.classList.add('active');
+        }, 5000);
+
+        // Step 4: Path 2 draws (7.5s)
         setTimeout(() => {
-          lines[1].classList.add('drawing');
-        }, 6000);
-        
-        // Output 1 appears (7500ms)
-        setTimeout(() => {
-          outputs[0].classList.add('active');
-          if (gridRects[cellIndices.output1]) {
-            gridRects[cellIndices.output1].classList.add('cell-output-1');
-          }
+          path2.classList.add('active');
         }, 7500);
-        
-        // Step 5: Line 3 draws to output 2 (9000ms)
+
+        // Step 5: Cell 3 appears (10s)
         setTimeout(() => {
-          lines[2].classList.add('drawing');
-        }, 9000);
-        
-        // Output 2 appears (10500ms)
+          cell3.classList.add('active');
+        }, 10000);
+
+        // Step 6: Path 3 draws (11.5s)
         setTimeout(() => {
-          outputs[1].classList.add('active');
-          if (gridRects[cellIndices.output2]) {
-            gridRects[cellIndices.output2].classList.add('cell-output-2');
-          }
-        }, 10500);
-        
-        // Step 6: Line 4 draws to output 3 (12000ms)
+          path3.classList.add('active');
+        }, 11500);
+
+        // Step 7: Cell 4 appears (13s)
         setTimeout(() => {
-          lines[3].classList.add('drawing');
-        }, 12000);
-        
-        // Output 3 appears (13500ms)
+          cell4.classList.add('active');
+        }, 13000);
+
+        // Step 8: Path 4 draws (14.5s)
         setTimeout(() => {
-          outputs[2].classList.add('active');
-          if (gridRects[cellIndices.output3]) {
-            gridRects[cellIndices.output3].classList.add('cell-output-3');
-          }
-        }, 13500);
-        
-        // Step 7: Line 5 draws to output 4 (15000ms)
+          path4.classList.add('active');
+        }, 14500);
+
+        // Step 9: Cell 5 appears (16s)
         setTimeout(() => {
-          lines[4].classList.add('drawing');
-        }, 15000);
-        
-        // Output 4 appears (16500ms)
-        setTimeout(() => {
-          outputs[3].classList.add('active');
-          if (gridRects[cellIndices.output4]) {
-            gridRects[cellIndices.output4].classList.add('cell-output-4');
-          }
-        }, 16500);
-        
-        // Hold for 1.5s, then restart (18000ms total cycle)
+          cell5.classList.add('active');
+        }, 16000);
+
+        // Restart (18s)
         setTimeout(() => {
           animate();
         }, 18000);
       }
-      
+
       animate();
     }
 
-    // Start animation when page loads
-    document.addEventListener('DOMContentLoaded', runGridStory);
+    document.addEventListener('DOMContentLoaded', runAnimation);
   </script>
-
 </body>
 </html>

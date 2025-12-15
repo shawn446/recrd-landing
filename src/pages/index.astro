@@ -14,9 +14,9 @@ import BaseHead from '../components/BaseHead.astro';
   <style is:global>
     :root { 
       --cell: 120px; 
-      --grid-line: rgba(255,255,255,0.08); 
+      --grid-line: rgba(255,255,255,0.06);
     }
-    [data-theme="light"] { --grid-line: rgba(0,0,0,0.08); }
+    [data-theme="light"] { --grid-line: rgba(0,0,0,0.06); }
 
     /* HERO */
     .hero {
@@ -30,7 +30,7 @@ import BaseHead from '../components/BaseHead.astro';
 
     .hero-content {
       max-width: 550px;
-      z-index: 20;
+      z-index: 100;
       padding: 48px 0;
       position: relative;
     }
@@ -82,76 +82,60 @@ import BaseHead from '../components/BaseHead.astro';
     .btn-arrow { display: inline-flex; transition: transform 0.2s ease; }
     .btn:hover .btn-arrow { transform: translateX(4px); }
 
-    /* GRID - Full width with left fade */
-    .grid-wrapper {
+    /* GRID - Right side with left fade */
+    .hero-grid {
       position: absolute;
       top: 0;
       right: 0;
       bottom: 0;
-      left: 0;
-      z-index: 1;
-      overflow: hidden;
-    }
-
-    .grid-bg {
-      position: absolute;
-      top: 0;
-      right: 0;
-      bottom: 0;
-      width: 100%;
+      width: 65%;
       background-image: 
         linear-gradient(to right, var(--grid-line) 1px, transparent 1px),
         linear-gradient(to bottom, var(--grid-line) 1px, transparent 1px);
       background-size: var(--cell) var(--cell);
-      mask-image: linear-gradient(to right, transparent 0%, transparent 30%, rgba(0,0,0,0.3) 45%, rgba(0,0,0,0.6) 60%, rgba(0,0,0,1) 75%);
-      -webkit-mask-image: linear-gradient(to right, transparent 0%, transparent 30%, rgba(0,0,0,0.3) 45%, rgba(0,0,0,0.6) 60%, rgba(0,0,0,1) 75%);
+      z-index: 1;
+      mask-image: linear-gradient(to right, transparent 0%, rgba(0,0,0,0.5) 15%, rgba(0,0,0,1) 50%);
+      -webkit-mask-image: linear-gradient(to right, transparent 0%, rgba(0,0,0,0.5) 15%, rgba(0,0,0,1) 50%);
     }
 
-    /* CARD SHOWCASE */
-    .card-showcase {
+    /* CARDS AREA */
+    .cards-area {
       position: absolute;
-      top: 50%;
-      right: calc(var(--cell) * 0.5);
-      transform: translateY(-50%);
-      width: calc(var(--cell) * 7);
-      height: calc(var(--cell) * 5);
-      z-index: 10;
+      top: 80px;
+      right: 0;
+      bottom: 40px;
+      width: 58%;
+      z-index: 50;
+      pointer-events: none;
     }
 
-    .card-stack {
-      position: relative;
-      width: 100%;
-      height: 100%;
-    }
-
-    .card-item {
+    /* ORIGAMI CARD - 2x3 grid of cells */
+    .origami-card {
       position: absolute;
-      width: calc(var(--cell) * 1.5);
-      height: calc(var(--cell) * 2.25);
-      cursor: pointer;
-      filter: drop-shadow(0 20px 40px rgba(0,0,0,0.35));
+      width: calc(var(--cell) * 2);
+      height: calc(var(--cell) * 3);
       opacity: 0;
-      perspective: 1000px;
+      transition: opacity 0.3s ease;
+      pointer-events: auto;
+      filter: drop-shadow(0 25px 50px rgba(0,0,0,0.5));
     }
 
-    .card-item.active {
+    .origami-card.active {
       opacity: 1;
     }
 
-    .card-item img {
-      width: 100%;
-      height: 100%;
-      object-fit: contain;
+    /* SVG fills the card - BEHIND panels */
+    .origami-card img {
       position: absolute;
       top: 0;
       left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: fill;
+      z-index: 1;
     }
 
-    .card-item:hover {
-      filter: drop-shadow(0 30px 50px rgba(0,0,0,0.45));
-    }
-
-    /* Origami fold panels - 2x3 grid overlay */
+    /* Fold grid - OVER the SVG */
     .fold-grid {
       position: absolute;
       top: 0;
@@ -159,44 +143,79 @@ import BaseHead from '../components/BaseHead.astro';
       width: 100%;
       height: 100%;
       display: grid;
-      grid-template-columns: 1fr 1fr;
-      grid-template-rows: 1fr 1fr 1fr;
-      pointer-events: none;
+      grid-template-columns: repeat(2, 1fr);
+      grid-template-rows: repeat(3, 1fr);
+      z-index: 2;
     }
 
-    .fold-panel {
+    /* Each panel cell */
+    .card-panel {
       position: relative;
       transform-style: preserve-3d;
-      backface-visibility: hidden;
+      perspective: 1000px;
     }
 
-    .fold-panel-inner {
+    .panel-inner {
       position: absolute;
       width: 100%;
       height: 100%;
-      transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.4s ease;
+      backface-visibility: hidden;
+      /* START: visible, flat, covering SVG */
+      opacity: 1;
+      transform: rotateY(0deg) rotateX(0deg);
+      transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
-    /* Fold directions for each panel */
-    .fold-panel:nth-child(1) .fold-panel-inner { transform-origin: left center; transform: rotateY(-90deg); }
-    .fold-panel:nth-child(2) .fold-panel-inner { transform-origin: top center; transform: rotateX(90deg); }
-    .fold-panel:nth-child(3) .fold-panel-inner { transform-origin: left center; transform: rotateY(-90deg); }
-    .fold-panel:nth-child(4) .fold-panel-inner { transform-origin: right center; transform: rotateY(90deg); }
-    .fold-panel:nth-child(5) .fold-panel-inner { transform-origin: bottom center; transform: rotateX(-90deg); }
-    .fold-panel:nth-child(6) .fold-panel-inner { transform-origin: right center; transform: rotateY(90deg); }
+    /* Transform origins */
+    .card-panel.from-left .panel-inner {
+      transform-origin: left center;
+    }
 
-    /* Revealed state */
-    .fold-panel.revealed .fold-panel-inner {
-      transform: rotateY(0deg) rotateX(0deg);
+    .card-panel.from-right .panel-inner {
+      transform-origin: right center;
+    }
+
+    .card-panel.from-top .panel-inner {
+      transform-origin: top center;
+    }
+
+    .card-panel.from-bottom .panel-inner {
+      transform-origin: bottom center;
+    }
+
+    /* REVEALED: fold away to show SVG */
+    .card-panel.revealed.from-left .panel-inner {
+      opacity: 0;
+      transform: rotateY(-90deg);
+    }
+
+    .card-panel.revealed.from-right .panel-inner {
+      opacity: 0;
+      transform: rotateY(90deg);
+    }
+
+    .card-panel.revealed.from-top .panel-inner {
+      opacity: 0;
+      transform: rotateX(90deg);
+    }
+
+    .card-panel.revealed.from-bottom .panel-inner {
+      opacity: 0;
+      transform: rotateX(-90deg);
     }
 
     /* Panel colors */
-    .fold-panel-inner.mint { background: var(--mint); }
-    .fold-panel-inner.purple { background: var(--purple); }
-    .fold-panel-inner.cyan { background: var(--cyan); }
-    .fold-panel-inner.coral { background: var(--coral); }
-    .fold-panel-inner.yellow { background: var(--yellow); }
-    .fold-panel-inner.dark { background: #1a1a1a; }
+    .panel-inner.mint { background: var(--mint); }
+    .panel-inner.purple { background: var(--purple); }
+    .panel-inner.cyan { background: var(--cyan); }
+    .panel-inner.coral { background: var(--coral); }
+    .panel-inner.yellow { background: var(--yellow); }
+    .panel-inner.dark { background: #1a1a1a; }
+
+    /* Card positions */
+    .origami-card.pos-0 { top: 0; right: 45%; }
+    .origami-card.pos-1 { top: 35%; right: 10%; }
+    .origami-card.pos-2 { bottom: 5%; right: 50%; }
 
     /* OTHER SECTIONS */
     .logo-bar { padding: 80px 48px; border-top: 1px solid var(--border); background: var(--bg-alt); }
@@ -262,10 +281,10 @@ import BaseHead from '../components/BaseHead.astro';
 
     /* RESPONSIVE */
     @media (max-width: 1800px) { :root { --cell: 110px; } .hero-headline { font-size: 80px; } }
-    @media (max-width: 1600px) { :root { --cell: 95px; } .hero-headline { font-size: 70px; } }
-    @media (max-width: 1400px) { :root { --cell: 80px; } .hero-headline { font-size: 60px; } }
-    @media (max-width: 1200px) { :root { --cell: 70px; } .hero-headline { font-size: 52px; } .how-flow { flex-direction: column; max-width: 500px; } .how-step { margin-left: 0; margin-top: -1px; } .how-step:first-child { margin-top: 0; } .step-arrow { display: none; } }
-    @media (max-width: 1000px) { .card-showcase { display: none; } .grid-wrapper { display: none; } .hero-headline { font-size: 48px; } }
+    @media (max-width: 1600px) { :root { --cell: 100px; } .hero-headline { font-size: 70px; } .cards-area { width: 55%; } }
+    @media (max-width: 1400px) { :root { --cell: 90px; } .hero-headline { font-size: 60px; } }
+    @media (max-width: 1200px) { :root { --cell: 80px; } .hero-headline { font-size: 52px; } .how-flow { flex-direction: column; max-width: 500px; } .how-step { margin-left: 0; margin-top: -1px; } .how-step:first-child { margin-top: 0; } .step-arrow { display: none; } }
+    @media (max-width: 1000px) { .cards-area { display: none; } .hero-grid { display: none; } .hero-headline { font-size: 48px; } }
     @media (max-width: 900px) { .hero { flex-direction: column; padding: 140px 24px 48px; min-height: auto; } .hero-content { max-width: 100%; text-align: center; margin-bottom: 40px; } .hero-headline { font-size: 48px; } .hero-buttons { justify-content: center; } .logo-bar { padding: 60px 24px; } .logo-bar-grid { gap: 32px 48px; } .how-section, .features-section, .faq-section, .cta-section { padding: 80px 24px; } .features-grid, .faq-grid { grid-template-columns: 1fr; } }
     @media (max-width: 600px) { .hero-headline { font-size: 36px; } .hero-sub { font-size: 16px; } .hero-buttons { flex-direction: column; } .btn { width: 100%; justify-content: center; } .section-headline { font-size: 32px; } .cta-headline { font-size: 28px; } .cta-buttons { flex-direction: column; } }
   </style>
@@ -275,6 +294,8 @@ import BaseHead from '../components/BaseHead.astro';
   <Nav />
 
   <section class="hero">
+    <div class="hero-grid"></div>
+
     <div class="hero-content">
       <h1 class="hero-headline">Your calls,<br><em>working for you</em></h1>
       <p class="hero-sub">AI agents that record, analyze, and act on every conversation. CRM updates, coaching, follow-ups—all automatic.</p>
@@ -284,123 +305,10 @@ import BaseHead from '../components/BaseHead.astro';
       </div>
     </div>
 
-    <div class="grid-wrapper">
-      <div class="grid-bg"></div>
-    </div>
-
-    <div class="card-showcase">
-      <div class="card-stack">
-        <div class="card-item" data-index="0" data-color="mint">
-          <img src="/cards/card-01-call-trigger.svg" alt="Call Trigger" />
-          <div class="fold-grid">
-            <div class="fold-panel"><div class="fold-panel-inner mint"></div></div>
-            <div class="fold-panel"><div class="fold-panel-inner mint"></div></div>
-            <div class="fold-panel"><div class="fold-panel-inner mint"></div></div>
-            <div class="fold-panel"><div class="fold-panel-inner mint"></div></div>
-            <div class="fold-panel"><div class="fold-panel-inner mint"></div></div>
-            <div class="fold-panel"><div class="fold-panel-inner mint"></div></div>
-          </div>
-        </div>
-        <div class="card-item" data-index="1" data-color="purple">
-          <img src="/cards/card-02-intel-agent.svg" alt="Intel Agent" />
-          <div class="fold-grid">
-            <div class="fold-panel"><div class="fold-panel-inner purple"></div></div>
-            <div class="fold-panel"><div class="fold-panel-inner purple"></div></div>
-            <div class="fold-panel"><div class="fold-panel-inner purple"></div></div>
-            <div class="fold-panel"><div class="fold-panel-inner purple"></div></div>
-            <div class="fold-panel"><div class="fold-panel-inner purple"></div></div>
-            <div class="fold-panel"><div class="fold-panel-inner purple"></div></div>
-          </div>
-        </div>
-        <div class="card-item" data-index="2" data-color="cyan">
-          <img src="/cards/card-03-crm-agent.svg" alt="CRM Agent" />
-          <div class="fold-grid">
-            <div class="fold-panel"><div class="fold-panel-inner cyan"></div></div>
-            <div class="fold-panel"><div class="fold-panel-inner cyan"></div></div>
-            <div class="fold-panel"><div class="fold-panel-inner cyan"></div></div>
-            <div class="fold-panel"><div class="fold-panel-inner cyan"></div></div>
-            <div class="fold-panel"><div class="fold-panel-inner cyan"></div></div>
-            <div class="fold-panel"><div class="fold-panel-inner cyan"></div></div>
-          </div>
-        </div>
-        <div class="card-item" data-index="3" data-color="coral">
-          <img src="/cards/card-04-risk-agent.svg" alt="Risk Agent" />
-          <div class="fold-grid">
-            <div class="fold-panel"><div class="fold-panel-inner coral"></div></div>
-            <div class="fold-panel"><div class="fold-panel-inner coral"></div></div>
-            <div class="fold-panel"><div class="fold-panel-inner coral"></div></div>
-            <div class="fold-panel"><div class="fold-panel-inner coral"></div></div>
-            <div class="fold-panel"><div class="fold-panel-inner coral"></div></div>
-            <div class="fold-panel"><div class="fold-panel-inner coral"></div></div>
-          </div>
-        </div>
-        <div class="card-item" data-index="4" data-color="yellow">
-          <img src="/cards/card-05-email-agent.svg" alt="Email Agent" />
-          <div class="fold-grid">
-            <div class="fold-panel"><div class="fold-panel-inner yellow"></div></div>
-            <div class="fold-panel"><div class="fold-panel-inner yellow"></div></div>
-            <div class="fold-panel"><div class="fold-panel-inner yellow"></div></div>
-            <div class="fold-panel"><div class="fold-panel-inner yellow"></div></div>
-            <div class="fold-panel"><div class="fold-panel-inner yellow"></div></div>
-            <div class="fold-panel"><div class="fold-panel-inner yellow"></div></div>
-          </div>
-        </div>
-        <div class="card-item" data-index="5" data-color="dark">
-          <img src="/cards/card-06-scorecard-agent.svg" alt="Scorecard Agent" />
-          <div class="fold-grid">
-            <div class="fold-panel"><div class="fold-panel-inner dark"></div></div>
-            <div class="fold-panel"><div class="fold-panel-inner dark"></div></div>
-            <div class="fold-panel"><div class="fold-panel-inner dark"></div></div>
-            <div class="fold-panel"><div class="fold-panel-inner dark"></div></div>
-            <div class="fold-panel"><div class="fold-panel-inner dark"></div></div>
-            <div class="fold-panel"><div class="fold-panel-inner dark"></div></div>
-          </div>
-        </div>
-        <div class="card-item" data-index="6" data-color="mint">
-          <img src="/cards/card-07-multithread-agent.svg" alt="Multi-Thread Agent" />
-          <div class="fold-grid">
-            <div class="fold-panel"><div class="fold-panel-inner mint"></div></div>
-            <div class="fold-panel"><div class="fold-panel-inner mint"></div></div>
-            <div class="fold-panel"><div class="fold-panel-inner mint"></div></div>
-            <div class="fold-panel"><div class="fold-panel-inner mint"></div></div>
-            <div class="fold-panel"><div class="fold-panel-inner mint"></div></div>
-            <div class="fold-panel"><div class="fold-panel-inner mint"></div></div>
-          </div>
-        </div>
-        <div class="card-item" data-index="7" data-color="purple">
-          <img src="/cards/card-08-quote-agent.svg" alt="Quote Agent" />
-          <div class="fold-grid">
-            <div class="fold-panel"><div class="fold-panel-inner purple"></div></div>
-            <div class="fold-panel"><div class="fold-panel-inner purple"></div></div>
-            <div class="fold-panel"><div class="fold-panel-inner purple"></div></div>
-            <div class="fold-panel"><div class="fold-panel-inner purple"></div></div>
-            <div class="fold-panel"><div class="fold-panel-inner purple"></div></div>
-            <div class="fold-panel"><div class="fold-panel-inner purple"></div></div>
-          </div>
-        </div>
-        <div class="card-item" data-index="8" data-color="cyan">
-          <img src="/cards/card-09-task-agent.svg" alt="Task Agent" />
-          <div class="fold-grid">
-            <div class="fold-panel"><div class="fold-panel-inner cyan"></div></div>
-            <div class="fold-panel"><div class="fold-panel-inner cyan"></div></div>
-            <div class="fold-panel"><div class="fold-panel-inner cyan"></div></div>
-            <div class="fold-panel"><div class="fold-panel-inner cyan"></div></div>
-            <div class="fold-panel"><div class="fold-panel-inner cyan"></div></div>
-            <div class="fold-panel"><div class="fold-panel-inner cyan"></div></div>
-          </div>
-        </div>
-        <div class="card-item" data-index="9" data-color="yellow">
-          <img src="/cards/card-10-prep-agent.svg" alt="Prep Agent" />
-          <div class="fold-grid">
-            <div class="fold-panel"><div class="fold-panel-inner yellow"></div></div>
-            <div class="fold-panel"><div class="fold-panel-inner yellow"></div></div>
-            <div class="fold-panel"><div class="fold-panel-inner yellow"></div></div>
-            <div class="fold-panel"><div class="fold-panel-inner yellow"></div></div>
-            <div class="fold-panel"><div class="fold-panel-inner yellow"></div></div>
-            <div class="fold-panel"><div class="fold-panel-inner yellow"></div></div>
-          </div>
-        </div>
-      </div>
+    <div class="cards-area">
+      <div class="origami-card pos-0" id="card-slot-0"></div>
+      <div class="origami-card pos-1" id="card-slot-1"></div>
+      <div class="origami-card pos-2" id="card-slot-2"></div>
     </div>
   </section>
 
@@ -469,148 +377,96 @@ import BaseHead from '../components/BaseHead.astro';
   <ThemeToggle />
 
   <script>
-    // Origami card showcase - cards align to grid cells
-    // Display order ensures no same colors adjacent:
-    // mint(0), coral(3), purple(1), dark(5), cyan(2), yellow(4), purple(7), mint(6), yellow(9), cyan(8)
-    const displayOrder = [0, 3, 1, 5, 2, 4, 7, 6, 9, 8];
-    
-    // Grid positions in cell units (col, row) - cards are 1.5 cells wide × 2.25 cells tall
-    // Positioned to not overlap, diagonal cascade from top-left to bottom-right
-    const gridPositions = [
-      { col: 0, row: 0 },
-      { col: 2, row: 0.5 },
-      { col: 4, row: 0 },
-      { col: 1, row: 2.5 },
-      { col: 3, row: 2 },
-      { col: 5, row: 2.5 },
+    // Card data - SVG paths and colors
+    // Order ensures no same colors adjacent when cycling
+    const cards = [
+      { src: '/cards/card-01-call-trigger.svg', color: 'mint' },
+      { src: '/cards/card-04-risk-agent.svg', color: 'coral' },
+      { src: '/cards/card-02-intel-agent.svg', color: 'purple' },
+      { src: '/cards/card-06-scorecard-agent.svg', color: 'dark' },
+      { src: '/cards/card-03-crm-agent.svg', color: 'cyan' },
+      { src: '/cards/card-05-email-agent.svg', color: 'yellow' },
+      { src: '/cards/card-08-quote-agent.svg', color: 'purple' },
+      { src: '/cards/card-07-multithread-agent.svg', color: 'mint' },
+      { src: '/cards/card-10-prep-agent.svg', color: 'yellow' },
+      { src: '/cards/card-09-task-agent.svg', color: 'cyan' },
     ];
 
+    // Build card: SVG image + colored panels overlay
+    // Panels START covering the SVG, then fold away
+    function buildCard(cardData) {
+      const foldDirs = ['from-left', 'from-left', 'from-top', 'from-left', 'from-top', 'from-left'];
+      
+      const panels = foldDirs.map((dir, i) => `
+        <div class="card-panel ${dir}" data-index="${i}">
+          <div class="panel-inner ${cardData.color}"></div>
+        </div>
+      `).join('');
+
+      return `
+        <img src="${cardData.src}" alt="Agent card" />
+        <div class="fold-grid">${panels}</div>
+      `;
+    }
+
     const UNFOLD_DELAY = 80;
-    const CARD_DISPLAY = 5000;
-    const CYCLE_STAGGER = 1500;
+    const CARD_STAGGER = 600;
+    const DISPLAY_TIME = 3500;
 
-    let cards;
-    let cellSize;
-    let usedPositions = new Set();
-    let cardQueue = [];
-    let activeSlots = [null, null, null];
+    let slotCards = [0, 1, 2];
+    let nextCardIndex = 3;
 
-    function shuffleArray(arr) {
-      const shuffled = [...arr];
-      for (let i = shuffled.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-      }
-      return shuffled;
-    }
-
-    function getCellSize() {
-      return parseInt(getComputedStyle(document.documentElement).getPropertyValue('--cell')) || 120;
-    }
-
-    function getRandomPosition() {
-      const available = gridPositions.filter((_, i) => !usedPositions.has(i));
-      if (available.length === 0) {
-        usedPositions.clear();
-        return getRandomPosition();
-      }
-      const idx = gridPositions.indexOf(available[Math.floor(Math.random() * available.length)]);
-      usedPositions.add(idx);
-      return gridPositions[idx];
-    }
-
-    function getNextCard() {
-      if (cardQueue.length === 0) {
-        cardQueue = shuffleArray(displayOrder);
-      }
-      return cardQueue.pop();
-    }
-
-    function positionCard(card, pos) {
-      cellSize = getCellSize();
-      card.style.left = `${pos.col * cellSize}px`;
-      card.style.top = `${pos.row * cellSize}px`;
-      card.style.transform = 'none';
-    }
-
-    function unfoldCard(card) {
-      const panels = card.querySelectorAll('.fold-panel');
-      card.classList.add('active');
-      
-      // Staggered reveal of panels
+    // Panels fold AWAY to reveal SVG
+    function unfoldCard(slot) {
+      const panels = slot.querySelectorAll('.card-panel');
+      slot.classList.add('active');
       panels.forEach((panel, i) => {
-        setTimeout(() => {
-          panel.classList.add('revealed');
-        }, i * UNFOLD_DELAY);
+        setTimeout(() => panel.classList.add('revealed'), i * UNFOLD_DELAY);
       });
     }
 
-    function foldCard(card) {
-      const panels = Array.from(card.querySelectorAll('.fold-panel')).reverse();
-      
-      // Staggered fold (reverse order)
+    // Panels fold BACK to cover SVG
+    function foldCard(slot) {
+      const panels = Array.from(slot.querySelectorAll('.card-panel')).reverse();
       panels.forEach((panel, i) => {
-        setTimeout(() => {
-          panel.classList.remove('revealed');
-        }, i * UNFOLD_DELAY);
+        setTimeout(() => panel.classList.remove('revealed'), i * UNFOLD_DELAY);
       });
-
-      // Hide card after all panels fold
-      setTimeout(() => {
-        card.classList.remove('active');
-      }, panels.length * UNFOLD_DELAY + 100);
+      setTimeout(() => slot.classList.remove('active'), panels.length * UNFOLD_DELAY + 150);
     }
 
     function cycleSlot(slotIndex) {
-      const currentCardIndex = activeSlots[slotIndex];
+      const slot = document.getElementById(`card-slot-${slotIndex}`);
       
-      // Fold current card if exists
-      if (currentCardIndex !== null) {
-        const currentCard = cards[currentCardIndex];
-        foldCard(currentCard);
-      }
+      foldCard(slot);
 
-      // After fold animation, show new card
       setTimeout(() => {
-        const newCardIndex = getNextCard();
-        const pos = getRandomPosition();
-        const newCard = cards[newCardIndex];
-
-        activeSlots[slotIndex] = newCardIndex;
+        slotCards[slotIndex] = nextCardIndex;
+        nextCardIndex = (nextCardIndex + 1) % cards.length;
         
-        // Reset panels to folded state
-        newCard.querySelectorAll('.fold-panel').forEach(p => p.classList.remove('revealed'));
-        
-        positionCard(newCard, pos);
-        unfoldCard(newCard);
-      }, 6 * UNFOLD_DELAY + 200);
+        slot.innerHTML = buildCard(cards[slotCards[slotIndex]]);
+        unfoldCard(slot);
+      }, 6 * UNFOLD_DELAY + 300);
     }
 
     document.addEventListener('DOMContentLoaded', () => {
-      cards = document.querySelectorAll('.card-item');
-      cardQueue = shuffleArray(displayOrder);
+      const slots = [
+        document.getElementById('card-slot-0'),
+        document.getElementById('card-slot-1'),
+        document.getElementById('card-slot-2')
+      ];
 
-      // Initial render - 3 cards with stagger
-      for (let i = 0; i < 3; i++) {
-        setTimeout(() => {
-          const cardIndex = getNextCard();
-          const pos = getRandomPosition();
-          const card = cards[cardIndex];
+      // Initial render with stagger
+      slots.forEach((slot, i) => {
+        slot.innerHTML = buildCard(cards[i]);
+        setTimeout(() => unfoldCard(slot), i * CARD_STAGGER);
+      });
 
-          activeSlots[i] = cardIndex;
-          positionCard(card, pos);
-          unfoldCard(card);
-        }, i * CYCLE_STAGGER);
-      }
-
-      // Cycle each slot on offset intervals
-      const cycleTime = CARD_DISPLAY + (6 * UNFOLD_DELAY * 2) + 500;
-
-      for (let i = 0; i < 3; i++) {
-        setTimeout(() => {
-          setInterval(() => cycleSlot(i), cycleTime);
-        }, (i * CYCLE_STAGGER) + CARD_DISPLAY);
-      }
+      // Offset cycling for continuous motion
+      const cycleInterval = DISPLAY_TIME + (6 * UNFOLD_DELAY * 2) + 600;
+      
+      setTimeout(() => setInterval(() => cycleSlot(0), cycleInterval), 0);
+      setTimeout(() => setInterval(() => cycleSlot(1), cycleInterval), cycleInterval * 0.33);
+      setTimeout(() => setInterval(() => cycleSlot(2), cycleInterval), cycleInterval * 0.66);
     });
   </script>
 </body>

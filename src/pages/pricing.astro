@@ -8,14 +8,37 @@ import BaseHead from '../components/BaseHead.astro';
 <!DOCTYPE html>
 <html lang="en" data-theme="dark">
 <head>
-  <BaseHead title="Pricing - recrd" description="Simple pricing for AI-powered revenue intelligence. Start free, upgrade when ready." />
+  <BaseHead title="Pricing - recrd" description="Simple pricing for AI-powered revenue intelligence. Start with Starter, scale with Advanced." />
   
   <style>
-    .pricing-header { padding: 160px 48px 80px; text-align: center; }
+    .pricing-header { padding: 160px 48px 60px; text-align: center; }
     .pricing-headline { font-size: 64px; font-weight: 350; line-height: 1.1; letter-spacing: -0.03em; margin-bottom: 20px; }
-    .pricing-sub { font-size: 18px; color: var(--text-muted); max-width: 500px; margin: 0 auto; }
+    .pricing-sub { font-size: 18px; color: var(--text-muted); max-width: 500px; margin: 0 auto 40px; }
 
-    .pricing-section { padding: 0 48px 120px; }
+    /* Billing Toggle */
+    .billing-toggle { display: flex; align-items: center; justify-content: center; gap: 16px; margin-bottom: 16px; }
+    .billing-option { font-size: 15px; color: var(--text-muted); cursor: pointer; padding: 8px 16px; transition: color 0.2s; }
+    .billing-option.active { color: var(--text); font-weight: 500; }
+    .toggle-switch { width: 56px; height: 28px; background: var(--border); border-radius: 14px; position: relative; cursor: pointer; transition: background 0.2s; }
+    .toggle-switch.annual { background: var(--mint); }
+    .toggle-knob { width: 22px; height: 22px; background: var(--bg); border-radius: 50%; position: absolute; top: 3px; left: 3px; transition: transform 0.2s; }
+    .toggle-switch.annual .toggle-knob { transform: translateX(28px); }
+    .billing-savings { font-family: var(--mono); font-size: 12px; color: var(--mint); background: rgba(70, 252, 175, 0.1); padding: 4px 12px; border-radius: 12px; }
+
+    /* User Counter */
+    .user-counter { display: flex; align-items: center; justify-content: center; gap: 24px; padding: 24px; background: var(--bg-card); border: 1px solid var(--border); max-width: 500px; margin: 0 auto 60px; }
+    .counter-label { font-size: 14px; color: var(--text-muted); }
+    .counter-controls { display: flex; align-items: center; gap: 16px; }
+    .counter-btn { width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; background: var(--bg); border: 1px solid var(--border); cursor: pointer; font-size: 18px; transition: all 0.2s; }
+    .counter-btn:hover { border-color: var(--mint); color: var(--mint); }
+    .counter-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+    .counter-value { font-size: 24px; font-weight: 500; min-width: 48px; text-align: center; font-family: var(--mono); }
+    .counter-total { text-align: right; }
+    .counter-total-label { font-size: 12px; color: var(--text-muted); margin-bottom: 4px; }
+    .counter-total-value { font-size: 24px; font-weight: 500; font-family: var(--mono); }
+    .counter-total-value .period { font-size: 14px; color: var(--text-muted); font-weight: 400; }
+
+    .pricing-section { padding: 0 48px 80px; }
     .pricing-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; max-width: 1200px; margin: 0 auto; }
 
     .pricing-card { background: var(--bg-card); border: 1px solid var(--border); padding: 40px 32px; position: relative; }
@@ -23,10 +46,11 @@ import BaseHead from '../components/BaseHead.astro';
     .pricing-badge { position: absolute; top: -12px; left: 50%; transform: translateX(-50%); background: var(--mint); color: #0a0a0a; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; padding: 6px 16px; }
 
     .pricing-tier { font-size: 14px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); margin-bottom: 16px; }
-    .pricing-price { display: flex; align-items: baseline; gap: 2px; margin-bottom: 16px; }
+    .pricing-price { display: flex; align-items: baseline; gap: 2px; margin-bottom: 8px; }
     .price-currency { font-size: 24px; font-weight: 500; }
     .price-amount { font-size: 56px; font-weight: 350; letter-spacing: -0.03em; }
     .price-period { font-size: 14px; color: var(--text-muted); }
+    .price-original { font-size: 18px; color: var(--text-muted); text-decoration: line-through; margin-bottom: 8px; font-family: var(--mono); }
     .pricing-desc { font-size: 14px; color: var(--text-muted); line-height: 1.6; margin-bottom: 32px; min-height: 44px; }
 
     .pricing-cta { margin-bottom: 32px; }
@@ -41,6 +65,12 @@ import BaseHead from '../components/BaseHead.astro';
     .btn-secondary::before { content: ''; position: absolute; top: 0; left: 0; width: 0; height: 100%; background: var(--purple); transition: width 0.3s ease; z-index: -1; }
     .btn-secondary:hover::before { width: 100%; }
     .btn-secondary:hover { color: #fff; border-color: var(--purple); }
+    .btn-arrow { display: inline-flex; transition: transform 0.2s ease; }
+    .btn-arrow img { width: 16px; height: 16px; }
+    .btn:hover .btn-arrow { transform: translateX(4px); }
+    .btn-arrow .chevron-hover { display: none; }
+    .btn:hover .chevron-default { display: none; }
+    .btn:hover .chevron-hover { display: block; }
 
     .pricing-features { list-style: none; }
     .pricing-features li { display: flex; align-items: flex-start; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--border); font-size: 14px; }
@@ -50,6 +80,32 @@ import BaseHead from '../components/BaseHead.astro';
     .check-icon.mint svg { stroke: var(--mint); }
     .check-icon.purple svg { stroke: var(--purple); }
     .feature-highlight { color: var(--mint); font-weight: 500; }
+
+    /* Feature Comparison Table */
+    .comparison-section { padding: 80px 48px 120px; border-top: 1px solid var(--border); }
+    .comparison-header { text-align: center; margin-bottom: 60px; }
+    .comparison-headline { font-size: 40px; font-weight: 350; letter-spacing: -0.02em; margin-bottom: 16px; }
+    .comparison-sub { font-size: 16px; color: var(--text-muted); }
+
+    .comparison-table { max-width: 1000px; margin: 0 auto; border: 1px solid var(--border); }
+    .comparison-row { display: grid; grid-template-columns: 1.5fr 1fr 1fr 1fr; border-bottom: 1px solid var(--border); }
+    .comparison-row:last-child { border-bottom: none; }
+    .comparison-row.header { background: var(--bg-card); font-weight: 600; position: sticky; top: 0; }
+    .comparison-row.category { background: var(--bg-alt); }
+    .comparison-cell { padding: 16px 20px; display: flex; align-items: center; font-size: 14px; }
+    .comparison-cell:not(:first-child) { justify-content: center; border-left: 1px solid var(--border); }
+    .comparison-cell.feature-name { color: var(--text-muted); }
+    .category-name { font-weight: 600; font-size: 13px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text); }
+    .check { color: var(--mint); }
+    .dash { color: var(--text-muted); opacity: 0.3; }
+    .coming-soon-badge { font-family: var(--mono); font-size: 9px; text-transform: uppercase; letter-spacing: 0.05em; padding: 3px 6px; background: var(--border); color: var(--text-muted); margin-left: 8px; }
+    .feature-value { font-family: var(--mono); font-size: 13px; }
+
+    /* Coming Soon Teaser */
+    .coming-soon-teaser { text-align: center; padding: 40px; background: var(--bg-alt); border: 1px solid var(--border); max-width: 1000px; margin: 40px auto 0; }
+    .teaser-label { font-family: var(--mono); font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--purple); margin-bottom: 12px; }
+    .teaser-text { font-size: 16px; color: var(--text-muted); }
+    .teaser-text strong { color: var(--text); font-weight: 500; }
 
     .faq-section { padding: 120px 48px; border-top: 1px solid var(--border); }
     .faq-header { text-align: center; margin-bottom: 60px; }
@@ -65,8 +121,8 @@ import BaseHead from '../components/BaseHead.astro';
     .cta-buttons { display: flex; gap: 16px; justify-content: center; }
     .cta-buttons .btn { width: auto; }
 
-    @media (max-width: 1000px) { .pricing-grid { grid-template-columns: 1fr; max-width: 450px; } }
-    @media (max-width: 900px) { .pricing-header { padding: 140px 24px 60px; } .pricing-headline { font-size: 44px; } .pricing-section { padding: 0 24px 80px; } .faq-section { padding: 80px 24px; } .faq-grid { grid-template-columns: 1fr; } .cta-section { padding: 80px 24px; } .cta-headline { font-size: 32px; } .cta-buttons { flex-direction: column; } .cta-buttons .btn { width: 100%; } }
+    @media (max-width: 1000px) { .pricing-grid { grid-template-columns: 1fr; max-width: 450px; } .comparison-table { overflow-x: auto; } .comparison-row { min-width: 700px; } }
+    @media (max-width: 900px) { .pricing-header { padding: 140px 24px 40px; } .pricing-headline { font-size: 44px; } .pricing-section { padding: 0 24px 60px; } .user-counter { flex-direction: column; gap: 16px; margin: 0 24px 40px; max-width: none; } .counter-total { text-align: center; } .comparison-section { padding: 60px 24px 80px; } .faq-section { padding: 80px 24px; } .faq-grid { grid-template-columns: 1fr; } .cta-section { padding: 80px 24px; } .cta-headline { font-size: 32px; } .cta-buttons { flex-direction: column; } .cta-buttons .btn { width: 100%; } }
   </style>
 </head>
 
@@ -75,79 +131,444 @@ import BaseHead from '../components/BaseHead.astro';
 
   <section class="pricing-header">
     <h1 class="pricing-headline">Simple pricing,<br>powerful agents.</h1>
-    <p class="pricing-sub">Start free. Upgrade when you're ready to unlock the full power of AI-driven revenue intelligence.</p>
+    <p class="pricing-sub">Start with Starter, scale when you're ready. No surprises, no hidden fees.</p>
+    
+    <div class="billing-toggle">
+      <span class="billing-option monthly active" data-billing="monthly">Monthly</span>
+      <div class="toggle-switch" id="billingToggle">
+        <div class="toggle-knob"></div>
+      </div>
+      <span class="billing-option annual" data-billing="annual">Annual</span>
+      <span class="billing-savings">Save 17%</span>
+    </div>
   </section>
+
+  <div class="user-counter">
+    <div>
+      <div class="counter-label">How many users?</div>
+      <div class="counter-controls">
+        <button class="counter-btn" id="decreaseUsers">−</button>
+        <span class="counter-value" id="userCount">5</span>
+        <button class="counter-btn" id="increaseUsers">+</button>
+      </div>
+    </div>
+    <div class="counter-total">
+      <div class="counter-total-label">Estimated total</div>
+      <div class="counter-total-value"><span id="totalPrice">$145</span><span class="period">/mo</span></div>
+    </div>
+  </div>
 
   <section class="pricing-section">
     <div class="pricing-grid">
       <div class="pricing-card">
         <div class="pricing-tier">Starter</div>
-        <div class="pricing-price"><span class="price-currency">$</span><span class="price-amount">0</span><span class="price-period">/month</span></div>
-        <p class="pricing-desc">For individuals exploring AI-powered call notes and basic insights.</p>
-        <div class="pricing-cta"><a href="#" class="btn btn-primary">Get Started Free</a></div>
+        <div class="price-original" id="starterOriginal" style="visibility: hidden;">$29</div>
+        <div class="pricing-price">
+          <span class="price-currency">$</span>
+          <span class="price-amount" id="starterPrice">29</span>
+          <span class="price-period">/user/mo</span>
+        </div>
+        <p class="pricing-desc">For small teams getting started with AI-powered call intelligence.</p>
+        <div class="pricing-cta">
+          <a href="#" class="btn btn-primary">Start Free Trial <span class="btn-arrow"><img src="/icons/chevron-green.svg" alt="" class="chevron-default" /><img src="/icons/chevron-black.svg" alt="" class="chevron-hover" /></span></a>
+        </div>
         <ul class="pricing-features">
-          <li><div class="check-icon mint"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></div>Up to 10 calls / month</li>
+          <li><div class="check-icon mint"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></div>Up to 5 users</li>
+          <li><div class="check-icon mint"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></div>Unlimited recordings</li>
           <li><div class="check-icon mint"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></div>AI transcription & summary</li>
+          <li><div class="check-icon mint"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></div>720p video quality</li>
           <li><div class="check-icon mint"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></div>Basic call insights</li>
-          <li><div class="check-icon mint"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></div>1 user</li>
-          <li><div class="check-icon mint"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></div>Zoom integration</li>
+          <li><div class="check-icon mint"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></div>Slack notifications</li>
+          <li><div class="check-icon mint"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></div>Zoom, Meet, Teams</li>
         </ul>
       </div>
 
       <div class="pricing-card featured">
         <div class="pricing-badge">Most Popular</div>
-        <div class="pricing-tier">Pro</div>
-        <div class="pricing-price"><span class="price-currency">$</span><span class="price-amount">49</span><span class="price-period">/user/mo</span></div>
+        <div class="pricing-tier">Advanced</div>
+        <div class="price-original" id="advancedOriginal" style="visibility: hidden;">$79</div>
+        <div class="pricing-price">
+          <span class="price-currency">$</span>
+          <span class="price-amount" id="advancedPrice">79</span>
+          <span class="price-period">/user/mo</span>
+        </div>
         <p class="pricing-desc">For sales teams ready to automate CRM updates and unlock AI coaching.</p>
-        <div class="pricing-cta"><a href="#" class="btn btn-featured">Start 14-Day Trial</a></div>
+        <div class="pricing-cta">
+          <a href="#" class="btn btn-featured">Start 14-Day Trial <span class="btn-arrow"><img src="/icons/chevron-black.svg" alt="" /></span></a>
+        </div>
         <ul class="pricing-features">
-          <li><div class="check-icon mint"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></div><span class="feature-highlight">Unlimited calls</span></li>
-          <li><div class="check-icon mint"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></div><span class="feature-highlight">All AI agents included</span></li>
-          <li><div class="check-icon mint"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></div>CRM auto-sync (HubSpot, Salesforce)</li>
+          <li><div class="check-icon mint"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></div><span class="feature-highlight">Up to 25 users</span></li>
+          <li><div class="check-icon mint"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></div><span class="feature-highlight">1080p HD video</span></li>
+          <li><div class="check-icon mint"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></div>HubSpot CRM sync</li>
           <li><div class="check-icon mint"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></div>AI coaching scorecards</li>
-          <li><div class="check-icon mint"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></div>Slack & email alerts</li>
-          <li><div class="check-icon mint"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></div>Follow-up email drafts</li>
-          <li><div class="check-icon mint"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></div>Up to 25 users</li>
+          <li><div class="check-icon mint"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></div>Cross-call intelligence</li>
+          <li><div class="check-icon mint"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></div>Deal signal detection</li>
+          <li><div class="check-icon mint"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></div>Premium AI agents</li>
         </ul>
       </div>
 
       <div class="pricing-card">
         <div class="pricing-tier">Enterprise</div>
-        <div class="pricing-price"><span class="price-amount">Custom</span></div>
-        <p class="pricing-desc">For large teams needing advanced security, custom agents, and dedicated support.</p>
-        <div class="pricing-cta"><a href="#" class="btn btn-secondary">Contact Sales</a></div>
+        <div class="price-original" style="visibility: hidden;">—</div>
+        <div class="pricing-price">
+          <span class="price-amount">Custom</span>
+        </div>
+        <p class="pricing-desc">For large teams needing advanced features, custom agents, and dedicated support.</p>
+        <div class="pricing-cta">
+          <a href="#" class="btn btn-secondary">Contact Sales <span class="btn-arrow"><img src="/icons/chevron-purple.svg" alt="" class="chevron-default" /><img src="/icons/chevron-white.svg" alt="" class="chevron-hover" /></span></a>
+        </div>
         <ul class="pricing-features">
-          <li><div class="check-icon purple"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></div>Everything in Pro</li>
-          <li><div class="check-icon purple"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></div>Custom AI agent builder</li>
-          <li><div class="check-icon purple"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></div>SSO & advanced security</li>
-          <li><div class="check-icon purple"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></div>Dedicated CSM</li>
-          <li><div class="check-icon purple"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></div>Custom integrations</li>
+          <li><div class="check-icon purple"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></div>Everything in Advanced</li>
           <li><div class="check-icon purple"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></div>Unlimited users</li>
+          <li><div class="check-icon purple"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></div>Custom agent builder</li>
+          <li><div class="check-icon purple"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></div>Advanced AI models</li>
+          <li><div class="check-icon purple"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></div>Custom bot avatar</li>
+          <li><div class="check-icon purple"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></div>Priority support</li>
+          <li><div class="check-icon purple"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></div>Custom integrations</li>
         </ul>
       </div>
+    </div>
+  </section>
+
+  <section class="comparison-section">
+    <div class="comparison-header">
+      <h2 class="comparison-headline">Compare plans</h2>
+      <p class="comparison-sub">Everything you need to know about what's included.</p>
+    </div>
+
+    <div class="comparison-table">
+      <div class="comparison-row header">
+        <div class="comparison-cell">Features</div>
+        <div class="comparison-cell">Starter</div>
+        <div class="comparison-cell">Advanced</div>
+        <div class="comparison-cell">Enterprise</div>
+      </div>
+
+      <!-- Recording & Transcription -->
+      <div class="comparison-row category">
+        <div class="comparison-cell"><span class="category-name">Recording & Transcription</span></div>
+        <div class="comparison-cell"></div>
+        <div class="comparison-cell"></div>
+        <div class="comparison-cell"></div>
+      </div>
+      <div class="comparison-row">
+        <div class="comparison-cell feature-name">Unlimited recordings</div>
+        <div class="comparison-cell"><span class="check">✓</span></div>
+        <div class="comparison-cell"><span class="check">✓</span></div>
+        <div class="comparison-cell"><span class="check">✓</span></div>
+      </div>
+      <div class="comparison-row">
+        <div class="comparison-cell feature-name">AI transcription & summary</div>
+        <div class="comparison-cell"><span class="check">✓</span></div>
+        <div class="comparison-cell"><span class="check">✓</span></div>
+        <div class="comparison-cell"><span class="check">✓</span></div>
+      </div>
+      <div class="comparison-row">
+        <div class="comparison-cell feature-name">Speaker diarization</div>
+        <div class="comparison-cell"><span class="check">✓</span></div>
+        <div class="comparison-cell"><span class="check">✓</span></div>
+        <div class="comparison-cell"><span class="check">✓</span></div>
+      </div>
+      <div class="comparison-row">
+        <div class="comparison-cell feature-name">Video quality</div>
+        <div class="comparison-cell"><span class="feature-value">720p</span></div>
+        <div class="comparison-cell"><span class="feature-value">1080p HD</span></div>
+        <div class="comparison-cell"><span class="feature-value">1080p HD</span></div>
+      </div>
+      <div class="comparison-row">
+        <div class="comparison-cell feature-name">Sentiment analysis</div>
+        <div class="comparison-cell"><span class="dash">—</span></div>
+        <div class="comparison-cell"><span class="check">✓</span></div>
+        <div class="comparison-cell"><span class="check">✓</span></div>
+      </div>
+      <div class="comparison-row">
+        <div class="comparison-cell feature-name">Auto chapters & topics</div>
+        <div class="comparison-cell"><span class="dash">—</span></div>
+        <div class="comparison-cell"><span class="check">✓</span></div>
+        <div class="comparison-cell"><span class="check">✓</span></div>
+      </div>
+
+      <!-- AI Intelligence -->
+      <div class="comparison-row category">
+        <div class="comparison-cell"><span class="category-name">AI Intelligence</span></div>
+        <div class="comparison-cell"></div>
+        <div class="comparison-cell"></div>
+        <div class="comparison-cell"></div>
+      </div>
+      <div class="comparison-row">
+        <div class="comparison-cell feature-name">Basic call insights</div>
+        <div class="comparison-cell"><span class="check">✓</span></div>
+        <div class="comparison-cell"><span class="check">✓</span></div>
+        <div class="comparison-cell"><span class="check">✓</span></div>
+      </div>
+      <div class="comparison-row">
+        <div class="comparison-cell feature-name">Cross-call intelligence</div>
+        <div class="comparison-cell"><span class="dash">—</span></div>
+        <div class="comparison-cell"><span class="check">✓</span></div>
+        <div class="comparison-cell"><span class="check">✓</span></div>
+      </div>
+      <div class="comparison-row">
+        <div class="comparison-cell feature-name">Deal signal detection</div>
+        <div class="comparison-cell"><span class="dash">—</span></div>
+        <div class="comparison-cell"><span class="check">✓</span></div>
+        <div class="comparison-cell"><span class="check">✓</span></div>
+      </div>
+      <div class="comparison-row">
+        <div class="comparison-cell feature-name">AI coaching scorecards</div>
+        <div class="comparison-cell"><span class="dash">—</span></div>
+        <div class="comparison-cell"><span class="check">✓</span></div>
+        <div class="comparison-cell"><span class="check">✓</span></div>
+      </div>
+      <div class="comparison-row">
+        <div class="comparison-cell feature-name">Forecasting & pipeline AI</div>
+        <div class="comparison-cell"><span class="dash">—</span></div>
+        <div class="comparison-cell"><span class="check">✓</span></div>
+        <div class="comparison-cell"><span class="check">✓</span></div>
+      </div>
+      <div class="comparison-row">
+        <div class="comparison-cell feature-name">Emotional analysis<span class="coming-soon-badge">Coming Soon</span></div>
+        <div class="comparison-cell"><span class="dash">—</span></div>
+        <div class="comparison-cell"><span class="dash">—</span></div>
+        <div class="comparison-cell"><span class="check">✓</span></div>
+      </div>
+
+      <!-- Agents -->
+      <div class="comparison-row category">
+        <div class="comparison-cell"><span class="category-name">AI Agents</span></div>
+        <div class="comparison-cell"></div>
+        <div class="comparison-cell"></div>
+        <div class="comparison-cell"></div>
+      </div>
+      <div class="comparison-row">
+        <div class="comparison-cell feature-name">Core agents (summary, notes)</div>
+        <div class="comparison-cell"><span class="check">✓</span></div>
+        <div class="comparison-cell"><span class="check">✓</span></div>
+        <div class="comparison-cell"><span class="check">✓</span></div>
+      </div>
+      <div class="comparison-row">
+        <div class="comparison-cell feature-name">Premium agents (CRM sync, risk alerts)</div>
+        <div class="comparison-cell"><span class="dash">—</span></div>
+        <div class="comparison-cell"><span class="check">✓</span></div>
+        <div class="comparison-cell"><span class="check">✓</span></div>
+      </div>
+      <div class="comparison-row">
+        <div class="comparison-cell feature-name">Custom agent builder</div>
+        <div class="comparison-cell"><span class="dash">—</span></div>
+        <div class="comparison-cell"><span class="dash">—</span></div>
+        <div class="comparison-cell"><span class="check">✓</span></div>
+      </div>
+      <div class="comparison-row">
+        <div class="comparison-cell feature-name">Advanced AI models</div>
+        <div class="comparison-cell"><span class="dash">—</span></div>
+        <div class="comparison-cell"><span class="dash">—</span></div>
+        <div class="comparison-cell"><span class="check">✓</span></div>
+      </div>
+
+      <!-- Integrations -->
+      <div class="comparison-row category">
+        <div class="comparison-cell"><span class="category-name">Integrations</span></div>
+        <div class="comparison-cell"></div>
+        <div class="comparison-cell"></div>
+        <div class="comparison-cell"></div>
+      </div>
+      <div class="comparison-row">
+        <div class="comparison-cell feature-name">Zoom / Google Meet / Teams</div>
+        <div class="comparison-cell"><span class="check">✓</span></div>
+        <div class="comparison-cell"><span class="check">✓</span></div>
+        <div class="comparison-cell"><span class="check">✓</span></div>
+      </div>
+      <div class="comparison-row">
+        <div class="comparison-cell feature-name">HubSpot CRM sync</div>
+        <div class="comparison-cell"><span class="dash">—</span></div>
+        <div class="comparison-cell"><span class="check">✓</span></div>
+        <div class="comparison-cell"><span class="check">✓</span></div>
+      </div>
+      <div class="comparison-row">
+        <div class="comparison-cell feature-name">Slack notifications</div>
+        <div class="comparison-cell"><span class="check">✓</span></div>
+        <div class="comparison-cell"><span class="check">✓</span></div>
+        <div class="comparison-cell"><span class="check">✓</span></div>
+      </div>
+
+      <!-- Team & Customization -->
+      <div class="comparison-row category">
+        <div class="comparison-cell"><span class="category-name">Team & Customization</span></div>
+        <div class="comparison-cell"></div>
+        <div class="comparison-cell"></div>
+        <div class="comparison-cell"></div>
+      </div>
+      <div class="comparison-row">
+        <div class="comparison-cell feature-name">Users included</div>
+        <div class="comparison-cell"><span class="feature-value">Up to 5</span></div>
+        <div class="comparison-cell"><span class="feature-value">Up to 25</span></div>
+        <div class="comparison-cell"><span class="feature-value">Unlimited</span></div>
+      </div>
+      <div class="comparison-row">
+        <div class="comparison-cell feature-name">Team analytics</div>
+        <div class="comparison-cell"><span class="dash">—</span></div>
+        <div class="comparison-cell"><span class="check">✓</span></div>
+        <div class="comparison-cell"><span class="check">✓</span></div>
+      </div>
+      <div class="comparison-row">
+        <div class="comparison-cell feature-name">Custom bot name</div>
+        <div class="comparison-cell"><span class="dash">—</span></div>
+        <div class="comparison-cell"><span class="check">✓</span></div>
+        <div class="comparison-cell"><span class="check">✓</span></div>
+      </div>
+      <div class="comparison-row">
+        <div class="comparison-cell feature-name">Custom bot avatar</div>
+        <div class="comparison-cell"><span class="dash">—</span></div>
+        <div class="comparison-cell"><span class="dash">—</span></div>
+        <div class="comparison-cell"><span class="check">✓</span></div>
+      </div>
+      <div class="comparison-row">
+        <div class="comparison-cell feature-name">Priority support</div>
+        <div class="comparison-cell"><span class="dash">—</span></div>
+        <div class="comparison-cell"><span class="dash">—</span></div>
+        <div class="comparison-cell"><span class="check">✓</span></div>
+      </div>
+    </div>
+
+    <div class="coming-soon-teaser">
+      <div class="teaser-label">On the Roadmap</div>
+      <p class="teaser-text"><strong>Bot-free recording</strong>, <strong>real-time transcription</strong>, and <strong>live coaching agents</strong> are coming soon. Stay tuned.</p>
     </div>
   </section>
 
   <section class="faq-section">
     <div class="faq-header"><h2 class="faq-headline">Frequently asked questions</h2></div>
     <div class="faq-grid">
-      <div class="faq-item"><h3 class="faq-question">What happens after my trial ends?</h3><p class="faq-answer">Your account automatically converts to the free Starter plan. No charges unless you explicitly upgrade. All your data is preserved.</p></div>
+      <div class="faq-item"><h3 class="faq-question">What happens after my trial ends?</h3><p class="faq-answer">Your account continues with the features you had during trial. No charges unless you explicitly upgrade. All your data is preserved.</p></div>
       <div class="faq-item"><h3 class="faq-question">Can I change plans anytime?</h3><p class="faq-answer">Yes. Upgrade, downgrade, or cancel anytime. Changes take effect immediately and we'll prorate any charges.</p></div>
-      <div class="faq-item"><h3 class="faq-question">What CRMs do you integrate with?</h3><p class="faq-answer">HubSpot and Salesforce are fully supported. We're adding more CRMs based on customer demand.</p></div>
-      <div class="faq-item"><h3 class="faq-question">Is my call data secure?</h3><p class="faq-answer">Yes. All data is encrypted at rest and in transit. Enterprise plans include SOC 2 compliance and custom data retention policies.</p></div>
+      <div class="faq-item"><h3 class="faq-question">What CRMs do you integrate with?</h3><p class="faq-answer">HubSpot is fully supported on Advanced and Enterprise plans. More CRM integrations are coming based on customer demand.</p></div>
+      <div class="faq-item"><h3 class="faq-question">Is my call data secure?</h3><p class="faq-answer">Yes. All data is encrypted at rest and in transit. Enterprise plans include custom data retention policies and additional security options.</p></div>
+      <div class="faq-item"><h3 class="faq-question">What's included in "Premium agents"?</h3><p class="faq-answer">CRM Sync, Risk Alerts, Coaching, Follow-Up, Meeting Prep, Competitor Intel, Deal Signals, and Forecast agents. All included on Advanced+.</p></div>
+      <div class="faq-item"><h3 class="faq-question">Do you offer annual discounts?</h3><p class="faq-answer">Yes! Annual billing saves you 17% compared to monthly. Toggle the switch above to see annual pricing.</p></div>
     </div>
   </section>
 
   <section class="cta-section">
     <h2 class="cta-headline">Ready to get started?</h2>
-    <p class="cta-sub">Start free, no credit card required. See the impact in your first week.</p>
+    <p class="cta-sub">Start your free trial today. No credit card required.</p>
     <div class="cta-buttons">
-      <a href="#" class="btn btn-primary">Start Free Trial</a>
-      <a href="#" class="btn btn-secondary">Talk to Sales</a>
+      <a href="#" class="btn btn-primary">Start Free Trial <span class="btn-arrow"><img src="/icons/chevron-green.svg" alt="" class="chevron-default" /><img src="/icons/chevron-black.svg" alt="" class="chevron-hover" /></span></a>
+      <a href="#" class="btn btn-secondary">Talk to Sales <span class="btn-arrow"><img src="/icons/chevron-purple.svg" alt="" class="chevron-default" /><img src="/icons/chevron-white.svg" alt="" class="chevron-hover" /></span></a>
     </div>
   </section>
 
   <Footer />
   <ThemeToggle />
+
+  <script>
+    // Pricing configuration
+    const pricing = {
+      starter: { monthly: 29, annual: 24 },
+      advanced: { monthly: 79, annual: 65 }
+    };
+
+    let isAnnual = false;
+    let userCount = 5;
+    let selectedPlan = 'starter';
+
+    // DOM elements
+    const billingToggle = document.getElementById('billingToggle');
+    const monthlyOption = document.querySelector('.billing-option.monthly');
+    const annualOption = document.querySelector('.billing-option.annual');
+    const decreaseBtn = document.getElementById('decreaseUsers');
+    const increaseBtn = document.getElementById('increaseUsers');
+    const userCountEl = document.getElementById('userCount');
+    const totalPriceEl = document.getElementById('totalPrice');
+    const starterPriceEl = document.getElementById('starterPrice');
+    const advancedPriceEl = document.getElementById('advancedPrice');
+    const starterOriginalEl = document.getElementById('starterOriginal');
+    const advancedOriginalEl = document.getElementById('advancedOriginal');
+
+    function updatePrices() {
+      const starterPrice = isAnnual ? pricing.starter.annual : pricing.starter.monthly;
+      const advancedPrice = isAnnual ? pricing.advanced.annual : pricing.advanced.monthly;
+
+      starterPriceEl.textContent = starterPrice;
+      advancedPriceEl.textContent = advancedPrice;
+
+      // Show original price when annual
+      if (isAnnual) {
+        starterOriginalEl.textContent = `$${pricing.starter.monthly}`;
+        starterOriginalEl.style.visibility = 'visible';
+        advancedOriginalEl.textContent = `$${pricing.advanced.monthly}`;
+        advancedOriginalEl.style.visibility = 'visible';
+      } else {
+        starterOriginalEl.style.visibility = 'hidden';
+        advancedOriginalEl.style.visibility = 'hidden';
+      }
+
+      updateTotal();
+    }
+
+    function updateTotal() {
+      // Calculate based on user count - use Advanced if > 5 users
+      let price;
+      if (userCount <= 5) {
+        price = isAnnual ? pricing.starter.annual : pricing.starter.monthly;
+        selectedPlan = 'starter';
+      } else {
+        price = isAnnual ? pricing.advanced.annual : pricing.advanced.monthly;
+        selectedPlan = 'advanced';
+      }
+
+      const total = price * userCount;
+      totalPriceEl.textContent = `$${total.toLocaleString()}`;
+    }
+
+    function updateUserCount() {
+      userCountEl.textContent = userCount;
+      decreaseBtn.disabled = userCount <= 1;
+      updateTotal();
+    }
+
+    // Event listeners
+    billingToggle.addEventListener('click', () => {
+      isAnnual = !isAnnual;
+      billingToggle.classList.toggle('annual', isAnnual);
+      monthlyOption.classList.toggle('active', !isAnnual);
+      annualOption.classList.toggle('active', isAnnual);
+      updatePrices();
+    });
+
+    monthlyOption.addEventListener('click', () => {
+      if (isAnnual) {
+        isAnnual = false;
+        billingToggle.classList.remove('annual');
+        monthlyOption.classList.add('active');
+        annualOption.classList.remove('active');
+        updatePrices();
+      }
+    });
+
+    annualOption.addEventListener('click', () => {
+      if (!isAnnual) {
+        isAnnual = true;
+        billingToggle.classList.add('annual');
+        monthlyOption.classList.remove('active');
+        annualOption.classList.add('active');
+        updatePrices();
+      }
+    });
+
+    decreaseBtn.addEventListener('click', () => {
+      if (userCount > 1) {
+        userCount--;
+        updateUserCount();
+      }
+    });
+
+    increaseBtn.addEventListener('click', () => {
+      userCount++;
+      updateUserCount();
+    });
+
+    // Initialize
+    updatePrices();
+    updateUserCount();
+  </script>
 </body>
 </html>

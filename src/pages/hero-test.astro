@@ -11,20 +11,24 @@ import Nav from '../components/Nav.astro';
   
   <style is:global>
     :root { 
-      --cell: 130px; 
-      --grid-line: rgba(255,255,255,0.08);
+      --cell: 120px; 
+      --grid-line: rgba(255,255,255,0.06);
       
       /* Colors */
       --mint: #46FCAF;
       --purple: #A678F4;
       --cyan: #5CEBDF;
-      --coral: #FF4F5E;
+      --coral: #FF6B7A;
       --yellow: #FFD84D;
       --bg: #0A0A0A;
       --text: #FFFFFF;
       --text-muted: rgba(255,255,255,0.6);
       --border: rgba(255,255,255,0.1);
-      --mono: 'Fraktion Mono', monospace;
+      --mono: 'Fraktion Mono', ui-monospace, monospace;
+    }
+
+    * {
+      box-sizing: border-box;
     }
 
     .hero {
@@ -37,77 +41,65 @@ import Nav from '../components/Nav.astro';
       background: var(--bg);
     }
 
-    /* Grid on RIGHT side only */
+    /* Grid on RIGHT side only - BEHIND everything */
     .hero-grid {
       position: absolute;
       top: 0;
       right: 0;
       bottom: 0;
-      width: 60%;
+      width: 65%;
       background-image: 
         linear-gradient(to right, var(--grid-line) 1px, transparent 1px),
         linear-gradient(to bottom, var(--grid-line) 1px, transparent 1px);
       background-size: var(--cell) var(--cell);
       z-index: 1;
-      mask-image: linear-gradient(to right, transparent 0%, rgba(0,0,0,0.3) 10%, rgba(0,0,0,1) 40%);
-      -webkit-mask-image: linear-gradient(to right, transparent 0%, rgba(0,0,0,0.3) 10%, rgba(0,0,0,1) 40%);
+      mask-image: linear-gradient(to right, transparent 0%, rgba(0,0,0,0.5) 15%, rgba(0,0,0,1) 50%);
+      -webkit-mask-image: linear-gradient(to right, transparent 0%, rgba(0,0,0,0.5) 15%, rgba(0,0,0,1) 50%);
     }
 
     /* Gradient blobs */
     .blob {
       position: absolute;
       border-radius: 50%;
-      filter: blur(120px);
+      filter: blur(140px);
       z-index: 0;
     }
 
     .blob-1 {
-      width: 700px;
-      height: 700px;
+      width: 800px;
+      height: 800px;
       background: var(--mint);
-      top: -250px;
-      right: 5%;
-      opacity: 0.12;
+      top: -300px;
+      right: 0;
+      opacity: 0.08;
     }
 
     .blob-2 {
-      width: 500px;
-      height: 500px;
+      width: 600px;
+      height: 600px;
       background: var(--purple);
-      bottom: -150px;
-      right: 25%;
-      opacity: 0.1;
+      bottom: -200px;
+      right: 20%;
+      opacity: 0.08;
     }
 
     .blob-3 {
-      width: 400px;
-      height: 400px;
+      width: 500px;
+      height: 500px;
       background: var(--cyan);
-      top: 50%;
-      left: 30%;
-      opacity: 0.06;
-    }
-
-    /* Left side visual - subtle arc/glow */
-    .hero-glow {
-      position: absolute;
-      left: 20%;
-      top: 50%;
-      transform: translate(-50%, -50%);
-      width: 600px;
-      height: 600px;
-      background: radial-gradient(ellipse at center, rgba(70, 252, 175, 0.04) 0%, transparent 70%);
-      z-index: 1;
+      top: 60%;
+      left: 35%;
+      opacity: 0.05;
     }
 
     .hero-content {
       max-width: 550px;
-      z-index: 10;
+      z-index: 100;
       padding: 48px 0;
     }
 
     .hero-headline {
-      font-size: 80px;
+      font-size: 76px;
       font-weight: 350;
       line-height: 1.0;
       letter-spacing: -0.03em;
@@ -120,9 +112,9 @@ import Nav from '../components/Nav.astro';
     }
 
     .hero-sub {
-      font-size: 20px;
+      font-size: 19px;
       font-weight: 400;
-      line-height: 1.5;
+      line-height: 1.6;
       margin-bottom: 40px;
       color: var(--text-muted);
     }
@@ -133,30 +125,31 @@ import Nav from '../components/Nav.astro';
       display: inline-flex;
       align-items: center;
       gap: 12px;
-      padding: 18px 28px;
+      padding: 18px 32px;
       font-weight: 500;
       font-size: 15px;
       text-decoration: none;
       transition: all 0.2s ease;
       cursor: pointer;
       border: none;
+      border-radius: 6px;
     }
     
     .btn-primary { background: var(--text); color: var(--bg); }
     .btn-primary:hover { background: var(--mint); color: #0a0a0a; transform: translateY(-2px); }
 
-    /* CARDS AREA - positioned on right grid */
+    /* CARDS AREA - covers right side */
     .cards-area {
       position: absolute;
-      top: 0;
+      top: 80px;
       right: 0;
-      bottom: 0;
-      width: 60%;
-      z-index: 10;
+      bottom: 40px;
+      width: 58%;
+      z-index: 50;
       pointer-events: none;
     }
 
-    /* ORIGAMI CARD - now 2x3 grid of larger cells */
+    /* ORIGAMI CARD */
     .origami-card {
       position: absolute;
       display: grid;
@@ -165,26 +158,27 @@ import Nav from '../components/Nav.astro';
       opacity: 0;
       transition: opacity 0.3s ease;
       pointer-events: auto;
+      filter: drop-shadow(0 25px 50px rgba(0,0,0,0.5));
     }
 
     .origami-card.active {
       opacity: 1;
     }
 
-    /* Card positions - staggered on grid */
+    /* Card positions - SPREAD ACROSS FULL HEIGHT */
+    .origami-card.pos-0 {
+      top: 0;
+      right: 45%;
+    }
+
     .origami-card.pos-1 {
-      top: calc(var(--cell) * 0.5);
-      right: calc(var(--cell) * 3);
+      top: 35%;
+      right: 10%;
     }
 
     .origami-card.pos-2 {
-      top: calc(var(--cell) * 2);
-      right: calc(var(--cell) * 0.5);
-    }
-
-    .origami-card.pos-3 {
-      top: calc(var(--cell) * 1);
-      right: calc(var(--cell) * 5);
+      bottom: 5%;
+      right: 50%;
     }
 
     /* Each cell/panel of the card */
@@ -203,8 +197,9 @@ import Nav from '../components/Nav.astro';
       backface-visibility: hidden;
       opacity: 0;
       transform: rotateY(-90deg);
-      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-      box-shadow: 0 4px 24px rgba(0,0,0,0.3);
+      transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+      border-radius: 4px;
+      overflow: hidden;
     }
 
     .card-panel.from-top .panel-inner {
@@ -222,25 +217,29 @@ import Nav from '../components/Nav.astro';
       transform: rotateY(0deg) rotateX(0deg);
     }
 
-    /* Card colors */
+    /* Card colors - SOLID BACKGROUNDS */
     .panel-inner.mint { background: var(--mint); }
     .panel-inner.purple { background: var(--purple); }
     .panel-inner.cyan { background: var(--cyan); }
     .panel-inner.coral { background: var(--coral); }
     .panel-inner.yellow { background: var(--yellow); }
-    .panel-inner.dark { background: #1a1a1a; border: 1px solid var(--border); }
+    .panel-inner.dark { 
+      background: #18181B;
+      border: 1px solid rgba(255,255,255,0.1);
+    }
 
-    /* Content inside panels - MORE PADDING */
+    /* Content inside panels */
     .panel-content {
       position: absolute;
       inset: 0;
-      padding: 16px;
+      padding: 18px;
       display: flex;
       flex-direction: column;
       justify-content: center;
       color: #0a0a0a;
       font-size: 13px;
       overflow: hidden;
+      background: inherit;
     }
 
     .panel-inner.purple .panel-content,
@@ -250,16 +249,16 @@ import Nav from '../components/Nav.astro';
     }
 
     .panel-icon {
-      width: 32px;
-      height: 32px;
-      margin-bottom: 10px;
+      width: 28px;
+      height: 28px;
+      margin-bottom: 12px;
       flex-shrink: 0;
     }
 
     .panel-icon svg {
       width: 100%;
       height: 100%;
-      stroke-width: 2;
+      stroke-width: 1.5;
       stroke-linecap: round;
       stroke-linejoin: round;
       fill: none;
@@ -268,33 +267,39 @@ import Nav from '../components/Nav.astro';
 
     .panel-badge {
       font-family: var(--mono);
-      font-size: 10px;
+      font-size: 9px;
       text-transform: uppercase;
-      letter-spacing: 0.1em;
-      padding: 6px 12px;
-      background: rgba(0,0,0,0.12);
+      letter-spacing: 0.12em;
+      padding: 6px 10px;
+      background: rgba(0,0,0,0.1);
       display: inline-block;
       width: fit-content;
-      border-radius: 2px;
+      border-radius: 4px;
+      font-weight: 500;
     }
 
     .panel-inner.purple .panel-badge,
     .panel-inner.coral .panel-badge,
     .panel-inner.dark .panel-badge {
-      background: rgba(255,255,255,0.15);
+      background: rgba(255,255,255,0.12);
     }
 
     .panel-title {
-      font-size: 20px;
+      font-size: 22px;
       font-weight: 600;
-      line-height: 1.2;
+      line-height: 1.15;
+      letter-spacing: -0.01em;
     }
 
     .panel-text {
       font-size: 13px;
-      opacity: 0.85;
+      opacity: 0.8;
       line-height: 1.4;
-      margin-top: 4px;
+    }
+
+    .panel-text + .panel-text {
+      margin-top: 2px;
+      opacity: 0.6;
     }
 
     .panel-stat {
@@ -303,61 +308,76 @@ import Nav from '../components/Nav.astro';
       align-items: center;
       font-family: var(--mono);
       font-size: 12px;
-      padding: 10px 0;
-      border-top: 1px solid rgba(0,0,0,0.1);
+      padding: 12px 0;
+      border-top: 1px solid rgba(0,0,0,0.08);
     }
 
     .panel-inner.purple .panel-stat,
     .panel-inner.coral .panel-stat,
     .panel-inner.dark .panel-stat {
-      border-color: rgba(255,255,255,0.15);
+      border-color: rgba(255,255,255,0.1);
     }
 
-    .stat-value { font-weight: 600; }
-    .stat-positive { color: #0a0a0a; }
+    .stat-label {
+      opacity: 0.7;
+    }
+
+    .stat-value { 
+      font-weight: 600;
+      font-size: 13px;
+    }
+
+    .stat-positive { 
+      color: #0a0a0a; 
+    }
     .panel-inner.purple .stat-positive,
-    .panel-inner.coral .stat-positive { color: var(--mint); }
-    .panel-inner.dark .stat-positive { color: var(--mint); }
+    .panel-inner.coral .stat-positive { 
+      color: var(--mint); 
+    }
+    .panel-inner.dark .stat-positive { 
+      color: var(--mint); 
+    }
 
     .meddic-mini {
       display: flex;
       gap: 6px;
-      margin-top: 10px;
+      margin-top: 12px;
     }
 
     .meddic-mini span {
       flex: 1;
       text-align: center;
-      padding: 8px 4px;
-      background: rgba(0,0,0,0.12);
+      padding: 10px 4px;
+      background: rgba(0,0,0,0.08);
       font-family: var(--mono);
-      font-size: 12px;
+      font-size: 11px;
       font-weight: 600;
-      border-radius: 2px;
+      border-radius: 4px;
     }
 
     .meddic-mini span.filled {
-      background: rgba(0,0,0,0.25);
+      background: rgba(0,0,0,0.18);
     }
 
     .panel-inner.dark .meddic-mini span {
-      background: rgba(255,255,255,0.1);
+      background: rgba(255,255,255,0.08);
     }
     .panel-inner.dark .meddic-mini span.filled {
-      background: rgba(255,255,255,0.25);
+      background: rgba(255,255,255,0.2);
     }
 
     .score-circle {
-      width: 56px;
-      height: 56px;
+      width: 52px;
+      height: 52px;
       border-radius: 50%;
-      background: conic-gradient(var(--mint) 0deg 306deg, rgba(255,255,255,0.1) 306deg 360deg);
+      background: conic-gradient(var(--mint) 0deg 306deg, rgba(255,255,255,0.15) 306deg 360deg);
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 18px;
+      font-size: 17px;
       font-weight: 700;
       margin: 0 auto;
+      color: #0a0a0a;
     }
 
     .quote-text {
@@ -369,26 +389,27 @@ import Nav from '../components/Nav.astro';
 
     .quote-attr {
       font-size: 11px;
-      opacity: 0.7;
-      margin-top: 6px;
+      opacity: 0.6;
+      margin-top: 8px;
     }
 
     /* RESPONSIVE */
     @media (max-width: 1600px) {
-      :root { --cell: 115px; }
-      .hero-headline { font-size: 70px; }
+      :root { --cell: 105px; }
+      .hero-headline { font-size: 68px; }
     }
 
     @media (max-width: 1400px) {
-      :root { --cell: 100px; }
-      .hero-headline { font-size: 60px; }
+      :root { --cell: 95px; }
+      .hero-headline { font-size: 58px; }
+      .cards-area { width: 55%; }
     }
 
     @media (max-width: 1200px) {
-      :root { --cell: 90px; }
-      .hero-headline { font-size: 52px; }
-      .hero-content { max-width: 450px; }
-      .panel-title { font-size: 16px; }
+      :root { --cell: 85px; }
+      .hero-headline { font-size: 50px; }
+      .hero-content { max-width: 420px; }
+      .panel-title { font-size: 18px; }
       .panel-text { font-size: 11px; }
     }
 
@@ -405,7 +426,7 @@ import Nav from '../components/Nav.astro';
   <Nav />
 
   <section class="hero">
-    <!-- Background grid - right side only -->
+    <!-- Background grid - LOWEST z-index -->
     <div class="hero-grid"></div>
 
     <!-- Gradient blobs -->
@@ -413,27 +434,22 @@ import Nav from '../components/Nav.astro';
     <div class="blob blob-2"></div>
     <div class="blob blob-3"></div>
 
-    <!-- Left side glow -->
-    <div class="hero-glow"></div>
-
     <div class="hero-content">
       <h1 class="hero-headline">Your calls,<br><em>working for you</em></h1>
-      <p class="hero-sub">Every sales call triggers six AI agents that update your CRM, alert your team, and draft follow-ups—automatically.</p>
+      <p class="hero-sub">Every sales call triggers AI agents that update your CRM, alert your team, and draft follow-ups—automatically.</p>
       <div class="hero-buttons">
         <a href="#" class="btn btn-primary">Book a Demo</a>
       </div>
     </div>
 
     <div class="cards-area">
-      <!-- 3 card slots at different positions -->
-      <div class="origami-card pos-1" id="card-slot-0"></div>
-      <div class="origami-card pos-2" id="card-slot-1"></div>
-      <div class="origami-card pos-3" id="card-slot-2"></div>
+      <div class="origami-card pos-0" id="card-slot-0"></div>
+      <div class="origami-card pos-1" id="card-slot-1"></div>
+      <div class="origami-card pos-2" id="card-slot-2"></div>
     </div>
   </section>
 
   <script>
-    // Card definitions - 6 cards total
     const cards = [
       {
         color: 'mint',
@@ -441,7 +457,7 @@ import Nav from '../components/Nav.astro';
           { type: 'icon-badge', icon: 'phone', badge: 'Trigger' },
           { type: 'title', text: 'Call completed' },
           { type: 'text', primary: 'Sarah Chen', secondary: 'VP Sales, Acme Corp' },
-          { type: 'text', primary: 'Discovery call', secondary: '32 minutes' },
+          { type: 'text', primary: 'Discovery call', secondary: '32 min duration' },
           { type: 'stat', label: 'Talk ratio', value: '35%' },
           { type: 'stat', label: 'Questions', value: '12' }
         ]
@@ -454,15 +470,15 @@ import Nav from '../components/Nav.astro';
           { type: 'stat', label: 'Sentiment', value: '87%', positive: true },
           { type: 'stat', label: 'Momentum', value: 'High', positive: true },
           { type: 'stat', label: 'Objections', value: '2' },
-          { type: 'stat', label: 'Actions', value: '14' }
+          { type: 'stat', label: 'Next steps', value: '4' }
         ]
       },
       {
         color: 'cyan',
         panels: [
-          { type: 'icon-badge', icon: 'bar-chart', badge: 'CRM Agent' },
+          { type: 'icon-badge', icon: 'database', badge: 'CRM Sync' },
           { type: 'title', text: 'Pipeline updated' },
-          { type: 'text', primary: 'Stage moved', secondary: '→ Negotiation' },
+          { type: 'text', primary: 'Stage changed', secondary: '→ Negotiation' },
           { type: 'text', primary: '12 fields synced', secondary: 'to HubSpot' },
           { type: 'meddic', values: ['M', 'E', 'D'], filled: [true, true, true] },
           { type: 'meddic', values: ['D', 'I', 'C'], filled: [true, false, true] }
@@ -471,12 +487,12 @@ import Nav from '../components/Nav.astro';
       {
         color: 'coral',
         panels: [
-          { type: 'icon-badge', icon: 'bell', badge: 'Risk Alert' },
+          { type: 'icon-badge', icon: 'alert', badge: 'Risk Alert' },
           { type: 'title', text: 'Manager notified' },
           { type: 'quote', text: '"Budget is tight this quarter..."' },
-          { type: 'quote-attr', text: '— Sarah Chen' },
-          { type: 'text', primary: 'Slack #deals', secondary: '@mike alerted' },
-          { type: 'stat', label: 'Risk', value: 'Medium' }
+          { type: 'quote-attr', text: '— Sarah Chen, 14:32' },
+          { type: 'text', primary: 'Posted to Slack', secondary: '#enterprise-deals' },
+          { type: 'stat', label: 'Risk level', value: 'Medium' }
         ]
       },
       {
@@ -484,80 +500,70 @@ import Nav from '../components/Nav.astro';
         panels: [
           { type: 'icon-badge', icon: 'mail', badge: 'Email Agent' },
           { type: 'title', text: 'Follow-up ready' },
-          { type: 'text', primary: 'Personalized email', secondary: 'drafted for review' },
+          { type: 'text', primary: 'Personalized email', secondary: 'Ready for review' },
           { type: 'stat', label: 'Length', value: '142 words' },
           { type: 'stat', label: 'Tone', value: 'Professional' },
-          { type: 'stat', label: 'CTAs', value: '2' }
+          { type: 'stat', label: 'References', value: '3 points' }
         ]
       },
       {
         color: 'dark',
         panels: [
-          { type: 'icon-badge', icon: 'edit', badge: 'Coach Agent' },
+          { type: 'icon-badge', icon: 'star', badge: 'Coaching' },
           { type: 'title', text: 'Scorecard ready' },
           { type: 'score', value: '85' },
           { type: 'stat', label: 'Discovery', value: 'Strong', positive: true },
-          { type: 'stat', label: 'Improve', value: 'Closing' },
-          { type: 'text', primary: '3 coaching tips', secondary: 'available' }
+          { type: 'stat', label: 'Needs work', value: 'Closing' },
+          { type: 'text', primary: '3 coaching tips', secondary: 'View suggestions' }
         ]
       }
     ];
 
     const icons = {
-      phone: '<path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/>',
+      phone: '<path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>',
       activity: '<polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>',
-      'bar-chart': '<line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/>',
-      bell: '<path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/>',
+      database: '<ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/>',
+      alert: '<path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>',
       mail: '<path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/>',
-      edit: '<path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>'
+      star: '<polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>'
     };
 
     function renderPanel(panel) {
-      let content = '';
-      
       switch(panel.type) {
         case 'icon-badge':
-          content = `
+          return `
             <div class="panel-icon"><svg viewBox="0 0 24 24">${icons[panel.icon]}</svg></div>
             <span class="panel-badge">${panel.badge}</span>
           `;
-          break;
         case 'title':
-          content = `<span class="panel-title">${panel.text}</span>`;
-          break;
+          return `<span class="panel-title">${panel.text}</span>`;
         case 'text':
-          content = `
+          return `
             <span class="panel-text">${panel.primary}</span>
-            <span class="panel-text" style="opacity:0.6">${panel.secondary}</span>
+            <span class="panel-text">${panel.secondary}</span>
           `;
-          break;
         case 'stat':
-          content = `
+          return `
             <div class="panel-stat">
-              <span>${panel.label}</span>
+              <span class="stat-label">${panel.label}</span>
               <span class="stat-value ${panel.positive ? 'stat-positive' : ''}">${panel.value}</span>
             </div>
           `;
-          break;
         case 'meddic':
-          content = `
+          return `
             <div class="meddic-mini">
               ${panel.values.map((v, i) => `<span class="${panel.filled[i] ? 'filled' : ''}">${v}</span>`).join('')}
             </div>
           `;
-          break;
         case 'quote':
-          content = `<span class="quote-text">${panel.text}</span>`;
-          break;
+          return `<span class="quote-text">${panel.text}</span>`;
         case 'quote-attr':
-          content = `<span class="quote-attr">${panel.text}</span>`;
-          break;
+          return `<span class="quote-attr">${panel.text}</span>`;
         case 'score':
-          content = `<div class="score-circle">${panel.value}</div>`;
-          break;
+          return `<div class="score-circle">${panel.value}</div>`;
+        default:
+          return '';
       }
-
-      return content;
     }
 
     function buildCard(cardData) {
@@ -574,14 +580,12 @@ import Nav from '../components/Nav.astro';
       `).join('');
     }
 
-    const UNFOLD_DELAY = 100;      // Time between each panel unfolding
-    const CARD_STAGGER = 800;      // Time between cards starting to appear
-    const DISPLAY_TIME = 3000;     // How long card stays fully visible
-    const FOLD_DURATION = 600;     // Time to fold up
+    const UNFOLD_DELAY = 80;
+    const CARD_STAGGER = 600;
+    const DISPLAY_TIME = 3500;
 
-    // Track which card is in each slot
-    let slotCards = [0, 1, 2];  // card indices for slots 0, 1, 2
-    let nextCardIndex = 3;      // next card to show
+    let slotCards = [0, 1, 2];
+    let nextCardIndex = 3;
 
     function unfoldCard(slot) {
       const panels = slot.querySelectorAll('.card-panel');
@@ -596,24 +600,21 @@ import Nav from '../components/Nav.astro';
       panels.forEach((panel, i) => {
         setTimeout(() => panel.classList.remove('revealed'), i * UNFOLD_DELAY);
       });
-      // Hide slot after fold completes
-      setTimeout(() => slot.classList.remove('active'), panels.length * UNFOLD_DELAY + 200);
+      setTimeout(() => slot.classList.remove('active'), panels.length * UNFOLD_DELAY + 150);
     }
 
     function cycleSlot(slotIndex) {
       const slot = document.getElementById(`card-slot-${slotIndex}`);
       
-      // Fold current card
       foldCard(slot);
 
-      // After fold, load next card and unfold
       setTimeout(() => {
         slotCards[slotIndex] = nextCardIndex;
         nextCardIndex = (nextCardIndex + 1) % cards.length;
         
         slot.innerHTML = buildCard(cards[slotCards[slotIndex]]);
         unfoldCard(slot);
-      }, 6 * UNFOLD_DELAY + 400);
+      }, 6 * UNFOLD_DELAY + 300);
     }
 
     document.addEventListener('DOMContentLoaded', () => {
@@ -623,29 +624,18 @@ import Nav from '../components/Nav.astro';
         document.getElementById('card-slot-2')
       ];
 
-      // Initial render - stagger the appearance
+      // Initial render with stagger
       slots.forEach((slot, i) => {
         slot.innerHTML = buildCard(cards[i]);
         setTimeout(() => unfoldCard(slot), i * CARD_STAGGER);
       });
 
-      // Cycle each slot at different intervals for continuous movement
-      // Slot 0 cycles every 4s
-      // Slot 1 cycles every 4s, offset by 1.3s
-      // Slot 2 cycles every 4s, offset by 2.6s
-      const cycleInterval = DISPLAY_TIME + (6 * UNFOLD_DELAY * 2) + 800;
+      // Offset cycling for continuous motion
+      const cycleInterval = DISPLAY_TIME + (6 * UNFOLD_DELAY * 2) + 600;
       
-      setTimeout(() => {
-        setInterval(() => cycleSlot(0), cycleInterval);
-      }, 0);
-
-      setTimeout(() => {
-        setInterval(() => cycleSlot(1), cycleInterval);
-      }, cycleInterval / 3);
-
-      setTimeout(() => {
-        setInterval(() => cycleSlot(2), cycleInterval);
-      }, (cycleInterval / 3) * 2);
+      setTimeout(() => setInterval(() => cycleSlot(0), cycleInterval), 0);
+      setTimeout(() => setInterval(() => cycleSlot(1), cycleInterval), cycleInterval * 0.33);
+      setTimeout(() => setInterval(() => cycleSlot(2), cycleInterval), cycleInterval * 0.66);
     });
   </script>
 </body>

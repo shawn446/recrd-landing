@@ -1,7 +1,6 @@
 ---
 // ComingSoon.astro - Add to all pages below Nav
 ---
-
 <div class="coming-soon-banner">
   <span class="coming-soon-badge">Coming Soon</span>
   <span class="coming-soon-text">We're launching soon. Sign up to get early access.</span>
@@ -20,9 +19,14 @@
     justify-content: center;
     gap: 16px;
     padding: 12px 24px;
+    background: var(--mint);
+    color: #0a0a0a;
+    font-size: 14px;
+  }
+
+  :global([data-theme="light"]) .coming-soon-banner {
     background: var(--purple);
     color: #fff;
-    font-size: 14px;
   }
 
   .coming-soon-badge {
@@ -30,8 +34,12 @@
     font-size: 10px;
     text-transform: uppercase;
     letter-spacing: 0.1em;
-    background: rgba(255,255,255,0.2);
+    background: rgba(0,0,0,0.15);
     padding: 4px 10px;
+  }
+
+  :global([data-theme="light"]) .coming-soon-badge {
+    background: rgba(255,255,255,0.2);
   }
 
   .coming-soon-text {
@@ -39,10 +47,15 @@
   }
 
   .coming-soon-link {
-    color: #fff;
+    color: #0a0a0a;
     text-decoration: none;
     font-weight: 600;
   }
+
+  :global([data-theme="light"]) .coming-soon-link {
+    color: #fff;
+  }
+
   .coming-soon-link:hover {
     text-decoration: underline;
   }

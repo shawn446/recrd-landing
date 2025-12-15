@@ -111,43 +111,92 @@ import BaseHead from '../components/BaseHead.astro';
     .card-showcase {
       position: absolute;
       top: 50%;
-      right: 60px;
+      right: calc(var(--cell) * 0.5);
       transform: translateY(-50%);
-      width: 720px;
-      height: 400px;
+      width: calc(var(--cell) * 7);
+      height: calc(var(--cell) * 5);
       z-index: 10;
-      perspective: 2000px;
     }
 
     .card-stack {
       position: relative;
       width: 100%;
       height: 100%;
-      transform-style: preserve-3d;
     }
 
     .card-item {
       position: absolute;
-      width: 160px;
-      height: 240px;
-      transform-style: preserve-3d;
-      backface-visibility: hidden;
+      width: calc(var(--cell) * 1.5);
+      height: calc(var(--cell) * 2.25);
       cursor: pointer;
-      filter: drop-shadow(0 25px 50px rgba(0,0,0,0.35));
+      filter: drop-shadow(0 20px 40px rgba(0,0,0,0.35));
       opacity: 0;
-      top: 50%;
-      transform: translateY(-50%);
+      perspective: 1000px;
+    }
+
+    .card-item.active {
+      opacity: 1;
     }
 
     .card-item img {
       width: 100%;
       height: 100%;
       object-fit: contain;
+      position: absolute;
+      top: 0;
+      left: 0;
     }
 
     .card-item:hover {
-      filter: drop-shadow(0 35px 60px rgba(0,0,0,0.5));
+      filter: drop-shadow(0 30px 50px rgba(0,0,0,0.45));
     }
+
+    /* Origami fold panels - 2x3 grid overlay */
+    .fold-grid {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: 1fr 1fr 1fr;
+      pointer-events: none;
+    }
+
+    .fold-panel {
+      position: relative;
+      transform-style: preserve-3d;
+      backface-visibility: hidden;
+    }
+
+    .fold-panel-inner {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.4s ease;
+    }
+
+    /* Fold directions for each panel */
+    .fold-panel:nth-child(1) .fold-panel-inner { transform-origin: left center; transform: rotateY(-90deg); }
+    .fold-panel:nth-child(2) .fold-panel-inner { transform-origin: top center; transform: rotateX(90deg); }
+    .fold-panel:nth-child(3) .fold-panel-inner { transform-origin: left center; transform: rotateY(-90deg); }
+    .fold-panel:nth-child(4) .fold-panel-inner { transform-origin: right center; transform: rotateY(90deg); }
+    .fold-panel:nth-child(5) .fold-panel-inner { transform-origin: bottom center; transform: rotateX(-90deg); }
+    .fold-panel:nth-child(6) .fold-panel-inner { transform-origin: right center; transform: rotateY(90deg); }
+
+    /* Revealed state */
+    .fold-panel.revealed .fold-panel-inner {
+      transform: rotateY(0deg) rotateX(0deg);
+    }
+
+    /* Panel colors */
+    .fold-panel-inner.mint { background: var(--mint); }
+    .fold-panel-inner.purple { background: var(--purple); }
+    .fold-panel-inner.cyan { background: var(--cyan); }
+    .fold-panel-inner.coral { background: var(--coral); }
+    .fold-panel-inner.yellow { background: var(--yellow); }
+    .fold-panel-inner.dark { background: #1a1a1a; }
 
     /* OTHER SECTIONS */
     .logo-bar { padding: 80px 48px; border-top: 1px solid var(--border); background: var(--bg-alt); }
@@ -212,10 +261,10 @@ import BaseHead from '../components/BaseHead.astro';
     .cta-buttons { display: flex; gap: 16px; justify-content: center; }
 
     /* RESPONSIVE */
-    @media (max-width: 1800px) { .hero-headline { font-size: 80px; } .card-showcase { right: 40px; width: 640px; } .card-item { width: 145px; height: 217px; } }
-    @media (max-width: 1600px) { .hero-headline { font-size: 70px; } .card-showcase { right: 30px; width: 560px; } .card-item { width: 130px; height: 195px; } }
-    @media (max-width: 1400px) { .hero-headline { font-size: 60px; } .card-showcase { right: 20px; width: 480px; } .card-item { width: 115px; height: 172px; } }
-    @media (max-width: 1200px) { .hero-headline { font-size: 52px; } .card-showcase { width: 400px; } .card-item { width: 100px; height: 150px; } .how-flow { flex-direction: column; max-width: 500px; } .how-step { margin-left: 0; margin-top: -1px; } .how-step:first-child { margin-top: 0; } .step-arrow { display: none; } }
+    @media (max-width: 1800px) { :root { --cell: 110px; } .hero-headline { font-size: 80px; } }
+    @media (max-width: 1600px) { :root { --cell: 95px; } .hero-headline { font-size: 70px; } }
+    @media (max-width: 1400px) { :root { --cell: 80px; } .hero-headline { font-size: 60px; } }
+    @media (max-width: 1200px) { :root { --cell: 70px; } .hero-headline { font-size: 52px; } .how-flow { flex-direction: column; max-width: 500px; } .how-step { margin-left: 0; margin-top: -1px; } .how-step:first-child { margin-top: 0; } .step-arrow { display: none; } }
     @media (max-width: 1000px) { .card-showcase { display: none; } .grid-wrapper { display: none; } .hero-headline { font-size: 48px; } }
     @media (max-width: 900px) { .hero { flex-direction: column; padding: 140px 24px 48px; min-height: auto; } .hero-content { max-width: 100%; text-align: center; margin-bottom: 40px; } .hero-headline { font-size: 48px; } .hero-buttons { justify-content: center; } .logo-bar { padding: 60px 24px; } .logo-bar-grid { gap: 32px 48px; } .how-section, .features-section, .faq-section, .cta-section { padding: 80px 24px; } .features-grid, .faq-grid { grid-template-columns: 1fr; } }
     @media (max-width: 600px) { .hero-headline { font-size: 36px; } .hero-sub { font-size: 16px; } .hero-buttons { flex-direction: column; } .btn { width: 100%; justify-content: center; } .section-headline { font-size: 32px; } .cta-headline { font-size: 28px; } .cta-buttons { flex-direction: column; } }
@@ -241,16 +290,116 @@ import BaseHead from '../components/BaseHead.astro';
 
     <div class="card-showcase">
       <div class="card-stack">
-        <div class="card-item" data-index="0"><img src="/cards/card-01-call-trigger.svg" alt="Call Trigger" /></div>
-        <div class="card-item" data-index="1"><img src="/cards/card-02-intel-agent.svg" alt="Intel Agent" /></div>
-        <div class="card-item" data-index="2"><img src="/cards/card-03-crm-agent.svg" alt="CRM Agent" /></div>
-        <div class="card-item" data-index="3"><img src="/cards/card-04-risk-agent.svg" alt="Risk Agent" /></div>
-        <div class="card-item" data-index="4"><img src="/cards/card-05-email-agent.svg" alt="Email Agent" /></div>
-        <div class="card-item" data-index="5"><img src="/cards/card-06-scorecard-agent.svg" alt="Scorecard Agent" /></div>
-        <div class="card-item" data-index="6"><img src="/cards/card-07-multithread-agent.svg" alt="Multi-Thread Agent" /></div>
-        <div class="card-item" data-index="7"><img src="/cards/card-08-quote-agent.svg" alt="Quote Agent" /></div>
-        <div class="card-item" data-index="8"><img src="/cards/card-09-task-agent.svg" alt="Task Agent" /></div>
-        <div class="card-item" data-index="9"><img src="/cards/card-10-prep-agent.svg" alt="Prep Agent" /></div>
+        <div class="card-item" data-index="0" data-color="mint">
+          <img src="/cards/card-01-call-trigger.svg" alt="Call Trigger" />
+          <div class="fold-grid">
+            <div class="fold-panel"><div class="fold-panel-inner mint"></div></div>
+            <div class="fold-panel"><div class="fold-panel-inner mint"></div></div>
+            <div class="fold-panel"><div class="fold-panel-inner mint"></div></div>
+            <div class="fold-panel"><div class="fold-panel-inner mint"></div></div>
+            <div class="fold-panel"><div class="fold-panel-inner mint"></div></div>
+            <div class="fold-panel"><div class="fold-panel-inner mint"></div></div>
+          </div>
+        </div>
+        <div class="card-item" data-index="1" data-color="purple">
+          <img src="/cards/card-02-intel-agent.svg" alt="Intel Agent" />
+          <div class="fold-grid">
+            <div class="fold-panel"><div class="fold-panel-inner purple"></div></div>
+            <div class="fold-panel"><div class="fold-panel-inner purple"></div></div>
+            <div class="fold-panel"><div class="fold-panel-inner purple"></div></div>
+            <div class="fold-panel"><div class="fold-panel-inner purple"></div></div>
+            <div class="fold-panel"><div class="fold-panel-inner purple"></div></div>
+            <div class="fold-panel"><div class="fold-panel-inner purple"></div></div>
+          </div>
+        </div>
+        <div class="card-item" data-index="2" data-color="cyan">
+          <img src="/cards/card-03-crm-agent.svg" alt="CRM Agent" />
+          <div class="fold-grid">
+            <div class="fold-panel"><div class="fold-panel-inner cyan"></div></div>
+            <div class="fold-panel"><div class="fold-panel-inner cyan"></div></div>
+            <div class="fold-panel"><div class="fold-panel-inner cyan"></div></div>
+            <div class="fold-panel"><div class="fold-panel-inner cyan"></div></div>
+            <div class="fold-panel"><div class="fold-panel-inner cyan"></div></div>
+            <div class="fold-panel"><div class="fold-panel-inner cyan"></div></div>
+          </div>
+        </div>
+        <div class="card-item" data-index="3" data-color="coral">
+          <img src="/cards/card-04-risk-agent.svg" alt="Risk Agent" />
+          <div class="fold-grid">
+            <div class="fold-panel"><div class="fold-panel-inner coral"></div></div>
+            <div class="fold-panel"><div class="fold-panel-inner coral"></div></div>
+            <div class="fold-panel"><div class="fold-panel-inner coral"></div></div>
+            <div class="fold-panel"><div class="fold-panel-inner coral"></div></div>
+            <div class="fold-panel"><div class="fold-panel-inner coral"></div></div>
+            <div class="fold-panel"><div class="fold-panel-inner coral"></div></div>
+          </div>
+        </div>
+        <div class="card-item" data-index="4" data-color="yellow">
+          <img src="/cards/card-05-email-agent.svg" alt="Email Agent" />
+          <div class="fold-grid">
+            <div class="fold-panel"><div class="fold-panel-inner yellow"></div></div>
+            <div class="fold-panel"><div class="fold-panel-inner yellow"></div></div>
+            <div class="fold-panel"><div class="fold-panel-inner yellow"></div></div>
+            <div class="fold-panel"><div class="fold-panel-inner yellow"></div></div>
+            <div class="fold-panel"><div class="fold-panel-inner yellow"></div></div>
+            <div class="fold-panel"><div class="fold-panel-inner yellow"></div></div>
+          </div>
+        </div>
+        <div class="card-item" data-index="5" data-color="dark">
+          <img src="/cards/card-06-scorecard-agent.svg" alt="Scorecard Agent" />
+          <div class="fold-grid">
+            <div class="fold-panel"><div class="fold-panel-inner dark"></div></div>
+            <div class="fold-panel"><div class="fold-panel-inner dark"></div></div>
+            <div class="fold-panel"><div class="fold-panel-inner dark"></div></div>
+            <div class="fold-panel"><div class="fold-panel-inner dark"></div></div>
+            <div class="fold-panel"><div class="fold-panel-inner dark"></div></div>
+            <div class="fold-panel"><div class="fold-panel-inner dark"></div></div>
+          </div>
+        </div>
+        <div class="card-item" data-index="6" data-color="mint">
+          <img src="/cards/card-07-multithread-agent.svg" alt="Multi-Thread Agent" />
+          <div class="fold-grid">
+            <div class="fold-panel"><div class="fold-panel-inner mint"></div></div>
+            <div class="fold-panel"><div class="fold-panel-inner mint"></div></div>
+            <div class="fold-panel"><div class="fold-panel-inner mint"></div></div>
+            <div class="fold-panel"><div class="fold-panel-inner mint"></div></div>
+            <div class="fold-panel"><div class="fold-panel-inner mint"></div></div>
+            <div class="fold-panel"><div class="fold-panel-inner mint"></div></div>
+          </div>
+        </div>
+        <div class="card-item" data-index="7" data-color="purple">
+          <img src="/cards/card-08-quote-agent.svg" alt="Quote Agent" />
+          <div class="fold-grid">
+            <div class="fold-panel"><div class="fold-panel-inner purple"></div></div>
+            <div class="fold-panel"><div class="fold-panel-inner purple"></div></div>
+            <div class="fold-panel"><div class="fold-panel-inner purple"></div></div>
+            <div class="fold-panel"><div class="fold-panel-inner purple"></div></div>
+            <div class="fold-panel"><div class="fold-panel-inner purple"></div></div>
+            <div class="fold-panel"><div class="fold-panel-inner purple"></div></div>
+          </div>
+        </div>
+        <div class="card-item" data-index="8" data-color="cyan">
+          <img src="/cards/card-09-task-agent.svg" alt="Task Agent" />
+          <div class="fold-grid">
+            <div class="fold-panel"><div class="fold-panel-inner cyan"></div></div>
+            <div class="fold-panel"><div class="fold-panel-inner cyan"></div></div>
+            <div class="fold-panel"><div class="fold-panel-inner cyan"></div></div>
+            <div class="fold-panel"><div class="fold-panel-inner cyan"></div></div>
+            <div class="fold-panel"><div class="fold-panel-inner cyan"></div></div>
+            <div class="fold-panel"><div class="fold-panel-inner cyan"></div></div>
+          </div>
+        </div>
+        <div class="card-item" data-index="9" data-color="yellow">
+          <img src="/cards/card-10-prep-agent.svg" alt="Prep Agent" />
+          <div class="fold-grid">
+            <div class="fold-panel"><div class="fold-panel-inner yellow"></div></div>
+            <div class="fold-panel"><div class="fold-panel-inner yellow"></div></div>
+            <div class="fold-panel"><div class="fold-panel-inner yellow"></div></div>
+            <div class="fold-panel"><div class="fold-panel-inner yellow"></div></div>
+            <div class="fold-panel"><div class="fold-panel-inner yellow"></div></div>
+            <div class="fold-panel"><div class="fold-panel-inner yellow"></div></div>
+          </div>
+        </div>
       </div>
     </div>
   </section>
@@ -320,109 +469,148 @@ import BaseHead from '../components/BaseHead.astro';
   <ThemeToggle />
 
   <script>
-    // Card showcase with origami flip animation
+    // Origami card showcase - cards align to grid cells
     // Display order ensures no same colors adjacent:
-    // 0-mint, 3-red, 1-purple, 5-dark, 2-cyan, 4-yellow, 7-purple, 6-mint, 9-yellow, 8-cyan
+    // mint(0), coral(3), purple(1), dark(5), cyan(2), yellow(4), purple(7), mint(6), yellow(9), cyan(8)
     const displayOrder = [0, 3, 1, 5, 2, 4, 7, 6, 9, 8];
     
-    const VISIBLE_CARDS = 5;
-    const CARD_WIDTH = 160;
-    const CARD_GAP = 20;
-    const FLIP_INTERVAL = 2500;
-    const ANIMATION_DURATION = 600;
+    // Grid positions in cell units (col, row) - cards are 1.5 cells wide × 2.25 cells tall
+    // Positioned to not overlap, diagonal cascade from top-left to bottom-right
+    const gridPositions = [
+      { col: 0, row: 0 },
+      { col: 2, row: 0.5 },
+      { col: 4, row: 0 },
+      { col: 1, row: 2.5 },
+      { col: 3, row: 2 },
+      { col: 5, row: 2.5 },
+    ];
 
-    let currentIndex = 0;
+    const UNFOLD_DELAY = 80;
+    const CARD_DISPLAY = 5000;
+    const CYCLE_STAGGER = 1500;
+
     let cards;
-    let isAnimating = false;
+    let cellSize;
+    let usedPositions = new Set();
+    let cardQueue = [];
+    let activeSlots = [null, null, null];
 
-    function getSlotPosition(slot) {
-      return {
-        x: slot * (CARD_WIDTH + CARD_GAP),
-        rotation: (slot - 2) * 5, // -10, -5, 0, 5, 10 degrees
-        z: 10 - slot
-      };
-    }
-
-    function setCardPosition(card, slot, animated = true) {
-      const pos = getSlotPosition(slot);
-      const duration = animated ? ANIMATION_DURATION : 0;
-      
-      card.style.transition = animated ? `all ${duration}ms cubic-bezier(0.4, 0, 0.2, 1)` : 'none';
-      card.style.left = `${pos.x}px`;
-      card.style.transform = `translateY(-50%) rotate(${pos.rotation}deg)`;
-      card.style.zIndex = pos.z;
-    }
-
-    function showInitialCards() {
-      for (let i = 0; i < VISIBLE_CARDS; i++) {
-        const cardIndex = displayOrder[i];
-        const card = cards[cardIndex];
-        
-        setCardPosition(card, i, false);
-        card.style.opacity = '0';
-        
-        // Staggered entrance
-        setTimeout(() => {
-          card.style.transition = `opacity ${ANIMATION_DURATION}ms ease-out`;
-          card.style.opacity = '1';
-        }, i * 150);
+    function shuffleArray(arr) {
+      const shuffled = [...arr];
+      for (let i = shuffled.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
       }
+      return shuffled;
     }
 
-    function flipCard() {
-      if (isAnimating) return;
-      isAnimating = true;
+    function getCellSize() {
+      return parseInt(getComputedStyle(document.documentElement).getPropertyValue('--cell')) || 120;
+    }
 
-      const outgoingOrderIndex = currentIndex % displayOrder.length;
-      const incomingOrderIndex = (currentIndex + VISIBLE_CARDS) % displayOrder.length;
+    function getRandomPosition() {
+      const available = gridPositions.filter((_, i) => !usedPositions.has(i));
+      if (available.length === 0) {
+        usedPositions.clear();
+        return getRandomPosition();
+      }
+      const idx = gridPositions.indexOf(available[Math.floor(Math.random() * available.length)]);
+      usedPositions.add(idx);
+      return gridPositions[idx];
+    }
+
+    function getNextCard() {
+      if (cardQueue.length === 0) {
+        cardQueue = shuffleArray(displayOrder);
+      }
+      return cardQueue.pop();
+    }
+
+    function positionCard(card, pos) {
+      cellSize = getCellSize();
+      card.style.left = `${pos.col * cellSize}px`;
+      card.style.top = `${pos.row * cellSize}px`;
+      card.style.transform = 'none';
+    }
+
+    function unfoldCard(card) {
+      const panels = card.querySelectorAll('.fold-panel');
+      card.classList.add('active');
       
-      const outgoingCardIndex = displayOrder[outgoingOrderIndex];
-      const incomingCardIndex = displayOrder[incomingOrderIndex];
+      // Staggered reveal of panels
+      panels.forEach((panel, i) => {
+        setTimeout(() => {
+          panel.classList.add('revealed');
+        }, i * UNFOLD_DELAY);
+      });
+    }
+
+    function foldCard(card) {
+      const panels = Array.from(card.querySelectorAll('.fold-panel')).reverse();
       
-      const outgoingCard = cards[outgoingCardIndex];
-      const incomingCard = cards[incomingCardIndex];
-      const slot = currentIndex % VISIBLE_CARDS;
-      const pos = getSlotPosition(slot);
+      // Staggered fold (reverse order)
+      panels.forEach((panel, i) => {
+        setTimeout(() => {
+          panel.classList.remove('revealed');
+        }, i * UNFOLD_DELAY);
+      });
 
-      // Fold out - origami style
-      outgoingCard.style.transition = `all ${ANIMATION_DURATION}ms cubic-bezier(0.4, 0, 0.2, 1)`;
-      outgoingCard.style.transform = `translateY(-50%) rotate(${pos.rotation}deg) rotateY(-90deg) scaleX(0.5)`;
-      outgoingCard.style.opacity = '0';
-
-      // Prepare incoming card
-      incomingCard.style.transition = 'none';
-      incomingCard.style.left = `${pos.x}px`;
-      incomingCard.style.transform = `translateY(-50%) rotate(${pos.rotation}deg) rotateY(90deg) scaleX(0.5)`;
-      incomingCard.style.opacity = '0';
-      incomingCard.style.zIndex = pos.z;
-
-      // Fold in after delay
+      // Hide card after all panels fold
       setTimeout(() => {
-        incomingCard.style.transition = `all ${ANIMATION_DURATION}ms cubic-bezier(0.4, 0, 0.2, 1)`;
-        incomingCard.style.transform = `translateY(-50%) rotate(${pos.rotation}deg) rotateY(0deg) scaleX(1)`;
-        incomingCard.style.opacity = '1';
-      }, ANIMATION_DURATION * 0.4);
+        card.classList.remove('active');
+      }, panels.length * UNFOLD_DELAY + 100);
+    }
 
-      // Reset outgoing card after animation
+    function cycleSlot(slotIndex) {
+      const currentCardIndex = activeSlots[slotIndex];
+      
+      // Fold current card if exists
+      if (currentCardIndex !== null) {
+        const currentCard = cards[currentCardIndex];
+        foldCard(currentCard);
+      }
+
+      // After fold animation, show new card
       setTimeout(() => {
-        outgoingCard.style.transition = 'none';
-        outgoingCard.style.transform = `translateY(-50%) rotateY(0deg) scaleX(1)`;
-        isAnimating = false;
-      }, ANIMATION_DURATION);
+        const newCardIndex = getNextCard();
+        const pos = getRandomPosition();
+        const newCard = cards[newCardIndex];
 
-      currentIndex++;
+        activeSlots[slotIndex] = newCardIndex;
+        
+        // Reset panels to folded state
+        newCard.querySelectorAll('.fold-panel').forEach(p => p.classList.remove('revealed'));
+        
+        positionCard(newCard, pos);
+        unfoldCard(newCard);
+      }, 6 * UNFOLD_DELAY + 200);
     }
 
     document.addEventListener('DOMContentLoaded', () => {
       cards = document.querySelectorAll('.card-item');
-      
-      // Initialize
-      showInitialCards();
+      cardQueue = shuffleArray(displayOrder);
 
-      // Start flipping after initial entrance
-      setTimeout(() => {
-        setInterval(flipCard, FLIP_INTERVAL);
-      }, VISIBLE_CARDS * 150 + 1500);
+      // Initial render - 3 cards with stagger
+      for (let i = 0; i < 3; i++) {
+        setTimeout(() => {
+          const cardIndex = getNextCard();
+          const pos = getRandomPosition();
+          const card = cards[cardIndex];
+
+          activeSlots[i] = cardIndex;
+          positionCard(card, pos);
+          unfoldCard(card);
+        }, i * CYCLE_STAGGER);
+      }
+
+      // Cycle each slot on offset intervals
+      const cycleTime = CARD_DISPLAY + (6 * UNFOLD_DELAY * 2) + 500;
+
+      for (let i = 0; i < 3; i++) {
+        setTimeout(() => {
+          setInterval(() => cycleSlot(i), cycleTime);
+        }, (i * CYCLE_STAGGER) + CARD_DISPLAY);
+      }
     });
   </script>
 </body>

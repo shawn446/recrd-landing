@@ -11,19 +11,22 @@ import BaseHead from '../components/BaseHead.astro';
   <BaseHead title="Pricing - recrd" description="Simple pricing for AI-powered revenue intelligence. Start with Starter, scale with Advanced." />
   
   <style>
-    .pricing-header { padding: 160px 48px 60px; text-align: center; }
+    .beta-banner { text-align: center; padding: 12px 24px; font-size: 14px; }
+    .beta-banner strong { font-weight: 600; }
+    [data-theme="dark"] .beta-banner { background: var(--mint); color: #0a0a0a; }
+    [data-theme="light"] .beta-banner { background: var(--purple); color: #fff; }
+
+    .pricing-header { padding: 120px 48px 60px; text-align: center; }
     .pricing-headline { font-size: 64px; font-weight: 350; line-height: 1.1; letter-spacing: -0.03em; margin-bottom: 20px; }
     .pricing-sub { font-size: 18px; color: var(--text-muted); max-width: 500px; margin: 0 auto 40px; }
 
-    /* Billing Toggle */
+    /* Billing Toggle - Tab Style */
     .billing-toggle { display: flex; align-items: center; justify-content: center; gap: 16px; margin-bottom: 16px; }
-    .billing-option { font-size: 15px; color: var(--text-muted); cursor: pointer; padding: 8px 16px; transition: color 0.2s; }
-    .billing-option.active { color: var(--text); font-weight: 500; }
-    .toggle-switch { width: 56px; height: 28px; background: var(--border); border-radius: 14px; position: relative; cursor: pointer; transition: background 0.2s; }
-    .toggle-switch.annual { background: var(--mint); }
-    .toggle-knob { width: 22px; height: 22px; background: var(--bg); border-radius: 50%; position: absolute; top: 3px; left: 3px; transition: transform 0.2s; }
-    .toggle-switch.annual .toggle-knob { transform: translateX(28px); }
-    .billing-savings { font-family: var(--mono); font-size: 12px; color: var(--mint); background: rgba(70, 252, 175, 0.1); padding: 4px 12px; border-radius: 12px; }
+    .billing-tabs { display: inline-flex; border: 1px solid var(--border); }
+    .billing-tab { padding: 10px 24px; font-size: 14px; cursor: pointer; transition: all 0.2s; background: transparent; color: var(--text-muted); }
+    .billing-tab.active { background: var(--mint); color: #0a0a0a; font-weight: 500; }
+    .billing-tab:not(.active):hover { background: var(--bg-card); }
+    .billing-savings { font-family: var(--mono); font-size: 11px; color: var(--mint); background: rgba(70, 252, 175, 0.1); padding: 6px 12px; border: 1px solid var(--mint); text-transform: uppercase; letter-spacing: 0.05em; }
 
     /* User Counter */
     .user-counter { display: flex; align-items: center; justify-content: center; gap: 24px; padding: 24px; background: var(--bg-card); border: 1px solid var(--border); max-width: 500px; margin: 0 auto 60px; }
@@ -41,7 +44,10 @@ import BaseHead from '../components/BaseHead.astro';
     .pricing-section { padding: 0 48px 80px; }
     .pricing-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; max-width: 1200px; margin: 0 auto; }
 
-    .pricing-card { background: var(--bg-card); border: 1px solid var(--border); padding: 40px 32px; position: relative; }
+    .pricing-card { background: var(--bg-card); border: 1px solid var(--border); padding: 40px 32px; position: relative; transition: border-color 0.2s; }
+    .pricing-card.selectable { cursor: pointer; }
+    .pricing-card.selectable:hover { border-color: var(--text-muted); }
+    .pricing-card.selected { border-color: var(--mint); }
     .pricing-card.featured { border-color: var(--mint); }
     .pricing-badge { position: absolute; top: -12px; left: 50%; transform: translateX(-50%); background: var(--mint); color: #0a0a0a; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; padding: 6px 16px; }
 
@@ -56,15 +62,19 @@ import BaseHead from '../components/BaseHead.astro';
     .pricing-cta { margin-bottom: 32px; }
     .btn { display: inline-flex; align-items: center; gap: 12px; padding: 16px 28px; font-weight: 500; font-size: 14px; text-decoration: none; transition: all 0.2s ease; cursor: pointer; position: relative; overflow: hidden; width: 100%; justify-content: center; }
     .btn-primary { background: transparent; color: var(--text); border: 1px solid var(--btn-outline); }
-    .btn-primary::before { content: ''; position: absolute; top: 0; left: 0; width: 0; height: 100%; background: var(--mint); transition: width 0.3s ease; z-index: -1; }
+    .btn-primary::before { content: ''; position: absolute; top: 0; left: 0; width: 0; height: 100%; background: var(--mint); transition: width 0.3s ease; z-index: 0; }
     .btn-primary:hover::before { width: 100%; }
     .btn-primary:hover { color: #0a0a0a; border-color: var(--mint); }
+    .btn-primary span, .btn-primary img { position: relative; z-index: 1; }
     .btn-featured { background: var(--mint); color: #0a0a0a; border: 1px solid var(--mint); font-weight: 600; }
-    .btn-featured:hover { background: #3de09d; }
+    .btn-featured::before { content: ''; position: absolute; top: 0; left: 0; width: 0; height: 100%; background: #3de09d; transition: width 0.3s ease; z-index: 0; }
+    .btn-featured:hover::before { width: 100%; }
+    .btn-featured span, .btn-featured img { position: relative; z-index: 1; }
     .btn-secondary { background: transparent; color: var(--text); border: 1px solid var(--btn-outline); }
-    .btn-secondary::before { content: ''; position: absolute; top: 0; left: 0; width: 0; height: 100%; background: var(--purple); transition: width 0.3s ease; z-index: -1; }
+    .btn-secondary::before { content: ''; position: absolute; top: 0; left: 0; width: 0; height: 100%; background: var(--purple); transition: width 0.3s ease; z-index: 0; }
     .btn-secondary:hover::before { width: 100%; }
     .btn-secondary:hover { color: #fff; border-color: var(--purple); }
+    .btn-secondary span, .btn-secondary img { position: relative; z-index: 1; }
     .btn-arrow { display: inline-flex; transition: transform 0.2s ease; }
     .btn-arrow img { width: 16px; height: 16px; }
     .btn:hover .btn-arrow { transform: translateX(4px); }
@@ -87,25 +97,21 @@ import BaseHead from '../components/BaseHead.astro';
     .comparison-headline { font-size: 40px; font-weight: 350; letter-spacing: -0.02em; margin-bottom: 16px; }
     .comparison-sub { font-size: 16px; color: var(--text-muted); }
 
-    .comparison-table { max-width: 1000px; margin: 0 auto; border: 1px solid var(--border); }
-    .comparison-row { display: grid; grid-template-columns: 1.5fr 1fr 1fr 1fr; border-bottom: 1px solid var(--border); }
-    .comparison-row:last-child { border-bottom: none; }
-    .comparison-row.header { background: var(--bg-card); font-weight: 600; position: sticky; top: 0; }
-    .comparison-row.category { background: var(--bg-alt); }
-    .comparison-cell { padding: 16px 20px; display: flex; align-items: center; font-size: 14px; }
-    .comparison-cell:not(:first-child) { justify-content: center; border-left: 1px solid var(--border); }
+    .comparison-table { max-width: 1000px; margin: 0 auto; }
+    .comparison-row { display: grid; grid-template-columns: 1.5fr 1fr 1fr 1fr; padding: 16px 0; }
+    .comparison-row.header { border-bottom: 1px solid var(--border); padding-bottom: 20px; margin-bottom: 8px; }
+    .comparison-row.category { padding: 40px 0 16px; }
+    .comparison-row.category:first-of-type { padding-top: 20px; }
+    .comparison-cell { display: flex; align-items: center; font-size: 15px; }
+    .comparison-cell:not(:first-child) { justify-content: center; }
     .comparison-cell.feature-name { color: var(--text-muted); }
-    .category-name { font-weight: 600; font-size: 13px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text); }
-    .check { color: var(--mint); }
-    .dash { color: var(--text-muted); opacity: 0.3; }
+    .comparison-cell.tier-name { font-weight: 600; font-size: 14px; text-transform: uppercase; letter-spacing: 0.05em; }
+    .category-name { font-weight: 600; font-size: 18px; color: var(--text); }
+    .check { color: var(--mint); font-size: 18px; }
+    .dash { color: var(--text-muted); opacity: 0.3; font-size: 18px; }
     .coming-soon-badge { font-family: var(--mono); font-size: 9px; text-transform: uppercase; letter-spacing: 0.05em; padding: 3px 6px; background: var(--border); color: var(--text-muted); margin-left: 8px; }
-    .feature-value { font-family: var(--mono); font-size: 13px; }
-
-    /* Coming Soon Teaser */
-    .coming-soon-teaser { text-align: center; padding: 40px; background: var(--bg-alt); border: 1px solid var(--border); max-width: 1000px; margin: 40px auto 0; }
-    .teaser-label { font-family: var(--mono); font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--purple); margin-bottom: 12px; }
-    .teaser-text { font-size: 16px; color: var(--text-muted); }
-    .teaser-text strong { color: var(--text); font-weight: 500; }
+    .feature-value { font-family: var(--mono); font-size: 14px; }
+    .feature-span { grid-column: 2 / 5; text-align: center; color: var(--text-muted); font-size: 14px; }
 
     .faq-section { padding: 120px 48px; border-top: 1px solid var(--border); }
     .faq-header { text-align: center; margin-bottom: 60px; }
@@ -120,25 +126,29 @@ import BaseHead from '../components/BaseHead.astro';
     .cta-sub { font-size: 18px; color: var(--text-muted); margin-bottom: 40px; }
     .cta-buttons { display: flex; gap: 16px; justify-content: center; }
     .cta-buttons .btn { width: auto; }
+    .cta-buttons .btn span { position: relative; z-index: 1; }
 
-    @media (max-width: 1000px) { .pricing-grid { grid-template-columns: 1fr; max-width: 450px; } .comparison-table { overflow-x: auto; } .comparison-row { min-width: 700px; } }
-    @media (max-width: 900px) { .pricing-header { padding: 140px 24px 40px; } .pricing-headline { font-size: 44px; } .pricing-section { padding: 0 24px 60px; } .user-counter { flex-direction: column; gap: 16px; margin: 0 24px 40px; max-width: none; } .counter-total { text-align: center; } .comparison-section { padding: 60px 24px 80px; } .faq-section { padding: 80px 24px; } .faq-grid { grid-template-columns: 1fr; } .cta-section { padding: 80px 24px; } .cta-headline { font-size: 32px; } .cta-buttons { flex-direction: column; } .cta-buttons .btn { width: 100%; } }
+    @media (max-width: 1000px) { .pricing-grid { grid-template-columns: 1fr; max-width: 450px; } .comparison-table { overflow-x: auto; } .comparison-row { min-width: 600px; } }
+    @media (max-width: 900px) { .pricing-header { padding: 100px 24px 40px; } .pricing-headline { font-size: 44px; } .pricing-section { padding: 0 24px 60px; } .user-counter { flex-direction: column; gap: 16px; margin: 0 24px 40px; max-width: none; } .counter-total { text-align: center; } .comparison-section { padding: 60px 24px 80px; } .faq-section { padding: 80px 24px; } .faq-grid { grid-template-columns: 1fr; } .cta-section { padding: 80px 24px; } .cta-headline { font-size: 32px; } .cta-buttons { flex-direction: column; } .cta-buttons .btn { width: 100%; } }
   </style>
 </head>
 
 <body>
   <Nav />
 
+  <div class="beta-banner">
+    <strong>Private Beta</strong> — We're still building. Some features may be in development.
+  </div>
+
   <section class="pricing-header">
     <h1 class="pricing-headline">Simple pricing,<br>powerful agents.</h1>
     <p class="pricing-sub">Start with Starter, scale when you're ready. No surprises, no hidden fees.</p>
     
     <div class="billing-toggle">
-      <span class="billing-option monthly active" data-billing="monthly">Monthly</span>
-      <div class="toggle-switch" id="billingToggle">
-        <div class="toggle-knob"></div>
+      <div class="billing-tabs">
+        <div class="billing-tab active" data-billing="monthly">Monthly</div>
+        <div class="billing-tab" data-billing="annual">Annual</div>
       </div>
-      <span class="billing-option annual" data-billing="annual">Annual</span>
       <span class="billing-savings">Save 17%</span>
     </div>
   </section>
@@ -148,19 +158,19 @@ import BaseHead from '../components/BaseHead.astro';
       <div class="counter-label">How many users?</div>
       <div class="counter-controls">
         <button class="counter-btn" id="decreaseUsers">−</button>
-        <span class="counter-value" id="userCount">5</span>
+        <span class="counter-value" id="userCount">1</span>
         <button class="counter-btn" id="increaseUsers">+</button>
       </div>
     </div>
     <div class="counter-total">
-      <div class="counter-total-label">Estimated total</div>
-      <div class="counter-total-value"><span id="totalPrice">$145</span><span class="period">/mo</span></div>
+      <div class="counter-total-label"><span id="selectedTierLabel">Starter</span> plan</div>
+      <div class="counter-total-value"><span id="totalPrice">$29</span><span class="period">/mo</span></div>
     </div>
   </div>
 
   <section class="pricing-section">
     <div class="pricing-grid">
-      <div class="pricing-card">
+      <div class="pricing-card selectable selected" data-tier="starter">
         <div class="pricing-tier">Starter</div>
         <div class="price-original" id="starterOriginal" style="visibility: hidden;">$29</div>
         <div class="pricing-price">
@@ -170,7 +180,7 @@ import BaseHead from '../components/BaseHead.astro';
         </div>
         <p class="pricing-desc">For small teams getting started with AI-powered call intelligence.</p>
         <div class="pricing-cta">
-          <a href="#" class="btn btn-primary">Start Free Trial <span class="btn-arrow"><img src="/icons/chevron-green.svg" alt="" class="chevron-default" /><img src="/icons/chevron-black.svg" alt="" class="chevron-hover" /></span></a>
+          <a href="#" class="btn btn-primary"><span>Start Free Trial</span> <span class="btn-arrow"><img src="/icons/chevron-green.svg" alt="" class="chevron-default" /><img src="/icons/chevron-black.svg" alt="" class="chevron-hover" /></span></a>
         </div>
         <ul class="pricing-features">
           <li><div class="check-icon mint"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></div>Up to 5 users</li>
@@ -183,7 +193,7 @@ import BaseHead from '../components/BaseHead.astro';
         </ul>
       </div>
 
-      <div class="pricing-card featured">
+      <div class="pricing-card selectable" data-tier="advanced">
         <div class="pricing-badge">Most Popular</div>
         <div class="pricing-tier">Advanced</div>
         <div class="price-original" id="advancedOriginal" style="visibility: hidden;">$79</div>
@@ -194,7 +204,7 @@ import BaseHead from '../components/BaseHead.astro';
         </div>
         <p class="pricing-desc">For sales teams ready to automate CRM updates and unlock AI coaching.</p>
         <div class="pricing-cta">
-          <a href="#" class="btn btn-featured">Start 14-Day Trial <span class="btn-arrow"><img src="/icons/chevron-black.svg" alt="" /></span></a>
+          <a href="#" class="btn btn-featured"><span>Start 14-Day Trial</span> <span class="btn-arrow"><img src="/icons/chevron-black.svg" alt="" /></span></a>
         </div>
         <ul class="pricing-features">
           <li><div class="check-icon mint"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></div><span class="feature-highlight">Up to 25 users</span></li>
@@ -215,7 +225,7 @@ import BaseHead from '../components/BaseHead.astro';
         </div>
         <p class="pricing-desc">For large teams needing advanced features, custom agents, and dedicated support.</p>
         <div class="pricing-cta">
-          <a href="#" class="btn btn-secondary">Contact Sales <span class="btn-arrow"><img src="/icons/chevron-purple.svg" alt="" class="chevron-default" /><img src="/icons/chevron-white.svg" alt="" class="chevron-hover" /></span></a>
+          <a href="#" class="btn btn-secondary"><span>Contact Sales</span> <span class="btn-arrow"><img src="/icons/chevron-purple.svg" alt="" class="chevron-default" /><img src="/icons/chevron-white.svg" alt="" class="chevron-hover" /></span></a>
         </div>
         <ul class="pricing-features">
           <li><div class="check-icon purple"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></div>Everything in Advanced</li>
@@ -238,10 +248,10 @@ import BaseHead from '../components/BaseHead.astro';
 
     <div class="comparison-table">
       <div class="comparison-row header">
-        <div class="comparison-cell">Features</div>
-        <div class="comparison-cell">Starter</div>
-        <div class="comparison-cell">Advanced</div>
-        <div class="comparison-cell">Enterprise</div>
+        <div class="comparison-cell"></div>
+        <div class="comparison-cell tier-name">Starter</div>
+        <div class="comparison-cell tier-name">Advanced</div>
+        <div class="comparison-cell tier-name">Enterprise</div>
       </div>
 
       <!-- Recording & Transcription -->
@@ -428,11 +438,6 @@ import BaseHead from '../components/BaseHead.astro';
         <div class="comparison-cell"><span class="check">✓</span></div>
       </div>
     </div>
-
-    <div class="coming-soon-teaser">
-      <div class="teaser-label">On the Roadmap</div>
-      <p class="teaser-text"><strong>Bot-free recording</strong>, <strong>real-time transcription</strong>, and <strong>live coaching agents</strong> are coming soon. Stay tuned.</p>
-    </div>
   </section>
 
   <section class="faq-section">
@@ -451,8 +456,8 @@ import BaseHead from '../components/BaseHead.astro';
     <h2 class="cta-headline">Ready to get started?</h2>
     <p class="cta-sub">Start your free trial today. No credit card required.</p>
     <div class="cta-buttons">
-      <a href="#" class="btn btn-primary">Start Free Trial <span class="btn-arrow"><img src="/icons/chevron-green.svg" alt="" class="chevron-default" /><img src="/icons/chevron-black.svg" alt="" class="chevron-hover" /></span></a>
-      <a href="#" class="btn btn-secondary">Talk to Sales <span class="btn-arrow"><img src="/icons/chevron-purple.svg" alt="" class="chevron-default" /><img src="/icons/chevron-white.svg" alt="" class="chevron-hover" /></span></a>
+      <a href="#" class="btn btn-primary"><span>Start Free Trial</span> <span class="btn-arrow"><img src="/icons/chevron-green.svg" alt="" class="chevron-default" /><img src="/icons/chevron-black.svg" alt="" class="chevron-hover" /></span></a>
+      <a href="#" class="btn btn-secondary"><span>Talk to Sales</span> <span class="btn-arrow"><img src="/icons/chevron-purple.svg" alt="" class="chevron-default" /><img src="/icons/chevron-white.svg" alt="" class="chevron-hover" /></span></a>
     </div>
   </section>
 
@@ -462,26 +467,26 @@ import BaseHead from '../components/BaseHead.astro';
   <script>
     // Pricing configuration
     const pricing = {
-      starter: { monthly: 29, annual: 24 },
-      advanced: { monthly: 79, annual: 65 }
+      starter: { monthly: 29, annual: 24, maxUsers: 5 },
+      advanced: { monthly: 79, annual: 65, maxUsers: 25 }
     };
 
     let isAnnual = false;
-    let userCount = 5;
-    let selectedPlan = 'starter';
+    let userCount = 1;
+    let selectedTier = 'starter';
 
     // DOM elements
-    const billingToggle = document.getElementById('billingToggle');
-    const monthlyOption = document.querySelector('.billing-option.monthly');
-    const annualOption = document.querySelector('.billing-option.annual');
+    const billingTabs = document.querySelectorAll('.billing-tab');
     const decreaseBtn = document.getElementById('decreaseUsers');
     const increaseBtn = document.getElementById('increaseUsers');
     const userCountEl = document.getElementById('userCount');
     const totalPriceEl = document.getElementById('totalPrice');
+    const selectedTierLabelEl = document.getElementById('selectedTierLabel');
     const starterPriceEl = document.getElementById('starterPrice');
     const advancedPriceEl = document.getElementById('advancedPrice');
     const starterOriginalEl = document.getElementById('starterOriginal');
     const advancedOriginalEl = document.getElementById('advancedOriginal');
+    const pricingCards = document.querySelectorAll('.pricing-card.selectable');
 
     function updatePrices() {
       const starterPrice = isAnnual ? pricing.starter.annual : pricing.starter.monthly;
@@ -505,55 +510,69 @@ import BaseHead from '../components/BaseHead.astro';
     }
 
     function updateTotal() {
-      // Calculate based on user count - use Advanced if > 5 users
-      let price;
-      if (userCount <= 5) {
-        price = isAnnual ? pricing.starter.annual : pricing.starter.monthly;
-        selectedPlan = 'starter';
-      } else {
-        price = isAnnual ? pricing.advanced.annual : pricing.advanced.monthly;
-        selectedPlan = 'advanced';
-      }
-
+      const tierPricing = pricing[selectedTier];
+      const price = isAnnual ? tierPricing.annual : tierPricing.monthly;
       const total = price * userCount;
       totalPriceEl.textContent = `$${total.toLocaleString()}`;
     }
 
+    function selectTier(tier) {
+      selectedTier = tier;
+      
+      // Update tier label
+      selectedTierLabelEl.textContent = tier.charAt(0).toUpperCase() + tier.slice(1);
+      
+      // Update card selection state
+      pricingCards.forEach(card => {
+        card.classList.remove('selected');
+        if (card.dataset.tier === tier) {
+          card.classList.add('selected');
+        }
+      });
+
+      // Enforce user limits
+      const maxUsers = pricing[tier].maxUsers;
+      if (userCount > maxUsers) {
+        userCount = maxUsers;
+      }
+      
+      updateUserCount();
+    }
+
     function updateUserCount() {
       userCountEl.textContent = userCount;
+      
+      // Enable/disable buttons based on tier limits
+      const maxUsers = pricing[selectedTier].maxUsers;
       decreaseBtn.disabled = userCount <= 1;
+      increaseBtn.disabled = userCount >= maxUsers;
+      
       updateTotal();
     }
 
-    // Event listeners
-    billingToggle.addEventListener('click', () => {
-      isAnnual = !isAnnual;
-      billingToggle.classList.toggle('annual', isAnnual);
-      monthlyOption.classList.toggle('active', !isAnnual);
-      annualOption.classList.toggle('active', isAnnual);
-      updatePrices();
-    });
-
-    monthlyOption.addEventListener('click', () => {
-      if (isAnnual) {
-        isAnnual = false;
-        billingToggle.classList.remove('annual');
-        monthlyOption.classList.add('active');
-        annualOption.classList.remove('active');
+    // Billing tab events
+    billingTabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        const billing = tab.dataset.billing;
+        isAnnual = billing === 'annual';
+        
+        billingTabs.forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        
         updatePrices();
-      }
+      });
     });
 
-    annualOption.addEventListener('click', () => {
-      if (!isAnnual) {
-        isAnnual = true;
-        billingToggle.classList.add('annual');
-        monthlyOption.classList.remove('active');
-        annualOption.classList.add('active');
-        updatePrices();
-      }
+    // Tier card selection
+    pricingCards.forEach(card => {
+      card.addEventListener('click', (e) => {
+        // Don't select if clicking the CTA button
+        if (e.target.closest('.btn')) return;
+        selectTier(card.dataset.tier);
+      });
     });
 
+    // User counter
     decreaseBtn.addEventListener('click', () => {
       if (userCount > 1) {
         userCount--;
@@ -562,8 +581,11 @@ import BaseHead from '../components/BaseHead.astro';
     });
 
     increaseBtn.addEventListener('click', () => {
-      userCount++;
-      updateUserCount();
+      const maxUsers = pricing[selectedTier].maxUsers;
+      if (userCount < maxUsers) {
+        userCount++;
+        updateUserCount();
+      }
     });
 
     // Initialize

@@ -51,13 +51,13 @@ import BaseHead from '../components/BaseHead.astro';
     .workflow-check svg { width: 12px; height: 12px; stroke: #fff; stroke-width: 3; }
     .workflow-cta { margin-top: 32px; }
     
-    .workflow-visual { background: var(--bg); border: 1px solid var(--border); padding: 24px; }
-    .workflow-mock { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
-    .workflow-step { background: var(--bg-card); border: 1px solid var(--border); padding: 16px; text-align: center; min-width: 100px; }
+    .workflow-visual { background: var(--bg); border: 1px solid var(--border); padding: 24px; overflow-x: auto; }
+    .workflow-mock { display: flex; align-items: center; gap: 16px; flex-wrap: nowrap; min-width: max-content; }
+    .workflow-step { background: var(--bg-card); border: 1px solid var(--border); padding: 16px; text-align: center; min-width: 100px; flex-shrink: 0; }
     .workflow-step-icon { width: 32px; height: 32px; margin: 0 auto 8px; }
     .workflow-step-icon img { width: 100%; height: 100%; object-fit: contain; }
     .workflow-step-label { font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; }
-    .workflow-arrow { color: var(--text-muted); }
+    .workflow-arrow { color: var(--text-muted); flex-shrink: 0; }
     .workflow-arrow img { width: 24px; height: 24px; }
 
     .request-section { padding: 100px 48px; border-top: 1px solid var(--border); text-align: center; }
@@ -76,6 +76,11 @@ import BaseHead from '../components/BaseHead.astro';
     .btn-arrow { display: inline-flex; transition: transform 0.2s ease; }
     .btn-arrow img { width: 16px; height: 16px; }
     .btn:hover .btn-arrow { transform: translateX(4px); }
+    
+    /* Chevron hover swap */
+    .btn-arrow .chevron-hover { display: none; }
+    .btn:hover .chevron-default { display: none; }
+    .btn:hover .chevron-hover { display: block; }
 
     @media (max-width: 1000px) { .agents-grid { grid-template-columns: repeat(2, 1fr); } .workflow-container { grid-template-columns: 1fr; gap: 48px; } }
     @media (max-width: 900px) { .hero { padding: 140px 24px 80px; } .hero-headline { font-size: 44px; } .agents-section { padding: 60px 24px 80px; } .agents-grid { grid-template-columns: 1fr; } .workflow-section { padding: 80px 24px; } .request-section { padding: 80px 24px; } .request-buttons { flex-direction: column; } .btn { width: 100%; justify-content: center; } }
@@ -194,7 +199,7 @@ import BaseHead from '../components/BaseHead.astro';
           <li><span class="workflow-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><polyline points="20 6 9 17 4 12"/></svg></span>Webhook outputs to any system</li>
         </ul>
         <div class="workflow-cta">
-          <a href="#" class="btn btn-primary">Request Early Access <span class="btn-arrow"><img src="/icons/chevron-purple.svg" alt="" /></span></a>
+          <a href="#" class="btn btn-primary">Request Early Access <span class="btn-arrow"><img src="/icons/chevron-purple.svg" alt="" class="chevron-default" /><img src="/icons/chevron-white.svg" alt="" class="chevron-hover" /></span></a>
         </div>
       </div>
       <div class="workflow-visual">
@@ -226,8 +231,8 @@ import BaseHead from '../components/BaseHead.astro';
   <section class="request-section">
     <h2 class="request-headline">Need a custom agent?</h2>
     <div class="request-buttons">
-      <a href="#" class="btn btn-primary">Request an Agent <span class="btn-arrow"><img src="/icons/chevron-purple.svg" alt="" /></span></a>
-      <a href="#" class="btn btn-secondary">Talk to Sales <span class="btn-arrow"><img src="/icons/chevron-green.svg" alt="" /></span></a>
+      <a href="#" class="btn btn-primary">Request an Agent <span class="btn-arrow"><img src="/icons/chevron-purple.svg" alt="" class="chevron-default" /><img src="/icons/chevron-white.svg" alt="" class="chevron-hover" /></span></a>
+      <a href="#" class="btn btn-secondary">Talk to Sales <span class="btn-arrow"><img src="/icons/chevron-green.svg" alt="" class="chevron-default" /><img src="/icons/chevron-black.svg" alt="" class="chevron-hover" /></span></a>
     </div>
   </section>
 

@@ -91,10 +91,10 @@ import BaseHead from '../components/BaseHead.astro';
       transform: translateY(-50%);
       width: calc(var(--cell) * var(--grid-cols));
       height: calc(var(--cell) * var(--grid-rows));
-      z-index: 5;
+      z-index: 2;
     }
 
-    .grid-svg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
+    .grid-svg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; }
     .grid-svg line { stroke: var(--grid-line); stroke-width: 1; }
 
     /* ORIGAMI CARDS */
@@ -105,8 +105,8 @@ import BaseHead from '../components/BaseHead.astro';
       grid-template-rows: repeat(3, var(--cell));
       opacity: 0;
       transition: opacity 0.3s ease;
-      z-index: 10;
-      filter: drop-shadow(0 20px 40px rgba(0,0,0,0.4));
+      z-index: 50;
+      filter: drop-shadow(0 20px 40px rgba(0,0,0,0.35));
     }
 
     .origami-card.active { opacity: 1; }
@@ -118,6 +118,7 @@ import BaseHead from '../components/BaseHead.astro';
       position: relative;
       transform-style: preserve-3d;
       perspective: 1000px;
+      z-index: 51;
     }
 
     .panel-inner {
@@ -155,13 +156,24 @@ import BaseHead from '../components/BaseHead.astro';
       transform: rotateY(0deg) rotateX(0deg);
     }
 
-    /* Panel colors */
+    /* Panel colors - solid with subtle depth */
     .panel-inner.mint { background: var(--mint); }
     .panel-inner.purple { background: var(--purple); }
     .panel-inner.cyan { background: var(--cyan); }
     .panel-inner.coral { background: var(--coral); }
     .panel-inner.yellow { background: var(--yellow); }
-    .panel-inner.dark { background: #18181B; border: 1px solid rgba(255,255,255,0.1); }
+    .panel-inner.dark { background: #1a1a1a; }
+
+    /* Subtle panel separators - only on inside edges */
+    .card-panel:nth-child(1) .panel-inner { border-right: 1px solid rgba(0,0,0,0.08); border-bottom: 1px solid rgba(0,0,0,0.08); }
+    .card-panel:nth-child(2) .panel-inner { border-bottom: 1px solid rgba(0,0,0,0.08); }
+    .card-panel:nth-child(3) .panel-inner { border-right: 1px solid rgba(0,0,0,0.08); border-bottom: 1px solid rgba(0,0,0,0.08); }
+    .card-panel:nth-child(4) .panel-inner { border-bottom: 1px solid rgba(0,0,0,0.08); }
+    .card-panel:nth-child(5) .panel-inner { border-right: 1px solid rgba(0,0,0,0.08); }
+    
+    .panel-inner.dark { border-color: rgba(255,255,255,0.08) !important; }
+    .panel-inner.purple { border-color: rgba(0,0,0,0.1) !important; }
+    .panel-inner.coral { border-color: rgba(0,0,0,0.1) !important; }
 
     /* Panel content */
     .panel-content {
@@ -411,7 +423,6 @@ import BaseHead from '../components/BaseHead.astro';
       <div class="origami-card" id="card-slot-0"></div>
       <div class="origami-card" id="card-slot-1"></div>
       <div class="origami-card" id="card-slot-2"></div>
-      <div class="origami-card" id="card-slot-3"></div>
     </div>
   </section>
 
@@ -647,25 +658,20 @@ import BaseHead from '../components/BaseHead.astro';
     }
 
     // Grid-aligned positions (col, row) - cards are 2x3 cells
+    // Grid is 9 cols x 8 rows, cards spread in diagonal cascade
     const gridPositions = [
-      { col: 0, row: 0 },   // top-left
-      { col: 3, row: 0 },   // top-middle
-      { col: 5, row: 0 },   // top-right
-      { col: 7, row: 0 },   // far right top
-      { col: 0, row: 3 },   // middle-left
-      { col: 3, row: 2 },   // center
-      { col: 5, row: 3 },   // middle-right
-      { col: 7, row: 2 },   // far right middle
-      { col: 0, row: 5 },   // bottom-left
-      { col: 3, row: 5 },   // bottom-middle
-      { col: 5, row: 5 },   // bottom-right
-      { col: 7, row: 5 },   // far right bottom
+      { col: 1, row: 0 },   // upper-left area
+      { col: 4, row: 1 },   // upper-center
+      { col: 7, row: 0 },   // upper-right
+      { col: 0, row: 4 },   // lower-left
+      { col: 4, row: 4 },   // lower-center
+      { col: 7, row: 5 },   // lower-right
     ];
 
     // Animation timing
-    const UNFOLD_DELAY = 70;
-    const CARD_DISPLAY = 4000;
-    const CYCLE_STAGGER = 1200;
+    const UNFOLD_DELAY = 80;
+    const CARD_DISPLAY = 5000;
+    const CYCLE_STAGGER = 1500;
 
     // State
     let usedPositions = new Set();
@@ -740,7 +746,7 @@ import BaseHead from '../components/BaseHead.astro';
 
     // Initialize
     document.addEventListener('DOMContentLoaded', () => {
-      const slots = [0, 1, 2, 3].map(i => document.getElementById(`card-slot-${i}`));
+      const slots = [0, 1, 2].map(i => document.getElementById(`card-slot-${i}`));
       
       // Shuffle cards for initial display
       cardQueue = shuffleArray([...Array(cards.length).keys()]);

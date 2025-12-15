@@ -11,8 +11,8 @@ import Nav from '../components/Nav.astro';
   
   <style is:global>
     :root { 
-      --cell: 100px; 
-      --grid-line: rgba(255,255,255,0.06);
+      --cell: 130px; 
+      --grid-line: rgba(255,255,255,0.08);
       
       /* Colors */
       --mint: #46FCAF;
@@ -34,17 +34,23 @@ import Nav from '../components/Nav.astro';
       padding: 72px 48px 0;
       position: relative;
       overflow: hidden;
+      background: var(--bg);
     }
 
-    /* Full-width background grid */
+    /* Grid on RIGHT side only */
     .hero-grid {
       position: absolute;
-      inset: 0;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      width: 60%;
       background-image: 
         linear-gradient(to right, var(--grid-line) 1px, transparent 1px),
         linear-gradient(to bottom, var(--grid-line) 1px, transparent 1px);
       background-size: var(--cell) var(--cell);
       z-index: 1;
+      mask-image: linear-gradient(to right, transparent 0%, rgba(0,0,0,0.3) 10%, rgba(0,0,0,1) 40%);
+      -webkit-mask-image: linear-gradient(to right, transparent 0%, rgba(0,0,0,0.3) 10%, rgba(0,0,0,1) 40%);
     }
 
     /* Gradient blobs */
@@ -52,35 +58,46 @@ import Nav from '../components/Nav.astro';
       position: absolute;
       border-radius: 50%;
       filter: blur(120px);
-      opacity: 0.4;
       z-index: 0;
     }
 
     .blob-1 {
-      width: 600px;
-      height: 600px;
+      width: 700px;
+      height: 700px;
       background: var(--mint);
-      top: -200px;
-      right: 10%;
-      opacity: 0.15;
+      top: -250px;
+      right: 5%;
+      opacity: 0.12;
     }
 
     .blob-2 {
       width: 500px;
       height: 500px;
       background: var(--purple);
-      bottom: -100px;
-      right: 30%;
-      opacity: 0.12;
+      bottom: -150px;
+      right: 25%;
+      opacity: 0.1;
     }
 
     .blob-3 {
       width: 400px;
       height: 400px;
       background: var(--cyan);
-      top: 40%;
-      left: -100px;
-      opacity: 0.1;
+      top: 50%;
+      left: 30%;
+      opacity: 0.06;
+    }
+
+    /* Left side visual - subtle arc/glow */
+    .hero-glow {
+      position: absolute;
+      left: 20%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(ellipse at center, rgba(70, 252, 175, 0.04) 0%, transparent 70%);
+      z-index: 1;
     }
 
     .hero-content {
@@ -122,28 +139,52 @@ import Nav from '../components/Nav.astro';
       text-decoration: none;
       transition: all 0.2s ease;
       cursor: pointer;
+      border: none;
     }
     
     .btn-primary { background: var(--text); color: var(--bg); }
     .btn-primary:hover { background: var(--mint); color: #0a0a0a; transform: translateY(-2px); }
 
-    /* CARD CONTAINER */
-    .cards-container {
+    /* CARDS AREA - positioned on right grid */
+    .cards-area {
       position: absolute;
-      top: 50%;
-      right: 80px;
-      transform: translateY(-50%);
-      display: flex;
-      gap: calc(var(--cell) * 2);
+      top: 0;
+      right: 0;
+      bottom: 0;
+      width: 60%;
       z-index: 10;
+      pointer-events: none;
     }
 
-    /* ORIGAMI CARD */
+    /* ORIGAMI CARD - now 2x3 grid of larger cells */
     .origami-card {
+      position: absolute;
       display: grid;
       grid-template-columns: repeat(2, var(--cell));
       grid-template-rows: repeat(3, var(--cell));
-      position: relative;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      pointer-events: auto;
+    }
+
+    .origami-card.active {
+      opacity: 1;
+    }
+
+    /* Card positions - staggered on grid */
+    .origami-card.pos-1 {
+      top: calc(var(--cell) * 0.5);
+      right: calc(var(--cell) * 3);
+    }
+
+    .origami-card.pos-2 {
+      top: calc(var(--cell) * 2);
+      right: calc(var(--cell) * 0.5);
+    }
+
+    .origami-card.pos-3 {
+      top: calc(var(--cell) * 1);
+      right: calc(var(--cell) * 5);
     }
 
     /* Each cell/panel of the card */
@@ -163,6 +204,7 @@ import Nav from '../components/Nav.astro';
       opacity: 0;
       transform: rotateY(-90deg);
       transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 4px 24px rgba(0,0,0,0.3);
     }
 
     .card-panel.from-top .panel-inner {
@@ -188,16 +230,16 @@ import Nav from '../components/Nav.astro';
     .panel-inner.yellow { background: var(--yellow); }
     .panel-inner.dark { background: #1a1a1a; border: 1px solid var(--border); }
 
-    /* Content inside panels */
+    /* Content inside panels - MORE PADDING */
     .panel-content {
       position: absolute;
       inset: 0;
-      padding: 14px;
+      padding: 16px;
       display: flex;
       flex-direction: column;
       justify-content: center;
       color: #0a0a0a;
-      font-size: 11px;
+      font-size: 13px;
       overflow: hidden;
     }
 
@@ -208,9 +250,10 @@ import Nav from '../components/Nav.astro';
     }
 
     .panel-icon {
-      width: 28px;
-      height: 28px;
-      margin-bottom: 8px;
+      width: 32px;
+      height: 32px;
+      margin-bottom: 10px;
+      flex-shrink: 0;
     }
 
     .panel-icon svg {
@@ -225,13 +268,14 @@ import Nav from '../components/Nav.astro';
 
     .panel-badge {
       font-family: var(--mono);
-      font-size: 9px;
+      font-size: 10px;
       text-transform: uppercase;
       letter-spacing: 0.1em;
-      padding: 5px 10px;
-      background: rgba(0,0,0,0.1);
+      padding: 6px 12px;
+      background: rgba(0,0,0,0.12);
       display: inline-block;
       width: fit-content;
+      border-radius: 2px;
     }
 
     .panel-inner.purple .panel-badge,
@@ -241,16 +285,16 @@ import Nav from '../components/Nav.astro';
     }
 
     .panel-title {
-      font-size: 16px;
+      font-size: 20px;
       font-weight: 600;
       line-height: 1.2;
     }
 
     .panel-text {
-      font-size: 11px;
+      font-size: 13px;
       opacity: 0.85;
       line-height: 1.4;
-      margin-top: 2px;
+      margin-top: 4px;
     }
 
     .panel-stat {
@@ -258,8 +302,8 @@ import Nav from '../components/Nav.astro';
       justify-content: space-between;
       align-items: center;
       font-family: var(--mono);
-      font-size: 11px;
-      padding: 8px 0;
+      font-size: 12px;
+      padding: 10px 0;
       border-top: 1px solid rgba(0,0,0,0.1);
     }
 
@@ -277,18 +321,19 @@ import Nav from '../components/Nav.astro';
 
     .meddic-mini {
       display: flex;
-      gap: 4px;
-      margin-top: 8px;
+      gap: 6px;
+      margin-top: 10px;
     }
 
     .meddic-mini span {
       flex: 1;
       text-align: center;
-      padding: 6px 2px;
+      padding: 8px 4px;
       background: rgba(0,0,0,0.12);
       font-family: var(--mono);
-      font-size: 10px;
+      font-size: 12px;
       font-weight: 600;
+      border-radius: 2px;
     }
 
     .meddic-mini span.filled {
@@ -303,50 +348,53 @@ import Nav from '../components/Nav.astro';
     }
 
     .score-circle {
-      width: 48px;
-      height: 48px;
+      width: 56px;
+      height: 56px;
       border-radius: 50%;
       background: conic-gradient(var(--mint) 0deg 306deg, rgba(255,255,255,0.1) 306deg 360deg);
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 16px;
+      font-size: 18px;
       font-weight: 700;
+      margin: 0 auto;
     }
 
     .quote-text {
       font-style: italic;
-      font-size: 10px;
-      line-height: 1.4;
+      font-size: 12px;
+      line-height: 1.5;
       opacity: 0.9;
     }
 
     .quote-attr {
-      font-size: 9px;
+      font-size: 11px;
       opacity: 0.7;
-      margin-top: 4px;
+      margin-top: 6px;
     }
 
     /* RESPONSIVE */
     @media (max-width: 1600px) {
-      :root { --cell: 90px; }
+      :root { --cell: 115px; }
       .hero-headline { font-size: 70px; }
     }
 
     @media (max-width: 1400px) {
-      :root { --cell: 80px; }
+      :root { --cell: 100px; }
       .hero-headline { font-size: 60px; }
-      .cards-container { right: 40px; gap: var(--cell); }
     }
 
     @media (max-width: 1200px) {
-      :root { --cell: 70px; }
+      :root { --cell: 90px; }
       .hero-headline { font-size: 52px; }
       .hero-content { max-width: 450px; }
+      .panel-title { font-size: 16px; }
+      .panel-text { font-size: 11px; }
     }
 
     @media (max-width: 1000px) {
-      .cards-container { display: none; }
+      .cards-area { display: none; }
+      .hero-grid { display: none; }
       .hero-content { max-width: 100%; text-align: center; }
       .hero-buttons { justify-content: center; }
     }
@@ -357,13 +405,16 @@ import Nav from '../components/Nav.astro';
   <Nav />
 
   <section class="hero">
-    <!-- Background grid -->
+    <!-- Background grid - right side only -->
     <div class="hero-grid"></div>
 
     <!-- Gradient blobs -->
     <div class="blob blob-1"></div>
     <div class="blob blob-2"></div>
     <div class="blob blob-3"></div>
+
+    <!-- Left side glow -->
+    <div class="hero-glow"></div>
 
     <div class="hero-content">
       <h1 class="hero-headline">Your calls,<br><em>working for you</em></h1>
@@ -373,16 +424,11 @@ import Nav from '../components/Nav.astro';
       </div>
     </div>
 
-    <div class="cards-container">
-      <!-- Card Slot 1 -->
-      <div class="origami-card" id="card-slot-1">
-        <!-- Populated by JS -->
-      </div>
-
-      <!-- Card Slot 2 -->
-      <div class="origami-card" id="card-slot-2">
-        <!-- Populated by JS -->
-      </div>
+    <div class="cards-area">
+      <!-- 3 card slots at different positions -->
+      <div class="origami-card pos-1" id="card-slot-0"></div>
+      <div class="origami-card pos-2" id="card-slot-1"></div>
+      <div class="origami-card pos-3" id="card-slot-2"></div>
     </div>
   </section>
 
@@ -397,7 +443,7 @@ import Nav from '../components/Nav.astro';
           { type: 'text', primary: 'Sarah Chen', secondary: 'VP Sales, Acme Corp' },
           { type: 'text', primary: 'Discovery call', secondary: '32 minutes' },
           { type: 'stat', label: 'Talk ratio', value: '35%' },
-          { type: 'stat', label: 'Questions', value: '12 asked' }
+          { type: 'stat', label: 'Questions', value: '12' }
         ]
       },
       {
@@ -407,8 +453,8 @@ import Nav from '../components/Nav.astro';
           { type: 'title', text: 'Analyzing call' },
           { type: 'stat', label: 'Sentiment', value: '87%', positive: true },
           { type: 'stat', label: 'Momentum', value: 'High', positive: true },
-          { type: 'stat', label: 'Objections', value: '2 found' },
-          { type: 'stat', label: 'Actions', value: '14 items' }
+          { type: 'stat', label: 'Objections', value: '2' },
+          { type: 'stat', label: 'Actions', value: '14' }
         ]
       },
       {
@@ -417,7 +463,7 @@ import Nav from '../components/Nav.astro';
           { type: 'icon-badge', icon: 'bar-chart', badge: 'CRM Agent' },
           { type: 'title', text: 'Pipeline updated' },
           { type: 'text', primary: 'Stage moved', secondary: '→ Negotiation' },
-          { type: 'text', primary: '12 fields', secondary: 'synced to HubSpot' },
+          { type: 'text', primary: '12 fields synced', secondary: 'to HubSpot' },
           { type: 'meddic', values: ['M', 'E', 'D'], filled: [true, true, true] },
           { type: 'meddic', values: ['D', 'I', 'C'], filled: [true, false, true] }
         ]
@@ -429,19 +475,19 @@ import Nav from '../components/Nav.astro';
           { type: 'title', text: 'Manager notified' },
           { type: 'quote', text: '"Budget is tight this quarter..."' },
           { type: 'quote-attr', text: '— Sarah Chen' },
-          { type: 'text', primary: 'Slack #enterprise', secondary: '@mike alerted' },
-          { type: 'stat', label: 'Risk level', value: 'Medium' }
+          { type: 'text', primary: 'Slack #deals', secondary: '@mike alerted' },
+          { type: 'stat', label: 'Risk', value: 'Medium' }
         ]
       },
       {
         color: 'yellow',
         panels: [
           { type: 'icon-badge', icon: 'mail', badge: 'Email Agent' },
-          { type: 'title', text: 'Follow-up drafted' },
-          { type: 'text', primary: 'Personalized email', secondary: 'ready to send' },
+          { type: 'title', text: 'Follow-up ready' },
+          { type: 'text', primary: 'Personalized email', secondary: 'drafted for review' },
           { type: 'stat', label: 'Length', value: '142 words' },
           { type: 'stat', label: 'Tone', value: 'Professional' },
-          { type: 'stat', label: 'References', value: '3 points' }
+          { type: 'stat', label: 'CTAs', value: '2' }
         ]
       },
       {
@@ -451,8 +497,8 @@ import Nav from '../components/Nav.astro';
           { type: 'title', text: 'Scorecard ready' },
           { type: 'score', value: '85' },
           { type: 'stat', label: 'Discovery', value: 'Strong', positive: true },
-          { type: 'stat', label: 'Needs work', value: 'Closing' },
-          { type: 'text', primary: 'MEDDIC method', secondary: '3 suggestions' }
+          { type: 'stat', label: 'Improve', value: 'Closing' },
+          { type: 'text', primary: '3 coaching tips', secondary: 'available' }
         ]
       }
     ];
@@ -466,7 +512,7 @@ import Nav from '../components/Nav.astro';
       edit: '<path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>'
     };
 
-    function renderPanel(panel, color) {
+    function renderPanel(panel) {
       let content = '';
       
       switch(panel.type) {
@@ -521,22 +567,25 @@ import Nav from '../components/Nav.astro';
         <div class="card-panel ${foldDirections[i]}" data-index="${i}">
           <div class="panel-inner ${cardData.color}">
             <div class="panel-content">
-              ${renderPanel(panel, cardData.color)}
+              ${renderPanel(panel)}
             </div>
           </div>
         </div>
       `).join('');
     }
 
-    const UNFOLD_DELAY = 120;
-    const DISPLAY_TIME = 3500;
-    const FOLD_PAUSE = 400;
+    const UNFOLD_DELAY = 100;      // Time between each panel unfolding
+    const CARD_STAGGER = 800;      // Time between cards starting to appear
+    const DISPLAY_TIME = 3000;     // How long card stays fully visible
+    const FOLD_DURATION = 600;     // Time to fold up
 
-    let slot1Index = 0;
-    let slot2Index = 1;
+    // Track which card is in each slot
+    let slotCards = [0, 1, 2];  // card indices for slots 0, 1, 2
+    let nextCardIndex = 3;      // next card to show
 
     function unfoldCard(slot) {
       const panels = slot.querySelectorAll('.card-panel');
+      slot.classList.add('active');
       panels.forEach((panel, i) => {
         setTimeout(() => panel.classList.add('revealed'), i * UNFOLD_DELAY);
       });
@@ -547,45 +596,56 @@ import Nav from '../components/Nav.astro';
       panels.forEach((panel, i) => {
         setTimeout(() => panel.classList.remove('revealed'), i * UNFOLD_DELAY);
       });
+      // Hide slot after fold completes
+      setTimeout(() => slot.classList.remove('active'), panels.length * UNFOLD_DELAY + 200);
     }
 
-    function cycleCards() {
-      const slot1 = document.getElementById('card-slot-1');
-      const slot2 = document.getElementById('card-slot-2');
+    function cycleSlot(slotIndex) {
+      const slot = document.getElementById(`card-slot-${slotIndex}`);
+      
+      // Fold current card
+      foldCard(slot);
 
-      // Fold current cards
-      foldCard(slot1);
-      setTimeout(() => foldCard(slot2), 150);
-
-      // After fold, update content and unfold
+      // After fold, load next card and unfold
       setTimeout(() => {
-        slot1Index = (slot1Index + 2) % cards.length;
-        slot2Index = (slot2Index + 2) % cards.length;
-
-        slot1.innerHTML = buildCard(cards[slot1Index]);
-        slot2.innerHTML = buildCard(cards[slot2Index]);
-
-        unfoldCard(slot1);
-        setTimeout(() => unfoldCard(slot2), 300);
-      }, (6 * UNFOLD_DELAY) + FOLD_PAUSE);
+        slotCards[slotIndex] = nextCardIndex;
+        nextCardIndex = (nextCardIndex + 1) % cards.length;
+        
+        slot.innerHTML = buildCard(cards[slotCards[slotIndex]]);
+        unfoldCard(slot);
+      }, 6 * UNFOLD_DELAY + 400);
     }
 
     document.addEventListener('DOMContentLoaded', () => {
-      const slot1 = document.getElementById('card-slot-1');
-      const slot2 = document.getElementById('card-slot-2');
+      const slots = [
+        document.getElementById('card-slot-0'),
+        document.getElementById('card-slot-1'),
+        document.getElementById('card-slot-2')
+      ];
 
-      // Initial render
-      slot1.innerHTML = buildCard(cards[0]);
-      slot2.innerHTML = buildCard(cards[1]);
+      // Initial render - stagger the appearance
+      slots.forEach((slot, i) => {
+        slot.innerHTML = buildCard(cards[i]);
+        setTimeout(() => unfoldCard(slot), i * CARD_STAGGER);
+      });
 
-      // Initial unfold
+      // Cycle each slot at different intervals for continuous movement
+      // Slot 0 cycles every 4s
+      // Slot 1 cycles every 4s, offset by 1.3s
+      // Slot 2 cycles every 4s, offset by 2.6s
+      const cycleInterval = DISPLAY_TIME + (6 * UNFOLD_DELAY * 2) + 800;
+      
       setTimeout(() => {
-        unfoldCard(slot1);
-        setTimeout(() => unfoldCard(slot2), 300);
-      }, 500);
+        setInterval(() => cycleSlot(0), cycleInterval);
+      }, 0);
 
-      // Start cycling
-      setInterval(cycleCards, DISPLAY_TIME + (6 * UNFOLD_DELAY * 2) + FOLD_PAUSE + 500);
+      setTimeout(() => {
+        setInterval(() => cycleSlot(1), cycleInterval);
+      }, cycleInterval / 3);
+
+      setTimeout(() => {
+        setInterval(() => cycleSlot(2), cycleInterval);
+      }, (cycleInterval / 3) * 2);
     });
   </script>
 </body>

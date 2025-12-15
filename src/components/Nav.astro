@@ -5,11 +5,8 @@
 
 <nav>
   <a href="/" class="nav-logo">
-    <svg viewBox="0 0 52 52" fill="none">
-      <rect y="16" width="28" height="28" fill="#A678F4"/>
-      <rect x="16" width="28" height="28" rx="6" fill="#46FCAF"/>
-    </svg>
-    <span class="nav-wordmark">recrd</span>
+    <img src="/dark-logo.svg" alt="recrd" class="logo-dark" />
+    <img src="/light-logo.svg" alt="recrd" class="logo-light" />
   </a>
   <ul class="nav-links">
     <li class="has-dropdown">
@@ -60,12 +57,21 @@
   .nav-logo {
     display: flex;
     align-items: center;
-    gap: 12px;
     text-decoration: none;
   }
   .nav-logo:hover { opacity: 0.8; }
-  .nav-logo svg { width: 32px; height: 32px; }
-  .nav-wordmark { font-weight: 600; font-size: 18px; color: var(--text); }
+  
+  .nav-logo img {
+    height: 28px;
+    width: auto;
+  }
+  
+  /* Logo theme switching */
+  .logo-light { display: none; }
+  .logo-dark { display: block; }
+  
+  :global([data-theme="light"]) .logo-light { display: block; }
+  :global([data-theme="light"]) .logo-dark { display: none; }
 
   .nav-links {
     display: flex;

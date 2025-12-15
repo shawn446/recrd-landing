@@ -26,6 +26,11 @@ import BaseHead from '../../components/BaseHead.astro';
     .hero-cta-arrow { transition: transform 0.2s ease; }
     .hero-cta-arrow img { width: 16px; height: 16px; }
     .hero-cta:hover .hero-cta-arrow { transform: translateX(4px); }
+    
+    /* Hero CTA chevron hover swap */
+    .hero-cta-arrow .chevron-hover { display: none; }
+    .hero-cta:hover .chevron-default { display: none; }
+    .hero-cta:hover .chevron-hover { display: block; }
 
     .hero-visual { background: var(--bg-card); border: 1px solid var(--border); padding: 32px; }
     .hero-mock-header { display: flex; align-items: center; justify-content: space-between; padding-bottom: 16px; border-bottom: 1px solid var(--border); margin-bottom: 20px; }
@@ -79,6 +84,11 @@ import BaseHead from '../../components/BaseHead.astro';
     .btn-arrow { display: inline-flex; transition: transform 0.2s ease; }
     .btn-arrow img { width: 16px; height: 16px; }
     .btn:hover .btn-arrow { transform: translateX(4px); }
+    
+    /* Chevron hover swap */
+    .btn-arrow .chevron-hover { display: none; }
+    .btn:hover .chevron-default { display: none; }
+    .btn:hover .chevron-hover { display: block; }
 
     @media (max-width: 1000px) { .hero { grid-template-columns: 1fr; gap: 48px; text-align: center; } .hero-content { max-width: 100%; } .solution-grid { grid-template-columns: 1fr; } }
     @media (max-width: 900px) { .hero { padding: 140px 24px 80px; } .hero-headline { font-size: 40px; } .pain-section { padding: 80px 24px; } .pain-grid { grid-template-columns: 1fr; } .pain-headline { font-size: 28px; } .solution-section { padding: 80px 24px; } .solution-headline { font-size: 28px; } .quote-section { padding: 80px 24px; } .quote-text { font-size: 22px; } .cta-section { padding: 80px 24px; } .cta-headline { font-size: 32px; } }
@@ -94,7 +104,7 @@ import BaseHead from '../../components/BaseHead.astro';
       <div class="hero-badge">For Sales Reps</div>
       <h1 class="hero-headline">Stop doing <em>CRM busywork</em></h1>
       <p class="hero-sub">You became a rep to sell, not to spend 30 minutes after every call updating HubSpot. recrd does it for you—automatically.</p>
-      <a href="#" class="hero-cta">Get Started Free <span class="hero-cta-arrow"><img src="/icons/chevron-green.svg" alt="" /></span></a>
+      <a href="#" class="hero-cta">Get Started Free <span class="hero-cta-arrow"><img src="/icons/chevron-green.svg" alt="" class="chevron-default" /><img src="/icons/chevron-black.svg" alt="" class="chevron-hover" /></span></a>
     </div>
     <div class="hero-visual">
       <div class="hero-mock-header"><span class="hero-mock-title">Post-Call Tasks</span><span class="hero-mock-time">Auto-completed in 47s</span></div>
@@ -147,7 +157,7 @@ import BaseHead from '../../components/BaseHead.astro';
   <section class="cta-section">
     <h2 class="cta-headline">Ready to sell more, admin less?</h2>
     <p class="cta-sub">Join thousands of reps who save 5+ hours every week with recrd.</p>
-    <a href="#" class="btn btn-primary">Start Free Trial <span class="btn-arrow"><img src="/icons/chevron-green.svg" alt="" /></span></a>
+    <a href="#" class="btn btn-primary">Start Free Trial <span class="btn-arrow"><img src="/icons/chevron-green.svg" alt="" class="chevron-default" /><img src="/icons/chevron-black.svg" alt="" class="chevron-hover" /></span></a>
   </section>
 
   <Footer />

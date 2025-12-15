@@ -11,10 +11,14 @@ import BaseHead from '../components/BaseHead.astro';
   <BaseHead title="Pricing - recrd" description="Simple pricing for AI-powered revenue intelligence. Start with Starter, scale with Advanced." />
   
   <style>
-    .beta-banner { text-align: center; padding: 12px 24px; font-size: 14px; }
+    body { padding-top: 44px; }
+    .beta-banner { text-align: center; padding: 12px 24px; font-size: 14px; position: fixed; top: 0; left: 0; right: 0; z-index: 1001; }
     .beta-banner strong { font-weight: 600; }
     [data-theme="dark"] .beta-banner { background: var(--mint); color: #0a0a0a; }
     [data-theme="light"] .beta-banner { background: var(--purple); color: #fff; }
+    
+    /* Offset nav for banner */
+    nav, .nav { top: 44px !important; }
 
     .pricing-header { padding: 120px 48px 60px; text-align: center; }
     .pricing-headline { font-size: 64px; font-weight: 350; line-height: 1.1; letter-spacing: -0.03em; margin-bottom: 20px; }
@@ -32,7 +36,7 @@ import BaseHead from '../components/BaseHead.astro';
     .user-counter { display: flex; align-items: center; justify-content: center; gap: 24px; padding: 24px; background: var(--bg-card); border: 1px solid var(--border); max-width: 500px; margin: 0 auto 60px; }
     .counter-label { font-size: 14px; color: var(--text-muted); }
     .counter-controls { display: flex; align-items: center; gap: 16px; }
-    .counter-btn { width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; background: var(--bg); border: 1px solid var(--border); cursor: pointer; font-size: 18px; transition: all 0.2s; }
+    .counter-btn { width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; background: var(--bg); border: 1px solid var(--border); cursor: pointer; font-size: 18px; transition: all 0.2s; color: var(--text); }
     .counter-btn:hover { border-color: var(--mint); color: var(--mint); }
     .counter-btn:disabled { opacity: 0.3; cursor: not-allowed; }
     .counter-value { font-size: 24px; font-weight: 500; min-width: 48px; text-align: center; font-family: var(--mono); }
@@ -89,7 +93,9 @@ import BaseHead from '../components/BaseHead.astro';
     .check-icon svg { width: 14px; height: 14px; }
     .check-icon.mint svg { stroke: var(--mint); }
     .check-icon.purple svg { stroke: var(--purple); }
+    [data-theme="light"] .check-icon.mint svg { stroke: var(--purple); }
     .feature-highlight { color: var(--mint); font-weight: 500; }
+    [data-theme="light"] .feature-highlight { color: var(--purple); }
 
     /* Feature Comparison Table */
     .comparison-section { padding: 80px 48px 120px; border-top: 1px solid var(--border); }
@@ -108,6 +114,7 @@ import BaseHead from '../components/BaseHead.astro';
     .comparison-cell.tier-name { font-weight: 600; font-size: 14px; text-transform: uppercase; letter-spacing: 0.05em; }
     .category-name { font-weight: 600; font-size: 18px; color: var(--text); }
     .check { color: var(--mint); font-size: 18px; }
+    [data-theme="light"] .check { color: var(--purple); }
     .dash { color: var(--text-muted); opacity: 0.3; font-size: 18px; }
     .coming-soon-badge { font-family: var(--mono); font-size: 9px; text-transform: uppercase; letter-spacing: 0.05em; padding: 3px 6px; background: var(--border); color: var(--text-muted); margin-left: 8px; }
     .feature-value { font-family: var(--mono); font-size: 14px; }
@@ -134,11 +141,11 @@ import BaseHead from '../components/BaseHead.astro';
 </head>
 
 <body>
-  <Nav />
-
   <div class="beta-banner">
     <strong>Private Beta</strong> — We're still building. Some features may be in development.
   </div>
+
+  <Nav />
 
   <section class="pricing-header">
     <h1 class="pricing-headline">Simple pricing,<br>powerful agents.</h1>

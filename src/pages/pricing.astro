@@ -11,16 +11,7 @@ import BaseHead from '../components/BaseHead.astro';
   <BaseHead title="Pricing - recrd" description="Simple pricing for AI-powered revenue intelligence. Start with Starter, scale with Advanced." />
   
   <style>
-    body { padding-top: 44px; }
-    .beta-banner { text-align: center; padding: 12px 24px; font-size: 14px; position: fixed; top: 0; left: 0; right: 0; z-index: 1001; }
-    .beta-banner strong { font-weight: 600; }
-    [data-theme="dark"] .beta-banner { background: var(--mint); color: #0a0a0a; }
-    [data-theme="light"] .beta-banner { background: var(--purple); color: #fff; }
-    
-    /* Offset nav for banner */
-    nav, .nav { top: 44px !important; }
-
-    .pricing-header { padding: 120px 48px 60px; text-align: center; }
+    .pricing-header { padding: 160px 48px 60px; text-align: center; }
     .pricing-headline { font-size: 64px; font-weight: 350; line-height: 1.1; letter-spacing: -0.03em; margin-bottom: 20px; }
     .pricing-sub { font-size: 18px; color: var(--text-muted); max-width: 500px; margin: 0 auto 40px; }
 
@@ -136,15 +127,11 @@ import BaseHead from '../components/BaseHead.astro';
     .cta-buttons .btn span { position: relative; z-index: 1; }
 
     @media (max-width: 1000px) { .pricing-grid { grid-template-columns: 1fr; max-width: 450px; } .comparison-table { overflow-x: auto; } .comparison-row { min-width: 600px; } }
-    @media (max-width: 900px) { .pricing-header { padding: 100px 24px 40px; } .pricing-headline { font-size: 44px; } .pricing-section { padding: 0 24px 60px; } .user-counter { flex-direction: column; gap: 16px; margin: 0 24px 40px; max-width: none; } .counter-total { text-align: center; } .comparison-section { padding: 60px 24px 80px; } .faq-section { padding: 80px 24px; } .faq-grid { grid-template-columns: 1fr; } .cta-section { padding: 80px 24px; } .cta-headline { font-size: 32px; } .cta-buttons { flex-direction: column; } .cta-buttons .btn { width: 100%; } }
+    @media (max-width: 900px) { .pricing-header { padding: 140px 24px 40px; } .pricing-headline { font-size: 44px; } .pricing-section { padding: 0 24px 60px; } .user-counter { flex-direction: column; gap: 16px; margin: 0 24px 40px; max-width: none; } .counter-total { text-align: center; } .comparison-section { padding: 60px 24px 80px; } .faq-section { padding: 80px 24px; } .faq-grid { grid-template-columns: 1fr; } .cta-section { padding: 80px 24px; } .cta-headline { font-size: 32px; } .cta-buttons { flex-direction: column; } .cta-buttons .btn { width: 100%; } }
   </style>
 </head>
 
 <body>
-  <div class="beta-banner">
-    <strong>Private Beta</strong> — We're still building. Some features may be in development.
-  </div>
-
   <Nav />
 
   <section class="pricing-header">

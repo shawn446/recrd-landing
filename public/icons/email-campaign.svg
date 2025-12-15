@@ -1,0 +1,14 @@
+<svg width="100" height="100" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M68.75 25H6.25V37.5H68.75V25Z" fill="#A678F4"/>
+<path d="M18.75 37.5H6.25V75H18.75V37.5Z" fill="#A678F4"/>
+<path d="M68.75 37.5H56.25V75H68.75V37.5Z" fill="#A678F4"/>
+<path d="M68.75 62.5H6.25V75H68.75V62.5Z" fill="#A678F4"/>
+<path opacity="0.6" d="M31.25 31.25H18.75V43.75H31.25V31.25Z" fill="#A678F4"/>
+<path opacity="0.6" d="M43.75 37.5H31.25V50H43.75V37.5Z" fill="#A678F4"/>
+<path opacity="0.6" d="M56.25 31.25H43.75V43.75H56.25V31.25Z" fill="#A678F4"/>
+<path d="M87.5 18.75H75V31.25H87.5V18.75Z" fill="#46FCAF"/>
+<path d="M93.75 31.25H81.25V43.75H93.75V31.25Z" fill="#46FCAF"/>
+<path opacity="0.7" d="M87.5 43.75H75V56.25H87.5V43.75Z" fill="#46FCAF"/>
+<path opacity="0.5" d="M93.75 56.25H81.25V68.75H93.75V56.25Z" fill="#46FCAF"/>
+<path opacity="0.3" d="M87.5 68.75H75V81.25H87.5V68.75Z" fill="#46FCAF"/>
+</svg>

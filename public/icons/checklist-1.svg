@@ -1,0 +1,35 @@
+<svg width="100" height="100" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g clip-path="url(#clip0_11_1752)">
+<mask id="mask0_11_1752" style="mask-type:luminance" maskUnits="userSpaceOnUse" x="0" y="0" width="100" height="100">
+<path d="M100 0H0V100H100V0Z" fill="white"/>
+</mask>
+<g mask="url(#mask0_11_1752)">
+<path d="M100 0H0V100H100V0Z" fill="#A678F4"/>
+<path d="M40 10H30V20H40V10Z" fill="#FE3E80"/>
+<path d="M50 10H40V20H50V10Z" fill="#FE3E80"/>
+<path d="M60 10H50V20H60V10Z" fill="#FE3E80"/>
+<path d="M70 10H60V20H70V10Z" fill="#FE3E80"/>
+<path d="M40 50H30V60H40V50Z" fill="#FE3E80"/>
+<path d="M50 50H40V60H50V50Z" fill="#FE3E80"/>
+<path d="M60 50H50V60H60V50Z" fill="#FE3E80"/>
+<path d="M70 50H60V60H70V50Z" fill="#FE3E80"/>
+<path d="M80 50H70V60H80V50Z" fill="#FE3E80"/>
+<path d="M90 50H80V60H90V50Z" fill="#FE3E80"/>
+<path d="M40 30H30V40H40V30Z" fill="#46FCAF"/>
+<path d="M50 30H40V40H50V30Z" fill="#46FCAF"/>
+<path d="M40 70H30V80H40V70Z" fill="#46FCAF"/>
+<path d="M50 70H40V80H50V70Z" fill="#46FCAF"/>
+<path d="M60 70H50V80H60V70Z" fill="#46FCAF"/>
+<path d="M70 70H60V80H70V70Z" fill="#46FCAF"/>
+<path d="M20 10H10V20H20V10Z" fill="#67E8F9"/>
+<path d="M20 30H10V40H20V30Z" fill="#67E8F9"/>
+<path d="M20 50H10V60H20V50Z" fill="#67E8F9"/>
+<path d="M20 70H10V80H20V70Z" fill="#67E8F9"/>
+</g>
+</g>
+<defs>
+<clipPath id="clip0_11_1752">
+<rect width="100" height="100" fill="white"/>
+</clipPath>
+</defs>
+</svg>

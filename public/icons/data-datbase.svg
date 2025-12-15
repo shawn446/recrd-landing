@@ -1,0 +1,48 @@
+<svg width="100" height="100" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g clip-path="url(#clip0_11_1849)">
+<mask id="mask0_11_1849" style="mask-type:luminance" maskUnits="userSpaceOnUse" x="0" y="0" width="100" height="100">
+<path d="M100 0H0V100H100V0Z" fill="white"/>
+</mask>
+<g mask="url(#mask0_11_1849)">
+<path d="M100 0H0V100H100V0Z" fill="#FE689B"/>
+<path d="M100 0H0V100H100V0Z" fill="#8B5CF6"/>
+<path d="M30 10H20V20H30V10Z" fill="#FE689B"/>
+<path d="M40 10H30V20H40V10Z" fill="#FE689B"/>
+<path d="M50 10H40V20H50V10Z" fill="#FE689B"/>
+<path d="M60 10H50V20H60V10Z" fill="#FE689B"/>
+<path d="M20 20H10V30H20V20Z" fill="#FE689B"/>
+<path d="M20 30H10V40H20V30Z" fill="#FE689B"/>
+<path d="M20 40H10V50H20V40Z" fill="#FE689B"/>
+<path d="M70 20H60V30H70V20Z" fill="#FE689B"/>
+<path d="M70 30H60V40H70V30Z" fill="#FE689B"/>
+<path d="M70 40H60V50H70V40Z" fill="#FE689B"/>
+<path d="M30 60H20V70H30V60Z" fill="#FE689B"/>
+<path d="M40 60H30V70H40V60Z" fill="#FE689B"/>
+<path d="M50 60H40V70H50V60Z" fill="#FE689B"/>
+<path d="M60 60H50V70H60V60Z" fill="#FE689B"/>
+<path d="M70 50H60V60H70V50Z" fill="#FE689B"/>
+<path d="M20 50H10V60H20V50Z" fill="#FE689B"/>
+<path d="M50 30H40V40H50V30Z" fill="#46FCAF"/>
+<path d="M60 30H50V40H60V30Z" fill="#46FCAF"/>
+<path d="M70 30H60V40H70V30Z" fill="#F3CD01"/>
+<path d="M80 30H70V40H80V30Z" fill="#46FCAF"/>
+<path d="M40 40H30V50H40V40Z" fill="#46FCAF"/>
+<path d="M40 50H30V60H40V50Z" fill="#46FCAF"/>
+<path d="M40 60H30V70H40V60Z" fill="#F3CD01"/>
+<path d="M90 40H80V50H90V40Z" fill="#46FCAF"/>
+<path d="M90 50H80V60H90V50Z" fill="#46FCAF"/>
+<path d="M90 60H80V70H90V60Z" fill="#46FCAF"/>
+<path d="M50 80H40V90H50V80Z" fill="#46FCAF"/>
+<path d="M60 80H50V90H60V80Z" fill="#46FCAF"/>
+<path d="M70 80H60V90H70V80Z" fill="#46FCAF"/>
+<path d="M80 80H70V90H80V80Z" fill="#46FCAF"/>
+<path d="M90 70H80V80H90V70Z" fill="#46FCAF"/>
+<path d="M40 70H30V80H40V70Z" fill="#46FCAF"/>
+</g>
+</g>
+<defs>
+<clipPath id="clip0_11_1849">
+<rect width="100" height="100" fill="white"/>
+</clipPath>
+</defs>
+</svg>

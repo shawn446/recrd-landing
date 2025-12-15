@@ -6,11 +6,8 @@
   <div class="footer-inner">
     <div class="footer-brand">
       <a href="/" class="footer-logo">
-        <svg viewBox="0 0 52 52" fill="none" width="28" height="28">
-          <rect y="16" width="28" height="28" fill="#A678F4"/>
-          <rect x="16" width="28" height="28" fill="#46FCAF"/>
-        </svg>
-        <span>recrd</span>
+        <img src="/dark-logo.svg" alt="recrd" class="logo-dark" />
+        <img src="/light-logo.svg" alt="recrd" class="logo-light" />
       </a>
       <p class="footer-desc">AI agents that close deals. Every call triggers intelligent automation that keeps your CRM current and your team informed.</p>
       <div class="footer-social">
@@ -89,16 +86,21 @@
   .footer-logo {
     display: inline-flex;
     align-items: center;
-    gap: 10px;
     text-decoration: none;
     margin-bottom: 16px;
   }
 
-  .footer-logo span {
-    font-weight: 600;
-    font-size: 16px;
-    color: var(--text);
+  .footer-logo img {
+    height: 24px;
+    width: auto;
   }
+  
+  /* Logo theme switching */
+  .logo-light { display: none; }
+  .logo-dark { display: block; }
+  
+  :global([data-theme="light"]) .logo-light { display: block; }
+  :global([data-theme="light"]) .logo-dark { display: none; }
 
   .footer-desc {
     font-size: 14px;

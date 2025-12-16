@@ -1,5 +1,5 @@
 ---
-// Hero - Smaller pixels, 3 positions using full screen, pixel in/out
+// Hero - Smaller pixels, randomized positions
 import Nav from '../components/Nav.astro';
 import Footer from '../components/Footer.astro';
 import BaseHead from '../components/BaseHead.astro';
@@ -127,39 +127,23 @@ import BaseHead from '../components/BaseHead.astro';
       height: var(--card-h);
       pointer-events: auto;
       filter: drop-shadow(0 20px 40px rgba(0,0,0,0.5));
+      transition: left 0s, top 0s; /* no transition on position */
     }
 
-    /* 3 positions - spread across full height */
-    /* Top-left area */
-    .card-slot[data-pos="0"] { 
-      left: calc(var(--cell) * 0); 
-      top: calc(var(--cell) * 1); 
-    }
-    /* Middle-right area */
-    .card-slot[data-pos="1"] { 
-      left: calc(var(--cell) * 5); 
-      top: calc(var(--cell) * 3); 
-    }
-    /* Bottom-left area */
-    .card-slot[data-pos="2"] { 
-      left: calc(var(--cell) * 1); 
-      top: calc(var(--cell) * 5); 
-    }
-
-    /* Pixel grid - smaller boxes (12x18 = 216 pixels) */
+    /* Pixel grid - even smaller boxes (16x24 = 384 pixels) */
     .pixel-grid {
       width: 100%;
       height: 100%;
       display: grid;
-      grid-template-columns: repeat(12, 1fr);
-      grid-template-rows: repeat(18, 1fr);
+      grid-template-columns: repeat(16, 1fr);
+      grid-template-rows: repeat(24, 1fr);
     }
 
     .pixel-cell {
       opacity: 0;
       transform: scale(0);
-      transition: opacity 0.08s ease-out, transform 0.12s cubic-bezier(0.34, 1.56, 0.64, 1);
-      background-size: 1200% 1800%;
+      transition: opacity 0.06s ease-out, transform 0.1s cubic-bezier(0.34, 1.56, 0.64, 1);
+      background-size: 1600% 2400%;
     }
 
     .pixel-cell.visible {
@@ -221,9 +205,9 @@ import BaseHead from '../components/BaseHead.astro';
     </div>
 
     <div class="cards-container">
-      <div class="card-slot" data-pos="0" id="slot-0"></div>
-      <div class="card-slot" data-pos="1" id="slot-1"></div>
-      <div class="card-slot" data-pos="2" id="slot-2"></div>
+      <div class="card-slot" id="slot-0"></div>
+      <div class="card-slot" id="slot-1"></div>
+      <div class="card-slot" id="slot-2"></div>
     </div>
   </section>
 
@@ -243,11 +227,28 @@ import BaseHead from '../components/BaseHead.astro';
       { src: '/cards/card-10-prep-agent.svg' },
     ];
 
-    const COLS = 12;
-    const ROWS = 18;
-    const TOTAL_PIXELS = COLS * ROWS; // 216
+    // All possible grid positions [row, col] - cards are 2x3, grid is 8 wide
+    // So col can be 0-6, row depends on viewport but 0-5 is safe
+    const allPositions = [
+      // Top area
+      [0, 0], [0, 2], [0, 4], [0, 6],
+      // Upper-mid
+      [1, 1], [1, 3], [1, 5],
+      // Middle
+      [2, 0], [2, 2], [2, 4], [2, 6],
+      // Lower-mid
+      [3, 1], [3, 3], [3, 5],
+      // Bottom
+      [4, 0], [4, 2], [4, 4], [4, 6],
+      [5, 1], [5, 3], [5, 5],
+    ];
+
+    const COLS = 16;
+    const ROWS = 24;
+    const TOTAL_PIXELS = COLS * ROWS; // 384
 
     let currentCards = [0, 1, 2];
+    let usedPositions = []; // track which positions are currently in use
 
     function shuffle(arr) {
       const a = [...arr];
@@ -256,6 +257,20 @@ import BaseHead from '../components/BaseHead.astro';
         [a[i], a[j]] = [a[j], a[i]];
       }
       return a;
+    }
+
+    function getRandomPosition() {
+      const available = allPositions.filter(pos => 
+        !usedPositions.some(used => used[0] === pos[0] && used[1] === pos[1])
+      );
+      if (available.length === 0) return allPositions[Math.floor(Math.random() * allPositions.length)];
+      return available[Math.floor(Math.random() * available.length)];
+    }
+
+    function setSlotPosition(slot, row, col) {
+      const cell = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--cell'));
+      slot.style.left = `${col * cell}px`;
+      slot.style.top = `${(row + 1) * cell}px`; // +1 to avoid banner
     }
 
     function buildPixelCard(card) {
@@ -276,38 +291,41 @@ import BaseHead from '../components/BaseHead.astro';
       const cells = slot.querySelectorAll('.pixel-cell');
       const indices = shuffle([...Array(cells.length).keys()]);
 
-      // Faster animation with smaller delay between pixels
       indices.forEach((idx, i) => {
         setTimeout(() => {
           cells[idx].classList.add('visible');
-        }, i * 6); // 6ms between each pixel
+        }, i * 4); // faster with more pixels
       });
 
       setTimeout(() => {
         if (callback) callback();
-      }, TOTAL_PIXELS * 6 + 100);
+      }, TOTAL_PIXELS * 4 + 100);
     }
 
     function animatePixelOut(slot, callback) {
       const cells = slot.querySelectorAll('.pixel-cell');
       const indices = shuffle([...Array(cells.length).keys()]);
 
-      // Pixels disappear randomly
       indices.forEach((idx, i) => {
         setTimeout(() => {
           cells[idx].classList.remove('visible');
-        }, i * 5); // slightly faster out
+        }, i * 3);
       });
 
       setTimeout(() => {
         slot.innerHTML = '';
         if (callback) callback();
-      }, TOTAL_PIXELS * 5 + 150);
+      }, TOTAL_PIXELS * 3 + 100);
     }
 
     function showCard(slotIndex, cardIndex) {
       const slot = document.getElementById(`slot-${slotIndex}`);
       const card = cards[cardIndex];
+      
+      // Get new random position
+      const pos = getRandomPosition();
+      usedPositions[slotIndex] = pos;
+      setSlotPosition(slot, pos[0], pos[1]);
       
       slot.innerHTML = buildPixelCard(card);
       animatePixelIn(slot);
@@ -321,30 +339,35 @@ import BaseHead from '../components/BaseHead.astro';
         return;
       }
 
-      animatePixelOut(slot, callback);
+      animatePixelOut(slot, () => {
+        // Clear this position from used
+        usedPositions[slotIndex] = null;
+        if (callback) callback();
+      });
     }
 
     function cycleSlot(slotIndex) {
       hideCard(slotIndex, () => {
-        // Pause with empty slot
         setTimeout(() => {
           currentCards[slotIndex] = (currentCards[slotIndex] + 3) % cards.length;
           showCard(slotIndex, currentCards[slotIndex]);
-        }, 500);
+        }, 400);
       });
     }
 
     document.addEventListener('DOMContentLoaded', () => {
-      // Staggered initial load
+      // Initial positions - spread out
+      usedPositions = [null, null, null];
+      
       setTimeout(() => showCard(0, 0), 400);
-      setTimeout(() => showCard(1, 1), 1000);
-      setTimeout(() => showCard(2, 2), 1600);
+      setTimeout(() => showCard(1, 1), 900);
+      setTimeout(() => showCard(2, 2), 1400);
 
-      // Cycle each slot at different intervals
-      const cycleTime = 5500;
-      setTimeout(() => setInterval(() => cycleSlot(0), cycleTime), 4500);
-      setTimeout(() => setInterval(() => cycleSlot(1), cycleTime), 6000);
-      setTimeout(() => setInterval(() => cycleSlot(2), cycleTime), 7500);
+      // Staggered cycling
+      const cycleTime = 5000;
+      setTimeout(() => setInterval(() => cycleSlot(0), cycleTime), 4000);
+      setTimeout(() => setInterval(() => cycleSlot(1), cycleTime), 5500);
+      setTimeout(() => setInterval(() => cycleSlot(2), cycleTime), 7000);
     });
   </script>
 </body>

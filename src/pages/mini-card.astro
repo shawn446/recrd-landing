@@ -1,5 +1,5 @@
 ---
-// Hero - Simple 1x1 cards with agent names, origami flip
+// Mini 1x1 agent cards - start hidden, slide in from edges
 import Nav from '../components/Nav.astro';
 import Footer from '../components/Footer.astro';
 import BaseHead from '../components/BaseHead.astro';
@@ -22,7 +22,6 @@ import BaseHead from '../components/BaseHead.astro';
       --bg: #0A0A0A;
       --text: #FFFFFF;
       --text-muted: rgba(255,255,255,0.6);
-      --mono: 'SF Mono', 'Fira Code', monospace;
     }
 
     * { box-sizing: border-box; }
@@ -120,15 +119,18 @@ import BaseHead from '../components/BaseHead.astro';
       pointer-events: none;
     }
 
-    /* Agent card - exactly 1x1 cell */
-    .agent-card {
+    /* Mini card - exactly 1x1 cell */
+    .mini-card {
       position: absolute;
       width: var(--cell);
       height: var(--cell);
-      perspective: 800px;
+      pointer-events: auto;
+      /* Start completely off-screen/invisible */
+      opacity: 0;
+      visibility: hidden;
     }
 
-    .agent-card-inner {
+    .mini-card-inner {
       width: 100%;
       height: 100%;
       display: flex;
@@ -137,47 +139,64 @@ import BaseHead from '../components/BaseHead.astro';
       align-items: center;
       padding: 12px;
       text-align: center;
-      backface-visibility: hidden;
-      transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
       box-shadow: 0 10px 40px rgba(0,0,0,0.4);
     }
 
-    /* Fold origins - card folds FROM this edge */
-    .agent-card.from-top .agent-card-inner {
-      transform-origin: top center;
-      transform: rotateX(-90deg);
+    /* Slide animations - start off screen */
+    .mini-card.from-left {
+      transform: translateX(-100%);
     }
-    .agent-card.from-bottom .agent-card-inner {
-      transform-origin: bottom center;
-      transform: rotateX(90deg);
+    .mini-card.from-right {
+      transform: translateX(100%);
     }
-    .agent-card.from-left .agent-card-inner {
-      transform-origin: left center;
-      transform: rotateY(90deg);
+    .mini-card.from-top {
+      transform: translateY(-100%);
     }
-    .agent-card.from-right .agent-card-inner {
-      transform-origin: right center;
-      transform: rotateY(-90deg);
+    .mini-card.from-bottom {
+      transform: translateY(100%);
     }
 
-    /* Visible state */
-    .agent-card.visible .agent-card-inner {
-      transform: rotateX(0deg) rotateY(0deg);
+    /* Visible state - slide in */
+    .mini-card.visible {
+      opacity: 1;
+      visibility: visible;
+      transform: translateX(0) translateY(0);
+      transition: opacity 0.4s ease, transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    /* Exiting state */
+    .mini-card.exiting.from-left {
+      opacity: 0;
+      transform: translateX(-100%);
+      transition: opacity 0.3s ease, transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .mini-card.exiting.from-right {
+      opacity: 0;
+      transform: translateX(100%);
+      transition: opacity 0.3s ease, transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .mini-card.exiting.from-top {
+      opacity: 0;
+      transform: translateY(-100%);
+      transition: opacity 0.3s ease, transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .mini-card.exiting.from-bottom {
+      opacity: 0;
+      transform: translateY(100%);
+      transition: opacity 0.3s ease, transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
     /* Colors */
-    .agent-card-inner.mint { background: var(--mint); color: #0a0a0a; }
-    .agent-card-inner.purple { background: var(--purple); color: #fff; }
-    .agent-card-inner.cyan { background: var(--cyan); color: #0a0a0a; }
-    .agent-card-inner.coral { background: var(--coral); color: #fff; }
-    .agent-card-inner.yellow { background: var(--yellow); color: #0a0a0a; }
-    .agent-card-inner.dark { background: #1a1a1a; color: #fff; border: 1px solid rgba(255,255,255,0.1); }
+    .mini-card-inner.mint { background: var(--mint); color: #0a0a0a; }
+    .mini-card-inner.purple { background: var(--purple); color: #fff; }
+    .mini-card-inner.cyan { background: var(--cyan); color: #0a0a0a; }
+    .mini-card-inner.coral { background: var(--coral); color: #fff; }
+    .mini-card-inner.yellow { background: var(--yellow); color: #0a0a0a; }
 
-    /* Icon */
     .agent-icon {
-      width: 28px;
-      height: 28px;
-      margin-bottom: 8px;
+      width: 26px;
+      height: 26px;
+      margin-bottom: 6px;
       opacity: 0.9;
     }
 
@@ -189,41 +208,19 @@ import BaseHead from '../components/BaseHead.astro';
       fill: none;
     }
 
-    /* Name */
     .agent-name {
-      font-size: 11px;
+      font-size: 10px;
       font-weight: 600;
       text-transform: uppercase;
       letter-spacing: 0.05em;
-      line-height: 1.3;
+      line-height: 1.2;
     }
-
-    /* Grid positions - row, col from top-left of grid area */
-    .agent-card[data-row="1"][data-col="0"] { top: calc(var(--cell) * 1); left: calc(var(--cell) * 0); }
-    .agent-card[data-row="1"][data-col="3"] { top: calc(var(--cell) * 1); left: calc(var(--cell) * 3); }
-    .agent-card[data-row="1"][data-col="6"] { top: calc(var(--cell) * 1); left: calc(var(--cell) * 6); }
-    
-    .agent-card[data-row="2"][data-col="1"] { top: calc(var(--cell) * 2); left: calc(var(--cell) * 1); }
-    .agent-card[data-row="2"][data-col="4"] { top: calc(var(--cell) * 2); left: calc(var(--cell) * 4); }
-    .agent-card[data-row="2"][data-col="7"] { top: calc(var(--cell) * 2); left: calc(var(--cell) * 7); }
-    
-    .agent-card[data-row="3"][data-col="0"] { top: calc(var(--cell) * 3); left: calc(var(--cell) * 0); }
-    .agent-card[data-row="3"][data-col="2"] { top: calc(var(--cell) * 3); left: calc(var(--cell) * 2); }
-    .agent-card[data-row="3"][data-col="5"] { top: calc(var(--cell) * 3); left: calc(var(--cell) * 5); }
-    
-    .agent-card[data-row="4"][data-col="1"] { top: calc(var(--cell) * 4); left: calc(var(--cell) * 1); }
-    .agent-card[data-row="4"][data-col="4"] { top: calc(var(--cell) * 4); left: calc(var(--cell) * 4); }
-    .agent-card[data-row="4"][data-col="7"] { top: calc(var(--cell) * 4); left: calc(var(--cell) * 7); }
-    
-    .agent-card[data-row="5"][data-col="0"] { top: calc(var(--cell) * 5); left: calc(var(--cell) * 0); }
-    .agent-card[data-row="5"][data-col="3"] { top: calc(var(--cell) * 5); left: calc(var(--cell) * 3); }
-    .agent-card[data-row="5"][data-col="6"] { top: calc(var(--cell) * 5); left: calc(var(--cell) * 6); }
 
     /* RESPONSIVE */
     @media (max-width: 1800px) {
       :root { --cell: 100px; }
       .hero-headline { font-size: 64px; }
-      .agent-name { font-size: 10px; }
+      .agent-name { font-size: 9px; }
     }
 
     @media (max-width: 1600px) {
@@ -235,8 +232,8 @@ import BaseHead from '../components/BaseHead.astro';
       :root { --cell: 80px; }
       .hero-headline { font-size: 48px; }
       .hero-content { max-width: 380px; }
-      .agent-icon { width: 24px; height: 24px; }
-      .agent-name { font-size: 9px; }
+      .agent-icon { width: 22px; height: 22px; }
+      .agent-name { font-size: 8px; }
     }
 
     @media (max-width: 1200px) {
@@ -283,15 +280,15 @@ import BaseHead from '../components/BaseHead.astro';
   <script>
     const agents = [
       { name: 'Call Trigger', color: 'mint', icon: 'phone' },
-      { name: 'Intel Agent', color: 'purple', icon: 'search' },
+      { name: 'Intel', color: 'purple', icon: 'search' },
       { name: 'CRM Sync', color: 'cyan', icon: 'database' },
       { name: 'Risk Alert', color: 'coral', icon: 'alert' },
-      { name: 'Email Draft', color: 'yellow', icon: 'mail' },
+      { name: 'Email', color: 'yellow', icon: 'mail' },
       { name: 'Coaching', color: 'purple', icon: 'star' },
       { name: 'Multithread', color: 'mint', icon: 'users' },
-      { name: 'Quote Agent', color: 'cyan', icon: 'quote' },
-      { name: 'Task Agent', color: 'coral', icon: 'check' },
-      { name: 'Prep Agent', color: 'yellow', icon: 'clipboard' },
+      { name: 'Quote', color: 'cyan', icon: 'quote' },
+      { name: 'Tasks', color: 'coral', icon: 'check' },
+      { name: 'Prep', color: 'yellow', icon: 'clipboard' },
     ];
 
     const icons = {
@@ -307,39 +304,42 @@ import BaseHead from '../components/BaseHead.astro';
       clipboard: '<path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/>',
     };
 
-    // Grid positions: [row, col, foldDirection]
+    // Grid positions [row, col] and slide direction
+    // Row starts at 1 to avoid banner, grid is 8 wide
     const positions = [
-      [1, 0, 'from-left'],
-      [1, 3, 'from-top'],
-      [1, 6, 'from-right'],
-      [2, 1, 'from-top'],
-      [2, 4, 'from-left'],
-      [2, 7, 'from-right'],
-      [3, 0, 'from-left'],
-      [3, 2, 'from-bottom'],
-      [3, 5, 'from-top'],
-      [4, 1, 'from-left'],
-      [4, 4, 'from-bottom'],
-      [4, 7, 'from-right'],
-      [5, 0, 'from-left'],
-      [5, 3, 'from-bottom'],
-      [5, 6, 'from-right'],
+      { row: 1, col: 0, dir: 'from-left' },
+      { row: 1, col: 3, dir: 'from-top' },
+      { row: 1, col: 7, dir: 'from-right' },
+      { row: 2, col: 1, dir: 'from-left' },
+      { row: 2, col: 5, dir: 'from-top' },
+      { row: 3, col: 0, dir: 'from-left' },
+      { row: 3, col: 3, dir: 'from-bottom' },
+      { row: 3, col: 6, dir: 'from-right' },
+      { row: 4, col: 2, dir: 'from-left' },
+      { row: 4, col: 5, dir: 'from-bottom' },
+      { row: 4, col: 7, dir: 'from-right' },
+      { row: 5, col: 0, dir: 'from-left' },
+      { row: 5, col: 4, dir: 'from-bottom' },
+      { row: 5, col: 7, dir: 'from-right' },
     ];
 
-    let activeCards = []; // track which cards are currently showing
-    let cardElements = []; // all card DOM elements
+    let cardElements = [];
+    let activeCards = [];
 
-    function createCard(agent, position, index) {
-      const [row, col, fold] = position;
-      
+    function getCell() {
+      return parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--cell')) || 120;
+    }
+
+    function createCard(agent, pos) {
+      const cell = getCell();
       const card = document.createElement('div');
-      card.className = `agent-card ${fold}`;
-      card.dataset.row = row;
-      card.dataset.col = col;
-      card.dataset.index = index;
+      card.className = `mini-card ${pos.dir}`;
+      card.style.left = `${pos.col * cell}px`;
+      card.style.top = `${pos.row * cell}px`;
+      card.dataset.dir = pos.dir;
       
       card.innerHTML = `
-        <div class="agent-card-inner ${agent.color}">
+        <div class="mini-card-inner ${agent.color}">
           <div class="agent-icon">
             <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
               ${icons[agent.icon]}
@@ -352,18 +352,18 @@ import BaseHead from '../components/BaseHead.astro';
       return card;
     }
 
-    function showCard(card, delay = 0) {
-      setTimeout(() => {
-        card.classList.add('visible');
-      }, delay);
+    function showCard(card) {
+      // Force reflow before adding visible class
+      card.offsetHeight;
+      card.classList.add('visible');
+      card.classList.remove('exiting');
     }
 
-    function hideCard(card, delay = 0) {
+    function hideCard(card) {
       return new Promise(resolve => {
-        setTimeout(() => {
-          card.classList.remove('visible');
-          setTimeout(resolve, 600); // wait for animation
-        }, delay);
+        card.classList.add('exiting');
+        card.classList.remove('visible');
+        setTimeout(resolve, 400);
       });
     }
 
@@ -377,28 +377,27 @@ import BaseHead from '../components/BaseHead.astro';
     }
 
     async function cycleCards() {
-      // Pick 3-5 random cards to hide
+      // Hide 2-3 random active cards
       const toHide = shuffle(activeCards).slice(0, Math.min(3, activeCards.length));
       
-      // Hide them with stagger
-      for (let i = 0; i < toHide.length; i++) {
-        await hideCard(toHide[i], i * 150);
+      for (const card of toHide) {
+        await hideCard(card);
       }
       
-      // Remove from active
       activeCards = activeCards.filter(c => !toHide.includes(c));
       
       // Pause
-      await new Promise(r => setTimeout(r, 400));
+      await new Promise(r => setTimeout(r, 300));
       
-      // Find inactive cards
+      // Show 2-3 inactive cards
       const inactive = cardElements.filter(c => !activeCards.includes(c));
       const toShow = shuffle(inactive).slice(0, Math.min(3, inactive.length));
       
-      // Show with stagger
       toShow.forEach((card, i) => {
-        showCard(card, i * 200);
-        activeCards.push(card);
+        setTimeout(() => {
+          showCard(card);
+          activeCards.push(card);
+        }, i * 150);
       });
     }
 
@@ -408,22 +407,24 @@ import BaseHead from '../components/BaseHead.astro';
       // Create all cards
       agents.forEach((agent, i) => {
         const pos = positions[i % positions.length];
-        const card = createCard(agent, pos, i);
+        const card = createCard(agent, pos);
         container.appendChild(card);
         cardElements.push(card);
       });
 
-      // Initial show - stagger first 5 cards
+      // Initial show - stagger 5 random cards
       const initial = shuffle(cardElements).slice(0, 5);
       initial.forEach((card, i) => {
-        showCard(card, 500 + i * 250);
-        activeCards.push(card);
+        setTimeout(() => {
+          showCard(card);
+          activeCards.push(card);
+        }, 400 + i * 200);
       });
 
       // Start cycling
       setTimeout(() => {
         setInterval(cycleCards, 4000);
-      }, 4000);
+      }, 4500);
     });
   </script>
 </body>

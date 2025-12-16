@@ -1,5 +1,5 @@
 ---
-// Hero - Simple labeled cards with origami flip
+// Hero - Simple labeled cards sliding in from edges
 import Nav from '../components/Nav.astro';
 import Footer from '../components/Footer.astro';
 import BaseHead from '../components/BaseHead.astro';
@@ -117,19 +117,18 @@ import BaseHead from '../components/BaseHead.astro';
       height: 100%;
       z-index: 10;
       pointer-events: none;
-      perspective: 1000px;
     }
 
-    /* ========== FLIP CARDS ========== */
+    /* ========== SLIDE CARDS ========== */
     .card-slot {
       position: absolute;
       width: var(--cell);
       height: var(--cell);
       pointer-events: auto;
-      perspective: 800px;
+      overflow: hidden;
     }
 
-    .flip-card {
+    .slide-card {
       width: 100%;
       height: 100%;
       display: flex;
@@ -138,42 +137,29 @@ import BaseHead from '../components/BaseHead.astro';
       text-decoration: none;
       cursor: pointer;
       box-shadow: 0 8px 30px rgba(0,0,0,0.3);
-      backface-visibility: hidden;
-      transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+      transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
-    .flip-card:hover {
+    .slide-card:hover {
       filter: brightness(1.05);
     }
 
-    /* Fold origins */
-    .flip-card.from-top {
-      transform-origin: top center;
-      transform: rotateX(-90deg);
-    }
-    .flip-card.from-bottom {
-      transform-origin: bottom center;
-      transform: rotateX(90deg);
-    }
-    .flip-card.from-left {
-      transform-origin: left center;
-      transform: rotateY(90deg);
-    }
-    .flip-card.from-right {
-      transform-origin: right center;
-      transform: rotateY(-90deg);
-    }
+    /* Start off-screen */
+    .slide-card.from-top { transform: translateY(-120%); }
+    .slide-card.from-bottom { transform: translateY(120%); }
+    .slide-card.from-left { transform: translateX(-120%); }
+    .slide-card.from-right { transform: translateX(120%); }
 
-    .flip-card.visible {
-      transform: rotateX(0) rotateY(0);
+    .slide-card.visible {
+      transform: translateX(0) translateY(0);
     }
 
     /* Colors */
-    .flip-card.mint { background: var(--mint); }
-    .flip-card.purple { background: var(--purple); }
-    .flip-card.cyan { background: var(--cyan); }
-    .flip-card.coral { background: var(--coral); }
-    .flip-card.yellow { background: var(--yellow); }
+    .slide-card.mint { background: var(--mint); }
+    .slide-card.purple { background: var(--purple); }
+    .slide-card.cyan { background: var(--cyan); }
+    .slide-card.coral { background: var(--coral); }
+    .slide-card.yellow { background: var(--yellow); }
 
     .card-label {
       font-size: 10px;
@@ -247,25 +233,37 @@ import BaseHead from '../components/BaseHead.astro';
 
   <script>
     const cards = [
-      { label: 'Agents', color: 'purple', row: 1, col: 2, dir: 'top' },
-      { label: 'Pipeline', color: 'cyan', row: 1, col: 5, dir: 'top' },
-      { label: 'Forecast', color: 'mint', row: 1, col: 8, dir: 'right' },
+      // Row 1
+      { label: 'Agents', color: 'purple', row: 1, col: 1, dir: 'left' },
+      { label: 'Pipeline', color: 'cyan', row: 1, col: 4, dir: 'top' },
+      { label: 'Forecast', color: 'mint', row: 1, col: 7, dir: 'right' },
       
-      { label: 'CRM Sync', color: 'mint', row: 2, col: 1, dir: 'left' },
-      { label: 'Alerts', color: 'coral', row: 2, col: 4, dir: 'top' },
-      { label: 'Coaching', color: 'yellow', row: 2, col: 7, dir: 'right' },
+      // Row 2
+      { label: 'CRM Sync', color: 'yellow', row: 2, col: 0, dir: 'left' },
+      { label: 'Alerts', color: 'coral', row: 2, col: 3, dir: 'top' },
+      { label: 'Coaching', color: 'purple', row: 2, col: 6, dir: 'top' },
+      { label: 'Intel', color: 'mint', row: 2, col: 9, dir: 'right' },
       
-      { label: 'Transcripts', color: 'purple', row: 3, col: 0, dir: 'left' },
-      { label: 'Insights', color: 'cyan', row: 3, col: 3, dir: 'left' },
-      { label: 'Email', color: 'coral', row: 3, col: 6, dir: 'right' },
-      { label: 'Tasks', color: 'mint', row: 3, col: 9, dir: 'right' },
+      // Row 3
+      { label: 'Transcripts', color: 'cyan', row: 3, col: 2, dir: 'left' },
+      { label: 'Insights', color: 'coral', row: 3, col: 5, dir: 'bottom' },
+      { label: 'Email', color: 'yellow', row: 3, col: 8, dir: 'right' },
       
-      { label: 'Intel', color: 'yellow', row: 4, col: 2, dir: 'left' },
-      { label: 'Reports', color: 'purple', row: 4, col: 5, dir: 'bottom' },
-      { label: 'Analytics', color: 'cyan', row: 4, col: 8, dir: 'right' },
+      // Row 4
+      { label: 'Tasks', color: 'mint', row: 4, col: 1, dir: 'left' },
+      { label: 'Reports', color: 'purple', row: 4, col: 4, dir: 'bottom' },
+      { label: 'Analytics', color: 'cyan', row: 4, col: 7, dir: 'right' },
       
-      { label: 'Dashboard', color: 'coral', row: 5, col: 1, dir: 'left' },
-      { label: 'Notify', color: 'mint', row: 5, col: 4, dir: 'bottom' },
+      // Row 5
+      { label: 'Dashboard', color: 'coral', row: 5, col: 0, dir: 'left' },
+      { label: 'Notify', color: 'yellow', row: 5, col: 3, dir: 'bottom' },
+      { label: 'Quotes', color: 'purple', row: 5, col: 6, dir: 'bottom' },
+      { label: 'Prep', color: 'mint', row: 5, col: 9, dir: 'right' },
+      
+      // Row 6
+      { label: 'Signals', color: 'yellow', row: 6, col: 2, dir: 'left' },
+      { label: 'Deals', color: 'cyan', row: 6, col: 5, dir: 'bottom' },
+      { label: 'Follow-up', color: 'coral', row: 6, col: 8, dir: 'right' },
     ];
 
     function shuffle(arr) {
@@ -283,9 +281,9 @@ import BaseHead from '../components/BaseHead.astro';
 
     function buildCard(card) {
       return `
-        <a href="#" class="flip-card ${card.color} from-${card.dir}">
+        <div class="slide-card ${card.color} from-${card.dir}">
           <span class="card-label">${card.label}</span>
-        </a>
+        </div>
       `;
     }
 
@@ -300,8 +298,8 @@ import BaseHead from '../components/BaseHead.astro';
       return slot;
     }
 
-    function flipIn(slot) {
-      const card = slot.querySelector('.flip-card');
+    function slideIn(slot) {
+      const card = slot.querySelector('.slide-card');
       if (card) {
         requestAnimationFrame(() => {
           card.classList.add('visible');
@@ -309,12 +307,12 @@ import BaseHead from '../components/BaseHead.astro';
       }
     }
 
-    function flipOut(slot) {
+    function slideOut(slot) {
       return new Promise(resolve => {
-        const card = slot.querySelector('.flip-card');
+        const card = slot.querySelector('.slide-card');
         if (card) {
           card.classList.remove('visible');
-          setTimeout(resolve, 600);
+          setTimeout(resolve, 500);
         } else {
           resolve();
         }
@@ -331,9 +329,9 @@ import BaseHead from '../components/BaseHead.astro';
         slots.push(slot);
       });
 
-      // Staggered flip in
-      slots.forEach((slot, i) => {
-        setTimeout(() => flipIn(slot), 200 + i * 100);
+      // Staggered slide in
+      shuffle([...slots]).forEach((slot, i) => {
+        setTimeout(() => slideIn(slot), 200 + i * 80);
       });
 
       // Cycle random cards
@@ -343,10 +341,10 @@ import BaseHead from '../components/BaseHead.astro';
           const slot = slots[idx];
           
           setTimeout(async () => {
-            await flipOut(slot);
+            await slideOut(slot);
             await new Promise(r => setTimeout(r, 300));
-            flipIn(slot);
-          }, i * 250);
+            slideIn(slot);
+          }, i * 200);
         });
       }, 4000);
     });

@@ -1,5 +1,5 @@
 ---
-// Mini 1x1 agent cards - start hidden, slide in from edges
+// Mini 1x1 cards - fixed positions, slide in and out
 import Nav from '../components/Nav.astro';
 import Footer from '../components/Footer.astro';
 import BaseHead from '../components/BaseHead.astro';
@@ -117,20 +117,32 @@ import BaseHead from '../components/BaseHead.astro';
       height: 100%;
       z-index: 10;
       pointer-events: none;
+      overflow: hidden;
     }
 
-    /* Mini card - exactly 1x1 cell */
-    .mini-card {
+    /* Mini card slot - fixed position */
+    .card-slot {
       position: absolute;
       width: var(--cell);
       height: var(--cell);
       pointer-events: auto;
-      /* Start completely off-screen/invisible */
-      opacity: 0;
-      visibility: hidden;
+      overflow: hidden;
     }
 
-    .mini-card-inner {
+    /* Fixed slot positions */
+    .card-slot[data-slot="0"] { left: calc(var(--cell) * 0); top: calc(var(--cell) * 1); }
+    .card-slot[data-slot="1"] { left: calc(var(--cell) * 3); top: calc(var(--cell) * 1); }
+    .card-slot[data-slot="2"] { left: calc(var(--cell) * 7); top: calc(var(--cell) * 1); }
+    .card-slot[data-slot="3"] { left: calc(var(--cell) * 1); top: calc(var(--cell) * 2); }
+    .card-slot[data-slot="4"] { left: calc(var(--cell) * 5); top: calc(var(--cell) * 2); }
+    .card-slot[data-slot="5"] { left: calc(var(--cell) * 0); top: calc(var(--cell) * 3); }
+    .card-slot[data-slot="6"] { left: calc(var(--cell) * 4); top: calc(var(--cell) * 3); }
+    .card-slot[data-slot="7"] { left: calc(var(--cell) * 7); top: calc(var(--cell) * 3); }
+    .card-slot[data-slot="8"] { left: calc(var(--cell) * 2); top: calc(var(--cell) * 4); }
+    .card-slot[data-slot="9"] { left: calc(var(--cell) * 6); top: calc(var(--cell) * 4); }
+
+    /* The actual card that slides */
+    .mini-card {
       width: 100%;
       height: 100%;
       display: flex;
@@ -140,58 +152,26 @@ import BaseHead from '../components/BaseHead.astro';
       padding: 12px;
       text-align: center;
       box-shadow: 0 10px 40px rgba(0,0,0,0.4);
+      transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
-    /* Slide animations - start off screen */
-    .mini-card.from-left {
-      transform: translateX(-100%);
-    }
-    .mini-card.from-right {
-      transform: translateX(100%);
-    }
-    .mini-card.from-top {
-      transform: translateY(-100%);
-    }
-    .mini-card.from-bottom {
-      transform: translateY(100%);
-    }
+    /* Starting positions - off screen */
+    .mini-card.from-left { transform: translateX(-120%); }
+    .mini-card.from-right { transform: translateX(120%); }
+    .mini-card.from-top { transform: translateY(-120%); }
+    .mini-card.from-bottom { transform: translateY(120%); }
 
-    /* Visible state - slide in */
+    /* Visible - centered */
     .mini-card.visible {
-      opacity: 1;
-      visibility: visible;
       transform: translateX(0) translateY(0);
-      transition: opacity 0.4s ease, transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-
-    /* Exiting state */
-    .mini-card.exiting.from-left {
-      opacity: 0;
-      transform: translateX(-100%);
-      transition: opacity 0.3s ease, transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-    .mini-card.exiting.from-right {
-      opacity: 0;
-      transform: translateX(100%);
-      transition: opacity 0.3s ease, transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-    .mini-card.exiting.from-top {
-      opacity: 0;
-      transform: translateY(-100%);
-      transition: opacity 0.3s ease, transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-    .mini-card.exiting.from-bottom {
-      opacity: 0;
-      transform: translateY(100%);
-      transition: opacity 0.3s ease, transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
     /* Colors */
-    .mini-card-inner.mint { background: var(--mint); color: #0a0a0a; }
-    .mini-card-inner.purple { background: var(--purple); color: #fff; }
-    .mini-card-inner.cyan { background: var(--cyan); color: #0a0a0a; }
-    .mini-card-inner.coral { background: var(--coral); color: #fff; }
-    .mini-card-inner.yellow { background: var(--yellow); color: #0a0a0a; }
+    .mini-card.mint { background: var(--mint); color: #0a0a0a; }
+    .mini-card.purple { background: var(--purple); color: #fff; }
+    .mini-card.cyan { background: var(--cyan); color: #0a0a0a; }
+    .mini-card.coral { background: var(--coral); color: #fff; }
+    .mini-card.yellow { background: var(--yellow); color: #0a0a0a; }
 
     .agent-icon {
       width: 26px;
@@ -272,7 +252,18 @@ import BaseHead from '../components/BaseHead.astro';
       </div>
     </div>
 
-    <div class="cards-container" id="cards-container"></div>
+    <div class="cards-container" id="cards-container">
+      <div class="card-slot" data-slot="0" data-dir="left"></div>
+      <div class="card-slot" data-slot="1" data-dir="top"></div>
+      <div class="card-slot" data-slot="2" data-dir="right"></div>
+      <div class="card-slot" data-slot="3" data-dir="left"></div>
+      <div class="card-slot" data-slot="4" data-dir="top"></div>
+      <div class="card-slot" data-slot="5" data-dir="left"></div>
+      <div class="card-slot" data-slot="6" data-dir="bottom"></div>
+      <div class="card-slot" data-slot="7" data-dir="right"></div>
+      <div class="card-slot" data-slot="8" data-dir="bottom"></div>
+      <div class="card-slot" data-slot="9" data-dir="right"></div>
+    </div>
   </section>
 
   <Footer />
@@ -304,42 +295,11 @@ import BaseHead from '../components/BaseHead.astro';
       clipboard: '<path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/>',
     };
 
-    // Grid positions [row, col] and slide direction
-    // Row starts at 1 to avoid banner, grid is 8 wide
-    const positions = [
-      { row: 1, col: 0, dir: 'from-left' },
-      { row: 1, col: 3, dir: 'from-top' },
-      { row: 1, col: 7, dir: 'from-right' },
-      { row: 2, col: 1, dir: 'from-left' },
-      { row: 2, col: 5, dir: 'from-top' },
-      { row: 3, col: 0, dir: 'from-left' },
-      { row: 3, col: 3, dir: 'from-bottom' },
-      { row: 3, col: 6, dir: 'from-right' },
-      { row: 4, col: 2, dir: 'from-left' },
-      { row: 4, col: 5, dir: 'from-bottom' },
-      { row: 4, col: 7, dir: 'from-right' },
-      { row: 5, col: 0, dir: 'from-left' },
-      { row: 5, col: 4, dir: 'from-bottom' },
-      { row: 5, col: 7, dir: 'from-right' },
-    ];
+    let slotAgents = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]; // which agent is in each slot
 
-    let cardElements = [];
-    let activeCards = [];
-
-    function getCell() {
-      return parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--cell')) || 120;
-    }
-
-    function createCard(agent, pos) {
-      const cell = getCell();
-      const card = document.createElement('div');
-      card.className = `mini-card ${pos.dir}`;
-      card.style.left = `${pos.col * cell}px`;
-      card.style.top = `${pos.row * cell}px`;
-      card.dataset.dir = pos.dir;
-      
-      card.innerHTML = `
-        <div class="mini-card-inner ${agent.color}">
+    function buildCard(agent, dir) {
+      return `
+        <div class="mini-card ${agent.color} from-${dir}">
           <div class="agent-icon">
             <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
               ${icons[agent.icon]}
@@ -348,23 +308,48 @@ import BaseHead from '../components/BaseHead.astro';
           <div class="agent-name">${agent.name}</div>
         </div>
       `;
-      
-      return card;
     }
 
-    function showCard(card) {
-      // Force reflow before adding visible class
-      card.offsetHeight;
-      card.classList.add('visible');
-      card.classList.remove('exiting');
+    function slideIn(slot) {
+      const card = slot.querySelector('.mini-card');
+      if (card) {
+        requestAnimationFrame(() => {
+          card.classList.add('visible');
+        });
+      }
     }
 
-    function hideCard(card) {
+    function slideOut(slot) {
       return new Promise(resolve => {
-        card.classList.add('exiting');
-        card.classList.remove('visible');
-        setTimeout(resolve, 400);
+        const card = slot.querySelector('.mini-card');
+        if (card) {
+          card.classList.remove('visible');
+          setTimeout(resolve, 500);
+        } else {
+          resolve();
+        }
       });
+    }
+
+    async function cycleSlot(slotIndex) {
+      const slot = document.querySelector(`[data-slot="${slotIndex}"]`);
+      const dir = slot.dataset.dir;
+      
+      // Slide out
+      await slideOut(slot);
+      
+      // Pause
+      await new Promise(r => setTimeout(r, 200));
+      
+      // Next agent (cycle through all 10)
+      slotAgents[slotIndex] = (slotAgents[slotIndex] + 1) % agents.length;
+      
+      // Build new card
+      slot.innerHTML = buildCard(agents[slotAgents[slotIndex]], dir);
+      
+      // Slight delay then slide in
+      await new Promise(r => setTimeout(r, 50));
+      slideIn(slot);
     }
 
     function shuffle(arr) {
@@ -376,55 +361,27 @@ import BaseHead from '../components/BaseHead.astro';
       return a;
     }
 
-    async function cycleCards() {
-      // Hide 2-3 random active cards
-      const toHide = shuffle(activeCards).slice(0, Math.min(3, activeCards.length));
-      
-      for (const card of toHide) {
-        await hideCard(card);
-      }
-      
-      activeCards = activeCards.filter(c => !toHide.includes(c));
-      
-      // Pause
-      await new Promise(r => setTimeout(r, 300));
-      
-      // Show 2-3 inactive cards
-      const inactive = cardElements.filter(c => !activeCards.includes(c));
-      const toShow = shuffle(inactive).slice(0, Math.min(3, inactive.length));
-      
-      toShow.forEach((card, i) => {
-        setTimeout(() => {
-          showCard(card);
-          activeCards.push(card);
-        }, i * 150);
-      });
-    }
-
     document.addEventListener('DOMContentLoaded', () => {
-      const container = document.getElementById('cards-container');
+      const slots = document.querySelectorAll('.card-slot');
       
-      // Create all cards
-      agents.forEach((agent, i) => {
-        const pos = positions[i % positions.length];
-        const card = createCard(agent, pos);
-        container.appendChild(card);
-        cardElements.push(card);
-      });
-
-      // Initial show - stagger 5 random cards
-      const initial = shuffle(cardElements).slice(0, 5);
-      initial.forEach((card, i) => {
+      // Build initial cards (staggered)
+      slots.forEach((slot, i) => {
+        const dir = slot.dataset.dir;
+        slot.innerHTML = buildCard(agents[i], dir);
+        
         setTimeout(() => {
-          showCard(card);
-          activeCards.push(card);
-        }, 400 + i * 200);
+          slideIn(slot);
+        }, 300 + i * 100);
       });
 
-      // Start cycling
-      setTimeout(() => {
-        setInterval(cycleCards, 4000);
-      }, 4500);
+      // Cycle random slots every 4 seconds
+      setInterval(() => {
+        // Pick 2-3 random slots to cycle
+        const indices = shuffle([0, 1, 2, 3, 4, 5, 6, 7, 8, 9]).slice(0, 3);
+        indices.forEach((idx, i) => {
+          setTimeout(() => cycleSlot(idx), i * 200);
+        });
+      }, 4000);
     });
   </script>
 </body>

@@ -1,5 +1,5 @@
 ---
-// Hero - Smaller pixels, randomized positions
+// Hero - Fixed pixels, proper spacing, no overlaps
 import Nav from '../components/Nav.astro';
 import Footer from '../components/Footer.astro';
 import BaseHead from '../components/BaseHead.astro';
@@ -127,10 +127,9 @@ import BaseHead from '../components/BaseHead.astro';
       height: var(--card-h);
       pointer-events: auto;
       filter: drop-shadow(0 20px 40px rgba(0,0,0,0.5));
-      transition: left 0s, top 0s; /* no transition on position */
     }
 
-    /* Pixel grid - even smaller boxes (16x24 = 384 pixels) */
+    /* Pixel grid - 16x24 = 384 tiny pixels */
     .pixel-grid {
       width: 100%;
       height: 100%;
@@ -142,8 +141,7 @@ import BaseHead from '../components/BaseHead.astro';
     .pixel-cell {
       opacity: 0;
       transform: scale(0);
-      transition: opacity 0.06s ease-out, transform 0.1s cubic-bezier(0.34, 1.56, 0.64, 1);
-      background-size: 1600% 2400%;
+      transition: opacity 0.05s ease-out, transform 0.08s cubic-bezier(0.34, 1.56, 0.64, 1);
     }
 
     .pixel-cell.visible {
@@ -204,7 +202,7 @@ import BaseHead from '../components/BaseHead.astro';
       </div>
     </div>
 
-    <div class="cards-container">
+    <div class="cards-container" id="cards-container">
       <div class="card-slot" id="slot-0"></div>
       <div class="card-slot" id="slot-1"></div>
       <div class="card-slot" id="slot-2"></div>
@@ -227,28 +225,30 @@ import BaseHead from '../components/BaseHead.astro';
       { src: '/cards/card-10-prep-agent.svg' },
     ];
 
-    // All possible grid positions [row, col] - cards are 2x3, grid is 8 wide
-    // So col can be 0-6, row depends on viewport but 0-5 is safe
-    const allPositions = [
-      // Top area
-      [0, 0], [0, 2], [0, 4], [0, 6],
-      // Upper-mid
-      [1, 1], [1, 3], [1, 5],
-      // Middle
-      [2, 0], [2, 2], [2, 4], [2, 6],
-      // Lower-mid
-      [3, 1], [3, 3], [3, 5],
-      // Bottom
-      [4, 0], [4, 2], [4, 4], [4, 6],
-      [5, 1], [5, 3], [5, 5],
+    // Positions: [row, col] - row starts at 1 to avoid banner
+    // Cards are 2 wide x 3 tall, grid is 8 wide
+    // Spread positions so they don't overlap (at least 3 cols apart, 4 rows apart)
+    const positionSets = [
+      // Set A: diagonal spread
+      [[1, 0], [3, 3], [1, 6]],
+      // Set B: different diagonal
+      [[2, 1], [1, 4], [4, 2]],
+      // Set C: scattered
+      [[1, 5], [4, 0], [2, 3]],
+      // Set D: more variety
+      [[3, 0], [1, 3], [3, 6]],
+      // Set E
+      [[2, 0], [4, 4], [1, 2]],
+      // Set F
+      [[1, 1], [3, 5], [5, 1]],
     ];
 
     const COLS = 16;
     const ROWS = 24;
-    const TOTAL_PIXELS = COLS * ROWS; // 384
+    const TOTAL_PIXELS = COLS * ROWS;
 
     let currentCards = [0, 1, 2];
-    let usedPositions = []; // track which positions are currently in use
+    let currentSetIndex = 0;
 
     function shuffle(arr) {
       const a = [...arr];
@@ -259,28 +259,25 @@ import BaseHead from '../components/BaseHead.astro';
       return a;
     }
 
-    function getRandomPosition() {
-      const available = allPositions.filter(pos => 
-        !usedPositions.some(used => used[0] === pos[0] && used[1] === pos[1])
-      );
-      if (available.length === 0) return allPositions[Math.floor(Math.random() * allPositions.length)];
-      return available[Math.floor(Math.random() * available.length)];
+    function getCell() {
+      return parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--cell')) || 120;
     }
 
     function setSlotPosition(slot, row, col) {
-      const cell = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--cell'));
+      const cell = getCell();
       slot.style.left = `${col * cell}px`;
-      slot.style.top = `${(row + 1) * cell}px`; // +1 to avoid banner
+      slot.style.top = `${row * cell}px`;
     }
 
-    function buildPixelCard(card) {
+    function buildPixelCard(cardSrc) {
       let cells = '';
       
       for (let row = 0; row < ROWS; row++) {
         for (let col = 0; col < COLS; col++) {
-          const xPos = (col / (COLS - 1)) * 100;
-          const yPos = (row / (ROWS - 1)) * 100;
-          cells += `<div class="pixel-cell" style="background-image: url('${card.src}'); background-position: ${xPos}% ${yPos}%;"></div>`;
+          // Calculate background position percentage
+          const xPos = COLS > 1 ? (col / (COLS - 1)) * 100 : 0;
+          const yPos = ROWS > 1 ? (row / (ROWS - 1)) * 100 : 0;
+          cells += `<div class="pixel-cell" data-src="${cardSrc}" style="background: url('${cardSrc}') ${xPos}% ${yPos}% / 1600% 2400% no-repeat;"></div>`;
         }
       }
       
@@ -291,43 +288,43 @@ import BaseHead from '../components/BaseHead.astro';
       const cells = slot.querySelectorAll('.pixel-cell');
       const indices = shuffle([...Array(cells.length).keys()]);
 
+      // Super fast - 2ms between pixels
       indices.forEach((idx, i) => {
         setTimeout(() => {
           cells[idx].classList.add('visible');
-        }, i * 4); // faster with more pixels
+        }, i * 2);
       });
 
       setTimeout(() => {
         if (callback) callback();
-      }, TOTAL_PIXELS * 4 + 100);
+      }, TOTAL_PIXELS * 2 + 50);
     }
 
     function animatePixelOut(slot, callback) {
       const cells = slot.querySelectorAll('.pixel-cell');
       const indices = shuffle([...Array(cells.length).keys()]);
 
+      // Fast out - 1.5ms between pixels
       indices.forEach((idx, i) => {
         setTimeout(() => {
           cells[idx].classList.remove('visible');
-        }, i * 3);
+        }, i * 1.5);
       });
 
       setTimeout(() => {
         slot.innerHTML = '';
         if (callback) callback();
-      }, TOTAL_PIXELS * 3 + 100);
+      }, TOTAL_PIXELS * 1.5 + 50);
     }
 
     function showCard(slotIndex, cardIndex) {
       const slot = document.getElementById(`slot-${slotIndex}`);
       const card = cards[cardIndex];
+      const positions = positionSets[currentSetIndex % positionSets.length];
+      const pos = positions[slotIndex];
       
-      // Get new random position
-      const pos = getRandomPosition();
-      usedPositions[slotIndex] = pos;
       setSlotPosition(slot, pos[0], pos[1]);
-      
-      slot.innerHTML = buildPixelCard(card);
+      slot.innerHTML = buildPixelCard(card.src);
       animatePixelIn(slot);
     }
 
@@ -339,35 +336,33 @@ import BaseHead from '../components/BaseHead.astro';
         return;
       }
 
-      animatePixelOut(slot, () => {
-        // Clear this position from used
-        usedPositions[slotIndex] = null;
-        if (callback) callback();
-      });
+      animatePixelOut(slot, callback);
     }
 
     function cycleSlot(slotIndex) {
       hideCard(slotIndex, () => {
         setTimeout(() => {
+          // Rotate to next position set when slot 0 cycles
+          if (slotIndex === 0) {
+            currentSetIndex = (currentSetIndex + 1) % positionSets.length;
+          }
           currentCards[slotIndex] = (currentCards[slotIndex] + 3) % cards.length;
           showCard(slotIndex, currentCards[slotIndex]);
-        }, 400);
+        }, 300);
       });
     }
 
     document.addEventListener('DOMContentLoaded', () => {
-      // Initial positions - spread out
-      usedPositions = [null, null, null];
-      
-      setTimeout(() => showCard(0, 0), 400);
-      setTimeout(() => showCard(1, 1), 900);
-      setTimeout(() => showCard(2, 2), 1400);
+      // Staggered initial load
+      setTimeout(() => showCard(0, 0), 300);
+      setTimeout(() => showCard(1, 1), 700);
+      setTimeout(() => showCard(2, 2), 1100);
 
-      // Staggered cycling
+      // Cycle times
       const cycleTime = 5000;
       setTimeout(() => setInterval(() => cycleSlot(0), cycleTime), 4000);
-      setTimeout(() => setInterval(() => cycleSlot(1), cycleTime), 5500);
-      setTimeout(() => setInterval(() => cycleSlot(2), cycleTime), 7000);
+      setTimeout(() => setInterval(() => cycleSlot(1), cycleTime), 5200);
+      setTimeout(() => setInterval(() => cycleSlot(2), cycleTime), 6400);
     });
   </script>
 </body>

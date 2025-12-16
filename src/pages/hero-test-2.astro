@@ -1,5 +1,5 @@
 ---
-// Hero - 3 cards, no overlap, animated entrances, cycling
+// Hero - 3 cards, grid-snapped, pixel reveal + fold animations
 import Nav from '../components/Nav.astro';
 import Footer from '../components/Footer.astro';
 import BaseHead from '../components/BaseHead.astro';
@@ -123,7 +123,7 @@ import BaseHead from '../components/BaseHead.astro';
       pointer-events: none;
     }
 
-    /* Card slot - 2x3 cells */
+    /* Card slot - exactly 2x3 cells */
     .card-slot {
       position: absolute;
       width: var(--card-w);
@@ -135,23 +135,24 @@ import BaseHead from '../components/BaseHead.astro';
 
     .card-slot.active {
       visibility: visible;
+      opacity: 1;
     }
 
-    /* 3 positions - spread out, no overlap */
-    /* Position 0: top-left area */
+    /* 3 positions - SNAPPED TO GRID, below banner area */
+    /* Position 0: left column, row 1 */
     .card-slot[data-pos="0"] { 
       left: calc(var(--cell) * 0); 
-      top: calc(var(--cell) * 0.5); 
+      top: calc(var(--cell) * 1); 
     }
-    /* Position 1: middle-right area */
+    /* Position 1: middle, row 2 (offset down) */
     .card-slot[data-pos="1"] { 
       left: calc(var(--cell) * 3); 
-      top: calc(var(--cell) * 2.5); 
+      top: calc(var(--cell) * 2); 
     }
-    /* Position 2: top-right area */
+    /* Position 2: right column, row 1 */
     .card-slot[data-pos="2"] { 
       left: calc(var(--cell) * 6); 
-      top: calc(var(--cell) * 0); 
+      top: calc(var(--cell) * 1); 
     }
 
     /* Card image */
@@ -165,76 +166,36 @@ import BaseHead from '../components/BaseHead.astro';
       filter: drop-shadow(0 20px 40px rgba(0,0,0,0.5));
     }
 
-    /* ========== PIXELATE ANIMATION ========== */
-    .card-slot.anim-pixelate img {
-      opacity: 0;
-    }
-
-    .card-slot.anim-pixelate.active img {
-      animation: pixelateIn 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-    }
-
-    .card-slot.anim-pixelate.exiting img {
-      animation: pixelateOut 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-    }
-
-    @keyframes pixelateIn {
-      0% { 
-        opacity: 0; 
-        filter: drop-shadow(0 20px 40px rgba(0,0,0,0.5)) blur(8px);
-        transform: scale(0.9);
-      }
-      30% { 
-        opacity: 0.5; 
-        filter: drop-shadow(0 20px 40px rgba(0,0,0,0.5)) blur(4px);
-      }
-      100% { 
-        opacity: 1; 
-        filter: drop-shadow(0 20px 40px rgba(0,0,0,0.5)) blur(0);
-        transform: scale(1);
-      }
-    }
-
-    @keyframes pixelateOut {
-      0% { 
-        opacity: 1; 
-        filter: drop-shadow(0 20px 40px rgba(0,0,0,0.5)) blur(0);
-        transform: scale(1);
-      }
-      100% { 
-        opacity: 0; 
-        filter: drop-shadow(0 20px 40px rgba(0,0,0,0.5)) blur(8px);
-        transform: scale(0.95);
-      }
-    }
-
-    /* Static/glitch effect overlay */
-    .static-overlay {
+    /* ========== PIXEL REVEAL ========== */
+    .pixel-grid {
       position: absolute;
       inset: 0;
-      z-index: 3;
+      display: grid;
+      grid-template-columns: repeat(8, 1fr);
+      grid-template-rows: repeat(12, 1fr);
+      z-index: 5;
       pointer-events: none;
+    }
+
+    .pixel-box {
+      opacity: 1;
+      transition: opacity 0.15s ease-out, transform 0.2s ease-out;
+    }
+
+    .pixel-box.hidden {
       opacity: 0;
-      background: repeating-linear-gradient(
-        0deg,
-        transparent,
-        transparent 2px,
-        rgba(255,255,255,0.03) 2px,
-        rgba(255,255,255,0.03) 4px
-      );
+      transform: scale(0.5);
     }
 
-    .card-slot.anim-pixelate.active .static-overlay {
-      animation: staticFlicker 0.8s ease-out forwards;
-    }
+    /* Pixel colors */
+    .pixel-box.mint { background: var(--mint); }
+    .pixel-box.purple { background: var(--purple); }
+    .pixel-box.cyan { background: var(--cyan); }
+    .pixel-box.coral { background: var(--coral); }
+    .pixel-box.yellow { background: var(--yellow); }
+    .pixel-box.dark { background: #1a1a1a; }
 
-    @keyframes staticFlicker {
-      0%, 10%, 20%, 30% { opacity: 1; }
-      5%, 15%, 25% { opacity: 0.5; }
-      100% { opacity: 0; }
-    }
-
-    /* ========== ORIGAMI FOLD ANIMATION ========== */
+    /* ========== ORIGAMI FOLD ========== */
     .fold-overlay {
       position: absolute;
       top: 0;
@@ -260,31 +221,21 @@ import BaseHead from '../components/BaseHead.astro';
       transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.4s ease;
     }
 
-    /* Fold origins */
     .fold-panel.from-top .fold-panel-inner { transform-origin: top center; }
     .fold-panel.from-bottom .fold-panel-inner { transform-origin: bottom center; }
     .fold-panel.from-left .fold-panel-inner { transform-origin: left center; }
     .fold-panel.from-right .fold-panel-inner { transform-origin: right center; }
 
-    /* Initial: panels cover SVG */
     .fold-panel .fold-panel-inner {
       transform: rotateX(0deg) rotateY(0deg);
       opacity: 1;
     }
 
-    /* Revealed: panels fold away */
     .fold-panel.revealed.from-top .fold-panel-inner { transform: rotateX(-95deg); opacity: 0; }
     .fold-panel.revealed.from-bottom .fold-panel-inner { transform: rotateX(95deg); opacity: 0; }
     .fold-panel.revealed.from-left .fold-panel-inner { transform: rotateY(95deg); opacity: 0; }
     .fold-panel.revealed.from-right .fold-panel-inner { transform: rotateY(-95deg); opacity: 0; }
 
-    /* Closing: panels fold back */
-    .fold-panel.closing.from-top .fold-panel-inner { transform: rotateX(0deg); opacity: 1; }
-    .fold-panel.closing.from-bottom .fold-panel-inner { transform: rotateX(0deg); opacity: 1; }
-    .fold-panel.closing.from-left .fold-panel-inner { transform: rotateY(0deg); opacity: 1; }
-    .fold-panel.closing.from-right .fold-panel-inner { transform: rotateY(0deg); opacity: 1; }
-
-    /* Panel colors */
     .fold-panel-inner.mint { background: var(--mint); }
     .fold-panel-inner.purple { background: var(--purple); }
     .fold-panel-inner.cyan { background: var(--cyan); }
@@ -292,54 +243,43 @@ import BaseHead from '../components/BaseHead.astro';
     .fold-panel-inner.yellow { background: var(--yellow); }
     .fold-panel-inner.dark { background: #1a1a1a; }
 
-    .card-slot.anim-fold {
-      opacity: 1;
-    }
-
-    /* ========== SLIDE ANIMATION ========== */
+    /* ========== SLIDE ========== */
     .card-slot.anim-slide img {
       opacity: 0;
       transform: translateY(40px);
+      transition: opacity 0.6s ease, transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
     .card-slot.anim-slide.active img {
-      animation: slideIn 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      opacity: 1;
+      transform: translateY(0);
     }
 
     .card-slot.anim-slide.exiting img {
-      animation: slideOut 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-    }
-
-    @keyframes slideIn {
-      0% { opacity: 0; transform: translateY(50px); }
-      100% { opacity: 1; transform: translateY(0); }
-    }
-
-    @keyframes slideOut {
-      0% { opacity: 1; transform: translateY(0); }
-      100% { opacity: 0; transform: translateY(-30px); }
+      opacity: 0;
+      transform: translateY(-30px);
     }
 
     /* RESPONSIVE */
     @media (max-width: 1800px) {
-      :root { --cell: 105px; }
+      :root { --cell: 100px; }
       .hero-headline { font-size: 64px; }
     }
 
     @media (max-width: 1600px) {
-      :root { --cell: 95px; }
-      .hero-headline { font-size: 58px; }
+      :root { --cell: 90px; }
+      .hero-headline { font-size: 56px; }
     }
 
     @media (max-width: 1400px) {
-      :root { --cell: 85px; }
-      .hero-headline { font-size: 50px; }
+      :root { --cell: 80px; }
+      .hero-headline { font-size: 48px; }
       .hero-content { max-width: 380px; }
     }
 
     @media (max-width: 1200px) {
-      :root { --cell: 75px; }
-      .hero-headline { font-size: 44px; }
+      :root { --cell: 70px; }
+      .hero-headline { font-size: 42px; }
     }
 
     @media (max-width: 1000px) {
@@ -374,7 +314,6 @@ import BaseHead from '../components/BaseHead.astro';
     </div>
 
     <div class="cards-container">
-      <!-- 3 card slots - always present, content swapped -->
       <div class="card-slot" data-pos="0" id="slot-0"></div>
       <div class="card-slot" data-pos="1" id="slot-1"></div>
       <div class="card-slot" data-pos="2" id="slot-2"></div>
@@ -397,16 +336,21 @@ import BaseHead from '../components/BaseHead.astro';
       { src: '/cards/card-10-prep-agent.svg', color: 'yellow' },
     ];
 
-    const animTypes = ['pixelate', 'fold', 'slide'];
+    const animTypes = ['pixel', 'fold', 'slide'];
     const foldDirs = ['from-top', 'from-left', 'from-right', 'from-bottom', 'from-left', 'from-top'];
 
-    let currentCards = [0, 1, 2]; // indices into cards array
-    let currentAnims = [0, 1, 2]; // indices into animTypes
+    let currentCards = [0, 1, 2];
+    let currentAnims = [0, 1, 2];
 
-    function buildPixelateCard(card) {
+    // Build pixel grid (8x12 = 96 tiny boxes)
+    function buildPixelCard(card) {
+      let pixels = '';
+      for (let i = 0; i < 96; i++) {
+        pixels += `<div class="pixel-box ${card.color}" data-index="${i}"></div>`;
+      }
       return `
         <img src="${card.src}" alt="Agent" />
-        <div class="static-overlay"></div>
+        <div class="pixel-grid">${pixels}</div>
       `;
     }
 
@@ -416,7 +360,6 @@ import BaseHead from '../components/BaseHead.astro';
           <div class="fold-panel-inner ${card.color}"></div>
         </div>
       `).join('');
-      
       return `
         <img src="${card.src}" alt="Agent" />
         <div class="fold-overlay">${panels}</div>
@@ -427,93 +370,113 @@ import BaseHead from '../components/BaseHead.astro';
       return `<img src="${card.src}" alt="Agent" />`;
     }
 
+    // Shuffle array helper
+    function shuffleArray(arr) {
+      const shuffled = [...arr];
+      for (let i = shuffled.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+      }
+      return shuffled;
+    }
+
     function showCard(slotIndex, cardIndex, animIndex) {
       const slot = document.getElementById(`slot-${slotIndex}`);
       const card = cards[cardIndex];
       const animType = animTypes[animIndex % animTypes.length];
 
-      // Clear previous
       slot.className = 'card-slot';
       slot.dataset.pos = slotIndex;
 
-      // Build card based on animation type
-      if (animType === 'pixelate') {
-        slot.innerHTML = buildPixelateCard(card);
-        slot.classList.add('anim-pixelate');
+      if (animType === 'pixel') {
+        slot.innerHTML = buildPixelCard(card);
+        slot.classList.add('anim-pixel', 'active');
+        
+        // Reveal pixels in random order
+        const pixels = slot.querySelectorAll('.pixel-box');
+        const indices = shuffleArray([...Array(pixels.length).keys()]);
+        
+        indices.forEach((idx, i) => {
+          setTimeout(() => {
+            pixels[idx].classList.add('hidden');
+          }, 50 + i * 12);
+        });
+
       } else if (animType === 'fold') {
         slot.innerHTML = buildFoldCard(card);
-        slot.classList.add('anim-fold');
+        slot.classList.add('anim-fold', 'active');
+        
+        const panels = slot.querySelectorAll('.fold-panel');
+        panels.forEach((panel, i) => {
+          setTimeout(() => panel.classList.add('revealed'), i * 80);
+        });
+
       } else {
         slot.innerHTML = buildSlideCard(card);
         slot.classList.add('anim-slide');
+        requestAnimationFrame(() => slot.classList.add('active'));
       }
-
-      // Trigger entrance
-      requestAnimationFrame(() => {
-        slot.classList.add('active');
-        
-        // For fold animation, reveal panels with stagger
-        if (animType === 'fold') {
-          const panels = slot.querySelectorAll('.fold-panel');
-          panels.forEach((panel, i) => {
-            setTimeout(() => panel.classList.add('revealed'), i * 70);
-          });
-        }
-      });
     }
 
     function hideCard(slotIndex, callback) {
       const slot = document.getElementById(`slot-${slotIndex}`);
-      const isFold = slot.classList.contains('anim-fold');
-      const isPixelate = slot.classList.contains('anim-pixelate');
-      const isSlide = slot.classList.contains('anim-slide');
+      const animType = slot.classList.contains('anim-pixel') ? 'pixel' : 
+                       slot.classList.contains('anim-fold') ? 'fold' : 'slide';
 
-      if (isFold) {
-        // Fold panels back
+      if (animType === 'pixel') {
+        // Pixels fade back in to cover
+        const pixels = slot.querySelectorAll('.pixel-box');
+        const indices = shuffleArray([...Array(pixels.length).keys()]);
+        
+        indices.forEach((idx, i) => {
+          setTimeout(() => {
+            pixels[idx].classList.remove('hidden');
+          }, i * 8);
+        });
+        
+        setTimeout(() => {
+          slot.classList.remove('active');
+          if (callback) callback();
+        }, pixels.length * 8 + 200);
+
+      } else if (animType === 'fold') {
         const panels = Array.from(slot.querySelectorAll('.fold-panel')).reverse();
         panels.forEach((panel, i) => {
-          setTimeout(() => {
-            panel.classList.remove('revealed');
-            panel.classList.add('closing');
-          }, i * 60);
+          setTimeout(() => panel.classList.remove('revealed'), i * 60);
         });
         setTimeout(() => {
           slot.classList.remove('active');
           if (callback) callback();
         }, panels.length * 60 + 400);
+
       } else {
-        // Pixelate or slide out
         slot.classList.add('exiting');
         setTimeout(() => {
           slot.classList.remove('active', 'exiting');
           if (callback) callback();
-        }, 600);
+        }, 500);
       }
     }
 
     function cycleSlot(slotIndex) {
       hideCard(slotIndex, () => {
-        // Get next card (cycle through all 10)
         currentCards[slotIndex] = (currentCards[slotIndex] + 3) % cards.length;
-        // Rotate animation type
         currentAnims[slotIndex] = (currentAnims[slotIndex] + 1) % animTypes.length;
-        
         showCard(slotIndex, currentCards[slotIndex], currentAnims[slotIndex]);
       });
     }
 
     document.addEventListener('DOMContentLoaded', () => {
       // Initial display with stagger
-      setTimeout(() => showCard(0, 0, 0), 300);
-      setTimeout(() => showCard(1, 1, 1), 600);
-      setTimeout(() => showCard(2, 2, 2), 900);
+      setTimeout(() => showCard(0, 0, 0), 400);
+      setTimeout(() => showCard(1, 1, 1), 700);
+      setTimeout(() => showCard(2, 2, 2), 1000);
 
-      // Cycle each slot on offset timers
-      const cycleInterval = 4500;
-      
-      setTimeout(() => setInterval(() => cycleSlot(0), cycleInterval), 3500);
-      setTimeout(() => setInterval(() => cycleSlot(1), cycleInterval), 5000);
-      setTimeout(() => setInterval(() => cycleSlot(2), cycleInterval), 6500);
+      // Cycle each slot
+      const cycleInterval = 5000;
+      setTimeout(() => setInterval(() => cycleSlot(0), cycleInterval), 4000);
+      setTimeout(() => setInterval(() => cycleSlot(1), cycleInterval), 5500);
+      setTimeout(() => setInterval(() => cycleSlot(2), cycleInterval), 7000);
     });
   </script>
 </body>

@@ -1,5 +1,5 @@
 ---
-// Hero - Cards with label bar + pixel art illustration
+// Hero - Simple labeled cards with origami flip
 import Nav from '../components/Nav.astro';
 import Footer from '../components/Footer.astro';
 import BaseHead from '../components/BaseHead.astro';
@@ -117,107 +117,73 @@ import BaseHead from '../components/BaseHead.astro';
       height: 100%;
       z-index: 10;
       pointer-events: none;
+      perspective: 1000px;
     }
 
-    /* ========== CARDS ========== */
+    /* ========== FLIP CARDS ========== */
     .card-slot {
       position: absolute;
-      pointer-events: auto;
-      overflow: hidden;
-    }
-
-    .card-slot.size-1 {
       width: var(--cell);
       height: var(--cell);
+      pointer-events: auto;
+      perspective: 800px;
     }
 
-    .card-slot.size-2 {
-      width: calc(var(--cell) * 2);
-      height: calc(var(--cell) * 2);
-    }
-
-    .pixel-card {
+    .flip-card {
       width: 100%;
       height: 100%;
-      position: relative;
-      text-decoration: none;
-      display: block;
-      transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-      cursor: pointer;
-      box-shadow: 0 8px 30px rgba(0,0,0,0.3);
-    }
-
-    .pixel-card:hover {
-      transform: scale(1.02);
-    }
-
-    /* Slide states */
-    .pixel-card.from-left { transform: translateX(-120%); }
-    .pixel-card.from-right { transform: translateX(120%); }
-    .pixel-card.from-top { transform: translateY(-120%); }
-    .pixel-card.from-bottom { transform: translateY(120%); }
-
-    .pixel-card.visible {
-      transform: translateX(0) translateY(0);
-    }
-
-    .pixel-card.visible:hover {
-      transform: scale(1.02);
-    }
-
-    /* Color backgrounds */
-    .pixel-card.mint { background: var(--mint); }
-    .pixel-card.purple { background: var(--purple); }
-    .pixel-card.cyan { background: var(--cyan); }
-    .pixel-card.coral { background: var(--coral); }
-    .pixel-card.yellow { background: var(--yellow); }
-
-    /* Label bar at top */
-    .card-label {
-      position: absolute;
-      top: 10%;
-      left: 15%;
-      right: 15%;
-      height: 20%;
-      background: rgba(10, 10, 10, 0.1);
       display: flex;
       align-items: center;
-      padding: 0 10%;
-      font-size: 9px;
+      justify-content: center;
+      text-decoration: none;
+      cursor: pointer;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+      backface-visibility: hidden;
+      transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .flip-card:hover {
+      filter: brightness(1.05);
+    }
+
+    /* Fold origins */
+    .flip-card.from-top {
+      transform-origin: top center;
+      transform: rotateX(-90deg);
+    }
+    .flip-card.from-bottom {
+      transform-origin: bottom center;
+      transform: rotateX(90deg);
+    }
+    .flip-card.from-left {
+      transform-origin: left center;
+      transform: rotateY(90deg);
+    }
+    .flip-card.from-right {
+      transform-origin: right center;
+      transform: rotateY(-90deg);
+    }
+
+    .flip-card.visible {
+      transform: rotateX(0) rotateY(0);
+    }
+
+    /* Colors */
+    .flip-card.mint { background: var(--mint); }
+    .flip-card.purple { background: var(--purple); }
+    .flip-card.cyan { background: var(--cyan); }
+    .flip-card.coral { background: var(--coral); }
+    .flip-card.yellow { background: var(--yellow); }
+
+    .card-label {
+      font-size: 10px;
       font-weight: 600;
       text-transform: uppercase;
-      letter-spacing: 0.1em;
+      letter-spacing: 0.08em;
       color: var(--bg);
+      text-align: center;
+      padding: 8px;
     }
-
-    .size-2 .card-label {
-      font-size: 11px;
-    }
-
-    /* Pixel art container */
-    .card-art {
-      position: absolute;
-      top: 35%;
-      left: 15%;
-      right: 15%;
-      bottom: 10%;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-evenly;
-    }
-
-    /* Pixel bars */
-    .px-bar {
-      height: 18%;
-      background: currentColor;
-    }
-
-    /* Accent colors for pixel art */
-    .pixel-card.mint .px-bar { color: var(--purple); }
-    .pixel-card.purple .px-bar { color: var(--mint); }
-    .pixel-card.cyan .px-bar { color: var(--coral); }
-    .pixel-card.coral .px-bar { color: var(--cyan); }
-    .pixel-card.yellow .px-bar { color: var(--purple); }
 
     /* RESPONSIVE */
     @media (max-width: 1800px) {
@@ -234,11 +200,13 @@ import BaseHead from '../components/BaseHead.astro';
       :root { --cell: 80px; }
       .hero-headline { font-size: 48px; }
       .hero-content { max-width: 380px; }
+      .card-label { font-size: 9px; }
     }
 
     @media (max-width: 1200px) {
       :root { --cell: 70px; }
       .hero-headline { font-size: 42px; }
+      .card-label { font-size: 8px; }
     }
 
     @media (max-width: 1000px) {
@@ -278,30 +246,26 @@ import BaseHead from '../components/BaseHead.astro';
   <Footer />
 
   <script>
-    // Card data with pixel art patterns (widths as percentages)
     const cards = [
-      { label: 'Agents', color: 'purple', href: '/agents', size: 2, row: 1, col: 1, dir: 'left', bars: [100, 70, 85, 50] },
-      { label: 'Forecast', color: 'mint', href: '/features#forecast', size: 1, row: 1, col: 5, dir: 'top', bars: [100, 75, 85, 55] },
-      { label: 'Pipeline', color: 'cyan', href: '/features#pipeline', size: 2, row: 1, col: 7, dir: 'right', bars: [100, 80, 60, 40] },
+      { label: 'Agents', color: 'purple', row: 1, col: 2, dir: 'top' },
+      { label: 'Pipeline', color: 'cyan', row: 1, col: 5, dir: 'top' },
+      { label: 'Forecast', color: 'mint', row: 1, col: 8, dir: 'right' },
       
-      { label: 'Alerts', color: 'coral', href: '/features#alerts', size: 1, row: 2, col: 4, dir: 'top', bars: [90, 100, 70, 85] },
+      { label: 'CRM Sync', color: 'mint', row: 2, col: 1, dir: 'left' },
+      { label: 'Alerts', color: 'coral', row: 2, col: 4, dir: 'top' },
+      { label: 'Coaching', color: 'yellow', row: 2, col: 7, dir: 'right' },
       
-      { label: 'CRM Sync', color: 'mint', href: '/features#crm', size: 1, row: 3, col: 0, dir: 'left', bars: [80, 100, 60, 90] },
-      { label: 'Coaching', color: 'yellow', href: '/features#coaching', size: 2, row: 3, col: 2, dir: 'left', bars: [100, 85, 70, 55] },
-      { label: 'Email', color: 'purple', href: '/features#email', size: 1, row: 3, col: 6, dir: 'right', bars: [70, 100, 80, 60] },
-      { label: 'Intel', color: 'cyan', href: '/features#intel', size: 1, row: 3, col: 9, dir: 'right', bars: [100, 65, 90, 75] },
+      { label: 'Transcripts', color: 'purple', row: 3, col: 0, dir: 'left' },
+      { label: 'Insights', color: 'cyan', row: 3, col: 3, dir: 'left' },
+      { label: 'Email', color: 'coral', row: 3, col: 6, dir: 'right' },
+      { label: 'Tasks', color: 'mint', row: 3, col: 9, dir: 'right' },
       
-      { label: 'Tasks', color: 'coral', href: '/features#tasks', size: 1, row: 4, col: 5, dir: 'bottom', bars: [85, 70, 100, 55] },
+      { label: 'Intel', color: 'yellow', row: 4, col: 2, dir: 'left' },
+      { label: 'Reports', color: 'purple', row: 4, col: 5, dir: 'bottom' },
+      { label: 'Analytics', color: 'cyan', row: 4, col: 8, dir: 'right' },
       
-      { label: 'Transcripts', color: 'yellow', href: '/features#transcripts', size: 1, row: 5, col: 0, dir: 'left', bars: [100, 80, 95, 60] },
-      { label: 'Insights', color: 'purple', href: '/features#insights', size: 2, row: 5, col: 3, dir: 'bottom', bars: [75, 100, 60, 85] },
-      { label: 'Quotes', color: 'mint', href: '/features#quotes', size: 1, row: 5, col: 8, dir: 'right', bars: [90, 70, 100, 80] },
-      
-      { label: 'Analytics', color: 'cyan', href: '/features#analytics', size: 2, row: 6, col: 1, dir: 'left', bars: [100, 75, 90, 50] },
-      { label: 'Notify', color: 'coral', href: '/features#notify', size: 1, row: 6, col: 6, dir: 'bottom', bars: [80, 100, 65, 90] },
-      
-      { label: 'Dashboard', color: 'yellow', href: '/dashboard', size: 2, row: 7, col: 4, dir: 'bottom', bars: [100, 80, 60, 45] },
-      { label: 'Reports', color: 'purple', href: '/features#reports', size: 1, row: 7, col: 8, dir: 'right', bars: [70, 100, 85, 55] },
+      { label: 'Dashboard', color: 'coral', row: 5, col: 1, dir: 'left' },
+      { label: 'Notify', color: 'mint', row: 5, col: 4, dir: 'bottom' },
     ];
 
     function shuffle(arr) {
@@ -318,15 +282,9 @@ import BaseHead from '../components/BaseHead.astro';
     }
 
     function buildCard(card) {
-      const opacities = [1, 0.7, 0.5, 0.3];
-      const barsHtml = card.bars.map((width, i) => 
-        `<div class="px-bar" style="width: ${width}%; opacity: ${opacities[i]};"></div>`
-      ).join('');
-
       return `
-        <a href="${card.href}" class="pixel-card ${card.color} from-${card.dir}">
-          <div class="card-label">${card.label}</div>
-          <div class="card-art">${barsHtml}</div>
+        <a href="#" class="flip-card ${card.color} from-${card.dir}">
+          <span class="card-label">${card.label}</span>
         </a>
       `;
     }
@@ -334,15 +292,16 @@ import BaseHead from '../components/BaseHead.astro';
     function createSlot(card) {
       const cell = getCell();
       const slot = document.createElement('div');
-      slot.className = `card-slot size-${card.size}`;
+      slot.className = 'card-slot';
       slot.style.left = `${card.col * cell}px`;
       slot.style.top = `${card.row * cell}px`;
+      slot.dataset.dir = card.dir;
       slot.innerHTML = buildCard(card);
       return slot;
     }
 
-    function slideIn(slot) {
-      const card = slot.querySelector('.pixel-card');
+    function flipIn(slot) {
+      const card = slot.querySelector('.flip-card');
       if (card) {
         requestAnimationFrame(() => {
           card.classList.add('visible');
@@ -350,12 +309,12 @@ import BaseHead from '../components/BaseHead.astro';
       }
     }
 
-    function slideOut(slot) {
+    function flipOut(slot) {
       return new Promise(resolve => {
-        const card = slot.querySelector('.pixel-card');
+        const card = slot.querySelector('.flip-card');
         if (card) {
           card.classList.remove('visible');
-          setTimeout(resolve, 500);
+          setTimeout(resolve, 600);
         } else {
           resolve();
         }
@@ -372,9 +331,9 @@ import BaseHead from '../components/BaseHead.astro';
         slots.push(slot);
       });
 
-      // Staggered slide in
+      // Staggered flip in
       slots.forEach((slot, i) => {
-        setTimeout(() => slideIn(slot), 300 + i * 80);
+        setTimeout(() => flipIn(slot), 200 + i * 100);
       });
 
       // Cycle random cards
@@ -384,12 +343,12 @@ import BaseHead from '../components/BaseHead.astro';
           const slot = slots[idx];
           
           setTimeout(async () => {
-            await slideOut(slot);
-            await new Promise(r => setTimeout(r, 400));
-            slideIn(slot);
-          }, i * 300);
+            await flipOut(slot);
+            await new Promise(r => setTimeout(r, 300));
+            flipIn(slot);
+          }, i * 250);
         });
-      }, 4500);
+      }, 4000);
     });
   </script>
 </body>

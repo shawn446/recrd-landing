@@ -1,5 +1,5 @@
 ---
-// Hero - Optimized pixel cards
+// Hero - Fixed pixel cards, no gaps
 import Nav from '../components/Nav.astro';
 import Footer from '../components/Footer.astro';
 import BaseHead from '../components/BaseHead.astro';
@@ -143,33 +143,28 @@ import BaseHead from '../components/BaseHead.astro';
       top: calc(var(--cell) * 5);
     }
 
-    /* Pixel grid - 10x15 = 150 pixels (good balance) */
+    /* Pixel grid - 12x18 pixels, no gaps */
     .pixel-grid {
       width: 100%;
       height: 100%;
       display: grid;
-      grid-template-columns: repeat(10, 1fr);
-      grid-template-rows: repeat(15, 1fr);
-      gap: 1px;
-      background: transparent;
+      grid-template-columns: repeat(12, 1fr);
+      grid-template-rows: repeat(18, 1fr);
     }
 
     .pixel-cell {
       opacity: 0;
-      transform: scale(0.3);
-      will-change: transform, opacity;
+      will-change: opacity;
     }
 
     .pixel-cell.visible {
       opacity: 1;
-      transform: scale(1);
-      transition: opacity 0.15s ease-out, transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+      transition: opacity 0.2s ease-out;
     }
 
     .pixel-cell.hiding {
       opacity: 0;
-      transform: scale(0.3);
-      transition: opacity 0.12s ease-in, transform 0.15s ease-in;
+      transition: opacity 0.15s ease-in;
     }
 
     /* RESPONSIVE */
@@ -248,9 +243,9 @@ import BaseHead from '../components/BaseHead.astro';
       { src: '/cards/card-10-prep-agent.svg' },
     ];
 
-    const COLS = 10;
-    const ROWS = 15;
-    const TOTAL_PIXELS = COLS * ROWS; // 150
+    const COLS = 12;
+    const ROWS = 18;
+    const TOTAL_PIXELS = COLS * ROWS; // 216
 
     let currentCards = [0, 1, 2];
 
@@ -268,9 +263,10 @@ import BaseHead from '../components/BaseHead.astro';
       
       for (let row = 0; row < ROWS; row++) {
         for (let col = 0; col < COLS; col++) {
-          const xPos = COLS > 1 ? (col / (COLS - 1)) * 100 : 0;
-          const yPos = ROWS > 1 ? (row / (ROWS - 1)) * 100 : 0;
-          cells += `<div class="pixel-cell" style="background: url('${cardSrc}') ${xPos}% ${yPos}% / 1000% 1500% no-repeat;"></div>`;
+          // Each pixel shows its portion of the image
+          const xPos = (col / (COLS - 1)) * 100;
+          const yPos = (row / (ROWS - 1)) * 100;
+          cells += `<div class="pixel-cell" style="background: url('${cardSrc}') ${xPos}% ${yPos}% / ${COLS * 100}% ${ROWS * 100}% no-repeat;"></div>`;
         }
       }
       
@@ -282,8 +278,7 @@ import BaseHead from '../components/BaseHead.astro';
         const cells = Array.from(slot.querySelectorAll('.pixel-cell'));
         const indices = shuffle([...Array(cells.length).keys()]);
         
-        // Batch animations in groups for smoother performance
-        const batchSize = 8;
+        const batchSize = 12;
         let batch = 0;
         
         function showBatch() {
@@ -312,10 +307,7 @@ import BaseHead from '../components/BaseHead.astro';
         const cells = Array.from(slot.querySelectorAll('.pixel-cell'));
         const indices = shuffle([...Array(cells.length).keys()]);
         
-        // Add hiding class to trigger transition
-        cells.forEach(cell => cell.classList.add('hiding'));
-        
-        const batchSize = 10;
+        const batchSize = 15;
         let batch = 0;
         
         function hideBatch() {
@@ -323,6 +315,7 @@ import BaseHead from '../components/BaseHead.astro';
           const end = Math.min(start + batchSize, indices.length);
           
           for (let i = start; i < end; i++) {
+            cells[indices[i]].classList.add('hiding');
             cells[indices[i]].classList.remove('visible');
           }
           
@@ -361,21 +354,17 @@ import BaseHead from '../components/BaseHead.astro';
     async function cycleSlot(slotIndex) {
       await hideCard(slotIndex);
       
-      // Brief pause
       await new Promise(r => setTimeout(r, 250));
       
-      // Next card
       currentCards[slotIndex] = (currentCards[slotIndex] + 3) % cards.length;
       await showCard(slotIndex, currentCards[slotIndex]);
     }
 
     document.addEventListener('DOMContentLoaded', () => {
-      // Staggered initial load
       setTimeout(() => showCard(0, 0), 300);
       setTimeout(() => showCard(1, 1), 700);
       setTimeout(() => showCard(2, 2), 1100);
 
-      // 5 second display, staggered starts
       const displayTime = 5000;
       setTimeout(() => setInterval(() => cycleSlot(0), displayTime), 4000);
       setTimeout(() => setInterval(() => cycleSlot(1), displayTime), 5200);

@@ -1,0 +1,393 @@
+---
+// Hero - Cards aligned to grid lines with origami fold
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+import BaseHead from '../components/BaseHead.astro';
+---
+
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <BaseHead title="recrd - AI agents that close deals" description="Revenue intelligence for sales teams." />
+  
+  <style is:global>
+    :root { 
+      --cell: 120px; 
+      --grid-line: rgba(255,255,255,0.08);
+      --mint: #46FCAF;
+      --purple: #A678F4;
+      --cyan: #5CEBDF;
+      --coral: #FF6B7A;
+      --yellow: #FFD84D;
+      --bg: #0A0A0A;
+      --text: #FFFFFF;
+      --text-muted: rgba(255,255,255,0.6);
+    }
+
+    * { box-sizing: border-box; }
+
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      padding: 72px 48px 0;
+      position: relative;
+      overflow: hidden;
+      background: var(--bg);
+    }
+
+    /* Grid on right side */
+    .hero-grid {
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      width: calc(var(--cell) * 9);
+      background-image: 
+        linear-gradient(to right, var(--grid-line) 1px, transparent 1px),
+        linear-gradient(to bottom, var(--grid-line) 1px, transparent 1px);
+      background-size: var(--cell) var(--cell);
+      background-position: 0 0;
+      z-index: 1;
+    }
+
+    /* Fade on left edge of grid */
+    .hero-grid::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      width: calc(var(--cell) * 3);
+      background: linear-gradient(to right, var(--bg) 0%, transparent 100%);
+      z-index: 2;
+    }
+
+    .hero-content {
+      max-width: 520px;
+      z-index: 100;
+      padding: 48px 0;
+    }
+
+    .hero-headline {
+      font-size: 76px;
+      font-weight: 350;
+      line-height: 1.0;
+      letter-spacing: -0.03em;
+      margin-bottom: 28px;
+    }
+
+    .hero-headline em { 
+      font-style: normal; 
+      color: var(--mint);
+      font-weight: 400;
+    }
+
+    .hero-sub {
+      font-size: 19px;
+      font-weight: 400;
+      line-height: 1.6;
+      margin-bottom: 40px;
+      color: var(--text-muted);
+    }
+
+    .hero-buttons { display: flex; gap: 16px; }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      padding: 18px 32px;
+      font-weight: 500;
+      font-size: 15px;
+      text-decoration: none;
+      transition: all 0.2s ease;
+      cursor: pointer;
+      border: none;
+      border-radius: 0;
+    }
+    
+    .btn-primary { background: var(--text); color: var(--bg); }
+    .btn-primary:hover { background: var(--mint); color: #0a0a0a; transform: translateY(-2px); }
+    
+    .btn-secondary { background: transparent; color: var(--text); border: 1px solid rgba(255,255,255,0.25); }
+    .btn-secondary:hover { background: var(--text); color: var(--bg); }
+
+    /* Cards Container - matches grid position exactly */
+    .cards-container {
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: calc(var(--cell) * 9);
+      height: 100%;
+      z-index: 10;
+      pointer-events: none;
+    }
+
+    /* Each card slot - positioned by grid coordinates */
+    .card-slot {
+      position: absolute;
+      width: calc(var(--cell) * 2);
+      height: calc(var(--cell) * 2);
+      pointer-events: auto;
+      perspective: 1200px;
+    }
+
+    /* Position cards on grid - using TOP and LEFT from grid origin (top-right of viewport) */
+    .card-slot[data-pos="0"] { top: calc(var(--cell) * 0); left: calc(var(--cell) * 0); }
+    .card-slot[data-pos="1"] { top: calc(var(--cell) * 0); left: calc(var(--cell) * 5); }
+    .card-slot[data-pos="2"] { top: calc(var(--cell) * 2); left: calc(var(--cell) * 2); }
+    .card-slot[data-pos="3"] { top: calc(var(--cell) * 2); left: calc(var(--cell) * 7); }
+    .card-slot[data-pos="4"] { top: calc(var(--cell) * 4); left: calc(var(--cell) * 0); }
+    .card-slot[data-pos="5"] { top: calc(var(--cell) * 4); left: calc(var(--cell) * 4); }
+    .card-slot[data-pos="6"] { top: calc(var(--cell) * 6); left: calc(var(--cell) * 1); }
+    .card-slot[data-pos="7"] { top: calc(var(--cell) * 6); left: calc(var(--cell) * 5); }
+    .card-slot[data-pos="8"] { top: calc(var(--cell) * 3); left: calc(var(--cell) * 4); }
+    .card-slot[data-pos="9"] { top: calc(var(--cell) * 5); left: calc(var(--cell) * 7); }
+
+    /* The SVG image */
+    .card-slot img {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      z-index: 1;
+      filter: drop-shadow(0 20px 40px rgba(0,0,0,0.5));
+    }
+
+    /* Fold overlay grid - 2x2 panels covering the SVG */
+    .fold-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      grid-template-rows: repeat(2, 1fr);
+      z-index: 2;
+    }
+
+    /* Each fold panel */
+    .fold-panel {
+      position: relative;
+      transform-style: preserve-3d;
+    }
+
+    .fold-panel-inner {
+      position: absolute;
+      inset: 0;
+      backface-visibility: hidden;
+      transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.5s ease;
+    }
+
+    /* Fold directions - panels fold FROM these edges */
+    .fold-panel.from-top .fold-panel-inner { transform-origin: top center; }
+    .fold-panel.from-bottom .fold-panel-inner { transform-origin: bottom center; }
+    .fold-panel.from-left .fold-panel-inner { transform-origin: left center; }
+    .fold-panel.from-right .fold-panel-inner { transform-origin: right center; }
+
+    /* Initial state: panels are flat, covering SVG */
+    .fold-panel .fold-panel-inner {
+      transform: rotateX(0deg) rotateY(0deg);
+      opacity: 1;
+    }
+
+    /* Revealed state: panels fold away */
+    .fold-panel.revealed.from-top .fold-panel-inner {
+      transform: rotateX(-110deg);
+      opacity: 0;
+    }
+    .fold-panel.revealed.from-bottom .fold-panel-inner {
+      transform: rotateX(110deg);
+      opacity: 0;
+    }
+    .fold-panel.revealed.from-left .fold-panel-inner {
+      transform: rotateY(110deg);
+      opacity: 0;
+    }
+    .fold-panel.revealed.from-right .fold-panel-inner {
+      transform: rotateY(-110deg);
+      opacity: 0;
+    }
+
+    /* Panel colors */
+    .fold-panel-inner.mint { background: var(--mint); }
+    .fold-panel-inner.purple { background: var(--purple); }
+    .fold-panel-inner.cyan { background: var(--cyan); }
+    .fold-panel-inner.coral { background: var(--coral); }
+    .fold-panel-inner.yellow { background: var(--yellow); }
+    .fold-panel-inner.dark { background: #1a1a1a; }
+
+    /* Hover effect on cards */
+    .card-slot:hover img {
+      filter: drop-shadow(0 25px 50px rgba(70, 252, 175, 0.3));
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 1800px) {
+      :root { --cell: 100px; }
+      .hero-headline { font-size: 68px; }
+    }
+
+    @media (max-width: 1600px) {
+      :root { --cell: 90px; }
+      .hero-headline { font-size: 60px; }
+    }
+
+    @media (max-width: 1400px) {
+      :root { --cell: 80px; }
+      .hero-headline { font-size: 52px; }
+      .hero-content { max-width: 420px; }
+    }
+
+    @media (max-width: 1200px) {
+      :root { --cell: 70px; }
+      .hero-headline { font-size: 46px; }
+    }
+
+    @media (max-width: 1000px) {
+      .cards-container, .hero-grid { display: none; }
+      .hero { justify-content: center; }
+      .hero-content { max-width: 100%; text-align: center; }
+      .hero-buttons { justify-content: center; }
+      .hero-headline { font-size: 42px; }
+    }
+
+    @media (max-width: 600px) {
+      .hero { padding: 120px 24px 48px; }
+      .hero-headline { font-size: 32px; }
+      .hero-sub { font-size: 16px; }
+      .hero-buttons { flex-direction: column; }
+      .btn { width: 100%; justify-content: center; }
+    }
+  </style>
+</head>
+
+<body>
+  <Nav />
+
+  <section class="hero">
+    <div class="hero-grid"></div>
+
+    <div class="hero-content">
+      <h1 class="hero-headline">Your calls,<br><em>working for you</em></h1>
+      <p class="hero-sub">Every sales call triggers AI agents that update your CRM, alert your team, and draft follow-ups—automatically.</p>
+      <div class="hero-buttons">
+        <a href="#" class="btn btn-primary">Book a Demo</a>
+        <a href="#how-it-works" class="btn btn-secondary">See How It Works</a>
+      </div>
+    </div>
+
+    <div class="cards-container">
+      <!-- 10 card slots positioned on grid intersections -->
+      <div class="card-slot" data-pos="0" data-card="0"></div>
+      <div class="card-slot" data-pos="1" data-card="1"></div>
+      <div class="card-slot" data-pos="2" data-card="2"></div>
+      <div class="card-slot" data-pos="3" data-card="3"></div>
+      <div class="card-slot" data-pos="4" data-card="4"></div>
+      <div class="card-slot" data-pos="5" data-card="5"></div>
+      <div class="card-slot" data-pos="6" data-card="6"></div>
+      <div class="card-slot" data-pos="7" data-card="7"></div>
+      <div class="card-slot" data-pos="8" data-card="8"></div>
+      <div class="card-slot" data-pos="9" data-card="9"></div>
+    </div>
+  </section>
+
+  <Footer />
+
+  <script>
+    // All 10 agent cards
+    const cards = [
+      { src: '/cards/card-01-call-trigger.svg', color: 'mint' },
+      { src: '/cards/card-02-intel-agent.svg', color: 'purple' },
+      { src: '/cards/card-03-crm-agent.svg', color: 'cyan' },
+      { src: '/cards/card-04-risk-agent.svg', color: 'coral' },
+      { src: '/cards/card-05-email-agent.svg', color: 'yellow' },
+      { src: '/cards/card-06-coaching-agent.svg', color: 'purple' },
+      { src: '/cards/card-07-multithread-agent.svg', color: 'mint' },
+      { src: '/cards/card-08-quote-agent.svg', color: 'cyan' },
+      { src: '/cards/card-09-task-agent.svg', color: 'coral' },
+      { src: '/cards/card-10-prep-agent.svg', color: 'yellow' },
+    ];
+
+    // Fold directions for 4 panels (2x2 grid)
+    // top-left, top-right, bottom-left, bottom-right
+    const foldPatterns = [
+      ['from-top', 'from-right', 'from-left', 'from-bottom'],
+      ['from-left', 'from-top', 'from-bottom', 'from-right'],
+      ['from-right', 'from-left', 'from-top', 'from-bottom'],
+      ['from-top', 'from-left', 'from-right', 'from-bottom'],
+    ];
+
+    function buildCard(cardData, patternIndex) {
+      const pattern = foldPatterns[patternIndex % foldPatterns.length];
+      
+      const panels = pattern.map((dir, i) => `
+        <div class="fold-panel ${dir}" data-index="${i}">
+          <div class="fold-panel-inner ${cardData.color}"></div>
+        </div>
+      `).join('');
+
+      return `
+        <img src="${cardData.src}" alt="Agent" />
+        <div class="fold-overlay">${panels}</div>
+      `;
+    }
+
+    function unfoldCard(slot, delay = 0) {
+      setTimeout(() => {
+        const panels = slot.querySelectorAll('.fold-panel');
+        panels.forEach((panel, i) => {
+          setTimeout(() => {
+            panel.classList.add('revealed');
+          }, i * 100);
+        });
+      }, delay);
+    }
+
+    function foldCard(slot) {
+      const panels = Array.from(slot.querySelectorAll('.fold-panel')).reverse();
+      panels.forEach((panel, i) => {
+        setTimeout(() => {
+          panel.classList.remove('revealed');
+        }, i * 100);
+      });
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const slots = document.querySelectorAll('.card-slot');
+
+      // Build and animate all cards with stagger
+      slots.forEach((slot, i) => {
+        const cardIndex = parseInt(slot.dataset.card);
+        slot.innerHTML = buildCard(cards[cardIndex], i);
+        
+        // Stagger the unfold animation
+        unfoldCard(slot, i * 150);
+      });
+
+      // Optional: Add subtle floating animation after initial unfold
+      setTimeout(() => {
+        slots.forEach((slot, i) => {
+          slot.style.transition = 'transform 3s ease-in-out';
+          slot.style.animation = `float ${2.5 + (i * 0.2)}s ease-in-out infinite`;
+          slot.style.animationDelay = `${i * 0.15}s`;
+        });
+      }, slots.length * 150 + 500);
+    });
+
+    // Add floating keyframes
+    const style = document.createElement('style');
+    style.textContent = `
+      @keyframes float {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-8px); }
+      }
+    `;
+    document.head.appendChild(style);
+  </script>
+</body>
+</html>

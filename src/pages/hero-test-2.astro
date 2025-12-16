@@ -1,5 +1,5 @@
 ---
-// Hero - Cards aligned to grid lines with origami fold
+// Hero - Cards exactly 2x3 cells, snapped to grid lines
 import Nav from '../components/Nav.astro';
 import Footer from '../components/Footer.astro';
 import BaseHead from '../components/BaseHead.astro';
@@ -12,7 +12,9 @@ import BaseHead from '../components/BaseHead.astro';
   
   <style is:global>
     :root { 
-      --cell: 120px; 
+      --cell: 120px;
+      --card-w: calc(var(--cell) * 2);  /* 240px */
+      --card-h: calc(var(--cell) * 3);  /* 360px */
       --grid-line: rgba(255,255,255,0.08);
       --mint: #46FCAF;
       --purple: #A678F4;
@@ -36,13 +38,13 @@ import BaseHead from '../components/BaseHead.astro';
       background: var(--bg);
     }
 
-    /* Grid on right side */
+    /* Grid - right side, 8 columns wide, starts from right edge */
     .hero-grid {
       position: absolute;
       top: 0;
       right: 0;
-      bottom: 0;
-      width: calc(var(--cell) * 9);
+      width: calc(var(--cell) * 8);
+      height: 100%;
       background-image: 
         linear-gradient(to right, var(--grid-line) 1px, transparent 1px),
         linear-gradient(to bottom, var(--grid-line) 1px, transparent 1px);
@@ -51,26 +53,26 @@ import BaseHead from '../components/BaseHead.astro';
       z-index: 1;
     }
 
-    /* Fade on left edge of grid */
+    /* Fade on left edge */
     .hero-grid::before {
       content: '';
       position: absolute;
       top: 0;
       left: 0;
-      bottom: 0;
-      width: calc(var(--cell) * 3);
-      background: linear-gradient(to right, var(--bg) 0%, transparent 100%);
+      width: calc(var(--cell) * 2);
+      height: 100%;
+      background: linear-gradient(to right, var(--bg), transparent);
       z-index: 2;
     }
 
     .hero-content {
-      max-width: 520px;
+      max-width: 500px;
       z-index: 100;
       padding: 48px 0;
     }
 
     .hero-headline {
-      font-size: 76px;
+      font-size: 72px;
       font-weight: 350;
       line-height: 1.0;
       letter-spacing: -0.03em;
@@ -84,7 +86,7 @@ import BaseHead from '../components/BaseHead.astro';
     }
 
     .hero-sub {
-      font-size: 19px;
+      font-size: 18px;
       font-weight: 400;
       line-height: 1.6;
       margin-bottom: 40px;
@@ -96,68 +98,68 @@ import BaseHead from '../components/BaseHead.astro';
     .btn {
       display: inline-flex;
       align-items: center;
-      gap: 12px;
-      padding: 18px 32px;
+      gap: 10px;
+      padding: 16px 28px;
       font-weight: 500;
       font-size: 15px;
       text-decoration: none;
       transition: all 0.2s ease;
       cursor: pointer;
       border: none;
-      border-radius: 0;
     }
     
     .btn-primary { background: var(--text); color: var(--bg); }
     .btn-primary:hover { background: var(--mint); color: #0a0a0a; transform: translateY(-2px); }
     
-    .btn-secondary { background: transparent; color: var(--text); border: 1px solid rgba(255,255,255,0.25); }
+    .btn-secondary { background: transparent; color: var(--text); border: 1px solid rgba(255,255,255,0.2); }
     .btn-secondary:hover { background: var(--text); color: var(--bg); }
 
-    /* Cards Container - matches grid position exactly */
+    /* Cards container - same size/position as grid */
     .cards-container {
       position: absolute;
       top: 0;
       right: 0;
-      width: calc(var(--cell) * 9);
+      width: calc(var(--cell) * 8);
       height: 100%;
       z-index: 10;
       pointer-events: none;
     }
 
-    /* Each card slot - positioned by grid coordinates */
+    /* Individual card - exactly 2x3 cells */
     .card-slot {
       position: absolute;
-      width: calc(var(--cell) * 2);
-      height: calc(var(--cell) * 2);
+      width: var(--card-w);
+      height: var(--card-h);
       pointer-events: auto;
-      perspective: 1200px;
+      perspective: 1500px;
     }
 
-    /* Position cards on grid - using TOP and LEFT from grid origin (top-right of viewport) */
-    .card-slot[data-pos="0"] { top: calc(var(--cell) * 0); left: calc(var(--cell) * 0); }
-    .card-slot[data-pos="1"] { top: calc(var(--cell) * 0); left: calc(var(--cell) * 5); }
-    .card-slot[data-pos="2"] { top: calc(var(--cell) * 2); left: calc(var(--cell) * 2); }
-    .card-slot[data-pos="3"] { top: calc(var(--cell) * 2); left: calc(var(--cell) * 7); }
-    .card-slot[data-pos="4"] { top: calc(var(--cell) * 4); left: calc(var(--cell) * 0); }
-    .card-slot[data-pos="5"] { top: calc(var(--cell) * 4); left: calc(var(--cell) * 4); }
-    .card-slot[data-pos="6"] { top: calc(var(--cell) * 6); left: calc(var(--cell) * 1); }
-    .card-slot[data-pos="7"] { top: calc(var(--cell) * 6); left: calc(var(--cell) * 5); }
-    .card-slot[data-pos="8"] { top: calc(var(--cell) * 3); left: calc(var(--cell) * 4); }
-    .card-slot[data-pos="9"] { top: calc(var(--cell) * 5); left: calc(var(--cell) * 7); }
+    /* Card positions - col/row from top-left of grid */
+    /* Grid is 8 cols wide, we need cards to not overflow */
+    /* Card takes 2 cols, so max col = 6 (0-indexed) */
+    .card-slot[data-pos="0"] { left: calc(var(--cell) * 0); top: calc(var(--cell) * 0); }
+    .card-slot[data-pos="1"] { left: calc(var(--cell) * 4); top: calc(var(--cell) * 0); }
+    .card-slot[data-pos="2"] { left: calc(var(--cell) * 2); top: calc(var(--cell) * 1); }
+    .card-slot[data-pos="3"] { left: calc(var(--cell) * 6); top: calc(var(--cell) * 1); }
+    .card-slot[data-pos="4"] { left: calc(var(--cell) * 0); top: calc(var(--cell) * 3); }
+    .card-slot[data-pos="5"] { left: calc(var(--cell) * 4); top: calc(var(--cell) * 2); }
+    .card-slot[data-pos="6"] { left: calc(var(--cell) * 2); top: calc(var(--cell) * 4); }
+    .card-slot[data-pos="7"] { left: calc(var(--cell) * 6); top: calc(var(--cell) * 4); }
+    .card-slot[data-pos="8"] { left: calc(var(--cell) * 0); top: calc(var(--cell) * 5); }
+    .card-slot[data-pos="9"] { left: calc(var(--cell) * 4); top: calc(var(--cell) * 5); }
 
-    /* The SVG image */
+    /* SVG fills card exactly */
     .card-slot img {
       position: absolute;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
-      object-fit: contain;
       z-index: 1;
-      filter: drop-shadow(0 20px 40px rgba(0,0,0,0.5));
+      filter: drop-shadow(0 15px 35px rgba(0,0,0,0.4));
     }
 
-    /* Fold overlay grid - 2x2 panels covering the SVG */
+    /* Fold overlay - 2 cols x 3 rows to match SVG structure */
     .fold-overlay {
       position: absolute;
       top: 0;
@@ -166,11 +168,10 @@ import BaseHead from '../components/BaseHead.astro';
       height: 100%;
       display: grid;
       grid-template-columns: repeat(2, 1fr);
-      grid-template-rows: repeat(2, 1fr);
+      grid-template-rows: repeat(3, 1fr);
       z-index: 2;
     }
 
-    /* Each fold panel */
     .fold-panel {
       position: relative;
       transform-style: preserve-3d;
@@ -180,38 +181,26 @@ import BaseHead from '../components/BaseHead.astro';
       position: absolute;
       inset: 0;
       backface-visibility: hidden;
-      transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.5s ease;
+      transition: transform 0.45s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.45s ease;
     }
 
-    /* Fold directions - panels fold FROM these edges */
+    /* Fold origins */
     .fold-panel.from-top .fold-panel-inner { transform-origin: top center; }
     .fold-panel.from-bottom .fold-panel-inner { transform-origin: bottom center; }
     .fold-panel.from-left .fold-panel-inner { transform-origin: left center; }
     .fold-panel.from-right .fold-panel-inner { transform-origin: right center; }
 
-    /* Initial state: panels are flat, covering SVG */
+    /* Initial: panels flat, covering SVG */
     .fold-panel .fold-panel-inner {
       transform: rotateX(0deg) rotateY(0deg);
       opacity: 1;
     }
 
-    /* Revealed state: panels fold away */
-    .fold-panel.revealed.from-top .fold-panel-inner {
-      transform: rotateX(-110deg);
-      opacity: 0;
-    }
-    .fold-panel.revealed.from-bottom .fold-panel-inner {
-      transform: rotateX(110deg);
-      opacity: 0;
-    }
-    .fold-panel.revealed.from-left .fold-panel-inner {
-      transform: rotateY(110deg);
-      opacity: 0;
-    }
-    .fold-panel.revealed.from-right .fold-panel-inner {
-      transform: rotateY(-110deg);
-      opacity: 0;
-    }
+    /* Revealed: panels fold away */
+    .fold-panel.revealed.from-top .fold-panel-inner { transform: rotateX(-100deg); opacity: 0; }
+    .fold-panel.revealed.from-bottom .fold-panel-inner { transform: rotateX(100deg); opacity: 0; }
+    .fold-panel.revealed.from-left .fold-panel-inner { transform: rotateY(100deg); opacity: 0; }
+    .fold-panel.revealed.from-right .fold-panel-inner { transform: rotateY(-100deg); opacity: 0; }
 
     /* Panel colors */
     .fold-panel-inner.mint { background: var(--mint); }
@@ -221,44 +210,37 @@ import BaseHead from '../components/BaseHead.astro';
     .fold-panel-inner.yellow { background: var(--yellow); }
     .fold-panel-inner.dark { background: #1a1a1a; }
 
-    /* Hover effect on cards */
-    .card-slot:hover img {
-      filter: drop-shadow(0 25px 50px rgba(70, 252, 175, 0.3));
-    }
-
     /* RESPONSIVE */
     @media (max-width: 1800px) {
-      :root { --cell: 100px; }
-      .hero-headline { font-size: 68px; }
+      :root { --cell: 105px; }
+      .hero-headline { font-size: 64px; }
     }
 
     @media (max-width: 1600px) {
-      :root { --cell: 90px; }
-      .hero-headline { font-size: 60px; }
+      :root { --cell: 95px; }
+      .hero-headline { font-size: 58px; }
     }
 
     @media (max-width: 1400px) {
-      :root { --cell: 80px; }
+      :root { --cell: 85px; }
       .hero-headline { font-size: 52px; }
-      .hero-content { max-width: 420px; }
+      .hero-content { max-width: 400px; }
     }
 
     @media (max-width: 1200px) {
-      :root { --cell: 70px; }
+      :root { --cell: 75px; }
       .hero-headline { font-size: 46px; }
     }
 
     @media (max-width: 1000px) {
       .cards-container, .hero-grid { display: none; }
-      .hero { justify-content: center; }
+      .hero { justify-content: center; padding: 120px 24px; }
       .hero-content { max-width: 100%; text-align: center; }
       .hero-buttons { justify-content: center; }
-      .hero-headline { font-size: 42px; }
     }
 
     @media (max-width: 600px) {
-      .hero { padding: 120px 24px 48px; }
-      .hero-headline { font-size: 32px; }
+      .hero-headline { font-size: 36px; }
       .hero-sub { font-size: 16px; }
       .hero-buttons { flex-direction: column; }
       .btn { width: 100%; justify-content: center; }
@@ -281,25 +263,15 @@ import BaseHead from '../components/BaseHead.astro';
       </div>
     </div>
 
-    <div class="cards-container">
-      <!-- 10 card slots positioned on grid intersections -->
-      <div class="card-slot" data-pos="0" data-card="0"></div>
-      <div class="card-slot" data-pos="1" data-card="1"></div>
-      <div class="card-slot" data-pos="2" data-card="2"></div>
-      <div class="card-slot" data-pos="3" data-card="3"></div>
-      <div class="card-slot" data-pos="4" data-card="4"></div>
-      <div class="card-slot" data-pos="5" data-card="5"></div>
-      <div class="card-slot" data-pos="6" data-card="6"></div>
-      <div class="card-slot" data-pos="7" data-card="7"></div>
-      <div class="card-slot" data-pos="8" data-card="8"></div>
-      <div class="card-slot" data-pos="9" data-card="9"></div>
+    <div class="cards-container" id="cards-container">
+      <!-- Cards injected by JS -->
     </div>
   </section>
 
   <Footer />
 
   <script>
-    // All 10 agent cards
+    // Card data - all 10 agents
     const cards = [
       { src: '/cards/card-01-call-trigger.svg', color: 'mint' },
       { src: '/cards/card-02-intel-agent.svg', color: 'purple' },
@@ -313,18 +285,18 @@ import BaseHead from '../components/BaseHead.astro';
       { src: '/cards/card-10-prep-agent.svg', color: 'yellow' },
     ];
 
-    // Fold directions for 4 panels (2x2 grid)
-    // top-left, top-right, bottom-left, bottom-right
+    // 6 panels (2x3 grid), fold directions for each
     const foldPatterns = [
-      ['from-top', 'from-right', 'from-left', 'from-bottom'],
-      ['from-left', 'from-top', 'from-bottom', 'from-right'],
-      ['from-right', 'from-left', 'from-top', 'from-bottom'],
-      ['from-top', 'from-left', 'from-right', 'from-bottom'],
+      ['from-left', 'from-top', 'from-left', 'from-right', 'from-bottom', 'from-left'],
+      ['from-top', 'from-right', 'from-left', 'from-bottom', 'from-left', 'from-right'],
+      ['from-right', 'from-left', 'from-top', 'from-left', 'from-right', 'from-bottom'],
+      ['from-left', 'from-left', 'from-bottom', 'from-top', 'from-left', 'from-right'],
     ];
 
     function buildCard(cardData, patternIndex) {
       const pattern = foldPatterns[patternIndex % foldPatterns.length];
       
+      // 6 panels to match the 2x3 grid structure of the SVG
       const panels = pattern.map((dir, i) => `
         <div class="fold-panel ${dir}" data-index="${i}">
           <div class="fold-panel-inner ${cardData.color}"></div>
@@ -332,7 +304,7 @@ import BaseHead from '../components/BaseHead.astro';
       `).join('');
 
       return `
-        <img src="${cardData.src}" alt="Agent" />
+        <img src="${cardData.src}" alt="Agent Card" />
         <div class="fold-overlay">${panels}</div>
       `;
     }
@@ -341,53 +313,29 @@ import BaseHead from '../components/BaseHead.astro';
       setTimeout(() => {
         const panels = slot.querySelectorAll('.fold-panel');
         panels.forEach((panel, i) => {
-          setTimeout(() => {
-            panel.classList.add('revealed');
-          }, i * 100);
+          setTimeout(() => panel.classList.add('revealed'), i * 80);
         });
       }, delay);
     }
 
-    function foldCard(slot) {
-      const panels = Array.from(slot.querySelectorAll('.fold-panel')).reverse();
-      panels.forEach((panel, i) => {
-        setTimeout(() => {
-          panel.classList.remove('revealed');
-        }, i * 100);
-      });
-    }
-
     document.addEventListener('DOMContentLoaded', () => {
-      const slots = document.querySelectorAll('.card-slot');
-
-      // Build and animate all cards with stagger
-      slots.forEach((slot, i) => {
-        const cardIndex = parseInt(slot.dataset.card);
-        slot.innerHTML = buildCard(cards[cardIndex], i);
+      const container = document.getElementById('cards-container');
+      
+      // Only show first 6 cards to avoid too much overlap
+      const visibleCards = cards.slice(0, 6);
+      
+      // Create card slots
+      visibleCards.forEach((card, i) => {
+        const slot = document.createElement('div');
+        slot.className = 'card-slot';
+        slot.dataset.pos = i.toString();
+        slot.innerHTML = buildCard(card, i);
+        container.appendChild(slot);
         
-        // Stagger the unfold animation
-        unfoldCard(slot, i * 150);
+        // Stagger the unfold
+        unfoldCard(slot, 300 + (i * 200));
       });
-
-      // Optional: Add subtle floating animation after initial unfold
-      setTimeout(() => {
-        slots.forEach((slot, i) => {
-          slot.style.transition = 'transform 3s ease-in-out';
-          slot.style.animation = `float ${2.5 + (i * 0.2)}s ease-in-out infinite`;
-          slot.style.animationDelay = `${i * 0.15}s`;
-        });
-      }, slots.length * 150 + 500);
     });
-
-    // Add floating keyframes
-    const style = document.createElement('style');
-    style.textContent = `
-      @keyframes float {
-        0%, 100% { transform: translateY(0); }
-        50% { transform: translateY(-8px); }
-      }
-    `;
-    document.head.appendChild(style);
   </script>
 </body>
 </html>

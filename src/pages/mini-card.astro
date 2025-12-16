@@ -1,5 +1,5 @@
 ---
-// Hero - Pixel cards + Mini slide-in cards combined
+// Hero - Pixel cards + Mini cards, better vertical spread
 import Nav from '../components/Nav.astro';
 import Footer from '../components/Footer.astro';
 import BaseHead from '../components/BaseHead.astro';
@@ -121,7 +121,7 @@ import BaseHead from '../components/BaseHead.astro';
       pointer-events: none;
     }
 
-    /* ========== PIXEL CARDS ========== */
+    /* ========== PIXEL CARDS (2x3 cells) ========== */
     .card-slot {
       position: absolute;
       width: var(--card-w);
@@ -130,17 +130,18 @@ import BaseHead from '../components/BaseHead.astro';
       filter: drop-shadow(0 20px 40px rgba(0,0,0,0.5));
     }
 
+    /* Spread across full height - top, middle, bottom */
     .card-slot[data-slot="0"] {
       left: calc(var(--cell) * 0);
       top: calc(var(--cell) * 1);
     }
     .card-slot[data-slot="1"] {
-      left: calc(var(--cell) * 4);
-      top: calc(var(--cell) * 2);
+      left: calc(var(--cell) * 5);
+      top: calc(var(--cell) * 3);
     }
     .card-slot[data-slot="2"] {
-      left: calc(var(--cell) * 1);
-      top: calc(var(--cell) * 5);
+      left: calc(var(--cell) * 2);
+      top: calc(var(--cell) * 6);
     }
 
     .pixel-grid {
@@ -166,7 +167,7 @@ import BaseHead from '../components/BaseHead.astro';
       transition: opacity 0.15s ease-in;
     }
 
-    /* ========== MINI CARDS ========== */
+    /* ========== MINI CARDS (1x1 cell) ========== */
     .mini-slot {
       position: absolute;
       width: var(--cell);
@@ -175,15 +176,22 @@ import BaseHead from '../components/BaseHead.astro';
       overflow: hidden;
     }
 
-    /* Mini card positions - avoiding pixel card areas */
+    /* Distributed across grid, avoiding pixel card areas */
+    /* Top area */
     .mini-slot[data-mini="0"] { left: calc(var(--cell) * 3); top: calc(var(--cell) * 1); }
-    .mini-slot[data-mini="1"] { left: calc(var(--cell) * 7); top: calc(var(--cell) * 1); }
-    .mini-slot[data-mini="2"] { left: calc(var(--cell) * 3); top: calc(var(--cell) * 3); }
-    .mini-slot[data-mini="3"] { left: calc(var(--cell) * 7); top: calc(var(--cell) * 3); }
-    .mini-slot[data-mini="4"] { left: calc(var(--cell) * 0); top: calc(var(--cell) * 4); }
-    .mini-slot[data-mini="5"] { left: calc(var(--cell) * 7); top: calc(var(--cell) * 5); }
-    .mini-slot[data-mini="6"] { left: calc(var(--cell) * 4); top: calc(var(--cell) * 6); }
-    .mini-slot[data-mini="7"] { left: calc(var(--cell) * 6); top: calc(var(--cell) * 6); }
+    .mini-slot[data-mini="1"] { left: calc(var(--cell) * 6); top: calc(var(--cell) * 1); }
+    /* Upper-mid */
+    .mini-slot[data-mini="2"] { left: calc(var(--cell) * 0); top: calc(var(--cell) * 4); }
+    .mini-slot[data-mini="3"] { left: calc(var(--cell) * 4); top: calc(var(--cell) * 2); }
+    /* Mid */
+    .mini-slot[data-mini="4"] { left: calc(var(--cell) * 7); top: calc(var(--cell) * 4); }
+    .mini-slot[data-mini="5"] { left: calc(var(--cell) * 3); top: calc(var(--cell) * 5); }
+    /* Lower */
+    .mini-slot[data-mini="6"] { left: calc(var(--cell) * 0); top: calc(var(--cell) * 6); }
+    .mini-slot[data-mini="7"] { left: calc(var(--cell) * 7); top: calc(var(--cell) * 6); }
+    /* Bottom */
+    .mini-slot[data-mini="8"] { left: calc(var(--cell) * 5); top: calc(var(--cell) * 7); }
+    .mini-slot[data-mini="9"] { left: calc(var(--cell) * 0); top: calc(var(--cell) * 8); }
 
     .mini-card {
       width: 100%;
@@ -299,13 +307,15 @@ import BaseHead from '../components/BaseHead.astro';
       
       <!-- Mini card slots -->
       <div class="mini-slot" data-mini="0" data-dir="top"></div>
-      <div class="mini-slot" data-mini="1" data-dir="right"></div>
+      <div class="mini-slot" data-mini="1" data-dir="top"></div>
       <div class="mini-slot" data-mini="2" data-dir="left"></div>
-      <div class="mini-slot" data-mini="3" data-dir="right"></div>
-      <div class="mini-slot" data-mini="4" data-dir="left"></div>
-      <div class="mini-slot" data-mini="5" data-dir="right"></div>
-      <div class="mini-slot" data-mini="6" data-dir="bottom"></div>
-      <div class="mini-slot" data-mini="7" data-dir="bottom"></div>
+      <div class="mini-slot" data-mini="3" data-dir="top"></div>
+      <div class="mini-slot" data-mini="4" data-dir="right"></div>
+      <div class="mini-slot" data-mini="5" data-dir="left"></div>
+      <div class="mini-slot" data-mini="6" data-dir="left"></div>
+      <div class="mini-slot" data-mini="7" data-dir="right"></div>
+      <div class="mini-slot" data-mini="8" data-dir="bottom"></div>
+      <div class="mini-slot" data-mini="9" data-dir="left"></div>
     </div>
   </section>
 
@@ -432,6 +442,8 @@ import BaseHead from '../components/BaseHead.astro';
       { name: 'Intel', color: 'purple', icon: 'search' },
       { name: 'Quote', color: 'cyan', icon: 'quote' },
       { name: 'Prep', color: 'yellow', icon: 'clipboard' },
+      { name: 'Forecast', color: 'coral', icon: 'chart' },
+      { name: 'Notify', color: 'mint', icon: 'bell' },
     ];
 
     const icons = {
@@ -443,9 +455,11 @@ import BaseHead from '../components/BaseHead.astro';
       search: '<circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>',
       quote: '<path d="M3 21c3 0 7-1 7-8V5c0-1.25-.756-2.017-2-2H4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2 1 0 1 0 1 1v1c0 1-1 2-2 2s-1 .008-1 1.031V21z"/><path d="M15 21c3 0 7-1 7-8V5c0-1.25-.757-2.017-2-2h-4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2h.75c0 2.25.25 4-2.75 4v3z"/>',
       clipboard: '<path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/>',
+      chart: '<path d="M3 3v18h18"/><path d="M18 17V9"/><path d="M13 17V5"/><path d="M8 17v-3"/>',
+      bell: '<path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/>',
     };
 
-    let miniSlotAgents = [0, 1, 2, 3, 4, 5, 6, 7];
+    let miniSlotAgents = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
 
     function buildMiniCard(agent, dir) {
       return `
@@ -513,12 +527,12 @@ import BaseHead from '../components/BaseHead.astro';
       miniSlots.forEach((slot, i) => {
         const dir = slot.dataset.dir;
         slot.innerHTML = buildMiniCard(miniAgents[i], dir);
-        setTimeout(() => slideMiniIn(slot), 500 + i * 150);
+        setTimeout(() => slideMiniIn(slot), 500 + i * 120);
       });
 
-      // Cycle mini cards - random slots every 3.5 seconds
+      // Cycle mini cards
       setInterval(() => {
-        const indices = shuffle([0, 1, 2, 3, 4, 5, 6, 7]).slice(0, 2);
+        const indices = shuffle([0, 1, 2, 3, 4, 5, 6, 7, 8, 9]).slice(0, 2);
         indices.forEach((idx, i) => {
           setTimeout(() => cycleMiniSlot(idx), i * 300);
         });

@@ -1,5 +1,5 @@
 ---
-// Hero - Simple pixel art cards with labels, link to pages
+// Hero - Cards with label bar + pixel art illustration
 import Nav from '../components/Nav.astro';
 import Footer from '../components/Footer.astro';
 import BaseHead from '../components/BaseHead.astro';
@@ -14,7 +14,7 @@ import BaseHead from '../components/BaseHead.astro';
     :root { 
       --cell: 120px;
       --grid-line: rgba(255,255,255,0.08);
-      --mint: #46FCAF;
+      --mint: #59FFA4;
       --purple: #A678F4;
       --cyan: #5CEBDF;
       --coral: #FF6B7A;
@@ -40,7 +40,7 @@ import BaseHead from '../components/BaseHead.astro';
       position: absolute;
       top: 0;
       right: 0;
-      width: calc(var(--cell) * 8);
+      width: calc(var(--cell) * 10);
       height: 100%;
       background-image: 
         linear-gradient(to right, var(--grid-line) 1px, transparent 1px),
@@ -54,9 +54,9 @@ import BaseHead from '../components/BaseHead.astro';
       position: absolute;
       top: 0;
       left: 0;
-      width: calc(var(--cell) * 2);
+      width: calc(var(--cell) * 4);
       height: 100%;
-      background: linear-gradient(to right, var(--bg), transparent);
+      background: linear-gradient(to right, var(--bg) 30%, transparent);
       z-index: 2;
     }
 
@@ -113,26 +113,24 @@ import BaseHead from '../components/BaseHead.astro';
       position: absolute;
       top: 0;
       right: 0;
-      width: calc(var(--cell) * 8);
+      width: calc(var(--cell) * 10);
       height: 100%;
       z-index: 10;
       pointer-events: none;
     }
 
-    /* ========== PIXEL ART CARDS ========== */
+    /* ========== CARDS ========== */
     .card-slot {
       position: absolute;
       pointer-events: auto;
       overflow: hidden;
     }
 
-    /* 1x1 cards */
     .card-slot.size-1 {
       width: var(--cell);
       height: var(--cell);
     }
 
-    /* 2x2 cards */
     .card-slot.size-2 {
       width: calc(var(--cell) * 2);
       height: calc(var(--cell) * 2);
@@ -141,11 +139,12 @@ import BaseHead from '../components/BaseHead.astro';
     .pixel-card {
       width: 100%;
       height: 100%;
-      display: flex;
-      flex-direction: column;
+      position: relative;
       text-decoration: none;
+      display: block;
       transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
       cursor: pointer;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.3);
     }
 
     .pixel-card:hover {
@@ -166,57 +165,59 @@ import BaseHead from '../components/BaseHead.astro';
       transform: scale(1.02);
     }
 
+    /* Color backgrounds */
+    .pixel-card.mint { background: var(--mint); }
+    .pixel-card.purple { background: var(--purple); }
+    .pixel-card.cyan { background: var(--cyan); }
+    .pixel-card.coral { background: var(--coral); }
+    .pixel-card.yellow { background: var(--yellow); }
+
+    /* Label bar at top */
     .card-label {
-      font-size: 10px;
-      font-weight: 500;
+      position: absolute;
+      top: 10%;
+      left: 15%;
+      right: 15%;
+      height: 20%;
+      background: rgba(10, 10, 10, 0.1);
+      display: flex;
+      align-items: center;
+      padding: 0 10%;
+      font-size: 9px;
+      font-weight: 600;
       text-transform: uppercase;
-      letter-spacing: 0.08em;
-      color: var(--text-muted);
-      margin-bottom: 6px;
-      padding-left: 2px;
+      letter-spacing: 0.1em;
+      color: var(--bg);
     }
 
     .size-2 .card-label {
       font-size: 11px;
-      margin-bottom: 8px;
     }
 
+    /* Pixel art container */
     .card-art {
-      flex: 1;
-      display: grid;
-      padding: 8px;
-      box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+      position: absolute;
+      top: 35%;
+      left: 15%;
+      right: 15%;
+      bottom: 10%;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-evenly;
     }
 
-    .size-1 .card-art {
-      grid-template-columns: repeat(6, 1fr);
-      grid-template-rows: repeat(6, 1fr);
-      gap: 2px;
+    /* Pixel bars */
+    .px-bar {
+      height: 18%;
+      background: currentColor;
     }
 
-    .size-2 .card-art {
-      grid-template-columns: repeat(8, 1fr);
-      grid-template-rows: repeat(8, 1fr);
-      gap: 3px;
-    }
-
-    /* Color backgrounds */
-    .card-art.mint { background: var(--mint); }
-    .card-art.purple { background: var(--purple); }
-    .card-art.cyan { background: var(--cyan); }
-    .card-art.coral { background: var(--coral); }
-    .card-art.yellow { background: var(--yellow); }
-
-    /* Pixel blocks */
-    .px {
-      background: rgba(0,0,0,0.25);
-    }
-    .px.light {
-      background: rgba(255,255,255,0.9);
-    }
-    .px.accent {
-      background: rgba(0,0,0,0.5);
-    }
+    /* Accent colors for pixel art */
+    .pixel-card.mint .px-bar { color: var(--purple); }
+    .pixel-card.purple .px-bar { color: var(--mint); }
+    .pixel-card.cyan .px-bar { color: var(--coral); }
+    .pixel-card.coral .px-bar { color: var(--cyan); }
+    .pixel-card.yellow .px-bar { color: var(--purple); }
 
     /* RESPONSIVE */
     @media (max-width: 1800px) {
@@ -277,186 +278,30 @@ import BaseHead from '../components/BaseHead.astro';
   <Footer />
 
   <script>
-    // Card definitions: label, color, link, size, pixel pattern
+    // Card data with pixel art patterns (widths as percentages)
     const cards = [
-      {
-        label: 'Agents',
-        color: 'purple',
-        href: '/agents',
-        size: 2,
-        row: 1, col: 0,
-        dir: 'left',
-        // 8x8 grid - robot/agent icon
-        pixels: [
-          0,0,1,1,1,1,0,0,
-          0,1,1,1,1,1,1,0,
-          0,1,2,1,1,2,1,0,
-          0,1,1,1,1,1,1,0,
-          0,0,1,1,1,1,0,0,
-          0,1,1,0,0,1,1,0,
-          0,1,1,0,0,1,1,0,
-          0,1,0,0,0,0,1,0,
-        ]
-      },
-      {
-        label: 'Pipeline',
-        color: 'cyan',
-        href: '/features#pipeline',
-        size: 2,
-        row: 1, col: 5,
-        dir: 'right',
-        // 8x8 grid - funnel/pipeline
-        pixels: [
-          1,1,1,1,1,1,1,1,
-          0,1,1,1,1,1,1,0,
-          0,0,1,1,1,1,0,0,
-          0,0,1,1,1,1,0,0,
-          0,0,0,1,1,0,0,0,
-          0,0,0,1,1,0,0,0,
-          0,0,0,1,1,0,0,0,
-          0,0,0,2,2,0,0,0,
-        ]
-      },
-      {
-        label: 'CRM Sync',
-        color: 'mint',
-        href: '/features#crm',
-        size: 1,
-        row: 3, col: 3,
-        dir: 'top',
-        // 6x6 grid - sync arrows
-        pixels: [
-          0,0,1,0,0,0,
-          0,1,1,1,1,0,
-          1,0,1,0,0,0,
-          0,0,0,1,0,1,
-          0,1,1,1,1,0,
-          0,0,0,1,0,0,
-        ]
-      },
-      {
-        label: 'Alerts',
-        color: 'coral',
-        href: '/features#alerts',
-        size: 1,
-        row: 3, col: 7,
-        dir: 'right',
-        // 6x6 grid - bell/alert
-        pixels: [
-          0,0,1,1,0,0,
-          0,1,1,1,1,0,
-          0,1,1,1,1,0,
-          1,1,1,1,1,1,
-          0,0,0,0,0,0,
-          0,0,1,1,0,0,
-        ]
-      },
-      {
-        label: 'Coaching',
-        color: 'yellow',
-        href: '/features#coaching',
-        size: 2,
-        row: 4, col: 0,
-        dir: 'left',
-        // 8x8 grid - scorecard/chart
-        pixels: [
-          1,1,1,1,1,1,1,1,
-          1,0,0,0,0,0,0,1,
-          1,0,2,2,0,0,0,1,
-          1,0,2,2,2,0,0,1,
-          1,0,2,2,2,2,0,1,
-          1,0,2,2,2,2,2,1,
-          1,0,0,0,0,0,0,1,
-          1,1,1,1,1,1,1,1,
-        ]
-      },
-      {
-        label: 'Forecast',
-        color: 'purple',
-        href: '/features#forecast',
-        size: 1,
-        row: 4, col: 4,
-        dir: 'bottom',
-        // 6x6 grid - chart bars
-        pixels: [
-          0,0,0,0,0,1,
-          0,0,0,0,1,1,
-          0,0,0,1,1,1,
-          0,0,1,1,1,1,
-          0,1,1,1,1,1,
-          1,1,1,1,1,1,
-        ]
-      },
-      {
-        label: 'Transcripts',
-        color: 'cyan',
-        href: '/features#transcripts',
-        size: 1,
-        row: 5, col: 3,
-        dir: 'left',
-        // 6x6 grid - text lines
-        pixels: [
-          1,1,1,1,1,0,
-          0,0,0,0,0,0,
-          1,1,1,1,0,0,
-          0,0,0,0,0,0,
-          1,1,1,1,1,1,
-          0,0,0,0,0,0,
-        ]
-      },
-      {
-        label: 'Email',
-        color: 'mint',
-        href: '/features#email',
-        size: 1,
-        row: 6, col: 0,
-        dir: 'left',
-        // 6x6 grid - envelope
-        pixels: [
-          1,1,1,1,1,1,
-          1,2,0,0,2,1,
-          1,0,2,2,0,1,
-          1,0,0,0,0,1,
-          1,0,0,0,0,1,
-          1,1,1,1,1,1,
-        ]
-      },
-      {
-        label: 'Tasks',
-        color: 'coral',
-        href: '/features#tasks',
-        size: 1,
-        row: 6, col: 4,
-        dir: 'bottom',
-        // 6x6 grid - checklist
-        pixels: [
-          1,0,2,2,2,2,
-          1,0,0,0,0,0,
-          1,0,2,2,2,0,
-          1,0,0,0,0,0,
-          1,0,2,2,2,2,
-          0,0,0,0,0,0,
-        ]
-      },
-      {
-        label: 'Insights',
-        color: 'yellow',
-        href: '/features#insights',
-        size: 2,
-        row: 6, col: 5,
-        dir: 'right',
-        // 8x8 grid - lightbulb
-        pixels: [
-          0,0,1,1,1,1,0,0,
-          0,1,1,1,1,1,1,0,
-          0,1,1,0,0,1,1,0,
-          0,1,1,0,0,1,1,0,
-          0,0,1,1,1,1,0,0,
-          0,0,0,1,1,0,0,0,
-          0,0,1,1,1,1,0,0,
-          0,0,0,1,1,0,0,0,
-        ]
-      },
+      { label: 'Agents', color: 'purple', href: '/agents', size: 2, row: 1, col: 1, dir: 'left', bars: [100, 70, 85, 50] },
+      { label: 'Forecast', color: 'mint', href: '/features#forecast', size: 1, row: 1, col: 5, dir: 'top', bars: [100, 75, 85, 55] },
+      { label: 'Pipeline', color: 'cyan', href: '/features#pipeline', size: 2, row: 1, col: 7, dir: 'right', bars: [100, 80, 60, 40] },
+      
+      { label: 'Alerts', color: 'coral', href: '/features#alerts', size: 1, row: 2, col: 4, dir: 'top', bars: [90, 100, 70, 85] },
+      
+      { label: 'CRM Sync', color: 'mint', href: '/features#crm', size: 1, row: 3, col: 0, dir: 'left', bars: [80, 100, 60, 90] },
+      { label: 'Coaching', color: 'yellow', href: '/features#coaching', size: 2, row: 3, col: 2, dir: 'left', bars: [100, 85, 70, 55] },
+      { label: 'Email', color: 'purple', href: '/features#email', size: 1, row: 3, col: 6, dir: 'right', bars: [70, 100, 80, 60] },
+      { label: 'Intel', color: 'cyan', href: '/features#intel', size: 1, row: 3, col: 9, dir: 'right', bars: [100, 65, 90, 75] },
+      
+      { label: 'Tasks', color: 'coral', href: '/features#tasks', size: 1, row: 4, col: 5, dir: 'bottom', bars: [85, 70, 100, 55] },
+      
+      { label: 'Transcripts', color: 'yellow', href: '/features#transcripts', size: 1, row: 5, col: 0, dir: 'left', bars: [100, 80, 95, 60] },
+      { label: 'Insights', color: 'purple', href: '/features#insights', size: 2, row: 5, col: 3, dir: 'bottom', bars: [75, 100, 60, 85] },
+      { label: 'Quotes', color: 'mint', href: '/features#quotes', size: 1, row: 5, col: 8, dir: 'right', bars: [90, 70, 100, 80] },
+      
+      { label: 'Analytics', color: 'cyan', href: '/features#analytics', size: 2, row: 6, col: 1, dir: 'left', bars: [100, 75, 90, 50] },
+      { label: 'Notify', color: 'coral', href: '/features#notify', size: 1, row: 6, col: 6, dir: 'bottom', bars: [80, 100, 65, 90] },
+      
+      { label: 'Dashboard', color: 'yellow', href: '/dashboard', size: 2, row: 7, col: 4, dir: 'bottom', bars: [100, 80, 60, 45] },
+      { label: 'Reports', color: 'purple', href: '/features#reports', size: 1, row: 7, col: 8, dir: 'right', bars: [70, 100, 85, 55] },
     ];
 
     function shuffle(arr) {
@@ -473,23 +318,15 @@ import BaseHead from '../components/BaseHead.astro';
     }
 
     function buildCard(card) {
-      const gridSize = card.size === 2 ? 8 : 6;
-      let pixelsHtml = '';
-      
-      card.pixels.forEach((val, i) => {
-        if (val === 0) {
-          pixelsHtml += '<div></div>';
-        } else if (val === 1) {
-          pixelsHtml += '<div class="px light"></div>';
-        } else {
-          pixelsHtml += '<div class="px accent"></div>';
-        }
-      });
+      const opacities = [1, 0.7, 0.5, 0.3];
+      const barsHtml = card.bars.map((width, i) => 
+        `<div class="px-bar" style="width: ${width}%; opacity: ${opacities[i]};"></div>`
+      ).join('');
 
       return `
-        <a href="${card.href}" class="pixel-card from-${card.dir}">
-          <span class="card-label">${card.label}</span>
-          <div class="card-art ${card.color}">${pixelsHtml}</div>
+        <a href="${card.href}" class="pixel-card ${card.color} from-${card.dir}">
+          <div class="card-label">${card.label}</div>
+          <div class="card-art">${barsHtml}</div>
         </a>
       `;
     }
@@ -529,7 +366,6 @@ import BaseHead from '../components/BaseHead.astro';
       const container = document.getElementById('cards-container');
       const slots = [];
 
-      // Create all slots
       cards.forEach(card => {
         const slot = createSlot(card);
         container.appendChild(slot);
@@ -538,23 +374,22 @@ import BaseHead from '../components/BaseHead.astro';
 
       // Staggered slide in
       slots.forEach((slot, i) => {
-        setTimeout(() => slideIn(slot), 300 + i * 100);
+        setTimeout(() => slideIn(slot), 300 + i * 80);
       });
 
-      // Cycle some cards periodically
+      // Cycle random cards
       setInterval(() => {
-        const indices = shuffle([...Array(slots.length).keys()]).slice(0, 2);
+        const indices = shuffle([...Array(slots.length).keys()]).slice(0, 3);
         indices.forEach((idx, i) => {
           const slot = slots[idx];
-          const card = cards[idx];
           
           setTimeout(async () => {
             await slideOut(slot);
-            await new Promise(r => setTimeout(r, 300));
+            await new Promise(r => setTimeout(r, 400));
             slideIn(slot);
-          }, i * 400);
+          }, i * 300);
         });
-      }, 5000);
+      }, 4500);
     });
   </script>
 </body>

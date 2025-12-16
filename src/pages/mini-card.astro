@@ -1,5 +1,5 @@
 ---
-// Hero - Pixel cards + Mini cards, better vertical spread
+// Hero - Simple pixel art cards with labels, link to pages
 import Nav from '../components/Nav.astro';
 import Footer from '../components/Footer.astro';
 import BaseHead from '../components/BaseHead.astro';
@@ -13,8 +13,6 @@ import BaseHead from '../components/BaseHead.astro';
   <style is:global>
     :root { 
       --cell: 120px;
-      --card-w: calc(var(--cell) * 2);
-      --card-h: calc(var(--cell) * 3);
       --grid-line: rgba(255,255,255,0.08);
       --mint: #46FCAF;
       --purple: #A678F4;
@@ -121,127 +119,103 @@ import BaseHead from '../components/BaseHead.astro';
       pointer-events: none;
     }
 
-    /* ========== PIXEL CARDS (2x3 cells) ========== */
+    /* ========== PIXEL ART CARDS ========== */
     .card-slot {
       position: absolute;
-      width: var(--card-w);
-      height: var(--card-h);
-      pointer-events: auto;
-      filter: drop-shadow(0 20px 40px rgba(0,0,0,0.5));
-    }
-
-    /* Spread across full height - top, middle, bottom */
-    .card-slot[data-slot="0"] {
-      left: calc(var(--cell) * 0);
-      top: calc(var(--cell) * 1);
-    }
-    .card-slot[data-slot="1"] {
-      left: calc(var(--cell) * 5);
-      top: calc(var(--cell) * 3);
-    }
-    .card-slot[data-slot="2"] {
-      left: calc(var(--cell) * 2);
-      top: calc(var(--cell) * 6);
-    }
-
-    .pixel-grid {
-      width: 100%;
-      height: 100%;
-      display: grid;
-      grid-template-columns: repeat(12, 1fr);
-      grid-template-rows: repeat(18, 1fr);
-    }
-
-    .pixel-cell {
-      opacity: 0;
-      will-change: opacity;
-    }
-
-    .pixel-cell.visible {
-      opacity: 1;
-      transition: opacity 0.2s ease-out;
-    }
-
-    .pixel-cell.hiding {
-      opacity: 0;
-      transition: opacity 0.15s ease-in;
-    }
-
-    /* ========== MINI CARDS (1x1 cell) ========== */
-    .mini-slot {
-      position: absolute;
-      width: var(--cell);
-      height: var(--cell);
       pointer-events: auto;
       overflow: hidden;
     }
 
-    /* Distributed across grid, avoiding pixel card areas */
-    /* Top area */
-    .mini-slot[data-mini="0"] { left: calc(var(--cell) * 3); top: calc(var(--cell) * 1); }
-    .mini-slot[data-mini="1"] { left: calc(var(--cell) * 6); top: calc(var(--cell) * 1); }
-    /* Upper-mid */
-    .mini-slot[data-mini="2"] { left: calc(var(--cell) * 0); top: calc(var(--cell) * 4); }
-    .mini-slot[data-mini="3"] { left: calc(var(--cell) * 4); top: calc(var(--cell) * 2); }
-    /* Mid */
-    .mini-slot[data-mini="4"] { left: calc(var(--cell) * 7); top: calc(var(--cell) * 4); }
-    .mini-slot[data-mini="5"] { left: calc(var(--cell) * 3); top: calc(var(--cell) * 5); }
-    /* Lower */
-    .mini-slot[data-mini="6"] { left: calc(var(--cell) * 0); top: calc(var(--cell) * 6); }
-    .mini-slot[data-mini="7"] { left: calc(var(--cell) * 7); top: calc(var(--cell) * 6); }
-    /* Bottom */
-    .mini-slot[data-mini="8"] { left: calc(var(--cell) * 5); top: calc(var(--cell) * 7); }
-    .mini-slot[data-mini="9"] { left: calc(var(--cell) * 0); top: calc(var(--cell) * 8); }
+    /* 1x1 cards */
+    .card-slot.size-1 {
+      width: var(--cell);
+      height: var(--cell);
+    }
 
-    .mini-card {
+    /* 2x2 cards */
+    .card-slot.size-2 {
+      width: calc(var(--cell) * 2);
+      height: calc(var(--cell) * 2);
+    }
+
+    .pixel-card {
       width: 100%;
       height: 100%;
       display: flex;
       flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      padding: 12px;
-      text-align: center;
-      box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+      text-decoration: none;
       transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+      cursor: pointer;
     }
 
-    .mini-card.from-left { transform: translateX(-120%); }
-    .mini-card.from-right { transform: translateX(120%); }
-    .mini-card.from-top { transform: translateY(-120%); }
-    .mini-card.from-bottom { transform: translateY(120%); }
+    .pixel-card:hover {
+      transform: scale(1.02);
+    }
 
-    .mini-card.visible {
+    /* Slide states */
+    .pixel-card.from-left { transform: translateX(-120%); }
+    .pixel-card.from-right { transform: translateX(120%); }
+    .pixel-card.from-top { transform: translateY(-120%); }
+    .pixel-card.from-bottom { transform: translateY(120%); }
+
+    .pixel-card.visible {
       transform: translateX(0) translateY(0);
     }
 
-    .mini-card.mint { background: var(--mint); color: #0a0a0a; }
-    .mini-card.purple { background: var(--purple); color: #fff; }
-    .mini-card.cyan { background: var(--cyan); color: #0a0a0a; }
-    .mini-card.coral { background: var(--coral); color: #fff; }
-    .mini-card.yellow { background: var(--yellow); color: #0a0a0a; }
-
-    .mini-icon {
-      width: 24px;
-      height: 24px;
-      margin-bottom: 6px;
-      opacity: 0.9;
+    .pixel-card.visible:hover {
+      transform: scale(1.02);
     }
 
-    .mini-icon svg {
-      width: 100%;
-      height: 100%;
-      stroke: currentColor;
-      stroke-width: 1.5;
-      fill: none;
-    }
-
-    .mini-name {
-      font-size: 9px;
-      font-weight: 600;
+    .card-label {
+      font-size: 10px;
+      font-weight: 500;
       text-transform: uppercase;
-      letter-spacing: 0.05em;
-      line-height: 1.2;
+      letter-spacing: 0.08em;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+      padding-left: 2px;
+    }
+
+    .size-2 .card-label {
+      font-size: 11px;
+      margin-bottom: 8px;
+    }
+
+    .card-art {
+      flex: 1;
+      display: grid;
+      padding: 8px;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+    }
+
+    .size-1 .card-art {
+      grid-template-columns: repeat(6, 1fr);
+      grid-template-rows: repeat(6, 1fr);
+      gap: 2px;
+    }
+
+    .size-2 .card-art {
+      grid-template-columns: repeat(8, 1fr);
+      grid-template-rows: repeat(8, 1fr);
+      gap: 3px;
+    }
+
+    /* Color backgrounds */
+    .card-art.mint { background: var(--mint); }
+    .card-art.purple { background: var(--purple); }
+    .card-art.cyan { background: var(--cyan); }
+    .card-art.coral { background: var(--coral); }
+    .card-art.yellow { background: var(--yellow); }
+
+    /* Pixel blocks */
+    .px {
+      background: rgba(0,0,0,0.25);
+    }
+    .px.light {
+      background: rgba(255,255,255,0.9);
+    }
+    .px.accent {
+      background: rgba(0,0,0,0.5);
     }
 
     /* RESPONSIVE */
@@ -259,8 +233,6 @@ import BaseHead from '../components/BaseHead.astro';
       :root { --cell: 80px; }
       .hero-headline { font-size: 48px; }
       .hero-content { max-width: 380px; }
-      .mini-icon { width: 20px; height: 20px; }
-      .mini-name { font-size: 8px; }
     }
 
     @media (max-width: 1200px) {
@@ -299,46 +271,193 @@ import BaseHead from '../components/BaseHead.astro';
       </div>
     </div>
 
-    <div class="cards-container">
-      <!-- Pixel card slots -->
-      <div class="card-slot" data-slot="0" id="slot-0"></div>
-      <div class="card-slot" data-slot="1" id="slot-1"></div>
-      <div class="card-slot" data-slot="2" id="slot-2"></div>
-      
-      <!-- Mini card slots -->
-      <div class="mini-slot" data-mini="0" data-dir="top"></div>
-      <div class="mini-slot" data-mini="1" data-dir="top"></div>
-      <div class="mini-slot" data-mini="2" data-dir="left"></div>
-      <div class="mini-slot" data-mini="3" data-dir="top"></div>
-      <div class="mini-slot" data-mini="4" data-dir="right"></div>
-      <div class="mini-slot" data-mini="5" data-dir="left"></div>
-      <div class="mini-slot" data-mini="6" data-dir="left"></div>
-      <div class="mini-slot" data-mini="7" data-dir="right"></div>
-      <div class="mini-slot" data-mini="8" data-dir="bottom"></div>
-      <div class="mini-slot" data-mini="9" data-dir="left"></div>
-    </div>
+    <div class="cards-container" id="cards-container"></div>
   </section>
 
   <Footer />
 
   <script>
-    // ========== PIXEL CARDS ==========
-    const pixelCards = [
-      { src: '/cards/card-01-call-trigger.svg' },
-      { src: '/cards/card-02-intel-agent.svg' },
-      { src: '/cards/card-03-crm-agent.svg' },
-      { src: '/cards/card-04-risk-agent.svg' },
-      { src: '/cards/card-05-email-agent.svg' },
-      { src: '/cards/card-06-coaching-agent.svg' },
-      { src: '/cards/card-07-multithread-agent.svg' },
-      { src: '/cards/card-08-quote-agent.svg' },
-      { src: '/cards/card-09-task-agent.svg' },
-      { src: '/cards/card-10-prep-agent.svg' },
+    // Card definitions: label, color, link, size, pixel pattern
+    const cards = [
+      {
+        label: 'Agents',
+        color: 'purple',
+        href: '/agents',
+        size: 2,
+        row: 1, col: 0,
+        dir: 'left',
+        // 8x8 grid - robot/agent icon
+        pixels: [
+          0,0,1,1,1,1,0,0,
+          0,1,1,1,1,1,1,0,
+          0,1,2,1,1,2,1,0,
+          0,1,1,1,1,1,1,0,
+          0,0,1,1,1,1,0,0,
+          0,1,1,0,0,1,1,0,
+          0,1,1,0,0,1,1,0,
+          0,1,0,0,0,0,1,0,
+        ]
+      },
+      {
+        label: 'Pipeline',
+        color: 'cyan',
+        href: '/features#pipeline',
+        size: 2,
+        row: 1, col: 5,
+        dir: 'right',
+        // 8x8 grid - funnel/pipeline
+        pixels: [
+          1,1,1,1,1,1,1,1,
+          0,1,1,1,1,1,1,0,
+          0,0,1,1,1,1,0,0,
+          0,0,1,1,1,1,0,0,
+          0,0,0,1,1,0,0,0,
+          0,0,0,1,1,0,0,0,
+          0,0,0,1,1,0,0,0,
+          0,0,0,2,2,0,0,0,
+        ]
+      },
+      {
+        label: 'CRM Sync',
+        color: 'mint',
+        href: '/features#crm',
+        size: 1,
+        row: 3, col: 3,
+        dir: 'top',
+        // 6x6 grid - sync arrows
+        pixels: [
+          0,0,1,0,0,0,
+          0,1,1,1,1,0,
+          1,0,1,0,0,0,
+          0,0,0,1,0,1,
+          0,1,1,1,1,0,
+          0,0,0,1,0,0,
+        ]
+      },
+      {
+        label: 'Alerts',
+        color: 'coral',
+        href: '/features#alerts',
+        size: 1,
+        row: 3, col: 7,
+        dir: 'right',
+        // 6x6 grid - bell/alert
+        pixels: [
+          0,0,1,1,0,0,
+          0,1,1,1,1,0,
+          0,1,1,1,1,0,
+          1,1,1,1,1,1,
+          0,0,0,0,0,0,
+          0,0,1,1,0,0,
+        ]
+      },
+      {
+        label: 'Coaching',
+        color: 'yellow',
+        href: '/features#coaching',
+        size: 2,
+        row: 4, col: 0,
+        dir: 'left',
+        // 8x8 grid - scorecard/chart
+        pixels: [
+          1,1,1,1,1,1,1,1,
+          1,0,0,0,0,0,0,1,
+          1,0,2,2,0,0,0,1,
+          1,0,2,2,2,0,0,1,
+          1,0,2,2,2,2,0,1,
+          1,0,2,2,2,2,2,1,
+          1,0,0,0,0,0,0,1,
+          1,1,1,1,1,1,1,1,
+        ]
+      },
+      {
+        label: 'Forecast',
+        color: 'purple',
+        href: '/features#forecast',
+        size: 1,
+        row: 4, col: 4,
+        dir: 'bottom',
+        // 6x6 grid - chart bars
+        pixels: [
+          0,0,0,0,0,1,
+          0,0,0,0,1,1,
+          0,0,0,1,1,1,
+          0,0,1,1,1,1,
+          0,1,1,1,1,1,
+          1,1,1,1,1,1,
+        ]
+      },
+      {
+        label: 'Transcripts',
+        color: 'cyan',
+        href: '/features#transcripts',
+        size: 1,
+        row: 5, col: 3,
+        dir: 'left',
+        // 6x6 grid - text lines
+        pixels: [
+          1,1,1,1,1,0,
+          0,0,0,0,0,0,
+          1,1,1,1,0,0,
+          0,0,0,0,0,0,
+          1,1,1,1,1,1,
+          0,0,0,0,0,0,
+        ]
+      },
+      {
+        label: 'Email',
+        color: 'mint',
+        href: '/features#email',
+        size: 1,
+        row: 6, col: 0,
+        dir: 'left',
+        // 6x6 grid - envelope
+        pixels: [
+          1,1,1,1,1,1,
+          1,2,0,0,2,1,
+          1,0,2,2,0,1,
+          1,0,0,0,0,1,
+          1,0,0,0,0,1,
+          1,1,1,1,1,1,
+        ]
+      },
+      {
+        label: 'Tasks',
+        color: 'coral',
+        href: '/features#tasks',
+        size: 1,
+        row: 6, col: 4,
+        dir: 'bottom',
+        // 6x6 grid - checklist
+        pixels: [
+          1,0,2,2,2,2,
+          1,0,0,0,0,0,
+          1,0,2,2,2,0,
+          1,0,0,0,0,0,
+          1,0,2,2,2,2,
+          0,0,0,0,0,0,
+        ]
+      },
+      {
+        label: 'Insights',
+        color: 'yellow',
+        href: '/features#insights',
+        size: 2,
+        row: 6, col: 5,
+        dir: 'right',
+        // 8x8 grid - lightbulb
+        pixels: [
+          0,0,1,1,1,1,0,0,
+          0,1,1,1,1,1,1,0,
+          0,1,1,0,0,1,1,0,
+          0,1,1,0,0,1,1,0,
+          0,0,1,1,1,1,0,0,
+          0,0,0,1,1,0,0,0,
+          0,0,1,1,1,1,0,0,
+          0,0,0,1,1,0,0,0,
+        ]
+      },
     ];
-
-    const COLS = 12;
-    const ROWS = 18;
-    let currentPixelCards = [0, 1, 2];
 
     function shuffle(arr) {
       const a = [...arr];
@@ -349,133 +468,44 @@ import BaseHead from '../components/BaseHead.astro';
       return a;
     }
 
-    function buildPixelCard(cardSrc) {
-      let cells = '';
-      for (let row = 0; row < ROWS; row++) {
-        for (let col = 0; col < COLS; col++) {
-          const xPos = (col / (COLS - 1)) * 100;
-          const yPos = (row / (ROWS - 1)) * 100;
-          cells += `<div class="pixel-cell" style="background: url('${cardSrc}') ${xPos}% ${yPos}% / ${COLS * 100}% ${ROWS * 100}% no-repeat;"></div>`;
-        }
-      }
-      return `<div class="pixel-grid">${cells}</div>`;
+    function getCell() {
+      return parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--cell')) || 120;
     }
 
-    function animatePixelIn(slot) {
-      return new Promise(resolve => {
-        const cells = Array.from(slot.querySelectorAll('.pixel-cell'));
-        const indices = shuffle([...Array(cells.length).keys()]);
-        const batchSize = 12;
-        let batch = 0;
-        
-        function showBatch() {
-          const start = batch * batchSize;
-          const end = Math.min(start + batchSize, indices.length);
-          for (let i = start; i < end; i++) {
-            cells[indices[i]].classList.add('visible');
-          }
-          batch++;
-          if (batch * batchSize < indices.length) {
-            requestAnimationFrame(showBatch);
-          } else {
-            setTimeout(resolve, 200);
-          }
+    function buildCard(card) {
+      const gridSize = card.size === 2 ? 8 : 6;
+      let pixelsHtml = '';
+      
+      card.pixels.forEach((val, i) => {
+        if (val === 0) {
+          pixelsHtml += '<div></div>';
+        } else if (val === 1) {
+          pixelsHtml += '<div class="px light"></div>';
+        } else {
+          pixelsHtml += '<div class="px accent"></div>';
         }
-        requestAnimationFrame(showBatch);
       });
-    }
 
-    function animatePixelOut(slot) {
-      return new Promise(resolve => {
-        const cells = Array.from(slot.querySelectorAll('.pixel-cell'));
-        const indices = shuffle([...Array(cells.length).keys()]);
-        const batchSize = 15;
-        let batch = 0;
-        
-        function hideBatch() {
-          const start = batch * batchSize;
-          const end = Math.min(start + batchSize, indices.length);
-          for (let i = start; i < end; i++) {
-            cells[indices[i]].classList.add('hiding');
-            cells[indices[i]].classList.remove('visible');
-          }
-          batch++;
-          if (batch * batchSize < indices.length) {
-            requestAnimationFrame(hideBatch);
-          } else {
-            setTimeout(() => {
-              slot.innerHTML = '';
-              resolve();
-            }, 180);
-          }
-        }
-        requestAnimationFrame(hideBatch);
-      });
-    }
-
-    async function showPixelCard(slotIndex, cardIndex) {
-      const slot = document.getElementById(`slot-${slotIndex}`);
-      slot.innerHTML = buildPixelCard(pixelCards[cardIndex].src);
-      await animatePixelIn(slot);
-    }
-
-    async function hidePixelCard(slotIndex) {
-      const slot = document.getElementById(`slot-${slotIndex}`);
-      if (!slot.querySelector('.pixel-grid')) return;
-      await animatePixelOut(slot);
-    }
-
-    async function cyclePixelSlot(slotIndex) {
-      await hidePixelCard(slotIndex);
-      await new Promise(r => setTimeout(r, 250));
-      currentPixelCards[slotIndex] = (currentPixelCards[slotIndex] + 3) % pixelCards.length;
-      await showPixelCard(slotIndex, currentPixelCards[slotIndex]);
-    }
-
-    // ========== MINI CARDS ==========
-    const miniAgents = [
-      { name: 'CRM Sync', color: 'cyan', icon: 'database' },
-      { name: 'Risk Alert', color: 'coral', icon: 'alert' },
-      { name: 'Email Draft', color: 'yellow', icon: 'mail' },
-      { name: 'Coaching', color: 'purple', icon: 'star' },
-      { name: 'Tasks', color: 'mint', icon: 'check' },
-      { name: 'Intel', color: 'purple', icon: 'search' },
-      { name: 'Quote', color: 'cyan', icon: 'quote' },
-      { name: 'Prep', color: 'yellow', icon: 'clipboard' },
-      { name: 'Forecast', color: 'coral', icon: 'chart' },
-      { name: 'Notify', color: 'mint', icon: 'bell' },
-    ];
-
-    const icons = {
-      database: '<ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/>',
-      alert: '<path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>',
-      mail: '<path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/>',
-      star: '<polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>',
-      check: '<polyline points="20 6 9 17 4 12"/>',
-      search: '<circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>',
-      quote: '<path d="M3 21c3 0 7-1 7-8V5c0-1.25-.756-2.017-2-2H4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2 1 0 1 0 1 1v1c0 1-1 2-2 2s-1 .008-1 1.031V21z"/><path d="M15 21c3 0 7-1 7-8V5c0-1.25-.757-2.017-2-2h-4c-1.25 0-2 .75-2 1.972V11c0 1.25.75 2 2 2h.75c0 2.25.25 4-2.75 4v3z"/>',
-      clipboard: '<path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/>',
-      chart: '<path d="M3 3v18h18"/><path d="M18 17V9"/><path d="M13 17V5"/><path d="M8 17v-3"/>',
-      bell: '<path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/>',
-    };
-
-    let miniSlotAgents = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
-
-    function buildMiniCard(agent, dir) {
       return `
-        <div class="mini-card ${agent.color} from-${dir}">
-          <div class="mini-icon">
-            <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
-              ${icons[agent.icon]}
-            </svg>
-          </div>
-          <div class="mini-name">${agent.name}</div>
-        </div>
+        <a href="${card.href}" class="pixel-card from-${card.dir}">
+          <span class="card-label">${card.label}</span>
+          <div class="card-art ${card.color}">${pixelsHtml}</div>
+        </a>
       `;
     }
 
-    function slideMiniIn(slot) {
-      const card = slot.querySelector('.mini-card');
+    function createSlot(card) {
+      const cell = getCell();
+      const slot = document.createElement('div');
+      slot.className = `card-slot size-${card.size}`;
+      slot.style.left = `${card.col * cell}px`;
+      slot.style.top = `${card.row * cell}px`;
+      slot.innerHTML = buildCard(card);
+      return slot;
+    }
+
+    function slideIn(slot) {
+      const card = slot.querySelector('.pixel-card');
       if (card) {
         requestAnimationFrame(() => {
           card.classList.add('visible');
@@ -483,9 +513,9 @@ import BaseHead from '../components/BaseHead.astro';
       }
     }
 
-    function slideMiniOut(slot) {
+    function slideOut(slot) {
       return new Promise(resolve => {
-        const card = slot.querySelector('.mini-card');
+        const card = slot.querySelector('.pixel-card');
         if (card) {
           card.classList.remove('visible');
           setTimeout(resolve, 500);
@@ -495,48 +525,36 @@ import BaseHead from '../components/BaseHead.astro';
       });
     }
 
-    async function cycleMiniSlot(slotIndex) {
-      const slot = document.querySelector(`[data-mini="${slotIndex}"]`);
-      const dir = slot.dataset.dir;
-      
-      await slideMiniOut(slot);
-      await new Promise(r => setTimeout(r, 200));
-      
-      miniSlotAgents[slotIndex] = (miniSlotAgents[slotIndex] + 1) % miniAgents.length;
-      slot.innerHTML = buildMiniCard(miniAgents[miniSlotAgents[slotIndex]], dir);
-      
-      await new Promise(r => setTimeout(r, 50));
-      slideMiniIn(slot);
-    }
-
-    // ========== INIT ==========
     document.addEventListener('DOMContentLoaded', () => {
-      // Init pixel cards
-      setTimeout(() => showPixelCard(0, 0), 300);
-      setTimeout(() => showPixelCard(1, 1), 700);
-      setTimeout(() => showPixelCard(2, 2), 1100);
+      const container = document.getElementById('cards-container');
+      const slots = [];
 
-      // Cycle pixel cards
-      const pixelDisplayTime = 5000;
-      setTimeout(() => setInterval(() => cyclePixelSlot(0), pixelDisplayTime), 4000);
-      setTimeout(() => setInterval(() => cyclePixelSlot(1), pixelDisplayTime), 5200);
-      setTimeout(() => setInterval(() => cyclePixelSlot(2), pixelDisplayTime), 6400);
-
-      // Init mini cards
-      const miniSlots = document.querySelectorAll('.mini-slot');
-      miniSlots.forEach((slot, i) => {
-        const dir = slot.dataset.dir;
-        slot.innerHTML = buildMiniCard(miniAgents[i], dir);
-        setTimeout(() => slideMiniIn(slot), 500 + i * 120);
+      // Create all slots
+      cards.forEach(card => {
+        const slot = createSlot(card);
+        container.appendChild(slot);
+        slots.push(slot);
       });
 
-      // Cycle mini cards
+      // Staggered slide in
+      slots.forEach((slot, i) => {
+        setTimeout(() => slideIn(slot), 300 + i * 100);
+      });
+
+      // Cycle some cards periodically
       setInterval(() => {
-        const indices = shuffle([0, 1, 2, 3, 4, 5, 6, 7, 8, 9]).slice(0, 2);
+        const indices = shuffle([...Array(slots.length).keys()]).slice(0, 2);
         indices.forEach((idx, i) => {
-          setTimeout(() => cycleMiniSlot(idx), i * 300);
+          const slot = slots[idx];
+          const card = cards[idx];
+          
+          setTimeout(async () => {
+            await slideOut(slot);
+            await new Promise(r => setTimeout(r, 300));
+            slideIn(slot);
+          }, i * 400);
         });
-      }, 3500);
+      }, 5000);
     });
   </script>
 </body>

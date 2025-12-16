@@ -1,5 +1,5 @@
 ---
-// Hero - Pixel cards with fixed positions, tiny pixels, 5 sec cycle
+// Hero - Optimized pixel cards
 import Nav from '../components/Nav.astro';
 import Footer from '../components/Footer.astro';
 import BaseHead from '../components/BaseHead.astro';
@@ -129,7 +129,7 @@ import BaseHead from '../components/BaseHead.astro';
       filter: drop-shadow(0 20px 40px rgba(0,0,0,0.5));
     }
 
-    /* Fixed positions - 3 slots that never overlap */
+    /* Fixed positions */
     .card-slot[data-slot="0"] {
       left: calc(var(--cell) * 0);
       top: calc(var(--cell) * 1);
@@ -143,24 +143,33 @@ import BaseHead from '../components/BaseHead.astro';
       top: calc(var(--cell) * 5);
     }
 
-    /* Pixel grid - TINY pixels 24x36 = 864 */
+    /* Pixel grid - 10x15 = 150 pixels (good balance) */
     .pixel-grid {
       width: 100%;
       height: 100%;
       display: grid;
-      grid-template-columns: repeat(24, 1fr);
-      grid-template-rows: repeat(36, 1fr);
+      grid-template-columns: repeat(10, 1fr);
+      grid-template-rows: repeat(15, 1fr);
+      gap: 1px;
+      background: transparent;
     }
 
     .pixel-cell {
       opacity: 0;
-      transform: scale(0);
-      transition: opacity 0.04s ease-out, transform 0.06s cubic-bezier(0.34, 1.56, 0.64, 1);
+      transform: scale(0.3);
+      will-change: transform, opacity;
     }
 
     .pixel-cell.visible {
       opacity: 1;
       transform: scale(1);
+      transition: opacity 0.15s ease-out, transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .pixel-cell.hiding {
+      opacity: 0;
+      transform: scale(0.3);
+      transition: opacity 0.12s ease-in, transform 0.15s ease-in;
     }
 
     /* RESPONSIVE */
@@ -239,9 +248,9 @@ import BaseHead from '../components/BaseHead.astro';
       { src: '/cards/card-10-prep-agent.svg' },
     ];
 
-    const COLS = 24;
-    const ROWS = 36;
-    const TOTAL_PIXELS = COLS * ROWS; // 864
+    const COLS = 10;
+    const ROWS = 15;
+    const TOTAL_PIXELS = COLS * ROWS; // 150
 
     let currentCards = [0, 1, 2];
 
@@ -261,7 +270,7 @@ import BaseHead from '../components/BaseHead.astro';
         for (let col = 0; col < COLS; col++) {
           const xPos = COLS > 1 ? (col / (COLS - 1)) * 100 : 0;
           const yPos = ROWS > 1 ? (row / (ROWS - 1)) * 100 : 0;
-          cells += `<div class="pixel-cell" style="background: url('${cardSrc}') ${xPos}% ${yPos}% / 2400% 3600% no-repeat;"></div>`;
+          cells += `<div class="pixel-cell" style="background: url('${cardSrc}') ${xPos}% ${yPos}% / 1000% 1500% no-repeat;"></div>`;
         }
       }
       
@@ -270,36 +279,66 @@ import BaseHead from '../components/BaseHead.astro';
 
     function animatePixelIn(slot) {
       return new Promise(resolve => {
-        const cells = slot.querySelectorAll('.pixel-cell');
+        const cells = Array.from(slot.querySelectorAll('.pixel-cell'));
         const indices = shuffle([...Array(cells.length).keys()]);
-
-        // Super fast - 1ms between pixels
-        indices.forEach((idx, i) => {
-          setTimeout(() => {
-            cells[idx].classList.add('visible');
-          }, i * 1);
-        });
-
-        setTimeout(resolve, TOTAL_PIXELS * 1 + 50);
+        
+        // Batch animations in groups for smoother performance
+        const batchSize = 8;
+        let batch = 0;
+        
+        function showBatch() {
+          const start = batch * batchSize;
+          const end = Math.min(start + batchSize, indices.length);
+          
+          for (let i = start; i < end; i++) {
+            cells[indices[i]].classList.add('visible');
+          }
+          
+          batch++;
+          
+          if (batch * batchSize < indices.length) {
+            requestAnimationFrame(showBatch);
+          } else {
+            setTimeout(resolve, 200);
+          }
+        }
+        
+        requestAnimationFrame(showBatch);
       });
     }
 
     function animatePixelOut(slot) {
       return new Promise(resolve => {
-        const cells = slot.querySelectorAll('.pixel-cell');
+        const cells = Array.from(slot.querySelectorAll('.pixel-cell'));
         const indices = shuffle([...Array(cells.length).keys()]);
-
-        // Fast out
-        indices.forEach((idx, i) => {
-          setTimeout(() => {
-            cells[idx].classList.remove('visible');
-          }, i * 0.8);
-        });
-
-        setTimeout(() => {
-          slot.innerHTML = '';
-          resolve();
-        }, TOTAL_PIXELS * 0.8 + 50);
+        
+        // Add hiding class to trigger transition
+        cells.forEach(cell => cell.classList.add('hiding'));
+        
+        const batchSize = 10;
+        let batch = 0;
+        
+        function hideBatch() {
+          const start = batch * batchSize;
+          const end = Math.min(start + batchSize, indices.length);
+          
+          for (let i = start; i < end; i++) {
+            cells[indices[i]].classList.remove('visible');
+          }
+          
+          batch++;
+          
+          if (batch * batchSize < indices.length) {
+            requestAnimationFrame(hideBatch);
+          } else {
+            setTimeout(() => {
+              slot.innerHTML = '';
+              resolve();
+            }, 180);
+          }
+        }
+        
+        requestAnimationFrame(hideBatch);
       });
     }
 
@@ -323,7 +362,7 @@ import BaseHead from '../components/BaseHead.astro';
       await hideCard(slotIndex);
       
       // Brief pause
-      await new Promise(r => setTimeout(r, 300));
+      await new Promise(r => setTimeout(r, 250));
       
       // Next card
       currentCards[slotIndex] = (currentCards[slotIndex] + 3) % cards.length;
@@ -333,14 +372,14 @@ import BaseHead from '../components/BaseHead.astro';
     document.addEventListener('DOMContentLoaded', () => {
       // Staggered initial load
       setTimeout(() => showCard(0, 0), 300);
-      setTimeout(() => showCard(1, 1), 600);
-      setTimeout(() => showCard(2, 2), 900);
+      setTimeout(() => showCard(1, 1), 700);
+      setTimeout(() => showCard(2, 2), 1100);
 
       // 5 second display, staggered starts
       const displayTime = 5000;
-      setTimeout(() => setInterval(() => cycleSlot(0), displayTime), 3500);
-      setTimeout(() => setInterval(() => cycleSlot(1), displayTime), 4500);
-      setTimeout(() => setInterval(() => cycleSlot(2), displayTime), 5500);
+      setTimeout(() => setInterval(() => cycleSlot(0), displayTime), 4000);
+      setTimeout(() => setInterval(() => cycleSlot(1), displayTime), 5200);
+      setTimeout(() => setInterval(() => cycleSlot(2), displayTime), 6400);
     });
   </script>
 </body>

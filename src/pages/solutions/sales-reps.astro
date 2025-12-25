@@ -13,13 +13,13 @@ import BaseHead from '../../components/BaseHead.astro';
   <style>
     .hero { padding: 160px 48px 100px; max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
     .hero-content { max-width: 540px; }
-    .hero-badge { display: inline-flex; align-items: center; gap: 8px; padding: 8px 16px; background: var(--bg-card); border: 1px solid var(--border); font-family: var(--mono); font-size: 12px; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 24px; color: var(--mint); }
+    .hero-badge { display: inline-flex; align-items: center; gap: 8px; padding: 8px 16px; background: var(--bg-card); border: 1px solid var(--border); border-radius: 6px; font-family: var(--mono); font-size: 12px; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 24px; color: var(--mint); }
     [data-theme="light"] .hero-badge { color: var(--purple); }
     .hero-headline { font-size: 56px; font-weight: 350; line-height: 1.1; letter-spacing: -0.03em; margin-bottom: 24px; }
     .hero-headline em { font-style: normal; color: var(--mint); }
     [data-theme="light"] .hero-headline em { color: var(--purple); }
     .hero-sub { font-size: 18px; color: var(--text-muted); line-height: 1.6; margin-bottom: 40px; }
-    .hero-cta { display: inline-flex; align-items: center; gap: 12px; padding: 18px 32px; font-weight: 500; font-size: 15px; text-decoration: none; position: relative; overflow: hidden; background: transparent; color: var(--text); border: 1px solid var(--btn-outline); transition: all 0.3s ease; }
+    .hero-cta { display: inline-flex; align-items: center; gap: 12px; padding: 18px 32px; font-weight: 500; font-size: 15px; text-decoration: none; position: relative; overflow: hidden; background: transparent; color: var(--text); border: 1px solid var(--btn-outline); border-radius: 6px; transition: all 0.3s ease; }
     .hero-cta::before { content: ''; position: absolute; top: 0; left: 0; width: 0; height: 100%; background: var(--mint); transition: width 0.3s ease; z-index: -1; }
     .hero-cta:hover::before { width: 100%; }
     .hero-cta:hover { color: #0a0a0a; border-color: var(--mint); }
@@ -32,7 +32,7 @@ import BaseHead from '../../components/BaseHead.astro';
     .hero-cta:hover .chevron-default { display: none; }
     .hero-cta:hover .chevron-hover { display: block; }
 
-    .hero-visual { background: var(--bg-card); border: 1px solid var(--border); padding: 32px; }
+    .hero-visual { background: var(--bg-card); border: 1px solid var(--border); border-radius: 6px; padding: 32px; }
     .hero-mock-header { display: flex; align-items: center; justify-content: space-between; padding-bottom: 16px; border-bottom: 1px solid var(--border); margin-bottom: 20px; }
     .hero-mock-title { font-weight: 600; font-size: 14px; }
     .hero-mock-time { font-family: var(--mono); font-size: 11px; color: var(--mint); }
@@ -47,7 +47,7 @@ import BaseHead from '../../components/BaseHead.astro';
     .pain-header { text-align: center; max-width: 600px; margin: 0 auto 64px; }
     .pain-label { font-family: var(--mono); font-size: 12px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--coral); margin-bottom: 16px; }
     .pain-headline { font-size: 36px; font-weight: 350; line-height: 1.2; letter-spacing: -0.02em; }
-    .pain-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--border); max-width: 1000px; margin: 0 auto; }
+    .pain-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--border); max-width: 1000px; margin: 0 auto; border-radius: 6px; overflow: hidden; }
     .pain-card { background: var(--bg); padding: 40px 32px; text-align: center; }
     .pain-stat { font-size: 48px; font-weight: 300; color: var(--coral); margin-bottom: 12px; font-family: var(--mono); }
     .pain-desc { font-size: 15px; color: var(--text-muted); line-height: 1.5; }
@@ -58,8 +58,8 @@ import BaseHead from '../../components/BaseHead.astro';
     [data-theme="light"] .solution-label { color: var(--purple); }
     .solution-headline { font-size: 36px; font-weight: 350; line-height: 1.2; letter-spacing: -0.02em; margin-bottom: 16px; }
     .solution-sub { font-size: 16px; color: var(--text-muted); }
-    .solution-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 48px; max-width: 1000px; margin: 0 auto; }
-    .solution-card { padding: 40px; background: var(--bg-card); border: 1px solid var(--border); }
+    .solution-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; max-width: 1000px; margin: 0 auto; }
+    .solution-card { padding: 40px; background: var(--bg-card); border: 1px solid var(--border); border-radius: 6px; }
     .solution-icon { width: 48px; height: 48px; margin-bottom: 24px; }
     .solution-icon img { width: 100%; height: 100%; object-fit: contain; }
     .solution-title { font-size: 20px; font-weight: 600; margin-bottom: 12px; }
@@ -76,7 +76,7 @@ import BaseHead from '../../components/BaseHead.astro';
     .cta-section { padding: 120px 48px; text-align: center; border-top: 1px solid var(--border); }
     .cta-headline { font-size: 40px; font-weight: 350; line-height: 1.2; letter-spacing: -0.02em; margin-bottom: 16px; }
     .cta-sub { font-size: 18px; color: var(--text-muted); margin-bottom: 40px; max-width: 500px; margin-left: auto; margin-right: auto; }
-    .btn { display: inline-flex; align-items: center; gap: 12px; padding: 18px 28px; font-weight: 500; font-size: 15px; text-decoration: none; transition: all 0.2s ease; cursor: pointer; position: relative; overflow: hidden; }
+    .btn { display: inline-flex; align-items: center; gap: 12px; padding: 18px 28px; font-weight: 500; font-size: 15px; text-decoration: none; transition: all 0.2s ease; cursor: pointer; position: relative; overflow: hidden; border-radius: 6px; }
     .btn-primary { background: transparent; color: var(--text); border: 1px solid var(--btn-outline); }
     .btn-primary::before { content: ''; position: absolute; top: 0; left: 0; width: 0; height: 100%; background: var(--mint); transition: width 0.3s ease; z-index: -1; }
     .btn-primary:hover::before { width: 100%; }

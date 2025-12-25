@@ -11,67 +11,192 @@ import BaseHead from '../components/BaseHead.astro';
   <BaseHead title="Features - recrd" description="CRM auto-sync, AI coaching, pipeline analytics, and more. Everything you need to close more deals." />
   
   <style>
+    /* ========== HERO - Keep brutalist/bold ========== */
     .hero { padding: 160px 48px 100px; text-align: center; max-width: 900px; margin: 0 auto; }
-    .hero-badge { display: inline-flex; align-items: center; gap: 8px; padding: 8px 16px; background: var(--bg-card); border: 1px solid var(--border); border-radius: 6px; font-family: var(--mono); font-size: 12px; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 32px; }
+    .hero-badge { display: inline-flex; align-items: center; gap: 8px; padding: 8px 16px; background: var(--bg-card); border: 1px solid var(--border); font-family: var(--mono); font-size: 12px; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 32px; }
     .hero-headline { font-size: 64px; font-weight: 350; line-height: 1.1; letter-spacing: -0.03em; margin-bottom: 24px; }
     .hero-headline em { font-style: normal; color: var(--cyan); }
     [data-theme="light"] .hero-headline em { color: var(--purple); }
     .hero-sub { font-size: 20px; color: var(--text-muted); line-height: 1.6; max-width: 600px; margin: 0 auto; }
 
+    /* ========== FEATURE SECTIONS ========== */
     .feature-section { padding: 120px 48px; border-top: 1px solid var(--border); }
     .feature-section:nth-child(even) { background: var(--bg-alt); }
     .feature-container { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
     .feature-container.reverse { direction: rtl; }
     .feature-container.reverse > * { direction: ltr; }
     .feature-content { max-width: 480px; }
+    
+    /* Labels - keep sharp as brand accent */
     .feature-label { font-family: var(--mono); font-size: 12px; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 16px; }
-    .feature-label.mint { color: var(--mint); }
+    .feature-label.mint { color: #46FCAF; }
     .feature-label.purple { color: var(--purple); }
-    .feature-label.cyan { color: var(--cyan); }
+    .feature-label.cyan { color: #67E8F9; }
     .feature-label.coral { color: var(--coral); }
-    .feature-label.yellow { color: var(--yellow); }
+    
     .feature-headline { font-size: 40px; font-weight: 350; line-height: 1.2; letter-spacing: -0.02em; margin-bottom: 20px; }
     .feature-desc { font-size: 16px; color: var(--text-muted); line-height: 1.7; margin-bottom: 32px; }
+    
+    /* Feature list - cleaner */
     .feature-list { list-style: none; }
     .feature-list li { display: flex; align-items: flex-start; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--border); font-size: 15px; }
     .feature-list li:last-child { border-bottom: none; }
+    
+    /* Checkmarks - keep hard edge as brand signature */
     .feature-check { width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 2px; }
     .feature-check svg { width: 12px; height: 12px; stroke-width: 3; }
-    .feature-check.mint { background: var(--mint); color: #0a0a0a; }
+    .feature-check.mint { background: #46FCAF; color: #0a0a0a; }
     .feature-check.purple { background: var(--purple); color: #fff; }
-    .feature-check.cyan { background: var(--cyan); color: #0a0a0a; }
+    .feature-check.cyan { background: #67E8F9; color: #0a0a0a; }
     .feature-check.coral { background: var(--coral); color: #fff; }
-    .feature-check.yellow { background: var(--yellow); color: #0a0a0a; }
 
-    .feature-visual { background: var(--bg); border: 1px solid var(--border); border-radius: 6px; padding: 24px; }
-    .feature-section:nth-child(even) .feature-visual { background: var(--bg-card); }
-    .mock-header { display: flex; align-items: center; justify-content: space-between; padding-bottom: 16px; border-bottom: 1px solid var(--border); margin-bottom: 20px; }
+    /* ========== AURORA GRADIENT CARDS ========== */
+    .feature-visual { 
+      padding: 28px; 
+      border-radius: 20px;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    /* Mint Aurora - Success/CRM */
+    .feature-visual.aurora-mint {
+      background: linear-gradient(135deg, 
+        rgba(70, 252, 175, 0.15) 0%, 
+        rgba(52, 211, 153, 0.08) 50%, 
+        rgba(20, 184, 166, 0.05) 100%
+      );
+      border: 1px solid rgba(70, 252, 175, 0.2);
+    }
+    [data-theme="light"] .feature-visual.aurora-mint {
+      background: linear-gradient(135deg, 
+        rgba(70, 252, 175, 0.25) 0%, 
+        rgba(167, 243, 208, 0.4) 50%, 
+        rgba(204, 251, 241, 0.3) 100%
+      );
+      border: 1px solid rgba(70, 252, 175, 0.3);
+    }
+    
+    /* Violet Aurora - AI/Coaching */
+    .feature-visual.aurora-violet {
+      background: linear-gradient(135deg, 
+        rgba(139, 92, 246, 0.15) 0%, 
+        rgba(167, 139, 250, 0.08) 50%, 
+        rgba(192, 132, 252, 0.05) 100%
+      );
+      border: 1px solid rgba(139, 92, 246, 0.2);
+    }
+    [data-theme="light"] .feature-visual.aurora-violet {
+      background: linear-gradient(135deg, 
+        rgba(139, 92, 246, 0.12) 0%, 
+        rgba(221, 214, 254, 0.5) 50%, 
+        rgba(237, 233, 254, 0.4) 100%
+      );
+      border: 1px solid rgba(139, 92, 246, 0.25);
+    }
+    
+    /* Coral Aurora - Risk/Warnings */
+    .feature-visual.aurora-coral {
+      background: linear-gradient(135deg, 
+        rgba(244, 63, 94, 0.12) 0%, 
+        rgba(251, 113, 133, 0.08) 50%, 
+        rgba(253, 164, 175, 0.05) 100%
+      );
+      border: 1px solid rgba(244, 63, 94, 0.2);
+    }
+    [data-theme="light"] .feature-visual.aurora-coral {
+      background: linear-gradient(135deg, 
+        rgba(244, 63, 94, 0.1) 0%, 
+        rgba(254, 205, 211, 0.5) 50%, 
+        rgba(255, 228, 230, 0.4) 100%
+      );
+      border: 1px solid rgba(244, 63, 94, 0.2);
+    }
+
+    /* Card inner content */
+    .mock-header { 
+      display: flex; 
+      align-items: center; 
+      justify-content: space-between; 
+      padding-bottom: 16px; 
+      border-bottom: 1px solid rgba(255,255,255,0.1); 
+      margin-bottom: 20px; 
+    }
+    [data-theme="light"] .mock-header { border-bottom-color: rgba(0,0,0,0.08); }
+    
     .mock-title { font-weight: 600; font-size: 14px; }
-    .mock-badge { font-family: var(--mono); font-size: 10px; text-transform: uppercase; letter-spacing: 0.05em; padding: 6px 12px; border-radius: 4px; }
-    .mock-badge.mint { background: var(--mint); color: #0a0a0a; }
+    
+    /* Badges - keep hard edge */
+    .mock-badge { 
+      font-family: var(--mono); 
+      font-size: 10px; 
+      text-transform: uppercase; 
+      letter-spacing: 0.05em; 
+      padding: 6px 12px; 
+    }
+    .mock-badge.mint { background: #46FCAF; color: #0a0a0a; }
     .mock-badge.purple { background: var(--purple); color: #fff; }
-    .mock-badge.cyan { background: var(--cyan); color: #0a0a0a; }
+    .mock-badge.cyan { background: #67E8F9; color: #0a0a0a; }
     .mock-badge.coral { background: var(--coral); color: #fff; }
-    .mock-badge.yellow { background: var(--yellow); color: #0a0a0a; }
 
-    .crm-field { display: flex; justify-content: space-between; align-items: center; padding: 12px 16px; background: var(--bg-alt); border: 1px solid var(--border); border-radius: 4px; margin-bottom: 8px; }
+    /* CRM Fields - glassmorphism inside aurora */
+    .crm-field { 
+      display: flex; 
+      justify-content: space-between; 
+      align-items: center; 
+      padding: 14px 18px; 
+      background: rgba(255,255,255,0.05);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 12px; 
+      margin-bottom: 10px; 
+    }
+    [data-theme="light"] .crm-field { 
+      background: rgba(255,255,255,0.7);
+      border-color: rgba(0,0,0,0.05);
+    }
     .crm-field:last-child { margin-bottom: 0; }
     .crm-field-label { font-size: 13px; color: var(--text-muted); }
-    .crm-field-value { font-family: var(--mono); font-size: 12px; color: var(--mint); }
+    .crm-field-value { font-family: var(--mono); font-size: 12px; color: #46FCAF; }
+    [data-theme="light"] .crm-field-value { color: #059669; }
 
-    .scorecard-item { display: flex; justify-content: space-between; align-items: center; padding: 14px 0; border-bottom: 1px solid var(--border); }
+    /* Scorecard items */
+    .scorecard-item { 
+      display: flex; 
+      justify-content: space-between; 
+      align-items: center; 
+      padding: 14px 0; 
+      border-bottom: 1px solid rgba(255,255,255,0.08); 
+    }
+    [data-theme="light"] .scorecard-item { border-bottom-color: rgba(0,0,0,0.06); }
     .scorecard-item:last-child { border-bottom: none; }
     .scorecard-label { font-size: 14px; }
     .scorecard-score { display: flex; align-items: center; gap: 12px; }
-    .scorecard-bar { width: 80px; height: 6px; background: var(--border); overflow: hidden; border-radius: 3px; }
+    .scorecard-bar { width: 80px; height: 6px; background: rgba(255,255,255,0.1); overflow: hidden; border-radius: 3px; }
+    [data-theme="light"] .scorecard-bar { background: rgba(0,0,0,0.08); }
     .scorecard-fill { height: 100%; border-radius: 3px; }
-    .scorecard-fill.high { background: var(--mint); }
+    .scorecard-fill.high { background: #46FCAF; }
     .scorecard-fill.mid { background: var(--yellow); }
     .scorecard-fill.low { background: var(--coral); }
     .scorecard-value { font-family: var(--mono); font-size: 13px; font-weight: 600; width: 40px; text-align: right; }
 
-    .risk-alert { display: flex; gap: 16px; padding: 16px; background: var(--bg-alt); border: 1px solid var(--border); border-radius: 6px; margin-bottom: 12px; }
+    /* Risk alerts - glassmorphism */
+    .risk-alert { 
+      display: flex; 
+      gap: 16px; 
+      padding: 18px; 
+      background: rgba(255,255,255,0.05);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 12px; 
+      margin-bottom: 12px; 
+    }
+    [data-theme="light"] .risk-alert { 
+      background: rgba(255,255,255,0.7);
+      border-color: rgba(0,0,0,0.05);
+    }
     .risk-alert:last-child { margin-bottom: 0; }
+    
+    /* Risk icons - keep hard edge */
     .risk-icon { width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
     .risk-icon.warning { background: var(--coral); }
     .risk-icon.caution { background: var(--yellow); }
@@ -79,24 +204,67 @@ import BaseHead from '../components/BaseHead.astro';
     .risk-title { font-size: 14px; font-weight: 600; margin-bottom: 4px; }
     .risk-desc { font-size: 13px; color: var(--text-muted); }
 
+    /* ========== CTA SECTION ========== */
     .cta-section { padding: 120px 48px; text-align: center; border-top: 1px solid var(--border); }
     .cta-headline { font-size: 40px; font-weight: 350; line-height: 1.2; letter-spacing: -0.02em; margin-bottom: 16px; }
     .cta-sub { font-size: 18px; color: var(--text-muted); margin-bottom: 40px; max-width: 500px; margin-left: auto; margin-right: auto; }
     .cta-buttons { display: flex; gap: 16px; justify-content: center; }
-    .btn { display: inline-flex; align-items: center; gap: 12px; padding: 18px 28px; font-weight: 500; font-size: 15px; text-decoration: none; transition: all 0.2s ease; cursor: pointer; position: relative; overflow: hidden; border-radius: 6px; }
-    .btn-primary { background: transparent; color: var(--text); border: 1px solid var(--btn-outline); }
-    .btn-primary::before { content: ''; position: absolute; top: 0; left: 0; width: 0; height: 100%; background: var(--mint); transition: width 0.3s ease; z-index: -1; }
-    .btn-primary:hover::before { width: 100%; }
-    .btn-primary:hover { color: #0a0a0a; border-color: var(--mint); }
-    .btn-secondary { background: transparent; color: var(--text); border: 1px solid var(--btn-outline); }
-    .btn-secondary::before { content: ''; position: absolute; top: 0; left: 0; width: 0; height: 100%; background: var(--purple); transition: width 0.3s ease; z-index: -1; }
-    .btn-secondary:hover::before { width: 100%; }
-    .btn-secondary:hover { color: #fff; border-color: var(--purple); }
+    
+    /* Buttons - keep hard edge with soft hover glow */
+    .btn { 
+      display: inline-flex; 
+      align-items: center; 
+      gap: 12px; 
+      padding: 18px 28px; 
+      font-weight: 500; 
+      font-size: 15px; 
+      text-decoration: none; 
+      transition: all 0.3s ease; 
+      cursor: pointer; 
+      position: relative; 
+      overflow: hidden; 
+    }
+    .btn-primary { 
+      background: transparent; 
+      color: var(--text); 
+      border: 1px solid var(--btn-outline); 
+    }
+    .btn-primary:hover { 
+      background: #46FCAF; 
+      color: #0a0a0a; 
+      border-color: #46FCAF;
+      box-shadow: 0 0 30px rgba(70, 252, 175, 0.3);
+    }
+    .btn-secondary { 
+      background: transparent; 
+      color: var(--text); 
+      border: 1px solid var(--btn-outline); 
+    }
+    .btn-secondary:hover { 
+      background: var(--purple); 
+      color: #fff; 
+      border-color: var(--purple);
+      box-shadow: 0 0 30px rgba(139, 92, 246, 0.3);
+    }
     .btn-arrow { display: inline-flex; transition: transform 0.2s ease; }
     .btn:hover .btn-arrow { transform: translateX(4px); }
 
-    @media (max-width: 1000px) { .feature-container { grid-template-columns: 1fr; gap: 48px; } .feature-container.reverse { direction: ltr; } .feature-content { max-width: 100%; } }
-    @media (max-width: 900px) { .hero { padding: 140px 24px 80px; } .hero-headline { font-size: 44px; } .feature-section { padding: 80px 24px; } .feature-headline { font-size: 32px; } .cta-section { padding: 80px 24px; } .cta-headline { font-size: 32px; } .cta-buttons { flex-direction: column; } .btn { width: 100%; justify-content: center; } }
+    /* ========== RESPONSIVE ========== */
+    @media (max-width: 1000px) { 
+      .feature-container { grid-template-columns: 1fr; gap: 48px; } 
+      .feature-container.reverse { direction: ltr; } 
+      .feature-content { max-width: 100%; } 
+    }
+    @media (max-width: 900px) { 
+      .hero { padding: 140px 24px 80px; } 
+      .hero-headline { font-size: 44px; } 
+      .feature-section { padding: 80px 24px; } 
+      .feature-headline { font-size: 32px; } 
+      .cta-section { padding: 80px 24px; } 
+      .cta-headline { font-size: 32px; } 
+      .cta-buttons { flex-direction: column; } 
+      .btn { width: 100%; justify-content: center; } 
+    }
   </style>
 </head>
 
@@ -109,6 +277,7 @@ import BaseHead from '../components/BaseHead.astro';
     <p class="hero-sub">From automatic CRM updates to AI-powered forecasting. Built for revenue teams who hate busywork.</p>
   </section>
 
+  <!-- CRM Sync - Mint Aurora -->
   <section class="feature-section" id="crm-sync">
     <div class="feature-container">
       <div class="feature-content">
@@ -122,7 +291,7 @@ import BaseHead from '../components/BaseHead.astro';
           <li><span class="feature-check mint"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><polyline points="20 6 9 17 4 12"/></svg></span>Works with HubSpot and Salesforce</li>
         </ul>
       </div>
-      <div class="feature-visual">
+      <div class="feature-visual aurora-mint">
         <div class="mock-header"><span class="mock-title">HubSpot Sync</span><span class="mock-badge mint">Live</span></div>
         <div class="crm-field"><span class="crm-field-label">Deal Stage</span><span class="crm-field-value">Demo Completed ✓</span></div>
         <div class="crm-field"><span class="crm-field-label">Decision Maker</span><span class="crm-field-value">Sarah Chen, VP Sales ✓</span></div>
@@ -133,21 +302,22 @@ import BaseHead from '../components/BaseHead.astro';
     </div>
   </section>
 
+  <!-- AI Coaching - Violet Aurora -->
   <section class="feature-section" id="coaching">
     <div class="feature-container reverse">
       <div class="feature-content">
-        <p class="feature-label cyan">AI Coaching</p>
+        <p class="feature-label purple">AI Coaching</p>
         <h2 class="feature-headline">Scorecards that actually help</h2>
         <p class="feature-desc">Auto-generated scorecards based on MEDDIC, BANT, SPICED, or your custom framework. See exactly where each rep needs coaching.</p>
         <ul class="feature-list">
-          <li><span class="feature-check cyan"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><polyline points="20 6 9 17 4 12"/></svg></span>15+ sales frameworks supported</li>
-          <li><span class="feature-check cyan"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><polyline points="20 6 9 17 4 12"/></svg></span>Per-call and aggregate scoring</li>
-          <li><span class="feature-check cyan"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><polyline points="20 6 9 17 4 12"/></svg></span>Specific coaching recommendations</li>
-          <li><span class="feature-check cyan"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><polyline points="20 6 9 17 4 12"/></svg></span>Custom scorecards for your methodology</li>
+          <li><span class="feature-check purple"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><polyline points="20 6 9 17 4 12"/></svg></span>15+ sales frameworks supported</li>
+          <li><span class="feature-check purple"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><polyline points="20 6 9 17 4 12"/></svg></span>Per-call and aggregate scoring</li>
+          <li><span class="feature-check purple"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><polyline points="20 6 9 17 4 12"/></svg></span>Specific coaching recommendations</li>
+          <li><span class="feature-check purple"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><polyline points="20 6 9 17 4 12"/></svg></span>Custom scorecards for your methodology</li>
         </ul>
       </div>
-      <div class="feature-visual">
-        <div class="mock-header"><span class="mock-title">MEDDIC Scorecard</span><span class="mock-badge cyan">Call #47</span></div>
+      <div class="feature-visual aurora-violet">
+        <div class="mock-header"><span class="mock-title">MEDDIC Scorecard</span><span class="mock-badge purple">Call #47</span></div>
         <div class="scorecard-item"><span class="scorecard-label">Metrics</span><div class="scorecard-score"><div class="scorecard-bar"><div class="scorecard-fill high" style="width: 90%;"></div></div><span class="scorecard-value">90%</span></div></div>
         <div class="scorecard-item"><span class="scorecard-label">Economic Buyer</span><div class="scorecard-score"><div class="scorecard-bar"><div class="scorecard-fill high" style="width: 85%;"></div></div><span class="scorecard-value">85%</span></div></div>
         <div class="scorecard-item"><span class="scorecard-label">Decision Criteria</span><div class="scorecard-score"><div class="scorecard-bar"><div class="scorecard-fill mid" style="width: 60%;"></div></div><span class="scorecard-value">60%</span></div></div>
@@ -158,6 +328,7 @@ import BaseHead from '../components/BaseHead.astro';
     </div>
   </section>
 
+  <!-- Risk Detection - Coral Aurora -->
   <section class="feature-section" id="risk-alerts">
     <div class="feature-container">
       <div class="feature-content">
@@ -171,7 +342,7 @@ import BaseHead from '../components/BaseHead.astro';
           <li><span class="feature-check coral"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><polyline points="20 6 9 17 4 12"/></svg></span>Recommended actions for each risk</li>
         </ul>
       </div>
-      <div class="feature-visual">
+      <div class="feature-visual aurora-coral">
         <div class="mock-header"><span class="mock-title">Risk Alerts</span><span class="mock-badge coral">3 New</span></div>
         <div class="risk-alert"><div class="risk-icon warning"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div><div class="risk-content"><div class="risk-title">Budget objection detected</div><div class="risk-desc">Acme Corp: "This is higher than we budgeted"</div></div></div>
         <div class="risk-alert"><div class="risk-icon warning"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div><div class="risk-content"><div class="risk-title">Competitor mentioned</div><div class="risk-desc">TechStart: "We're also looking at Gong"</div></div></div>

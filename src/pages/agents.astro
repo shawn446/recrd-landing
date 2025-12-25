@@ -29,7 +29,8 @@ import BaseHead from '../components/BaseHead.astro';
     .agent-card { background: var(--bg); padding: 32px; position: relative; }
     .agent-card:hover { background: var(--bg-card); }
     .agent-header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 16px; }
-    .agent-icon { width: 40px; height: 40px; }
+    .agent-icon { width: 48px; height: 48px; }
+    .agent-icon img { width: 100%; height: 100%; object-fit: contain; }
     .agent-status { font-family: var(--mono); font-size: 10px; text-transform: uppercase; letter-spacing: 0.05em; padding: 4px 10px; }
     .agent-status.active { background: var(--mint); color: #0a0a0a; }
     .agent-status.soon { background: var(--border); color: var(--text-muted); }
@@ -39,7 +40,7 @@ import BaseHead from '../components/BaseHead.astro';
     .agent-tag { font-family: var(--mono); font-size: 10px; text-transform: uppercase; letter-spacing: 0.05em; padding: 4px 8px; background: var(--bg-card); border: 1px solid var(--border); color: var(--text-muted); }
 
     .workflow-section { padding: 120px 48px; background: var(--bg-alt); border-top: 1px solid var(--border); }
-    .workflow-container { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: 1.2fr 1fr; gap: 80px; align-items: center; }
+    .workflow-container { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1.4fr; gap: 60px; align-items: center; }
     .workflow-content { max-width: 450px; }
     .workflow-headline { font-size: 36px; font-weight: 350; line-height: 1.2; letter-spacing: -0.02em; margin-bottom: 20px; }
     .workflow-desc { font-size: 16px; color: var(--text-muted); line-height: 1.7; margin-bottom: 32px; }
@@ -50,12 +51,14 @@ import BaseHead from '../components/BaseHead.astro';
     .workflow-check svg { width: 12px; height: 12px; stroke: #fff; stroke-width: 3; }
     .workflow-cta { margin-top: 32px; }
     
-    .workflow-visual { background: var(--bg); border: 1px solid var(--border); padding: 24px; }
-    .workflow-mock { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
-    .workflow-step { background: var(--bg-card); border: 1px solid var(--border); padding: 16px; text-align: center; min-width: 100px; }
-    .workflow-step-icon { font-size: 20px; margin-bottom: 8px; }
+    .workflow-visual { background: var(--bg); border: 1px solid var(--border); padding: 20px; }
+    .workflow-mock { display: flex; align-items: center; gap: 12px; flex-wrap: nowrap; }
+    .workflow-step { background: var(--bg-card); border: 1px solid var(--border); padding: 14px 12px; text-align: center; min-width: 80px; flex-shrink: 0; }
+    .workflow-step-icon { width: 32px; height: 32px; margin: 0 auto 8px; }
+    .workflow-step-icon img { width: 100%; height: 100%; object-fit: contain; }
     .workflow-step-label { font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; }
-    .workflow-arrow { color: var(--text-muted); font-size: 20px; }
+    .workflow-arrow { color: var(--text-muted); flex-shrink: 0; }
+    .workflow-arrow img { width: 20px; height: 20px; }
 
     .request-section { padding: 100px 48px; border-top: 1px solid var(--border); text-align: center; }
     .request-headline { font-size: 32px; font-weight: 350; letter-spacing: -0.02em; margin-bottom: 32px; }
@@ -71,7 +74,13 @@ import BaseHead from '../components/BaseHead.astro';
     .btn-secondary:hover::before { width: 100%; }
     .btn-secondary:hover { color: #0a0a0a; border-color: var(--mint); }
     .btn-arrow { display: inline-flex; transition: transform 0.2s ease; }
+    .btn-arrow img { width: 16px; height: 16px; }
     .btn:hover .btn-arrow { transform: translateX(4px); }
+    
+    /* Chevron hover swap */
+    .btn-arrow .chevron-hover { display: none; }
+    .btn:hover .chevron-default { display: none; }
+    .btn:hover .chevron-hover { display: block; }
 
     @media (max-width: 1000px) { .agents-grid { grid-template-columns: repeat(2, 1fr); } .workflow-container { grid-template-columns: 1fr; gap: 48px; } }
     @media (max-width: 900px) { .hero { padding: 140px 24px 80px; } .hero-headline { font-size: 44px; } .agents-section { padding: 60px 24px 80px; } .agents-grid { grid-template-columns: 1fr; } .workflow-section { padding: 80px 24px; } .request-section { padding: 80px 24px; } .request-buttons { flex-direction: column; } .btn { width: 100%; justify-content: center; } }
@@ -95,7 +104,7 @@ import BaseHead from '../components/BaseHead.astro';
     <div class="agents-grid">
       <div class="agent-card">
         <div class="agent-header">
-          <div class="agent-icon"><svg viewBox="0 0 40 40" fill="none"><rect x="4" y="4" width="32" height="6" fill="var(--mint)"/><rect x="4" y="12" width="32" height="6" fill="var(--mint)" opacity="0.7"/><rect x="4" y="20" width="32" height="6" fill="var(--mint)" opacity="0.5"/><rect x="26" y="30" width="10" height="6" fill="var(--purple)"/></svg></div>
+          <div class="agent-icon"><img src="/icons/checklist.svg" alt="CRM Sync" /></div>
           <span class="agent-status active">Active</span>
         </div>
         <h3 class="agent-name">CRM Sync Agent</h3>
@@ -104,7 +113,7 @@ import BaseHead from '../components/BaseHead.astro';
       </div>
       <div class="agent-card">
         <div class="agent-header">
-          <div class="agent-icon"><svg viewBox="0 0 40 40" fill="none"><rect x="16" y="2" width="8" height="4" fill="var(--coral)"/><rect x="12" y="6" width="16" height="4" fill="var(--coral)"/><rect x="8" y="10" width="24" height="14" fill="var(--coral)"/><rect x="4" y="24" width="32" height="4" fill="var(--coral)"/><rect x="16" y="28" width="8" height="4" fill="var(--coral)"/></svg></div>
+          <div class="agent-icon"><img src="/icons/alert-ping.svg" alt="Risk Alert" /></div>
           <span class="agent-status active">Active</span>
         </div>
         <h3 class="agent-name">Risk Alert Agent</h3>
@@ -113,7 +122,7 @@ import BaseHead from '../components/BaseHead.astro';
       </div>
       <div class="agent-card">
         <div class="agent-header">
-          <div class="agent-icon"><svg viewBox="0 0 40 40" fill="none"><rect x="4" y="30" width="6" height="6" fill="var(--cyan)" opacity="0.4"/><rect x="12" y="24" width="6" height="12" fill="var(--cyan)" opacity="0.6"/><rect x="20" y="16" width="6" height="20" fill="var(--cyan)" opacity="0.8"/><rect x="28" y="6" width="6" height="30" fill="var(--cyan)"/></svg></div>
+          <div class="agent-icon"><img src="/icons/progress-bars.svg" alt="Coaching" /></div>
           <span class="agent-status active">Active</span>
         </div>
         <h3 class="agent-name">Coaching Agent</h3>
@@ -122,7 +131,7 @@ import BaseHead from '../components/BaseHead.astro';
       </div>
       <div class="agent-card">
         <div class="agent-header">
-          <div class="agent-icon"><svg viewBox="0 0 40 40" fill="none"><rect x="4" y="8" width="32" height="4" fill="var(--yellow)"/><rect x="4" y="12" width="4" height="16" fill="var(--yellow)"/><rect x="32" y="12" width="4" height="16" fill="var(--yellow)"/><rect x="4" y="28" width="32" height="4" fill="var(--yellow)"/><rect x="26" y="2" width="10" height="10" fill="var(--mint)"/></svg></div>
+          <div class="agent-icon"><img src="/icons/email-campaign.svg" alt="Follow-Up" /></div>
           <span class="agent-status active">Active</span>
         </div>
         <h3 class="agent-name">Follow-Up Agent</h3>
@@ -131,7 +140,7 @@ import BaseHead from '../components/BaseHead.astro';
       </div>
       <div class="agent-card">
         <div class="agent-header">
-          <div class="agent-icon"><svg viewBox="0 0 40 40" fill="none"><rect x="4" y="4" width="32" height="32" fill="var(--purple)" opacity="0.2"/><rect x="8" y="12" width="20" height="3" fill="var(--purple)"/><rect x="8" y="18" width="14" height="3" fill="var(--purple)" opacity="0.7"/><rect x="8" y="24" width="16" height="3" fill="var(--purple)" opacity="0.5"/></svg></div>
+          <div class="agent-icon"><img src="/icons/meeting-prep-purple.svg" alt="Meeting Prep" /></div>
           <span class="agent-status active">Active</span>
         </div>
         <h3 class="agent-name">Meeting Prep Agent</h3>
@@ -140,7 +149,7 @@ import BaseHead from '../components/BaseHead.astro';
       </div>
       <div class="agent-card">
         <div class="agent-header">
-          <div class="agent-icon"><svg viewBox="0 0 40 40" fill="none"><rect x="4" y="16" width="14" height="14" fill="var(--coral)" opacity="0.6"/><rect x="22" y="8" width="14" height="14" fill="var(--purple)" opacity="0.6"/><rect x="10" y="16" width="12" height="8" fill="var(--coral)"/></svg></div>
+          <div class="agent-icon"><img src="/icons/battle-arena.svg" alt="Competitor" /></div>
           <span class="agent-status active">Active</span>
         </div>
         <h3 class="agent-name">Competitor Agent</h3>
@@ -149,7 +158,7 @@ import BaseHead from '../components/BaseHead.astro';
       </div>
       <div class="agent-card">
         <div class="agent-header">
-          <div class="agent-icon"><svg viewBox="0 0 40 40" fill="none"><rect x="4" y="18" width="6" height="4" fill="var(--mint)"/><rect x="12" y="14" width="6" height="12" fill="var(--mint)"/><rect x="20" y="8" width="6" height="24" fill="var(--mint)"/><rect x="28" y="4" width="6" height="32" fill="var(--mint)"/></svg></div>
+          <div class="agent-icon"><img src="/icons/signal-waves-green.svg" alt="Deal Signal" /></div>
           <span class="agent-status active">Active</span>
         </div>
         <h3 class="agent-name">Deal Signal Agent</h3>
@@ -158,7 +167,7 @@ import BaseHead from '../components/BaseHead.astro';
       </div>
       <div class="agent-card">
         <div class="agent-header">
-          <div class="agent-icon"><svg viewBox="0 0 40 40" fill="none"><rect x="4" y="32" width="32" height="2" fill="var(--yellow)"/><rect x="4" y="6" width="2" height="28" fill="var(--yellow)"/><rect x="8" y="24" width="4" height="4" fill="var(--yellow)"/><rect x="14" y="20" width="4" height="4" fill="var(--yellow)"/><rect x="20" y="14" width="4" height="4" fill="var(--yellow)"/><rect x="26" y="10" width="4" height="4" fill="var(--mint)"/></svg></div>
+          <div class="agent-icon"><img src="/icons/agent-forecast.svg" alt="Forecast" /></div>
           <span class="agent-status active">Active</span>
         </div>
         <h3 class="agent-name">Forecast Agent</h3>
@@ -167,7 +176,7 @@ import BaseHead from '../components/BaseHead.astro';
       </div>
       <div class="agent-card">
         <div class="agent-header">
-          <div class="agent-icon"><svg viewBox="0 0 40 40" fill="none"><rect x="16" y="2" width="8" height="8" fill="var(--cyan)"/><rect x="4" y="16" width="8" height="8" fill="var(--cyan)" opacity="0.7"/><rect x="28" y="16" width="8" height="8" fill="var(--cyan)" opacity="0.7"/><rect x="10" y="30" width="8" height="8" fill="var(--cyan)" opacity="0.5"/><rect x="22" y="30" width="8" height="8" fill="var(--cyan)" opacity="0.5"/></svg></div>
+          <div class="agent-icon"><img src="/icons/champ-map.svg" alt="Stakeholder" /></div>
           <span class="agent-status soon">Coming Soon</span>
         </div>
         <h3 class="agent-name">Stakeholder Agent</h3>
@@ -190,18 +199,30 @@ import BaseHead from '../components/BaseHead.astro';
           <li><span class="workflow-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><polyline points="20 6 9 17 4 12"/></svg></span>Webhook outputs to any system</li>
         </ul>
         <div class="workflow-cta">
-          <a href="#" class="btn btn-primary">Request Early Access <span class="btn-arrow"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><rect x="2" y="0" width="2" height="2" fill="currentColor"/><rect x="4" y="2" width="2" height="2" fill="currentColor"/><rect x="6" y="4" width="2" height="2" fill="currentColor"/><rect x="4" y="6" width="2" height="2" fill="currentColor"/><rect x="2" y="8" width="2" height="2" fill="currentColor"/></svg></span></a>
+          <a href="#" class="btn btn-primary">Request Early Access <span class="btn-arrow"><img src="/icons/chevron-purple.svg" alt="" class="chevron-default" /><img src="/icons/chevron-white.svg" alt="" class="chevron-hover" /></span></a>
         </div>
       </div>
       <div class="workflow-visual">
         <div class="workflow-mock">
-          <div class="workflow-step"><div class="workflow-step-icon">🎯</div><div class="workflow-step-label">Trigger</div></div>
-          <span class="workflow-arrow">→</span>
-          <div class="workflow-step"><div class="workflow-step-icon">🔍</div><div class="workflow-step-label">Analyze</div></div>
-          <span class="workflow-arrow">→</span>
-          <div class="workflow-step"><div class="workflow-step-icon">⚡</div><div class="workflow-step-label">Condition</div></div>
-          <span class="workflow-arrow">→</span>
-          <div class="workflow-step"><div class="workflow-step-icon">📤</div><div class="workflow-step-label">Output</div></div>
+          <div class="workflow-step">
+            <div class="workflow-step-icon"><img src="/icons/alert-ping.svg" alt="Trigger" /></div>
+            <div class="workflow-step-label">Trigger</div>
+          </div>
+          <span class="workflow-arrow"><img src="/icons/chevron-green.svg" alt="" /></span>
+          <div class="workflow-step">
+            <div class="workflow-step-icon"><img src="/icons/signal-waves-purple.svg" alt="Analyze" /></div>
+            <div class="workflow-step-label">Analyze</div>
+          </div>
+          <span class="workflow-arrow"><img src="/icons/chevron-green.svg" alt="" /></span>
+          <div class="workflow-step">
+            <div class="workflow-step-icon"><img src="/icons/checkboard-green-black.svg" alt="Condition" /></div>
+            <div class="workflow-step-label">Condition</div>
+          </div>
+          <span class="workflow-arrow"><img src="/icons/chevron-green.svg" alt="" /></span>
+          <div class="workflow-step">
+            <div class="workflow-step-icon"><img src="/icons/email-campaign.svg" alt="Output" /></div>
+            <div class="workflow-step-label">Output</div>
+          </div>
         </div>
       </div>
     </div>
@@ -210,8 +231,8 @@ import BaseHead from '../components/BaseHead.astro';
   <section class="request-section">
     <h2 class="request-headline">Need a custom agent?</h2>
     <div class="request-buttons">
-      <a href="#" class="btn btn-primary">Request an Agent <span class="btn-arrow"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><rect x="2" y="0" width="2" height="2" fill="currentColor"/><rect x="4" y="2" width="2" height="2" fill="currentColor"/><rect x="6" y="4" width="2" height="2" fill="currentColor"/><rect x="4" y="6" width="2" height="2" fill="currentColor"/><rect x="2" y="8" width="2" height="2" fill="currentColor"/></svg></span></a>
-      <a href="#" class="btn btn-secondary">Talk to Sales <span class="btn-arrow"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><rect x="2" y="0" width="2" height="2" fill="currentColor"/><rect x="4" y="2" width="2" height="2" fill="currentColor"/><rect x="6" y="4" width="2" height="2" fill="currentColor"/><rect x="4" y="6" width="2" height="2" fill="currentColor"/><rect x="2" y="8" width="2" height="2" fill="currentColor"/></svg></span></a>
+      <a href="#" class="btn btn-primary">Request an Agent <span class="btn-arrow"><img src="/icons/chevron-purple.svg" alt="" class="chevron-default" /><img src="/icons/chevron-white.svg" alt="" class="chevron-hover" /></span></a>
+      <a href="#" class="btn btn-secondary">Talk to Sales <span class="btn-arrow"><img src="/icons/chevron-green.svg" alt="" class="chevron-default" /><img src="/icons/chevron-black.svg" alt="" class="chevron-hover" /></span></a>
     </div>
   </section>
 

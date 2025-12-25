@@ -19,6 +19,13 @@ import BaseHead from '../../components/BaseHead.astro';
     .hero-cta::before { content: ''; position: absolute; top: 0; left: 0; width: 0; height: 100%; background: var(--coral); transition: width 0.3s ease; z-index: -1; }
     .hero-cta:hover::before { width: 100%; }
     .hero-cta:hover { color: #fff; border-color: var(--coral); }
+    .hero-cta-arrow { display: inline-flex; transition: transform 0.2s ease; }
+    .hero-cta-arrow img { width: 16px; height: 16px; }
+    .hero-cta:hover .hero-cta-arrow { transform: translateX(4px); }
+    .hero-cta-arrow .chevron-hover { display: none; }
+    .hero-cta:hover .chevron-default { display: none; }
+    .hero-cta:hover .chevron-hover { display: block; }
+
     .hero-visual { background: var(--bg-card); border: 1px solid var(--border); padding: 32px; }
     .hero-mock-header { display: flex; align-items: center; justify-content: space-between; padding-bottom: 16px; border-bottom: 1px solid var(--border); margin-bottom: 20px; }
     .hero-mock-title { font-weight: 600; font-size: 14px; }
@@ -44,6 +51,9 @@ import BaseHead from '../../components/BaseHead.astro';
     .solution-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 48px; max-width: 1000px; margin: 0 auto; }
     .solution-card { padding: 40px; background: var(--bg-card); border: 1px solid var(--border); }
     .solution-icon { width: 48px; height: 48px; margin-bottom: 24px; }
+    .solution-icon img { width: 100%; height: 100%; object-fit: contain; }
+    .solution-card-soon { position: relative; }
+    .solution-badge { position: absolute; top: 16px; right: 16px; font-family: var(--mono); font-size: 10px; text-transform: uppercase; letter-spacing: 0.05em; padding: 4px 10px; background: var(--border); color: var(--text-muted); }
     .solution-title { font-size: 20px; font-weight: 600; margin-bottom: 12px; }
     .solution-desc { font-size: 15px; color: var(--text-muted); line-height: 1.6; }
     .quote-section { padding: 100px 48px; border-top: 1px solid var(--border); background: var(--bg-alt); }
@@ -59,6 +69,13 @@ import BaseHead from '../../components/BaseHead.astro';
     .btn::before { content: ''; position: absolute; top: 0; left: 0; width: 0; height: 100%; background: var(--coral); transition: width 0.3s ease; z-index: -1; }
     .btn:hover::before { width: 100%; }
     .btn:hover { color: #fff; border-color: var(--coral); }
+    .btn-arrow { display: inline-flex; transition: transform 0.2s ease; }
+    .btn-arrow img { width: 16px; height: 16px; }
+    .btn:hover .btn-arrow { transform: translateX(4px); }
+    .btn-arrow .chevron-hover { display: none; }
+    .btn:hover .chevron-default { display: none; }
+    .btn:hover .chevron-hover { display: block; }
+
     @media (max-width: 1000px) { .hero { grid-template-columns: 1fr; gap: 48px; text-align: center; } .solution-grid { grid-template-columns: 1fr; } }
     @media (max-width: 900px) { .hero { padding: 140px 24px 80px; } .hero-headline { font-size: 40px; } .pain-section { padding: 80px 24px; } .pain-grid { grid-template-columns: 1fr; } .solution-section { padding: 80px 24px; } .quote-section { padding: 80px 24px; } .cta-section { padding: 80px 24px; } }
   </style>
@@ -70,7 +87,7 @@ import BaseHead from '../../components/BaseHead.astro';
       <div class="hero-badge">For Marketing</div>
       <h1 class="hero-headline">Hear what prospects <em>actually say</em></h1>
       <p class="hero-sub">Stop guessing what messaging resonates. Get real voice-of-customer insights from sales calls to fuel your campaigns and competitive positioning.</p>
-      <a href="#" class="hero-cta">Book a Demo</a>
+      <a href="#" class="hero-cta">Book a Demo <span class="hero-cta-arrow"><img src="/icons/chevron-coral.svg" alt="" class="chevron-default" /><img src="/icons/chevron-white.svg" alt="" class="chevron-hover" /></span></a>
     </div>
     <div class="hero-visual">
       <div class="hero-mock-header"><span class="hero-mock-title">Voice of Customer</span><span class="hero-mock-badge">This Month</span></div>
@@ -90,10 +107,38 @@ import BaseHead from '../../components/BaseHead.astro';
   <section class="solution-section">
     <div class="solution-header"><p class="solution-label">How recrd helps</p><h2 class="solution-headline">Customer insights on tap</h2><p class="solution-sub">Real words from real prospects, automatically surfaced.</p></div>
     <div class="solution-grid">
-      <div class="solution-card"><div class="solution-icon"><svg viewBox="0 0 48 48" fill="none"><rect x="8" y="8" width="32" height="32" fill="var(--coral)" opacity="0.2"/><rect x="12" y="16" width="24" height="3" fill="var(--coral)"/><rect x="12" y="24" width="18" height="3" fill="var(--coral)" opacity="0.7"/><rect x="12" y="32" width="20" height="3" fill="var(--coral)" opacity="0.5"/></svg></div><h3 class="solution-title">Pain Point Tracking</h3><p class="solution-desc">See which problems prospects mention most. Build messaging that speaks directly to real pain, not assumed pain.</p></div>
-      <div class="solution-card"><div class="solution-icon"><svg viewBox="0 0 48 48" fill="none"><rect x="4" y="20" width="18" height="18" fill="var(--coral)" opacity="0.6"/><rect x="26" y="10" width="18" height="18" fill="var(--purple)" opacity="0.6"/><rect x="14" y="20" width="16" height="10" fill="var(--coral)"/></svg></div><h3 class="solution-title">Competitive Intel</h3><p class="solution-desc">Every competitor mention flagged and categorized. Know exactly how you're being compared and where you win.</p></div>
-      <div class="solution-card"><div class="solution-icon"><svg viewBox="0 0 48 48" fill="none"><rect x="4" y="4" width="12" height="12" fill="var(--coral)"/><rect x="18" y="4" width="12" height="12" fill="var(--coral)" opacity="0.7"/><rect x="32" y="4" width="12" height="12" fill="var(--coral)" opacity="0.5"/><rect x="4" y="18" width="40" height="3" fill="var(--coral)" opacity="0.3"/><rect x="4" y="24" width="32" height="3" fill="var(--coral)" opacity="0.3"/></svg></div><h3 class="solution-title">Content Fuel</h3><p class="solution-desc">Surface exact phrases and objections for case studies, blog posts, and ad copy. Write content that converts.</p></div>
-      <div class="solution-card"><div class="solution-icon"><svg viewBox="0 0 48 48" fill="none"><rect x="4" y="6" width="40" height="6" fill="var(--coral)"/><rect x="8" y="14" width="32" height="6" fill="var(--coral)" opacity="0.8"/><rect x="14" y="22" width="20" height="6" fill="var(--coral)" opacity="0.6"/><rect x="18" y="30" width="12" height="6" fill="var(--mint)"/></svg></div><h3 class="solution-title">Lead Quality Insights</h3><p class="solution-desc">Understand which channels and campaigns produce conversations that convert, not just MQLs that ghost.</p></div>
+      <div class="solution-card">
+        <div class="solution-icon"><img src="/icons/feedback-loop.svg" alt="Pain Point Tracking" /></div>
+        <h3 class="solution-title">Pain Point Tracking</h3>
+        <p class="solution-desc">See which problems prospects mention most. Build messaging that speaks directly to real pain, not assumed pain.</p>
+      </div>
+      <div class="solution-card">
+        <div class="solution-icon"><img src="/icons/battle-arena.svg" alt="Competitive Intel" /></div>
+        <h3 class="solution-title">Competitive Intel</h3>
+        <p class="solution-desc">Every competitor mention flagged and categorized. Know exactly how you're being compared and where you win.</p>
+      </div>
+      <div class="solution-card">
+        <div class="solution-icon"><img src="/icons/megaphone.svg" alt="Content Fuel" /></div>
+        <h3 class="solution-title">Content Fuel</h3>
+        <p class="solution-desc">Surface exact phrases and objections for case studies, blog posts, and ad copy. Write content that converts.</p>
+      </div>
+      <div class="solution-card">
+        <div class="solution-icon"><img src="/icons/signal-waves-purple.svg" alt="Lead Quality Insights" /></div>
+        <h3 class="solution-title">Lead Quality Insights</h3>
+        <p class="solution-desc">Understand which channels and campaigns produce conversations that convert, not just MQLs that ghost.</p>
+      </div>
+      <div class="solution-card solution-card-soon">
+        <div class="solution-badge">Coming Soon</div>
+        <div class="solution-icon"><img src="/icons/checklist.svg" alt="Testimonial Agent" /></div>
+        <h3 class="solution-title">Testimonial Agent</h3>
+        <p class="solution-desc">Automatically flags quotable customer praise from calls. Build your case study pipeline without hunting for sound bites.</p>
+      </div>
+      <div class="solution-card solution-card-soon">
+        <div class="solution-badge">Coming Soon</div>
+        <div class="solution-icon"><img src="/icons/feedback-loop.svg" alt="Feature Request Agent" /></div>
+        <h3 class="solution-title">Feature Request Agent</h3>
+        <p class="solution-desc">Logs every feature request with context and frequency. Routes insights to product so nothing falls through the cracks.</p>
+      </div>
     </div>
   </section>
   <section class="quote-section">
@@ -102,7 +147,7 @@ import BaseHead from '../../components/BaseHead.astro';
   <section class="cta-section">
     <h2 class="cta-headline">Ready to hear your customers?</h2>
     <p class="cta-sub">Get real prospect insights delivered to your inbox, automatically.</p>
-    <a href="#" class="btn">Book a Demo</a>
+    <a href="#" class="btn">Book a Demo <span class="btn-arrow"><img src="/icons/chevron-coral.svg" alt="" class="chevron-default" /><img src="/icons/chevron-white.svg" alt="" class="chevron-hover" /></span></a>
   </section>
   <Footer />
   <ThemeToggle />

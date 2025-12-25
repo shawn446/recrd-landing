@@ -1,13 +1,10 @@
 ---
 // Nav Component
 // Usage: import Nav from '../components/Nav.astro'; then <Nav />
+import ComingSoon from './ComingSoon.astro';
 ---
 
 <nav>
-  <a href="/" class="nav-logo">
-    <img src="/dark-logo.svg" alt="recrd" class="logo-dark" />
-    <img src="/light-logo.svg" alt="recrd" class="logo-light" />
-  </a>
   <ul class="nav-links">
     <li class="has-dropdown">
       <a href="#">
@@ -28,11 +25,19 @@
     <li><a href="/pricing">Pricing</a></li>
     <li><a href="/agents">Agents</a></li>
   </ul>
+
+  <a href="/" class="nav-logo">
+    <img src="/dark-logo.svg" alt="recrd" class="logo-dark" />
+    <img src="/light-logo.svg" alt="recrd" class="logo-light" />
+  </a>
+
   <div class="nav-right">
     <a href="/#contact" class="nav-contact">Contact</a>
     <a href="https://app.recrd.io" class="nav-cta">Dashboard</a>
   </div>
 </nav>
+
+<ComingSoon />
 
 <style>
   nav {
@@ -40,7 +45,7 @@
     top: 0;
     left: 0;
     right: 0;
-    height: 72px;
+    height: 96px;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -55,6 +60,9 @@
   }
 
   .nav-logo {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
     display: flex;
     align-items: center;
     text-decoration: none;
@@ -202,5 +210,9 @@
   @media (max-width: 900px) {
     nav { padding: 0 24px; }
     .nav-links { display: none; }
+    .nav-logo {
+      position: static;
+      transform: none;
+    }
   }
 </style>

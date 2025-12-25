@@ -1,16 +1,21 @@
 ---
-// ComingSoon.astro - Add to all pages below Nav
+// ComingSoon.astro - Private Beta banner for all pages
 ---
 <div class="coming-soon-banner">
-  <span class="coming-soon-badge">Coming Soon</span>
-  <span class="coming-soon-text">We're launching soon. Sign up to get early access.</span>
+  <span class="coming-soon-badge">Private Beta</span>
+  <span class="coming-soon-text">We're still building. Some features may be in development.</span>
   <a href="#contact" class="coming-soon-link">Join the waitlist →</a>
 </div>
 
 <style>
+  /* Push all page content down to account for fixed banner */
+  :global(body) {
+    padding-top: 44px;
+  }
+
   .coming-soon-banner {
     position: fixed;
-    top: 72px; /* below nav */
+    top: 96px; /* below nav */
     left: 0;
     right: 0;
     z-index: 99;

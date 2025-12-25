@@ -1,0 +1,375 @@
+---
+// Hero - Fixed pixel cards, no gaps
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+import BaseHead from '../components/BaseHead.astro';
+---
+
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <BaseHead title="recrd - AI agents that close deals" description="Revenue intelligence for sales teams." />
+  
+  <style is:global>
+    :root { 
+      --cell: 120px;
+      --card-w: calc(var(--cell) * 2);
+      --card-h: calc(var(--cell) * 3);
+      --grid-line: rgba(255,255,255,0.08);
+      --mint: #46FCAF;
+      --purple: #A678F4;
+      --cyan: #5CEBDF;
+      --coral: #FF6B7A;
+      --yellow: #FFD84D;
+      --bg: #0A0A0A;
+      --text: #FFFFFF;
+      --text-muted: rgba(255,255,255,0.6);
+    }
+
+    * { box-sizing: border-box; }
+
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      padding: 72px 48px 0;
+      position: relative;
+      overflow: hidden;
+      background: var(--bg);
+    }
+
+    .hero-grid {
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: calc(var(--cell) * 8);
+      height: 100%;
+      background-image: 
+        linear-gradient(to right, var(--grid-line) 1px, transparent 1px),
+        linear-gradient(to bottom, var(--grid-line) 1px, transparent 1px);
+      background-size: var(--cell) var(--cell);
+      z-index: 1;
+    }
+
+    .hero-grid::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: calc(var(--cell) * 2);
+      height: 100%;
+      background: linear-gradient(to right, var(--bg), transparent);
+      z-index: 2;
+    }
+
+    .hero-content {
+      max-width: 480px;
+      z-index: 100;
+      padding: 48px 0;
+    }
+
+    .hero-headline {
+      font-size: 72px;
+      font-weight: 350;
+      line-height: 1.0;
+      letter-spacing: -0.03em;
+      margin-bottom: 28px;
+    }
+
+    .hero-headline em { 
+      font-style: normal; 
+      color: var(--mint);
+      font-weight: 400;
+    }
+
+    .hero-sub {
+      font-size: 18px;
+      font-weight: 400;
+      line-height: 1.6;
+      margin-bottom: 40px;
+      color: var(--text-muted);
+    }
+
+    .hero-buttons { display: flex; gap: 16px; }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 16px 28px;
+      font-weight: 500;
+      font-size: 15px;
+      text-decoration: none;
+      transition: all 0.2s ease;
+      cursor: pointer;
+      border: none;
+    }
+    
+    .btn-primary { background: var(--text); color: var(--bg); }
+    .btn-primary:hover { background: var(--mint); color: #0a0a0a; transform: translateY(-2px); }
+    
+    .btn-secondary { background: transparent; color: var(--text); border: 1px solid rgba(255,255,255,0.2); }
+    .btn-secondary:hover { background: var(--text); color: var(--bg); }
+
+    .cards-container {
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: calc(var(--cell) * 8);
+      height: 100%;
+      z-index: 10;
+      pointer-events: none;
+    }
+
+    .card-slot {
+      position: absolute;
+      width: var(--card-w);
+      height: var(--card-h);
+      pointer-events: auto;
+      filter: drop-shadow(0 20px 40px rgba(0,0,0,0.5));
+    }
+
+    /* Fixed positions */
+    .card-slot[data-slot="0"] {
+      left: calc(var(--cell) * 0);
+      top: calc(var(--cell) * 1);
+    }
+    .card-slot[data-slot="1"] {
+      left: calc(var(--cell) * 4);
+      top: calc(var(--cell) * 2);
+    }
+    .card-slot[data-slot="2"] {
+      left: calc(var(--cell) * 1);
+      top: calc(var(--cell) * 5);
+    }
+
+    /* Pixel grid - 12x18 pixels, no gaps */
+    .pixel-grid {
+      width: 100%;
+      height: 100%;
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      grid-template-rows: repeat(18, 1fr);
+    }
+
+    .pixel-cell {
+      opacity: 0;
+      will-change: opacity;
+    }
+
+    .pixel-cell.visible {
+      opacity: 1;
+      transition: opacity 0.2s ease-out;
+    }
+
+    .pixel-cell.hiding {
+      opacity: 0;
+      transition: opacity 0.15s ease-in;
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 1800px) {
+      :root { --cell: 100px; }
+      .hero-headline { font-size: 64px; }
+    }
+
+    @media (max-width: 1600px) {
+      :root { --cell: 90px; }
+      .hero-headline { font-size: 56px; }
+    }
+
+    @media (max-width: 1400px) {
+      :root { --cell: 80px; }
+      .hero-headline { font-size: 48px; }
+      .hero-content { max-width: 380px; }
+    }
+
+    @media (max-width: 1200px) {
+      :root { --cell: 70px; }
+      .hero-headline { font-size: 42px; }
+    }
+
+    @media (max-width: 1000px) {
+      .cards-container, .hero-grid { display: none; }
+      .hero { justify-content: center; padding: 120px 24px; }
+      .hero-content { max-width: 100%; text-align: center; }
+      .hero-buttons { justify-content: center; }
+    }
+
+    @media (max-width: 600px) {
+      .hero-headline { font-size: 36px; }
+      .hero-sub { font-size: 16px; }
+      .hero-buttons { flex-direction: column; }
+      .btn { width: 100%; justify-content: center; }
+    }
+  </style>
+</head>
+
+<body>
+  <Nav />
+
+  <section class="hero">
+    <div class="hero-grid"></div>
+
+    <div class="hero-content">
+      <h1 class="hero-headline">Your calls,<br><em>working for you</em></h1>
+      <p class="hero-sub">Every sales call triggers AI agents that update your CRM, alert your team, and draft follow-ups—automatically.</p>
+      <div class="hero-buttons">
+        <a href="#" class="btn btn-primary">Book a Demo</a>
+        <a href="#how-it-works" class="btn btn-secondary">See How It Works</a>
+      </div>
+    </div>
+
+    <div class="cards-container">
+      <div class="card-slot" data-slot="0" id="slot-0"></div>
+      <div class="card-slot" data-slot="1" id="slot-1"></div>
+      <div class="card-slot" data-slot="2" id="slot-2"></div>
+    </div>
+  </section>
+
+  <Footer />
+
+  <script>
+    const cards = [
+      { src: '/cards/card-01-call-trigger.svg' },
+      { src: '/cards/card-02-intel-agent.svg' },
+      { src: '/cards/card-03-crm-agent.svg' },
+      { src: '/cards/card-04-risk-agent.svg' },
+      { src: '/cards/card-05-email-agent.svg' },
+      { src: '/cards/card-06-coaching-agent.svg' },
+      { src: '/cards/card-07-multithread-agent.svg' },
+      { src: '/cards/card-08-quote-agent.svg' },
+      { src: '/cards/card-09-task-agent.svg' },
+      { src: '/cards/card-10-prep-agent.svg' },
+    ];
+
+    const COLS = 12;
+    const ROWS = 18;
+    const TOTAL_PIXELS = COLS * ROWS; // 216
+
+    let currentCards = [0, 1, 2];
+
+    function shuffle(arr) {
+      const a = [...arr];
+      for (let i = a.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [a[i], a[j]] = [a[j], a[i]];
+      }
+      return a;
+    }
+
+    function buildPixelCard(cardSrc) {
+      let cells = '';
+      
+      for (let row = 0; row < ROWS; row++) {
+        for (let col = 0; col < COLS; col++) {
+          // Each pixel shows its portion of the image
+          const xPos = (col / (COLS - 1)) * 100;
+          const yPos = (row / (ROWS - 1)) * 100;
+          cells += `<div class="pixel-cell" style="background: url('${cardSrc}') ${xPos}% ${yPos}% / ${COLS * 100}% ${ROWS * 100}% no-repeat;"></div>`;
+        }
+      }
+      
+      return `<div class="pixel-grid">${cells}</div>`;
+    }
+
+    function animatePixelIn(slot) {
+      return new Promise(resolve => {
+        const cells = Array.from(slot.querySelectorAll('.pixel-cell'));
+        const indices = shuffle([...Array(cells.length).keys()]);
+        
+        const batchSize = 12;
+        let batch = 0;
+        
+        function showBatch() {
+          const start = batch * batchSize;
+          const end = Math.min(start + batchSize, indices.length);
+          
+          for (let i = start; i < end; i++) {
+            cells[indices[i]].classList.add('visible');
+          }
+          
+          batch++;
+          
+          if (batch * batchSize < indices.length) {
+            requestAnimationFrame(showBatch);
+          } else {
+            setTimeout(resolve, 200);
+          }
+        }
+        
+        requestAnimationFrame(showBatch);
+      });
+    }
+
+    function animatePixelOut(slot) {
+      return new Promise(resolve => {
+        const cells = Array.from(slot.querySelectorAll('.pixel-cell'));
+        const indices = shuffle([...Array(cells.length).keys()]);
+        
+        const batchSize = 15;
+        let batch = 0;
+        
+        function hideBatch() {
+          const start = batch * batchSize;
+          const end = Math.min(start + batchSize, indices.length);
+          
+          for (let i = start; i < end; i++) {
+            cells[indices[i]].classList.add('hiding');
+            cells[indices[i]].classList.remove('visible');
+          }
+          
+          batch++;
+          
+          if (batch * batchSize < indices.length) {
+            requestAnimationFrame(hideBatch);
+          } else {
+            setTimeout(() => {
+              slot.innerHTML = '';
+              resolve();
+            }, 180);
+          }
+        }
+        
+        requestAnimationFrame(hideBatch);
+      });
+    }
+
+    async function showCard(slotIndex, cardIndex) {
+      const slot = document.getElementById(`slot-${slotIndex}`);
+      const card = cards[cardIndex];
+      
+      slot.innerHTML = buildPixelCard(card.src);
+      await animatePixelIn(slot);
+    }
+
+    async function hideCard(slotIndex) {
+      const slot = document.getElementById(`slot-${slotIndex}`);
+      
+      if (!slot.querySelector('.pixel-grid')) return;
+      
+      await animatePixelOut(slot);
+    }
+
+    async function cycleSlot(slotIndex) {
+      await hideCard(slotIndex);
+      
+      await new Promise(r => setTimeout(r, 250));
+      
+      currentCards[slotIndex] = (currentCards[slotIndex] + 3) % cards.length;
+      await showCard(slotIndex, currentCards[slotIndex]);
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      setTimeout(() => showCard(0, 0), 300);
+      setTimeout(() => showCard(1, 1), 700);
+      setTimeout(() => showCard(2, 2), 1100);
+
+      const displayTime = 5000;
+      setTimeout(() => setInterval(() => cycleSlot(0), displayTime), 4000);
+      setTimeout(() => setInterval(() => cycleSlot(1), displayTime), 5200);
+      setTimeout(() => setInterval(() => cycleSlot(2), displayTime), 6400);
+    });
+  </script>
+</body>
+</html>

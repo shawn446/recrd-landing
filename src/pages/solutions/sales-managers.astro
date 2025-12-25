@@ -19,6 +19,15 @@ import BaseHead from '../../components/BaseHead.astro';
     .hero-cta::before { content: ''; position: absolute; top: 0; left: 0; width: 0; height: 100%; background: var(--purple); transition: width 0.3s ease; z-index: -1; }
     .hero-cta:hover::before { width: 100%; }
     .hero-cta:hover { color: #fff; border-color: var(--purple); }
+    .hero-cta-arrow { display: inline-flex; transition: transform 0.2s ease; }
+    .hero-cta-arrow img { width: 16px; height: 16px; }
+    .hero-cta:hover .hero-cta-arrow { transform: translateX(4px); }
+    
+    /* Hero CTA chevron hover swap */
+    .hero-cta-arrow .chevron-hover { display: none; }
+    .hero-cta:hover .chevron-default { display: none; }
+    .hero-cta:hover .chevron-hover { display: block; }
+
     .hero-visual { background: var(--bg-card); border: 1px solid var(--border); padding: 32px; }
     .hero-mock-header { display: flex; align-items: center; justify-content: space-between; padding-bottom: 16px; border-bottom: 1px solid var(--border); margin-bottom: 20px; }
     .hero-mock-title { font-weight: 600; font-size: 14px; }
@@ -49,6 +58,9 @@ import BaseHead from '../../components/BaseHead.astro';
     .solution-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 48px; max-width: 1000px; margin: 0 auto; }
     .solution-card { padding: 40px; background: var(--bg-card); border: 1px solid var(--border); }
     .solution-icon { width: 48px; height: 48px; margin-bottom: 24px; }
+    .solution-icon img { width: 100%; height: 100%; object-fit: contain; }
+    .solution-card-soon { position: relative; }
+    .solution-badge { position: absolute; top: 16px; right: 16px; font-family: var(--mono); font-size: 10px; text-transform: uppercase; letter-spacing: 0.05em; padding: 4px 10px; background: var(--border); color: var(--text-muted); }
     .solution-title { font-size: 20px; font-weight: 600; margin-bottom: 12px; }
     .solution-desc { font-size: 15px; color: var(--text-muted); line-height: 1.6; }
     .quote-section { padding: 100px 48px; border-top: 1px solid var(--border); background: var(--bg-alt); }
@@ -64,6 +76,15 @@ import BaseHead from '../../components/BaseHead.astro';
     .btn::before { content: ''; position: absolute; top: 0; left: 0; width: 0; height: 100%; background: var(--purple); transition: width 0.3s ease; z-index: -1; }
     .btn:hover::before { width: 100%; }
     .btn:hover { color: #fff; border-color: var(--purple); }
+    .btn-arrow { display: inline-flex; transition: transform 0.2s ease; }
+    .btn-arrow img { width: 16px; height: 16px; }
+    .btn:hover .btn-arrow { transform: translateX(4px); }
+    
+    /* Button chevron hover swap */
+    .btn-arrow .chevron-hover { display: none; }
+    .btn:hover .chevron-default { display: none; }
+    .btn:hover .chevron-hover { display: block; }
+
     @media (max-width: 1000px) { .hero { grid-template-columns: 1fr; gap: 48px; text-align: center; } .solution-grid { grid-template-columns: 1fr; } }
     @media (max-width: 900px) { .hero { padding: 140px 24px 80px; } .hero-headline { font-size: 40px; } .pain-section { padding: 80px 24px; } .pain-grid { grid-template-columns: 1fr; } .solution-section { padding: 80px 24px; } .quote-section { padding: 80px 24px; } .quote-text { font-size: 22px; } .cta-section { padding: 80px 24px; } .cta-headline { font-size: 32px; } }
   </style>
@@ -75,7 +96,7 @@ import BaseHead from '../../components/BaseHead.astro';
       <div class="hero-badge">For Sales Managers</div>
       <h1 class="hero-headline">Coach smarter, <em>not harder</em></h1>
       <p class="hero-sub">Stop listening to hours of call recordings. Get AI-powered scorecards, deal risk alerts, and coaching insights—without the manual work.</p>
-      <a href="#" class="hero-cta">Book a Demo</a>
+      <a href="#" class="hero-cta">Book a Demo <span class="hero-cta-arrow"><img src="/icons/chevron-purple.svg" alt="" class="chevron-default" /><img src="/icons/chevron-white.svg" alt="" class="chevron-hover" /></span></a>
     </div>
     <div class="hero-visual">
       <div class="hero-mock-header"><span class="hero-mock-title">Team Scorecard</span><span class="hero-mock-badge">This Week</span></div>
@@ -96,10 +117,37 @@ import BaseHead from '../../components/BaseHead.astro';
   <section class="solution-section">
     <div class="solution-header"><p class="solution-label">How recrd helps</p><h2 class="solution-headline">Visibility without the legwork</h2><p class="solution-sub">AI does the call review. You do the coaching.</p></div>
     <div class="solution-grid">
-      <div class="solution-card"><div class="solution-icon"><svg viewBox="0 0 48 48" fill="none"><rect x="6" y="34" width="6" height="8" fill="var(--purple)" opacity="0.4"/><rect x="14" y="28" width="6" height="14" fill="var(--purple)" opacity="0.55"/><rect x="22" y="20" width="6" height="22" fill="var(--purple)" opacity="0.7"/><rect x="30" y="14" width="6" height="28" fill="var(--purple)" opacity="0.85"/><rect x="38" y="6" width="6" height="36" fill="var(--purple)"/></svg></div><h3 class="solution-title">AI Scorecards</h3><p class="solution-desc">Every call auto-scored against MEDDIC, BANT, or your custom framework. See exactly where each rep needs help.</p></div>
-      <div class="solution-card"><div class="solution-icon"><svg viewBox="0 0 48 48" fill="none"><rect x="20" y="4" width="8" height="4" fill="var(--coral)"/><rect x="16" y="8" width="16" height="4" fill="var(--coral)"/><rect x="12" y="12" width="24" height="16" fill="var(--coral)"/><rect x="8" y="28" width="32" height="4" fill="var(--coral)"/><rect x="20" y="32" width="8" height="4" fill="var(--coral)"/></svg></div><h3 class="solution-title">Deal Risk Alerts</h3><p class="solution-desc">Budget objections, competitor mentions, champion loss—get notified the moment a deal shows warning signs.</p></div>
-      <div class="solution-card"><div class="solution-icon"><svg viewBox="0 0 48 48" fill="none"><rect x="20" y="4" width="8" height="8" fill="var(--cyan)"/><rect x="6" y="20" width="8" height="8" fill="var(--cyan)" opacity="0.7"/><rect x="34" y="20" width="8" height="8" fill="var(--cyan)" opacity="0.7"/><rect x="12" y="36" width="8" height="8" fill="var(--cyan)" opacity="0.5"/><rect x="28" y="36" width="8" height="8" fill="var(--cyan)" opacity="0.5"/></svg></div><h3 class="solution-title">Team Performance</h3><p class="solution-desc">Compare reps across calls, deals, and time periods. Identify top performers and replicate what works.</p></div>
-      <div class="solution-card"><div class="solution-icon"><svg viewBox="0 0 48 48" fill="none"><rect x="8" y="8" width="32" height="32" fill="var(--mint)" opacity="0.2"/><rect x="12" y="16" width="24" height="3" fill="var(--mint)"/><rect x="12" y="24" width="18" height="3" fill="var(--mint)" opacity="0.7"/><rect x="12" y="32" width="20" height="3" fill="var(--mint)" opacity="0.5"/></svg></div><h3 class="solution-title">Coaching Comments</h3><p class="solution-desc">Leave timestamped feedback on specific call moments. Reps get actionable coaching, not vague notes.</p></div>
+      <div class="solution-card">
+        <div class="solution-icon"><img src="/icons/progress-bars.svg" alt="AI Scorecards" /></div>
+        <h3 class="solution-title">AI Scorecards</h3>
+        <p class="solution-desc">Every call auto-scored against MEDDIC, BANT, or your custom framework. See exactly where each rep needs help.</p>
+      </div>
+      <div class="solution-card">
+        <div class="solution-icon"><img src="/icons/alert-ping.svg" alt="Deal Risk Alerts" /></div>
+        <h3 class="solution-title">Deal Risk Alerts</h3>
+        <p class="solution-desc">Budget objections, competitor mentions, champion loss—get notified the moment a deal shows warning signs.</p>
+      </div>
+      <div class="solution-card">
+        <div class="solution-icon"><img src="/icons/champ-map.svg" alt="Team Performance" /></div>
+        <h3 class="solution-title">Team Performance</h3>
+        <p class="solution-desc">Compare reps across calls, deals, and time periods. Identify top performers and replicate what works.</p>
+      </div>
+      <div class="solution-card">
+        <div class="solution-icon"><img src="/icons/meeting-prep-purple.svg" alt="Coaching Comments" /></div>
+        <h3 class="solution-title">Coaching Comments</h3>
+        <p class="solution-desc">Leave timestamped feedback on specific call moments. Reps get actionable coaching, not vague notes.</p>
+      </div>
+      <div class="solution-card">
+        <div class="solution-icon"><img src="/icons/agent-forecast.svg" alt="Forecast Agent" /></div>
+        <h3 class="solution-title">Forecast Agent</h3>
+        <p class="solution-desc">AI-weighted pipeline predictions based on deal signals and conversation patterns. See which deals are at risk before they slip.</p>
+      </div>
+      <div class="solution-card solution-card-soon">
+        <div class="solution-icon"><img src="/icons/one-one-agent.svg" alt="1:1 Prep Agent" /></div>
+        <div class="solution-badge">Coming Soon</div>
+        <h3 class="solution-title">1:1 Prep Agent</h3>
+        <p class="solution-desc">Get an AI-generated agenda before every 1:1. Surfaces the week's activity, deal risks, coaching moments, and what went well—so you spend less time prepping and more time coaching.</p>
+      </div>
     </div>
   </section>
   <section class="quote-section">
@@ -108,7 +156,7 @@ import BaseHead from '../../components/BaseHead.astro';
   <section class="cta-section">
     <h2 class="cta-headline">Ready to coach at scale?</h2>
     <p class="cta-sub">See how recrd gives you visibility into every conversation without the time sink.</p>
-    <a href="#" class="btn">Book a Demo</a>
+    <a href="#" class="btn">Book a Demo <span class="btn-arrow"><img src="/icons/chevron-purple.svg" alt="" class="chevron-default" /><img src="/icons/chevron-white.svg" alt="" class="chevron-hover" /></span></a>
   </section>
   <Footer />
   <ThemeToggle />

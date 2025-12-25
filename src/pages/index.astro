@@ -1,7 +1,6 @@
 ---
 // Homepage - recrd
 import Nav from '../components/Nav.astro';
-import ComingSoon from '../components/ComingSoon.astro';
 import Footer from '../components/Footer.astro';
 import ThemeToggle from '../components/ThemeToggle.astro';
 import BaseHead from '../components/BaseHead.astro';
@@ -12,29 +11,28 @@ import BaseHead from '../components/BaseHead.astro';
 <head>
   <BaseHead title="recrd - AI agents that close deals" description="Revenue intelligence for sales teams. Record calls, auto-update CRM, and get AI-powered coaching." />
   
-  <style>
+  <style is:global>
     :root { 
       --cell: 120px; 
-      --grid-cols: 9; 
-      --grid-rows: 8; 
-      --grid-line: rgba(255,255,255,0.12); 
+      --grid-line: rgba(255,255,255,0.06);
     }
-    [data-theme="light"] { --grid-line: rgba(0,0,0,0.12); }
+    [data-theme="light"] { --grid-line: rgba(0,0,0,0.06); }
 
     /* HERO */
     .hero {
       min-height: 100vh;
       display: flex;
       align-items: center;
-      padding: 120px 0 0 48px; /* extra padding for banner */
+      padding: 140px 0 0 48px;
       position: relative;
       overflow: hidden;
     }
 
     .hero-content {
       max-width: 550px;
-      z-index: 10;
+      z-index: 100;
       padding: 48px 0;
+      position: relative;
     }
 
     .hero-headline {
@@ -84,83 +82,140 @@ import BaseHead from '../components/BaseHead.astro';
     .btn-arrow { display: inline-flex; transition: transform 0.2s ease; }
     .btn:hover .btn-arrow { transform: translateX(4px); }
 
-    /* GRID */
-    .grid-wrapper {
+    /* GRID - Right side with left fade */
+    .hero-grid {
       position: absolute;
-      top: 50%;
-      right: 20px;
-      transform: translateY(-50%);
-      width: calc(var(--cell) * var(--grid-cols));
-      height: calc(var(--cell) * var(--grid-rows));
-      z-index: 5;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      width: 65%;
+      background-image: 
+        linear-gradient(to right, var(--grid-line) 1px, transparent 1px),
+        linear-gradient(to bottom, var(--grid-line) 1px, transparent 1px);
+      background-size: var(--cell) var(--cell);
+      z-index: 1;
+      mask-image: linear-gradient(to right, transparent 0%, rgba(0,0,0,0.5) 15%, rgba(0,0,0,1) 50%);
+      -webkit-mask-image: linear-gradient(to right, transparent 0%, rgba(0,0,0,0.5) 15%, rgba(0,0,0,1) 50%);
     }
 
-    .grid-svg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
-    .grid-svg line { stroke: var(--grid-line); stroke-width: 1; }
+    /* CARDS AREA */
+    .cards-area {
+      position: absolute;
+      top: 80px;
+      right: 0;
+      bottom: 40px;
+      width: 58%;
+      z-index: 50;
+      pointer-events: none;
+    }
 
-    /* CARDS */
-    .card {
+    /* ORIGAMI CARD - 2x3 grid of cells */
+    .origami-card {
       position: absolute;
       width: calc(var(--cell) * 2);
-      height: calc(var(--cell) * 2);
-      display: flex;
-      flex-direction: column;
-      padding: 24px;
+      height: calc(var(--cell) * 3);
       opacity: 0;
-      transform: translateX(-30px) scale(0.95);
-      z-index: 10;
+      transition: opacity 0.3s ease;
+      pointer-events: auto;
+      filter: drop-shadow(0 25px 50px rgba(0,0,0,0.5));
     }
 
-    .card-header { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
-    .card-icon { width: 22px; height: 22px; flex-shrink: 0; }
-    .card-icon svg { width: 100%; height: 100%; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; fill: none; }
-    .card-badge { font-family: var(--mono); font-size: 9px; text-transform: uppercase; letter-spacing: 0.1em; padding: 5px 10px; }
-    .card-title { font-size: 18px; font-weight: 600; line-height: 1.2; margin-bottom: 6px; }
-    .card-content { font-size: 12px; line-height: 1.5; opacity: 0.9; flex: 1; }
-    .card-meta { font-family: var(--mono); font-size: 10px; opacity: 0.7; margin-top: auto; padding-top: 10px; border-top: 1px solid rgba(0,0,0,0.1); }
+    .origami-card.active {
+      opacity: 1;
+    }
 
-    .card.mint { background: var(--mint); color: #0a0a0a; }
-    .card.mint .card-badge { background: rgba(0,0,0,0.1); }
-    .card.mint .card-icon svg { stroke: #0a0a0a; }
-    .card.mint .card-meta { border-color: rgba(0,0,0,0.15); }
+    /* SVG fills the card - BEHIND panels */
+    .origami-card img {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: fill;
+      z-index: 1;
+    }
 
-    .card.purple { background: var(--purple); color: #fff; }
-    .card.purple .card-badge { background: rgba(255,255,255,0.2); }
-    .card.purple .card-icon svg { stroke: #fff; }
-    .card.purple .card-meta { border-color: rgba(255,255,255,0.2); }
+    /* Fold grid - OVER the SVG */
+    .fold-grid {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      grid-template-rows: repeat(3, 1fr);
+      z-index: 2;
+    }
 
-    .card.cyan { background: var(--cyan); color: #0a0a0a; }
-    .card.cyan .card-badge { background: rgba(0,0,0,0.1); }
-    .card.cyan .card-icon svg { stroke: #0a0a0a; }
-    .card.cyan .card-meta { border-color: rgba(0,0,0,0.15); }
+    /* Each panel cell */
+    .card-panel {
+      position: relative;
+      transform-style: preserve-3d;
+      perspective: 1000px;
+    }
 
-    .card.coral { background: var(--coral); color: #fff; }
-    .card.coral .card-badge { background: rgba(255,255,255,0.2); }
-    .card.coral .card-icon svg { stroke: #fff; }
-    .card.coral .card-meta { border-color: rgba(255,255,255,0.2); }
+    .panel-inner {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      backface-visibility: hidden;
+      /* START: visible, flat, covering SVG */
+      opacity: 1;
+      transform: rotateY(0deg) rotateX(0deg);
+      transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    }
 
-    .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-top: 6px; }
-    .stat-box { background: rgba(255,255,255,0.15); padding: 8px; }
-    .stat-label { font-family: var(--mono); font-size: 8px; text-transform: uppercase; letter-spacing: 0.1em; opacity: 0.8; margin-bottom: 2px; }
-    .stat-value { font-size: 14px; font-weight: 600; }
-    .stat-value.positive { color: #46FCAF; }
-    .stat-value.highlight { color: #fff; }
+    /* Transform origins */
+    .card-panel.from-left .panel-inner {
+      transform-origin: left center;
+    }
 
-    .talk-ratio { display: flex; height: 6px; gap: 2px; margin-top: 8px; border-radius: 3px; overflow: hidden; }
-    .talk-ratio .rep { background: rgba(0,0,0,0.3); width: 35%; }
-    .talk-ratio .prospect { background: rgba(0,0,0,0.15); width: 65%; }
+    .card-panel.from-right .panel-inner {
+      transform-origin: right center;
+    }
 
-    .meddic-row { display: flex; gap: 4px; margin-top: 8px; }
-    .meddic-item { flex: 1; background: rgba(0,0,0,0.15); padding: 6px 2px; font-family: var(--mono); font-size: 9px; text-align: center; font-weight: 600; }
-    .meddic-item.filled { background: rgba(0,0,0,0.3); }
+    .card-panel.from-top .panel-inner {
+      transform-origin: top center;
+    }
 
-    .quote-block { background: rgba(255,255,255,0.12); padding: 10px; margin-top: 4px; font-style: italic; font-size: 11px; line-height: 1.4; }
-    .quote-attr { font-style: normal; font-size: 10px; opacity: 0.8; margin-top: 6px; }
+    .card-panel.from-bottom .panel-inner {
+      transform-origin: bottom center;
+    }
 
-    #card1 { top: 0; left: 0; }
-    #card2 { top: calc(var(--cell) * 2); left: calc(var(--cell) * 3); }
-    #card3 { top: calc(var(--cell) * 4); left: calc(var(--cell) * 5); }
-    #card4 { top: calc(var(--cell) * 6); left: calc(var(--cell) * 7); }
+    /* REVEALED: fold away to show SVG */
+    .card-panel.revealed.from-left .panel-inner {
+      opacity: 0;
+      transform: rotateY(-90deg);
+    }
+
+    .card-panel.revealed.from-right .panel-inner {
+      opacity: 0;
+      transform: rotateY(90deg);
+    }
+
+    .card-panel.revealed.from-top .panel-inner {
+      opacity: 0;
+      transform: rotateX(90deg);
+    }
+
+    .card-panel.revealed.from-bottom .panel-inner {
+      opacity: 0;
+      transform: rotateX(-90deg);
+    }
+
+    /* Panel colors */
+    .panel-inner.mint { background: var(--mint); }
+    .panel-inner.purple { background: var(--purple); }
+    .panel-inner.cyan { background: var(--cyan); }
+    .panel-inner.coral { background: var(--coral); }
+    .panel-inner.yellow { background: var(--yellow); }
+    .panel-inner.dark { background: #1a1a1a; }
+
+    /* Card positions */
+    .origami-card.pos-0 { top: 0; right: 45%; }
+    .origami-card.pos-1 { top: 35%; right: 10%; }
+    .origami-card.pos-2 { bottom: 5%; right: 50%; }
 
     /* OTHER SECTIONS */
     .logo-bar { padding: 80px 48px; border-top: 1px solid var(--border); background: var(--bg-alt); }
@@ -226,63 +281,34 @@ import BaseHead from '../components/BaseHead.astro';
 
     /* RESPONSIVE */
     @media (max-width: 1800px) { :root { --cell: 110px; } .hero-headline { font-size: 80px; } }
-    @media (max-width: 1600px) { :root { --cell: 95px; } .hero-headline { font-size: 70px; } }
-    @media (max-width: 1400px) { :root { --cell: 80px; } .hero-headline { font-size: 60px; } .card { padding: 18px; } .card-title { font-size: 15px; } .card-content { font-size: 11px; } }
-    @media (max-width: 1200px) { :root { --cell: 70px; } .hero-headline { font-size: 52px; } .card { padding: 14px; } .card-title { font-size: 13px; } .stats-grid, .meddic-row, .quote-block { display: none; } .how-flow { flex-direction: column; max-width: 500px; } .how-step { margin-left: 0; margin-top: -1px; } .how-step:first-child { margin-top: 0; } .step-arrow { display: none; } }
-    @media (max-width: 1000px) { :root { --cell: 60px; } .hero-headline { font-size: 44px; } .card { padding: 10px; } .card-title { font-size: 12px; } .card-content, .card-meta { display: none; } }
-    @media (max-width: 900px) { .hero { flex-direction: column; padding: 140px 24px 48px; min-height: auto; } .hero-content { max-width: 100%; text-align: center; margin-bottom: 40px; } .hero-headline { font-size: 48px; } .hero-buttons { justify-content: center; } .grid-wrapper { position: relative; top: auto; right: auto; transform: none; margin: 0 auto; } :root { --cell: 50px; } .logo-bar { padding: 60px 24px; } .logo-bar-grid { gap: 32px 48px; } .how-section, .features-section, .faq-section, .cta-section { padding: 80px 24px; } .features-grid, .faq-grid { grid-template-columns: 1fr; } }
-    @media (max-width: 600px) { .hero-headline { font-size: 36px; } .hero-sub { font-size: 16px; } .hero-buttons { flex-direction: column; } .btn { width: 100%; justify-content: center; } :root { --cell: 40px; } .card { padding: 6px; } .card-badge { font-size: 6px; padding: 2px 4px; } .card-title { font-size: 9px; } .card-icon { width: 12px; height: 12px; } .card-header { margin-bottom: 4px; gap: 4px; } .section-headline { font-size: 32px; } .cta-headline { font-size: 28px; } .cta-buttons { flex-direction: column; } }
+    @media (max-width: 1600px) { :root { --cell: 100px; } .hero-headline { font-size: 70px; } .cards-area { width: 55%; } }
+    @media (max-width: 1400px) { :root { --cell: 90px; } .hero-headline { font-size: 60px; } }
+    @media (max-width: 1200px) { :root { --cell: 80px; } .hero-headline { font-size: 52px; } .how-flow { flex-direction: column; max-width: 500px; } .how-step { margin-left: 0; margin-top: -1px; } .how-step:first-child { margin-top: 0; } .step-arrow { display: none; } }
+    @media (max-width: 1000px) { .cards-area { display: none; } .hero-grid { display: none; } .hero-headline { font-size: 48px; } }
+    @media (max-width: 900px) { .hero { flex-direction: column; padding: 140px 24px 48px; min-height: auto; } .hero-content { max-width: 100%; text-align: center; margin-bottom: 40px; } .hero-headline { font-size: 48px; } .hero-buttons { justify-content: center; } .logo-bar { padding: 60px 24px; } .logo-bar-grid { gap: 32px 48px; } .how-section, .features-section, .faq-section, .cta-section { padding: 80px 24px; } .features-grid, .faq-grid { grid-template-columns: 1fr; } }
+    @media (max-width: 600px) { .hero-headline { font-size: 36px; } .hero-sub { font-size: 16px; } .hero-buttons { flex-direction: column; } .btn { width: 100%; justify-content: center; } .section-headline { font-size: 32px; } .cta-headline { font-size: 28px; } .cta-buttons { flex-direction: column; } }
   </style>
 </head>
 
 <body>
   <Nav />
-  <ComingSoon />
 
   <section class="hero">
+    <div class="hero-grid"></div>
+
     <div class="hero-content">
       <h1 class="hero-headline">Your calls,<br><em>working for you</em></h1>
-      <p class="hero-sub">Every sales call triggers six AI agents that update your CRM, alert your team, and draft follow-ups—automatically.</p>
+      <p class="hero-sub">AI agents that record, analyze, and act on every conversation. CRM updates, coaching, follow-ups—all automatic.</p>
       <div class="hero-buttons">
         <a href="#" class="btn btn-primary">Book a Demo <span class="btn-arrow"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><rect x="1" y="7" width="2" height="2" fill="currentColor"/><rect x="4" y="7" width="2" height="2" fill="currentColor"/><rect x="7" y="7" width="2" height="2" fill="currentColor"/><rect x="10" y="7" width="2" height="2" fill="currentColor"/><rect x="10" y="4" width="2" height="2" fill="currentColor"/><rect x="12" y="6" width="2" height="2" fill="currentColor"/><rect x="10" y="10" width="2" height="2" fill="currentColor"/><rect x="12" y="8" width="2" height="2" fill="currentColor"/></svg></span></a>
         <a href="#how-it-works" class="btn btn-secondary">See How It Works <span class="btn-arrow"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><rect x="1" y="7" width="2" height="2" fill="currentColor"/><rect x="4" y="7" width="2" height="2" fill="currentColor"/><rect x="7" y="7" width="2" height="2" fill="currentColor"/><rect x="10" y="7" width="2" height="2" fill="currentColor"/><rect x="10" y="4" width="2" height="2" fill="currentColor"/><rect x="12" y="6" width="2" height="2" fill="currentColor"/><rect x="10" y="10" width="2" height="2" fill="currentColor"/><rect x="12" y="8" width="2" height="2" fill="currentColor"/></svg></span></a>
       </div>
     </div>
 
-    <div class="grid-wrapper">
-      <svg class="grid-svg" viewBox="0 0 1080 960" preserveAspectRatio="xMidYMid meet">
-        <line x1="0" y1="0" x2="1080" y2="0"/><line x1="120" y1="120" x2="1080" y2="120"/><line x1="240" y1="240" x2="1080" y2="240"/><line x1="360" y1="360" x2="1080" y2="360"/><line x1="360" y1="480" x2="1080" y2="480"/><line x1="240" y1="600" x2="1080" y2="600"/><line x1="120" y1="720" x2="1080" y2="720"/><line x1="0" y1="840" x2="1080" y2="840"/><line x1="0" y1="960" x2="1080" y2="960"/>
-        <line x1="1080" y1="0" x2="1080" y2="960"/><line x1="960" y1="0" x2="960" y2="960"/><line x1="840" y1="0" x2="840" y2="960"/><line x1="720" y1="0" x2="720" y2="960"/><line x1="600" y1="0" x2="600" y2="960"/><line x1="480" y1="0" x2="480" y2="960"/><line x1="360" y1="0" x2="360" y2="360"/><line x1="360" y1="480" x2="360" y2="960"/><line x1="240" y1="0" x2="240" y2="240"/><line x1="240" y1="600" x2="240" y2="960"/><line x1="120" y1="0" x2="120" y2="120"/><line x1="120" y1="720" x2="120" y2="960"/><line x1="0" y1="0" x2="0" y2="0"/><line x1="0" y1="840" x2="0" y2="960"/>
-        <line x1="0" y1="120" x2="120" y2="120"/><line x1="120" y1="240" x2="240" y2="240"/><line x1="240" y1="360" x2="360" y2="360"/><line x1="240" y1="600" x2="360" y2="600"/><line x1="120" y1="720" x2="240" y2="720"/><line x1="0" y1="840" x2="120" y2="840"/>
-      </svg>
-
-      <div class="card mint" id="card1">
-        <div class="card-header"><div class="card-icon"><svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg></div><span class="card-badge">Trigger</span></div>
-        <span class="card-title">Call completed</span>
-        <div class="card-content">Discovery call with Sarah Chen, VP Sales at Acme Corp<div class="talk-ratio"><div class="rep"></div><div class="prospect"></div></div></div>
-        <div class="card-meta">32 min · 35/65 talk ratio</div>
-      </div>
-
-      <div class="card purple" id="card2">
-        <div class="card-header"><div class="card-icon"><svg viewBox="0 0 24 24"><path d="M2 12h2"/><path d="M6 8v8"/><path d="M10 4v16"/><path d="M14 6v12"/><path d="M18 9v6"/><path d="M22 12h-2"/></svg></div><span class="card-badge">Processing</span></div>
-        <span class="card-title">recrd analyzes</span>
-        <div class="card-content"><div class="stats-grid"><div class="stat-box"><div class="stat-label">Sentiment</div><div class="stat-value positive">87%</div></div><div class="stat-box"><div class="stat-label">Momentum</div><div class="stat-value highlight">High</div></div><div class="stat-box"><div class="stat-label">Objections</div><div class="stat-value">2</div></div><div class="stat-box"><div class="stat-label">Next Steps</div><div class="stat-value">4</div></div></div></div>
-        <div class="card-meta">6 agents · 14 actions</div>
-      </div>
-
-      <div class="card cyan" id="card3">
-        <div class="card-header"><div class="card-icon"><svg viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></div><span class="card-badge">CRM Agent</span></div>
-        <span class="card-title">Pipeline updated</span>
-        <div class="card-content">Stage → Negotiation<div class="meddic-row"><div class="meddic-item filled">M</div><div class="meddic-item filled">E</div><div class="meddic-item filled">D</div><div class="meddic-item filled">D</div><div class="meddic-item">I</div><div class="meddic-item filled">C</div></div></div>
-        <div class="card-meta">5/6 MEDDIC · 12 fields</div>
-      </div>
-
-      <div class="card coral" id="card4">
-        <div class="card-header"><div class="card-icon"><svg viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg></div><span class="card-badge">Risk Alert</span></div>
-        <span class="card-title">Manager notified</span>
-        <div class="card-content"><div class="quote-block">"Budget is tight this quarter, but we're very interested in Q1."</div><div class="quote-attr">— Sarah Chen, VP Sales</div></div>
-        <div class="card-meta">Slack #enterprise · @mike</div>
-      </div>
+    <div class="cards-area">
+      <div class="origami-card pos-0" id="card-slot-0"></div>
+      <div class="origami-card pos-1" id="card-slot-1"></div>
+      <div class="origami-card pos-2" id="card-slot-2"></div>
     </div>
   </section>
 
@@ -319,7 +345,7 @@ import BaseHead from '../components/BaseHead.astro';
       <div class="feature-card"><div class="feature-icon"><svg viewBox="0 0 48 48" fill="none"><rect x="20" y="4" width="8" height="4" fill="var(--coral)"/><rect x="16" y="8" width="16" height="4" fill="var(--coral)"/><rect x="12" y="12" width="24" height="16" fill="var(--coral)"/><rect x="8" y="28" width="32" height="4" fill="var(--coral)"/><rect x="20" y="32" width="8" height="4" fill="var(--coral)"/></svg></div><h3 class="feature-title">Real-Time Risk Alerts</h3><p class="feature-desc">Budget concerns, competitor mentions, ghosting signals—catch deal risks before they kill your quarter.</p></div>
       <div class="feature-card"><div class="feature-icon"><svg viewBox="0 0 48 48" fill="none"><rect x="4" y="12" width="40" height="4" fill="var(--cyan)"/><rect x="4" y="16" width="4" height="20" fill="var(--cyan)"/><rect x="40" y="16" width="4" height="20" fill="var(--cyan)"/><rect x="4" y="36" width="40" height="4" fill="var(--cyan)"/><rect x="32" y="4" width="12" height="12" fill="var(--mint)"/></svg></div><h3 class="feature-title">Auto Follow-Up Drafts</h3><p class="feature-desc">Personalized follow-up emails generated instantly. Just review, edit, and send.</p></div>
       <div class="feature-card"><div class="feature-icon"><svg viewBox="0 0 48 48" fill="none"><rect x="4" y="6" width="40" height="8" fill="var(--yellow)"/><rect x="8" y="18" width="32" height="8" fill="var(--yellow)" opacity="0.7"/><rect x="14" y="30" width="20" height="8" fill="var(--yellow)" opacity="0.5"/><rect x="20" y="40" width="8" height="4" fill="var(--mint)"/></svg></div><h3 class="feature-title">Pipeline Analytics</h3><p class="feature-desc">See where deals stall. Stage conversion rates, cycle trends, negotiation bottlenecks—all in one view.</p></div>
-      <div class="feature-card"><div class="feature-icon"><svg viewBox="0 0 48 48" fill="none"><rect x="4" y="4" width="12" height="12" fill="var(--mint)"/><rect x="18" y="4" width="12" height="12" fill="var(--purple)"/><rect x="32" y="4" width="12" height="12" fill="var(--cyan)"/><rect x="4" y="18" width="12" height="12" fill="var(--yellow)"/><rect x="18" y="18" width="12" height="12" fill="var(--coral)"/><rect x="32" y="18" width="12" height="12" fill="var(--mint)" opacity="0.5"/><rect x="4" y="32" width="12" height="12" fill="var(--purple)" opacity="0.5"/><rect x="18" y="32" width="12" height="12" fill="var(--cyan)" opacity="0.5"/><rect x="32" y="32" width="12" height="12" fill="var(--yellow)" opacity="0.5"/></svg></div><h3 class="feature-title">Agent Marketplace</h3><p class="feature-desc">9 pre-built AI agents ready to deploy with one click. Or build custom workflows for your team. <a href="/agents">Explore agents →</a></p></div>
+      <div class="feature-card"><div class="feature-icon"><svg viewBox="0 0 48 48" fill="none"><rect x="4" y="4" width="12" height="12" fill="var(--mint)"/><rect x="18" y="4" width="12" height="12" fill="var(--purple)"/><rect x="32" y="4" width="12" height="12" fill="var(--cyan)"/><rect x="4" y="18" width="12" height="12" fill="var(--yellow)"/><rect x="18" y="18" width="12" height="12" fill="var(--coral)"/><rect x="32" y="18" width="12" height="12" fill="var(--mint)" opacity="0.5"/><rect x="4" y="32" width="12" height="12" fill="var(--purple)" opacity="0.5"/><rect x="18" y="32" width="12" height="12" fill="var(--cyan)" opacity="0.5"/><rect x="32" y="32" width="12" height="12" fill="var(--yellow)" opacity="0.5"/></svg></div><h3 class="feature-title">Agent Marketplace</h3><p class="feature-desc">Pre-built AI agents ready to deploy with one click. Or build custom workflows for your team. <a href="/agents">Explore agents →</a></p></div>
     </div>
   </section>
 
@@ -331,7 +357,7 @@ import BaseHead from '../components/BaseHead.astro';
     <div class="faq-grid">
       <div class="faq-item"><h3 class="faq-question">How does recording work?</h3><p class="faq-answer">recrd joins your calls as a participant (with consent). Works with Zoom, Google Meet, and Microsoft Teams. No browser extensions or desktop apps required.</p></div>
       <div class="faq-item"><h3 class="faq-question">Which CRMs do you support?</h3><p class="faq-answer">We integrate with HubSpot and Salesforce out of the box. Custom CRM integrations available on Enterprise plans.</p></div>
-      <div class="faq-item"><h3 class="faq-question">Is my data secure?</h3><p class="faq-answer">Yes. All recordings and transcripts are encrypted at rest and in transit. We're SOC 2 Type II compliant and GDPR ready. Your data is never used to train AI models.</p></div>
+      <div class="faq-item"><h3 class="faq-question">Is my data secure?</h3><p class="faq-answer">Yes. All recordings and transcripts are encrypted at rest and in transit. Your data is never used to train AI models.</p></div>
       <div class="faq-item"><h3 class="faq-question">How long does setup take?</h3><p class="faq-answer">Most teams are up and running in under 15 minutes. Connect your calendar, link your CRM, and you're ready to record your first call.</p></div>
       <div class="faq-item"><h3 class="faq-question">Can I customize the AI agents?</h3><p class="faq-answer">Yes. Use our pre-built agents or create custom workflows. Define your own fields, triggers, and outputs to match your sales process.</p></div>
       <div class="faq-item"><h3 class="faq-question">What sales methodologies do you support?</h3><p class="faq-answer">MEDDIC, BANT, SPICED, Challenger, and more. We also support custom scorecards if you have your own methodology.</p></div>
@@ -351,24 +377,97 @@ import BaseHead from '../components/BaseHead.astro';
   <ThemeToggle />
 
   <script>
-    import { gsap } from 'gsap';
-    import Lenis from 'lenis';
+    // Card data - SVG paths and colors
+    // Order ensures no same colors adjacent when cycling
+    const cards = [
+      { src: '/cards/card-01-call-trigger.svg', color: 'mint' },
+      { src: '/cards/card-04-risk-agent.svg', color: 'coral' },
+      { src: '/cards/card-02-intel-agent.svg', color: 'purple' },
+      { src: '/cards/card-06-scorecard-agent.svg', color: 'dark' },
+      { src: '/cards/card-03-crm-agent.svg', color: 'cyan' },
+      { src: '/cards/card-05-email-agent.svg', color: 'yellow' },
+      { src: '/cards/card-08-quote-agent.svg', color: 'purple' },
+      { src: '/cards/card-07-multithread-agent.svg', color: 'mint' },
+      { src: '/cards/card-10-prep-agent.svg', color: 'yellow' },
+      { src: '/cards/card-09-task-agent.svg', color: 'cyan' },
+    ];
 
-    const lenis = new Lenis({ duration: 1.2, easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), smoothWheel: true });
-    function raf(time) { lenis.raf(time); requestAnimationFrame(raf); }
-    requestAnimationFrame(raf);
+    // Build card: SVG image + colored panels overlay
+    // Panels START covering the SVG, then fold away
+    function buildCard(cardData) {
+      const foldDirs = ['from-left', 'from-left', 'from-top', 'from-left', 'from-top', 'from-left'];
+      
+      const panels = foldDirs.map((dir, i) => `
+        <div class="card-panel ${dir}" data-index="${i}">
+          <div class="panel-inner ${cardData.color}"></div>
+        </div>
+      `).join('');
 
-    function animateCards() {
-      gsap.set('.card', { opacity: 0, x: -30, scale: 0.95 });
-      const tl = gsap.timeline();
-      tl.to('#card1', { opacity: 1, x: 0, scale: 1, duration: 0.7, ease: 'power2.out' });
-      tl.to('#card2', { opacity: 1, x: 0, scale: 1, duration: 0.7, ease: 'power2.out' }, '-=0.4');
-      tl.to('#card3', { opacity: 1, x: 0, scale: 1, duration: 0.7, ease: 'power2.out' }, '-=0.4');
-      tl.to('#card4', { opacity: 1, x: 0, scale: 1, duration: 0.7, ease: 'power2.out' }, '-=0.4');
-      return tl;
+      return `
+        <img src="${cardData.src}" alt="Agent card" />
+        <div class="fold-grid">${panels}</div>
+      `;
     }
 
-    document.addEventListener('DOMContentLoaded', () => { setTimeout(animateCards, 500); });
+    const UNFOLD_DELAY = 80;
+    const CARD_STAGGER = 600;
+    const DISPLAY_TIME = 3500;
+
+    let slotCards = [0, 1, 2];
+    let nextCardIndex = 3;
+
+    // Panels fold AWAY to reveal SVG
+    function unfoldCard(slot) {
+      const panels = slot.querySelectorAll('.card-panel');
+      slot.classList.add('active');
+      panels.forEach((panel, i) => {
+        setTimeout(() => panel.classList.add('revealed'), i * UNFOLD_DELAY);
+      });
+    }
+
+    // Panels fold BACK to cover SVG
+    function foldCard(slot) {
+      const panels = Array.from(slot.querySelectorAll('.card-panel')).reverse();
+      panels.forEach((panel, i) => {
+        setTimeout(() => panel.classList.remove('revealed'), i * UNFOLD_DELAY);
+      });
+      setTimeout(() => slot.classList.remove('active'), panels.length * UNFOLD_DELAY + 150);
+    }
+
+    function cycleSlot(slotIndex) {
+      const slot = document.getElementById(`card-slot-${slotIndex}`);
+      
+      foldCard(slot);
+
+      setTimeout(() => {
+        slotCards[slotIndex] = nextCardIndex;
+        nextCardIndex = (nextCardIndex + 1) % cards.length;
+        
+        slot.innerHTML = buildCard(cards[slotCards[slotIndex]]);
+        unfoldCard(slot);
+      }, 6 * UNFOLD_DELAY + 300);
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const slots = [
+        document.getElementById('card-slot-0'),
+        document.getElementById('card-slot-1'),
+        document.getElementById('card-slot-2')
+      ];
+
+      // Initial render with stagger
+      slots.forEach((slot, i) => {
+        slot.innerHTML = buildCard(cards[i]);
+        setTimeout(() => unfoldCard(slot), i * CARD_STAGGER);
+      });
+
+      // Offset cycling for continuous motion
+      const cycleInterval = DISPLAY_TIME + (6 * UNFOLD_DELAY * 2) + 600;
+      
+      setTimeout(() => setInterval(() => cycleSlot(0), cycleInterval), 0);
+      setTimeout(() => setInterval(() => cycleSlot(1), cycleInterval), cycleInterval * 0.33);
+      setTimeout(() => setInterval(() => cycleSlot(2), cycleInterval), cycleInterval * 0.66);
+    });
   </script>
 </body>
 </html>

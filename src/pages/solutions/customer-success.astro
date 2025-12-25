@@ -19,6 +19,13 @@ import BaseHead from '../../components/BaseHead.astro';
     .hero-cta::before { content: ''; position: absolute; top: 0; left: 0; width: 0; height: 100%; background: var(--cyan); transition: width 0.3s ease; z-index: -1; }
     .hero-cta:hover::before { width: 100%; }
     .hero-cta:hover { color: #0a0a0a; border-color: var(--cyan); }
+    .hero-cta-arrow { display: inline-flex; transition: transform 0.2s ease; }
+    .hero-cta-arrow img { width: 16px; height: 16px; }
+    .hero-cta:hover .hero-cta-arrow { transform: translateX(4px); }
+    .hero-cta-arrow .chevron-hover { display: none; }
+    .hero-cta:hover .chevron-default { display: none; }
+    .hero-cta:hover .chevron-hover { display: block; }
+
     .hero-visual { background: var(--bg-card); border: 1px solid var(--border); padding: 32px; }
     .hero-mock-header { display: flex; align-items: center; justify-content: space-between; padding-bottom: 16px; border-bottom: 1px solid var(--border); margin-bottom: 20px; }
     .hero-mock-title { font-weight: 600; font-size: 14px; }
@@ -49,6 +56,9 @@ import BaseHead from '../../components/BaseHead.astro';
     .solution-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 48px; max-width: 1000px; margin: 0 auto; }
     .solution-card { padding: 40px; background: var(--bg-card); border: 1px solid var(--border); }
     .solution-icon { width: 48px; height: 48px; margin-bottom: 24px; }
+    .solution-icon img { width: 100%; height: 100%; object-fit: contain; }
+    .solution-card-soon { position: relative; }
+    .solution-badge { position: absolute; top: 16px; right: 16px; font-family: var(--mono); font-size: 10px; text-transform: uppercase; letter-spacing: 0.05em; padding: 4px 10px; background: var(--border); color: var(--text-muted); }
     .solution-title { font-size: 20px; font-weight: 600; margin-bottom: 12px; }
     .solution-desc { font-size: 15px; color: var(--text-muted); line-height: 1.6; }
     .quote-section { padding: 100px 48px; border-top: 1px solid var(--border); background: var(--bg-alt); }
@@ -64,6 +74,13 @@ import BaseHead from '../../components/BaseHead.astro';
     .btn::before { content: ''; position: absolute; top: 0; left: 0; width: 0; height: 100%; background: var(--cyan); transition: width 0.3s ease; z-index: -1; }
     .btn:hover::before { width: 100%; }
     .btn:hover { color: #0a0a0a; border-color: var(--cyan); }
+    .btn-arrow { display: inline-flex; transition: transform 0.2s ease; }
+    .btn-arrow img { width: 16px; height: 16px; }
+    .btn:hover .btn-arrow { transform: translateX(4px); }
+    .btn-arrow .chevron-hover { display: none; }
+    .btn:hover .chevron-default { display: none; }
+    .btn:hover .chevron-hover { display: block; }
+
     @media (max-width: 1000px) { .hero { grid-template-columns: 1fr; gap: 48px; text-align: center; } .solution-grid { grid-template-columns: 1fr; } }
     @media (max-width: 900px) { .hero { padding: 140px 24px 80px; } .hero-headline { font-size: 40px; } .pain-section { padding: 80px 24px; } .pain-grid { grid-template-columns: 1fr; } .solution-section { padding: 80px 24px; } .quote-section { padding: 80px 24px; } .cta-section { padding: 80px 24px; } }
   </style>
@@ -75,7 +92,7 @@ import BaseHead from '../../components/BaseHead.astro';
       <div class="hero-badge">For Customer Success</div>
       <h1 class="hero-headline">Catch churn <em>before it happens</em></h1>
       <p class="hero-sub">Stop being surprised by renewals. Get early warning signals from customer calls, automate QBR prep, and keep accounts healthy.</p>
-      <a href="#" class="hero-cta">Book a Demo</a>
+      <a href="#" class="hero-cta">Book a Demo <span class="hero-cta-arrow"><img src="/icons/chevron-blue.svg" alt="" class="chevron-default" /><img src="/icons/chevron-black.svg" alt="" class="chevron-hover" /></span></a>
     </div>
     <div class="hero-visual">
       <div class="hero-mock-header"><span class="hero-mock-title">Account Health</span><span class="hero-mock-badge">Portfolio</span></div>
@@ -96,10 +113,38 @@ import BaseHead from '../../components/BaseHead.astro';
   <section class="solution-section">
     <div class="solution-header"><p class="solution-label">How recrd helps</p><h2 class="solution-headline">Account intelligence on autopilot</h2><p class="solution-sub">Know exactly how every account feels—before they tell you they're leaving.</p></div>
     <div class="solution-grid">
-      <div class="solution-card"><div class="solution-icon"><svg viewBox="0 0 48 48" fill="none"><rect x="20" y="4" width="8" height="4" fill="var(--cyan)"/><rect x="16" y="8" width="16" height="4" fill="var(--cyan)"/><rect x="12" y="12" width="24" height="16" fill="var(--cyan)"/><rect x="8" y="28" width="32" height="4" fill="var(--cyan)"/><rect x="20" y="32" width="8" height="4" fill="var(--cyan)"/></svg></div><h3 class="solution-title">Churn Signals</h3><p class="solution-desc">Sentiment shifts, feature complaints, competitor mentions—get alerts the moment an account shows warning signs.</p></div>
-      <div class="solution-card"><div class="solution-icon"><svg viewBox="0 0 48 48" fill="none"><rect x="8" y="4" width="32" height="4" fill="var(--cyan)"/><rect x="8" y="8" width="4" height="36" fill="var(--cyan)"/><rect x="36" y="8" width="4" height="36" fill="var(--cyan)"/><rect x="8" y="40" width="32" height="4" fill="var(--cyan)"/><rect x="14" y="14" width="12" height="3" fill="var(--cyan)" opacity="0.6"/><rect x="14" y="20" width="20" height="3" fill="var(--cyan)" opacity="0.6"/><rect x="14" y="26" width="16" height="3" fill="var(--cyan)" opacity="0.6"/></svg></div><h3 class="solution-title">Auto QBR Prep</h3><p class="solution-desc">AI-generated account summaries, key milestones, and talking points. Prep that used to take 4 hours, done in 4 minutes.</p></div>
-      <div class="solution-card"><div class="solution-icon"><svg viewBox="0 0 48 48" fill="none"><rect x="4" y="22" width="8" height="4" fill="var(--cyan)"/><rect x="14" y="18" width="8" height="12" fill="var(--cyan)"/><rect x="24" y="12" width="8" height="24" fill="var(--cyan)"/><rect x="34" y="6" width="8" height="36" fill="var(--mint)"/></svg></div><h3 class="solution-title">Expansion Signals</h3><p class="solution-desc">Not just churn—catch expansion opportunities too. Know when accounts are ready to grow before they ask.</p></div>
-      <div class="solution-card"><div class="solution-icon"><svg viewBox="0 0 48 48" fill="none"><rect x="20" y="4" width="8" height="8" fill="var(--cyan)"/><rect x="6" y="20" width="8" height="8" fill="var(--cyan)" opacity="0.7"/><rect x="34" y="20" width="8" height="8" fill="var(--cyan)" opacity="0.7"/><rect x="12" y="36" width="8" height="8" fill="var(--cyan)" opacity="0.5"/><rect x="28" y="36" width="8" height="8" fill="var(--cyan)" opacity="0.5"/></svg></div><h3 class="solution-title">Stakeholder Tracking</h3><p class="solution-desc">Know who's engaged, who's gone quiet, and when your champion changes roles. Never be blindsided by a new decision-maker.</p></div>
+      <div class="solution-card">
+        <div class="solution-icon"><img src="/icons/alert-ping.svg" alt="Churn Signals" /></div>
+        <h3 class="solution-title">Churn Signals</h3>
+        <p class="solution-desc">Sentiment shifts, feature complaints, competitor mentions—get alerts the moment an account shows warning signs.</p>
+      </div>
+      <div class="solution-card">
+        <div class="solution-icon"><img src="/icons/meeting-prep-green.svg" alt="Auto QBR Prep" /></div>
+        <h3 class="solution-title">Auto QBR Prep</h3>
+        <p class="solution-desc">AI-generated account summaries, key milestones, and talking points. Prep that used to take 4 hours, done in 4 minutes.</p>
+      </div>
+      <div class="solution-card">
+        <div class="solution-icon"><img src="/icons/agent-forecast.svg" alt="Expansion Signals" /></div>
+        <h3 class="solution-title">Expansion Signals</h3>
+        <p class="solution-desc">Not just churn—catch expansion opportunities too. Know when accounts are ready to grow before they ask.</p>
+      </div>
+      <div class="solution-card">
+        <div class="solution-icon"><img src="/icons/champ-map.svg" alt="Stakeholder Tracking" /></div>
+        <h3 class="solution-title">Stakeholder Tracking</h3>
+        <p class="solution-desc">Know who's engaged, who's gone quiet, and when your champion changes roles. Never be blindsided by a new decision-maker.</p>
+      </div>
+      <div class="solution-card solution-card-soon">
+        <div class="solution-badge">Coming Soon</div>
+        <div class="solution-icon"><img src="/icons/checklist.svg" alt="Onboarding Agent" /></div>
+        <h3 class="solution-title">Onboarding Agent</h3>
+        <p class="solution-desc">Tracks go-live milestones and flags stalled implementations. Know which accounts need a nudge before they go dark.</p>
+      </div>
+      <div class="solution-card solution-card-soon">
+        <div class="solution-badge">Coming Soon</div>
+        <div class="solution-icon"><img src="/icons/warning-triangle-red.svg" alt="Escalation Agent" /></div>
+        <h3 class="solution-title">Escalation Agent</h3>
+        <p class="solution-desc">Detects escalation language, legal threats, and exec involvement. Get instant alerts when conversations get serious.</p>
+      </div>
     </div>
   </section>
   <section class="quote-section">
@@ -108,7 +153,7 @@ import BaseHead from '../../components/BaseHead.astro';
   <section class="cta-section">
     <h2 class="cta-headline">Ready to stop surprise churn?</h2>
     <p class="cta-sub">See how recrd gives you early warning on every account in your portfolio.</p>
-    <a href="#" class="btn">Book a Demo</a>
+    <a href="#" class="btn">Book a Demo <span class="btn-arrow"><img src="/icons/chevron-blue.svg" alt="" class="chevron-default" /><img src="/icons/chevron-black.svg" alt="" class="chevron-hover" /></span></a>
   </section>
   <Footer />
   <ThemeToggle />

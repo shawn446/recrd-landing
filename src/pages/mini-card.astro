@@ -1,0 +1,353 @@
+---
+// Hero - Simple labeled cards sliding in from edges
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+import BaseHead from '../components/BaseHead.astro';
+---
+
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <BaseHead title="recrd - AI agents that close deals" description="Revenue intelligence for sales teams." />
+  
+  <style is:global>
+    :root { 
+      --cell: 120px;
+      --grid-line: rgba(255,255,255,0.08);
+      --mint: #59FFA4;
+      --purple: #A678F4;
+      --cyan: #5CEBDF;
+      --coral: #FF6B7A;
+      --yellow: #FFD84D;
+      --bg: #0A0A0A;
+      --text: #FFFFFF;
+      --text-muted: rgba(255,255,255,0.6);
+    }
+
+    * { box-sizing: border-box; }
+
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      padding: 72px 48px 0;
+      position: relative;
+      overflow: hidden;
+      background: var(--bg);
+    }
+
+    .hero-grid {
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: calc(var(--cell) * 10);
+      height: 100%;
+      background-image: 
+        linear-gradient(to right, var(--grid-line) 1px, transparent 1px),
+        linear-gradient(to bottom, var(--grid-line) 1px, transparent 1px);
+      background-size: var(--cell) var(--cell);
+      z-index: 1;
+    }
+
+    .hero-grid::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: calc(var(--cell) * 4);
+      height: 100%;
+      background: linear-gradient(to right, var(--bg) 30%, transparent);
+      z-index: 2;
+    }
+
+    .hero-content {
+      max-width: 480px;
+      z-index: 100;
+      padding: 48px 0;
+    }
+
+    .hero-headline {
+      font-size: 72px;
+      font-weight: 350;
+      line-height: 1.0;
+      letter-spacing: -0.03em;
+      margin-bottom: 28px;
+    }
+
+    .hero-headline em { 
+      font-style: normal; 
+      color: var(--mint);
+      font-weight: 400;
+    }
+
+    .hero-sub {
+      font-size: 18px;
+      font-weight: 400;
+      line-height: 1.6;
+      margin-bottom: 40px;
+      color: var(--text-muted);
+    }
+
+    .hero-buttons { display: flex; gap: 16px; }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 16px 28px;
+      font-weight: 500;
+      font-size: 15px;
+      text-decoration: none;
+      transition: all 0.2s ease;
+      cursor: pointer;
+      border: none;
+    }
+    
+    .btn-primary { background: var(--text); color: var(--bg); }
+    .btn-primary:hover { background: var(--mint); color: #0a0a0a; transform: translateY(-2px); }
+    
+    .btn-secondary { background: transparent; color: var(--text); border: 1px solid rgba(255,255,255,0.2); }
+    .btn-secondary:hover { background: var(--text); color: var(--bg); }
+
+    .cards-container {
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: calc(var(--cell) * 10);
+      height: 100%;
+      z-index: 10;
+      pointer-events: none;
+    }
+
+    /* ========== SLIDE CARDS ========== */
+    .card-slot {
+      position: absolute;
+      width: var(--cell);
+      height: var(--cell);
+      pointer-events: auto;
+      overflow: hidden;
+    }
+
+    .slide-card {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      cursor: pointer;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+      transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .slide-card:hover {
+      filter: brightness(1.05);
+    }
+
+    /* Start off-screen */
+    .slide-card.from-top { transform: translateY(-120%); }
+    .slide-card.from-bottom { transform: translateY(120%); }
+    .slide-card.from-left { transform: translateX(-120%); }
+    .slide-card.from-right { transform: translateX(120%); }
+
+    .slide-card.visible {
+      transform: translateX(0) translateY(0);
+    }
+
+    /* Colors */
+    .slide-card.mint { background: var(--mint); }
+    .slide-card.purple { background: var(--purple); }
+    .slide-card.cyan { background: var(--cyan); }
+    .slide-card.coral { background: var(--coral); }
+    .slide-card.yellow { background: var(--yellow); }
+
+    .card-label {
+      font-size: 10px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--bg);
+      text-align: center;
+      padding: 8px;
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 1800px) {
+      :root { --cell: 100px; }
+      .hero-headline { font-size: 64px; }
+    }
+
+    @media (max-width: 1600px) {
+      :root { --cell: 90px; }
+      .hero-headline { font-size: 56px; }
+    }
+
+    @media (max-width: 1400px) {
+      :root { --cell: 80px; }
+      .hero-headline { font-size: 48px; }
+      .hero-content { max-width: 380px; }
+      .card-label { font-size: 9px; }
+    }
+
+    @media (max-width: 1200px) {
+      :root { --cell: 70px; }
+      .hero-headline { font-size: 42px; }
+      .card-label { font-size: 8px; }
+    }
+
+    @media (max-width: 1000px) {
+      .cards-container, .hero-grid { display: none; }
+      .hero { justify-content: center; padding: 120px 24px; }
+      .hero-content { max-width: 100%; text-align: center; }
+      .hero-buttons { justify-content: center; }
+    }
+
+    @media (max-width: 600px) {
+      .hero-headline { font-size: 36px; }
+      .hero-sub { font-size: 16px; }
+      .hero-buttons { flex-direction: column; }
+      .btn { width: 100%; justify-content: center; }
+    }
+  </style>
+</head>
+
+<body>
+  <Nav />
+
+  <section class="hero">
+    <div class="hero-grid"></div>
+
+    <div class="hero-content">
+      <h1 class="hero-headline">Your calls,<br><em>working for you</em></h1>
+      <p class="hero-sub">Every sales call triggers AI agents that update your CRM, alert your team, and draft follow-ups—automatically.</p>
+      <div class="hero-buttons">
+        <a href="#" class="btn btn-primary">Book a Demo</a>
+        <a href="#how-it-works" class="btn btn-secondary">See How It Works</a>
+      </div>
+    </div>
+
+    <div class="cards-container" id="cards-container"></div>
+  </section>
+
+  <Footer />
+
+  <script>
+    const cards = [
+      // Row 1
+      { label: 'Agents', color: 'purple', row: 1, col: 1, dir: 'left' },
+      { label: 'Pipeline', color: 'cyan', row: 1, col: 4, dir: 'top' },
+      { label: 'Forecast', color: 'mint', row: 1, col: 7, dir: 'right' },
+      
+      // Row 2
+      { label: 'CRM Sync', color: 'yellow', row: 2, col: 0, dir: 'left' },
+      { label: 'Alerts', color: 'coral', row: 2, col: 3, dir: 'top' },
+      { label: 'Coaching', color: 'purple', row: 2, col: 6, dir: 'top' },
+      { label: 'Intel', color: 'mint', row: 2, col: 9, dir: 'right' },
+      
+      // Row 3
+      { label: 'Transcripts', color: 'cyan', row: 3, col: 2, dir: 'left' },
+      { label: 'Insights', color: 'coral', row: 3, col: 5, dir: 'bottom' },
+      { label: 'Email', color: 'yellow', row: 3, col: 8, dir: 'right' },
+      
+      // Row 4
+      { label: 'Tasks', color: 'mint', row: 4, col: 1, dir: 'left' },
+      { label: 'Reports', color: 'purple', row: 4, col: 4, dir: 'bottom' },
+      { label: 'Analytics', color: 'cyan', row: 4, col: 7, dir: 'right' },
+      
+      // Row 5
+      { label: 'Dashboard', color: 'coral', row: 5, col: 0, dir: 'left' },
+      { label: 'Notify', color: 'yellow', row: 5, col: 3, dir: 'bottom' },
+      { label: 'Quotes', color: 'purple', row: 5, col: 6, dir: 'bottom' },
+      { label: 'Prep', color: 'mint', row: 5, col: 9, dir: 'right' },
+      
+      // Row 6
+      { label: 'Signals', color: 'yellow', row: 6, col: 2, dir: 'left' },
+      { label: 'Deals', color: 'cyan', row: 6, col: 5, dir: 'bottom' },
+      { label: 'Follow-up', color: 'coral', row: 6, col: 8, dir: 'right' },
+    ];
+
+    function shuffle(arr) {
+      const a = [...arr];
+      for (let i = a.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [a[i], a[j]] = [a[j], a[i]];
+      }
+      return a;
+    }
+
+    function getCell() {
+      return parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--cell')) || 120;
+    }
+
+    function buildCard(card) {
+      return `
+        <div class="slide-card ${card.color} from-${card.dir}">
+          <span class="card-label">${card.label}</span>
+        </div>
+      `;
+    }
+
+    function createSlot(card) {
+      const cell = getCell();
+      const slot = document.createElement('div');
+      slot.className = 'card-slot';
+      slot.style.left = `${card.col * cell}px`;
+      slot.style.top = `${card.row * cell}px`;
+      slot.dataset.dir = card.dir;
+      slot.innerHTML = buildCard(card);
+      return slot;
+    }
+
+    function slideIn(slot) {
+      const card = slot.querySelector('.slide-card');
+      if (card) {
+        requestAnimationFrame(() => {
+          card.classList.add('visible');
+        });
+      }
+    }
+
+    function slideOut(slot) {
+      return new Promise(resolve => {
+        const card = slot.querySelector('.slide-card');
+        if (card) {
+          card.classList.remove('visible');
+          setTimeout(resolve, 500);
+        } else {
+          resolve();
+        }
+      });
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const container = document.getElementById('cards-container');
+      const slots = [];
+
+      cards.forEach(card => {
+        const slot = createSlot(card);
+        container.appendChild(slot);
+        slots.push(slot);
+      });
+
+      // Staggered slide in
+      shuffle([...slots]).forEach((slot, i) => {
+        setTimeout(() => slideIn(slot), 200 + i * 80);
+      });
+
+      // Cycle random cards
+      setInterval(() => {
+        const indices = shuffle([...Array(slots.length).keys()]).slice(0, 3);
+        indices.forEach((idx, i) => {
+          const slot = slots[idx];
+          
+          setTimeout(async () => {
+            await slideOut(slot);
+            await new Promise(r => setTimeout(r, 300));
+            slideIn(slot);
+          }, i * 200);
+        });
+      }, 4000);
+    });
+  </script>
+</body>
+</html>
